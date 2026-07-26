@@ -1,8 +1,14 @@
-# Ponte Digital — Plataforma Cognitiva para Empresários
+# Ponte Digital — Infraestrutura Cognitiva Empresarial
 
-> **Fase:** V4 Founder — validação de produto com 100 fundadores
-> **Stack:** Next.js 16 + React 19 + Prisma 7 + PostgreSQL (Supabase)
-> **Release Program v1.0:** Programas 0-5 ✅ **COMPLETO** — plataforma GO-LIVE READY desde 24/07/2026
+> **Fase:** V4 Founder — validação de produto com empresários reais
+> **Stack:** Next.js 16 + React 19 + Prisma 7 + PostgreSQL (Supabase) + Google Gemini
+> **Status:** Go-Live — Empresa Zero ativa, publicando primeira versão
+
+---
+
+## Propósito
+
+A Ponte Digital é uma infraestrutura cognitiva que aprende sobre o negócio do empresário e o ajuda a tomar decisões melhores. Não é um CRM, não é um ERP — é uma camada de inteligência que conecta dados, contexto e decisão.
 
 ---
 
@@ -14,15 +20,27 @@
 | Saber o que está sendo construído agora | [`docs/02-PRODUCT/CURRENT_PRODUCT.md`](./docs/02-PRODUCT/CURRENT_PRODUCT.md) |
 | Ver a arquitetura atual | [`docs/09-ARCHITECTURE/ARCHITECTURAL_INVENTORY.md`](./docs/09-ARCHITECTURE/ARCHITECTURAL_INVENTORY.md) |
 | Entender o motor cognitivo | [`docs/09-ARCHITECTURE/COGNITIVE_MAP.md`](./docs/09-ARCHITECTURE/COGNITIVE_MAP.md) |
-| Ver o barramento de eventos | [`docs/09-ARCHITECTURE/EVENT_MAP.md`](./docs/09-ARCHITECTURE/EVENT_MAP.md) |
-| Ver os pipelines do sistema | [`docs/09-ARCHITECTURE/PIPELINE_MAP.md`](./docs/09-ARCHITECTURE/PIPELINE_MAP.md) |
-| Ver o mapa de dependências | [`docs/09-ARCHITECTURE/DEPENDENCY_MAP.md`](./docs/09-ARCHITECTURE/DEPENDENCY_MAP.md) |
 | Navegar pelas decisões arquiteturais | [`docs/09-ARCHITECTURE/ADR_NAVIGATOR.md`](./docs/09-ARCHITECTURE/ADR_NAVIGATOR.md) |
-| Índice mestre completo | [`docs/09-ARCHITECTURE/KNOWLEDGE_INDEX.md`](./docs/09-ARCHITECTURE/KNOWLEDGE_INDEX.md) |
+| Índice mestre da plataforma | [`docs/09-ARCHITECTURE/KNOWLEDGE_INDEX.md`](./docs/09-ARCHITECTURE/KNOWLEDGE_INDEX.md) |
 
 ---
 
-## Repositório
+## Stack
+
+| Camada | Tecnologia |
+|--------|-----------|
+| Framework | Next.js 16 (App Router) |
+| UI | React 19 + Tailwind CSS 4 + Radix UI + Recharts |
+| Validação | Zod 4 + React Hook Form |
+| Banco | PostgreSQL (Supabase) + Prisma 7 |
+| Autenticação | Supabase Auth (SSR) |
+| IA | Google Gemini (via AI Provider) |
+| Cache | Supabase (pg-large-object) |
+| Deploy | Vercel |
+
+---
+
+## Estrutura do projeto
 
 ```
 /
@@ -39,7 +57,7 @@
 │   └── 09-ARCHITECTURE/→ Documentação viva (mapas, fluxos, dependências)
 ├── sistema/           → Código da aplicação
 │   ├── src/
-│   │   ├── app/       → App Router (pages + API routes)
+│   │   ├── app/       → App Router (páginas + API routes)
 │   │   ├── components/→ Componentes React
 │   │   ├── hooks/     → Hooks customizados
 │   │   ├── services/  → Lógica de domínio
@@ -51,59 +69,55 @@
 
 ---
 
-## Documentação Viva
+## Como rodar localmente
 
-A documentação da Ponte Digital passou por um Release Program completo. Todo documento em `docs/09-ARCHITECTURE/` foi gerado a partir do código real e permanece sincronizado com a implementação.
+```bash
+# 1. Clone o repositório
+git clone https://github.com/<SEU_USUARIO>/ponte-digital.git
+cd ponte-digital/sistema
 
-Principais documentos:
+# 2. Instale as dependências
+npm install
 
-- **[Arquitetura](docs/09-ARCHITECTURE/ARCHITECTURAL_INVENTORY.md)** — visão geral, camadas, módulos, API map, ER diagram
-- **[Mapa Cognitivo](docs/09-ARCHITECTURE/COGNITIVE_MAP.md)** — fluxo cognitivo, 19 engines, pipeline, integrações
-- **[Mapa de Eventos](docs/09-ARCHITECTURE/EVENT_MAP.md)** — barramento de eventos, catálogo, DLQ, resiliência
-- **[Mapa de Pipelines](docs/09-ARCHITECTURE/PIPELINE_MAP.md)** — pipelines de dashboard, diagnóstico, cadastro, ciclo, feedback
-- **[Mapa de Dependências](docs/09-ARCHITECTURE/DEPENDENCY_MAP.md)** — grafo de dependências, acoplamentos, pontos críticos
-- **[ADR Navigator](docs/09-ARCHITECTURE/ADR_NAVIGATOR.md)** — índice navegável de todas as 34 decisões arquiteturais
-- **[Knowledge Index](docs/09-ARCHITECTURE/KNOWLEDGE_INDEX.md)** — índice mestre de toda a plataforma
+# 3. Configure as variáveis de ambiente
+cp .env.example .env
+# Edite .env com suas credenciais do Supabase e Google Gemini
+
+# 4. Execute as migrações do banco
+npx prisma migrate dev
+
+# 5. Inicie o servidor de desenvolvimento
+npm run dev
+```
+
+### Pré-requisitos
+
+- Node.js 24+
+- PostgreSQL (via Supabase)
+- Conta no Google AI Studio (para chave Gemini)
+- Projeto no Supabase (Auth + Database habilitados)
 
 ---
 
-## Release Program v1.0 — Resumo
+## Deploy
 
-| Programa | Status | Descrição |
-|----------|:------:|-----------|
-| Programa 0 — Setup | ✅ | Configuração inicial |
-| Programa 1 — Auditoria Global | ✅ | 198 arquivos auditados |
-| Programa 2 — Documentação Viva | ✅ | 7 documentos em `docs/09-ARCHITECTURE/` |
-| Programa 3 — Hardening + RC | ✅ | 12 correções de segurança, RC emitido |
-| Programa 4 — Deploy e Go-Live | ✅ | 8 documentos operacionais |
-| Programa 5 — Encerramento | ✅ | Baseline, certificação, changelog, roadmap |
+A Ponte Digital é implantada na Vercel. Consulte:
 
-**Status final: GO-LIVE READY** — todas as engines implementadas, documentação completa, operação documentada.
+- [`docs/DEPLOY/VERCEL_DEPLOY.md`](./docs/DEPLOY/VERCEL_DEPLOY.md) — instruções completas de deploy
+- [`docs/DEPLOY/GEMINI_SETUP.md`](./docs/DEPLOY/GEMINI_SETUP.md) — configuração do provedor de IA
+- [`docs/DEPLOY/SMOKE_TEST.md`](./docs/DEPLOY/SMOKE_TEST.md) — checklist de verificação pós-deploy
+- [`docs/05-OPERATIONS/OPS-CICD.md`](./docs/05-OPERATIONS/OPS-CICD.md) — pipeline CI/CD
 
-### Documentos de Encerramento
+---
 
-| Documento | Descrição |
-|-----------|-----------|
-| [`CHANGELOG.md`](./CHANGELOG.md) | Changelog oficial semântico |
-| [`docs/05-OPERATIONS/VERSION_1.0.md`](./docs/05-OPERATIONS/VERSION_1.0.md) | Documento oficial da versão |
-| [`docs/05-OPERATIONS/RELEASE_FINAL_V1.md`](./docs/05-OPERATIONS/RELEASE_FINAL_V1.md) | Parecer final da release |
-| [`docs/05-OPERATIONS/PLATFORM_CERTIFICATION_V1.md`](./docs/05-OPERATIONS/PLATFORM_CERTIFICATION_V1.md) | Certificação oficial |
-| [`docs/05-OPERATIONS/LESSONS_LEARNED.md`](./docs/05-OPERATIONS/LESSONS_LEARNED.md) | Lições aprendidas |
-| [`docs/09-ARCHITECTURE/PLATFORM_BASELINE_V1.md`](./docs/09-ARCHITECTURE/PLATFORM_BASELINE_V1.md) | Baseline oficial |
-| [`docs/06-ROADMAP/ROADMAP_V1_1.md`](./docs/06-ROADMAP/ROADMAP_V1_1.md) | Roadmap v1.1 |
-| [`docs/05-OPERATIONS/TRANSITION_TO_V1_1.md`](./docs/05-OPERATIONS/TRANSITION_TO_V1_1.md) | Transição para v1.1 |
+## Licença
 
-### Documentos Operacionais
+Este repositório é privado e contém propriedade intelectual da Ponte Digital.
+Consulte o proprietário para obter termos de uso.
 
-| Documento | Descrição |
-|-----------|-----------|
-| [`OPS-SECURITY-CHECKLIST.md`](./docs/05-OPERATIONS/OPS-SECURITY-CHECKLIST.md) | Checklist de segurança operacional |
-| [`OPS-INFRASTRUCTURE.md`](./docs/05-OPERATIONS/OPS-INFRASTRUCTURE.md) | Diagrama de infraestrutura |
-| [`OPS-BACKUP.md`](./docs/05-OPERATIONS/OPS-BACKUP.md) | Estratégia de backup e recuperação |
-| [`OPS-CICD.md`](./docs/05-OPERATIONS/OPS-CICD.md) | Pipeline CI/CD |
-| [`OPS-OBSERVABILITY.md`](./docs/05-OPERATIONS/OPS-OBSERVABILITY.md) | Observabilidade |
-| [`OPS-RUNBOOK.md`](./docs/05-OPERATIONS/OPS-RUNBOOK.md) | Runbook operacional |
-| [`OPS-GO-LIVE-CHECKLIST.md`](./docs/05-OPERATIONS/OPS-GO-LIVE-CHECKLIST.md) | Go-Live checklist |
-| [`OPS-GO-LIVE-READY.md`](./docs/05-OPERATIONS/OPS-GO-LIVE-READY.md) | Plano de Go-Live |
+---
 
-Consulte também [`docs/05-OPERATIONS/PAINEL_AUDITORIA_GLOBAL.md`](./docs/05-OPERATIONS/PAINEL_AUDITORIA_GLOBAL.md) para o painel completo da auditoria.
+## Contato
+
+- **Email:** kelven@pontedigital.com.br
+- **Repositório:** [github.com/<SEU_USUARIO>/ponte-digital](https://github.com/<SEU_USUARIO>/ponte-digital)

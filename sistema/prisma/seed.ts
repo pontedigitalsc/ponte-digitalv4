@@ -15,8 +15,8 @@ async function main() {
   console.log('Seed — Empresa Zero (Ponte Digital)')
   console.log()
 
-  const email = process.env.SEED_ADMIN_EMAIL ?? 'kelven@pontedigital.com.br'
-  const senha = process.env.SEED_ADMIN_PASSWORD ?? 'Ponte@2026'
+  const email = process.env.SEED_ADMIN_EMAIL ?? (() => { throw new Error('SEED_ADMIN_EMAIL é obrigatório') })()
+  const senha = process.env.SEED_ADMIN_PASSWORD ?? (() => { throw new Error('SEED_ADMIN_PASSWORD é obrigatório') })()
 
   const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
     email,
