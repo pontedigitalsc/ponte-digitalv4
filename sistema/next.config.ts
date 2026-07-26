@@ -1,8 +1,11 @@
 import type { NextConfig } from 'next'
 
+const root = process.cwd()
+
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: root,
   turbopack: {
-    root: process.cwd(),
+    root,
   },
   poweredByHeader: false,
   images: {
