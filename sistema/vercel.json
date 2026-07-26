@@ -2,7 +2,6 @@
   "framework": "nextjs",
   "installCommand": "npm ci && npx prisma generate",
   "buildCommand": "npm run build",
-  "lintCommand": "echo skipping lint",
   "outputDirectory": ".next",
   "crons": []
 }
