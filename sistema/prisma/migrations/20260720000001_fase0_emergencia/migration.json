@@ -1,0 +1,126 @@
+{
+  "version": "7.8",
+  "steps": [
+    {
+      "tag": "CreateMigration",
+      "migration_name": "fase0_emergencia"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "Empresa",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "Usuario",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "Contato",
+      "column": "deletedAt",
+      "column_new": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "EtapaImplantacao",
+      "column": "deletedAt",
+      "column_new": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "Historico",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "ConfiguracaoEmpresa",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "HistoricoSinal",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "Evidencia",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "Hipotese",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "MemoriaCognitiva",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "AcaoCognitiva",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "EventoAtivacao",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "Outcome",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "ConhecimentoValidado",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "FeedbackAcao",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "Conversa",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "IdentidadeDigital",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "ConversaHistorico",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "Aprendizado",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "Event",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "EventSubscription",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "DeadLetter",
+      "column": "deletedAt"
+    },
+    {
+      "tag": "AlterColumn",
+      "model": "DecisaoSinal",
+      "column": "deletedAt"
+    }
+  ]
+}

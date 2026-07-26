@@ -1,0 +1,1142 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── MULTI-TENANT BASE ────────────────────────────────────────────────────────
+
+model Empresa {
+  id        String   @id @default(cuid())
+  nome      String
+  slug      String   @unique
+  logo      String?
+  plano     Plano    @default(BASICO)
+  ativa     Boolean  @default(true)
+  criadaEm  DateTime @default(now())
+  atualizadaEm DateTime @updatedAt
+  deletedAt   DateTime?
+
+  usuarios      Usuario[]
+  leads         Lead[]
+  clientes      Cliente[]
+  contatos      Contato[]
+  tarefas       Tarefa[]
+  implantacoes  Implantacao[]
+  etapasImplantacao EtapaImplantacao[]
+  transacoes    Transacao[]
+  historicos    Historico[]
+  configuracao  ConfiguracaoEmpresa?
+  historicoSinais HistoricoSinal[]
+  conversas     Conversa[]
+  identidade    IdentidadeDigital?
+  historicoConversas ConversaHistorico[]
+  evidencias        Evidencia[]
+  hipoteses         Hipotese[]
+  memorias          MemoriaCognitiva[]
+  acoesCognitivas   AcaoCognitiva[]
+  feedbackAcoes     FeedbackAcao[]
+  eventosAtivacao   EventoAtivacao[]
+  outcomes              Outcome[]
+  conhecimentosValidados ConhecimentoValidado[]
+  aprendizados          Aprendizado[]
+  anotacoes             Anotacao[]
+  tags                  Tag[]
+  onboardingDecisoes    OnboardingDecisao[]
+  decisoesSinais        DecisaoSinal[]
+  eventos               Event[]
+  eventSubscriptions    EventSubscription[]
+  deadLetters           DeadLetter[]
+  cicloConfiguracoes    CicloConfiguracao[]
+  confiancaFontes       ConfiancaFonte[]
+
+  @@index([ativa])
+  @@index([criadaEm])
+  @@index([deletedAt])
+  @@map("empresas")
+}
+
+enum Plano {
+  BASICO
+  PROFISSIONAL
+  ENTERPRISE
+}
+
+// ─── USUÁRIOS ─────────────────────────────────────────────────────────────────
+
+model Usuario {
+  id           String   @id @default(cuid())
+  empresaId    String
+  supabaseId   String   @unique
+  nome         String
+  email        String
+  avatar       String?
+  cargo        String?
+  role         Role     @default(MEMBRO)
+  ativo        Boolean  @default(true)
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+  deletedAt    DateTime?
+
+  empresa      Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  tarefasCriadas   Tarefa[]       @relation("TarefaCriador")
+  tarefasAtribuidas Tarefa[]      @relation("TarefaResponsavel")
+  historicos       Historico[]
+  leads            Lead[]         @relation("LeadResponsavel")
+  anotacoes        Anotacao[]
+  onboardingDecisoes OnboardingDecisao[]
+
+  @@index([empresaId])
+  @@index([empresaId, ativo])
+  @@index([empresaId, deletedAt])
+  @@map("usuarios")
+}
+
+enum Role {
+  ADMIN
+  GESTOR
+  MEMBRO
+}
+
+// ─── LEADS ────────────────────────────────────────────────────────────────────
+
+model Lead {
+  id              String      @id @default(cuid())
+  empresaId       String
+  responsavelId   String?
+  nome            String
+  email           String?
+  telefone        String?
+  empresa         String?
+  cargo           String?
+  origem          OrigemLead  @default(INDICACAO)
+  estagio         EstagioLead @default(CONTATO)
+  temperatura     Temperatura @default(MORNO)
+  valor           Decimal?    @db.Decimal(10, 2)
+  observacoes     String?
+  perdidoMotivo   String?
+  criadoEm        DateTime    @default(now())
+  atualizadoEm    DateTime    @updatedAt
+  contatoEm       DateTime?
+  deletedAt       DateTime?
+
+  empresaRef      Empresa     @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  responsavel     Usuario?    @relation("LeadResponsavel", fields: [responsavelId], references: [id], onDelete: SetNull)
+  tarefas         Tarefa[]
+  historicos      Historico[]
+  cliente         Cliente?
+
+  @@index([empresaId, estagio])
+  @@index([empresaId, temperatura])
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, atualizadoEm])
+  @@index([empresaId, deletedAt])
+  @@index([responsavelId])
+  @@index([empresaId, responsavelId, estagio])
+  @@map("leads")
+}
+
+enum OrigemLead {
+  INDICACAO
+  SITE
+  INSTAGRAM
+  FACEBOOK
+  GOOGLE
+  WHATSAPP
+  COLD_OUTREACH
+  EVENTO
+  OUTRO
+}
+
+enum EstagioLead {
+  CONTATO
+  DIAGNOSTICO
+  PROPOSTA
+  NEGOCIACAO
+  FECHADO_GANHO
+  FECHADO_PERDIDO
+}
+
+enum Temperatura {
+  QUENTE
+  MORNO
+  FRIO
+}
+
+// ─── CLIENTES ─────────────────────────────────────────────────────────────────
+
+model Cliente {
+  id              String        @id @default(cuid())
+  empresaId       String
+  leadId          String?       @unique
+  nome            String
+  email           String?
+  telefone        String?
+  documento       String?
+  segmento        String?
+  site            String?
+  endereco        String?
+  cidade          String?
+  estado          String?
+  status          StatusCliente @default(ATIVO)
+  observacoes     String?
+  valorMensal     Decimal?      @db.Decimal(10, 2)
+  diaVencimento   Int?
+  criadoEm        DateTime      @default(now())
+  atualizadoEm    DateTime      @updatedAt
+  proximoContato  DateTime?
+  deletedAt       DateTime?
+
+  empresa         Empresa       @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  lead            Lead?         @relation(fields: [leadId], references: [id])
+  tarefas         Tarefa[]
+  historicos      Historico[]
+  implantacoes    Implantacao[]
+  transacoes      Transacao[]
+  contatos        Contato[]
+
+  @@index([empresaId, status])
+  @@index([empresaId, segmento])
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, deletedAt])
+  @@map("clientes")
+}
+
+enum StatusCliente {
+  ATIVO
+  INATIVO
+  INADIMPLENTE
+  CANCELADO
+  TRIAL
+}
+
+// ─── CONTATOS ─────────────────────────────────────────────────────────────────
+
+model Contato {
+  id            String   @id @default(cuid())
+  empresaId     String
+  clienteId     String
+  nome          String
+  cargo         String?
+  email         String?
+  telefone      String?
+  principal     Boolean  @default(false)
+  criadoEm      DateTime @default(now())
+  atualizadoEm  DateTime @updatedAt
+  deletedAt     DateTime?
+
+  empresa       Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente       Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId])
+  @@index([empresaId, clienteId])
+  @@index([empresaId, deletedAt])
+  @@index([clienteId])
+  @@index([clienteId, principal])
+  @@map("contatos")
+}
+
+// ─── IMPLANTAÇÕES ─────────────────────────────────────────────────────────────
+
+model Implantacao {
+  id            String              @id @default(cuid())
+  empresaId     String
+  clienteId     String
+  titulo        String
+  descricao     String?
+  status        StatusImplantacao   @default(PENDENTE)
+  dataInicio    DateTime?
+  dataPrevisao  DateTime?
+  dataConclusao DateTime?
+  criadaEm      DateTime            @default(now())
+  atualizadaEm  DateTime            @updatedAt
+  deletedAt     DateTime?
+
+  empresa       Empresa             @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente       Cliente             @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  etapas        EtapaImplantacao[]
+  historicos    Historico[]
+  onboardingDecisoes OnboardingDecisao[]
+
+  @@index([empresaId, status])
+  @@index([empresaId, dataPrevisao])
+  @@index([empresaId, deletedAt])
+  @@index([clienteId])
+  @@map("implantacoes")
+}
+
+enum StatusImplantacao {
+  PENDENTE
+  EM_ANDAMENTO
+  AGUARDANDO_CLIENTE
+  CONCLUIDA
+  CANCELADA
+}
+
+model EtapaImplantacao {
+  id             String      @id @default(cuid())
+  empresaId      String
+  implantacaoId  String
+  titulo         String
+  descricao      String?
+  concluida      Boolean     @default(false)
+  ordem          Int
+  concluidaEm    DateTime?
+  criadaEm       DateTime    @default(now())
+  atualizadaEm   DateTime    @updatedAt
+  deletedAt      DateTime?
+
+  empresa        Empresa     @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  implantacao    Implantacao @relation(fields: [implantacaoId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId])
+  @@index([empresaId, implantacaoId])
+  @@index([empresaId, deletedAt])
+  @@index([implantacaoId])
+  @@index([implantacaoId, concluida])
+  @@index([implantacaoId, ordem])
+  @@map("etapas_implantacao")
+}
+
+// ─── TAREFAS ──────────────────────────────────────────────────────────────────
+
+model Tarefa {
+  id             String        @id @default(cuid())
+  empresaId      String
+  criadorId      String
+  responsavelId  String?
+  clienteId      String?
+  leadId         String?
+  titulo         String
+  descricao      String?
+  status         StatusTarefa  @default(PENDENTE)
+  prioridade     Prioridade    @default(MEDIA)
+  tipo           TipoTarefa    @default(TAREFA)
+  dataVencimento DateTime?
+  concluidaEm   DateTime?
+  criadaEm      DateTime       @default(now())
+  atualizadaEm  DateTime       @updatedAt
+  deletedAt     DateTime?
+
+  empresa       Empresa        @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  criador       Usuario        @relation("TarefaCriador", fields: [criadorId], references: [id], onDelete: Cascade)
+  responsavel   Usuario?       @relation("TarefaResponsavel", fields: [responsavelId], references: [id], onDelete: SetNull)
+  cliente       Cliente?       @relation(fields: [clienteId], references: [id], onDelete: SetNull)
+  lead          Lead?          @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  @@index([empresaId, status])
+  @@index([empresaId, dataVencimento])
+  @@index([empresaId, prioridade])
+  @@index([empresaId, tipo])
+  @@index([empresaId, criadaEm])
+  @@index([empresaId, deletedAt])
+  @@index([responsavelId])
+  @@index([clienteId])
+  @@index([empresaId, responsavelId, status])
+  @@map("tarefas")
+}
+
+enum StatusTarefa {
+  PENDENTE
+  EM_ANDAMENTO
+  CONCLUIDA
+  CANCELADA
+}
+
+enum Prioridade {
+  URGENTE
+  ALTA
+  MEDIA
+  BAIXA
+}
+
+enum TipoTarefa {
+  TAREFA
+  LIGACAO
+  EMAIL
+  REUNIAO
+  FOLLOW_UP
+  VISITA
+}
+
+// ─── HISTÓRICO ────────────────────────────────────────────────────────────────
+
+model Historico {
+  id            String        @id @default(cuid())
+  empresaId     String
+  usuarioId     String?
+  clienteId     String?
+  leadId        String?
+  implantacaoId String?
+  tipo          TipoHistorico
+  titulo        String
+  descricao     String?
+  metadata      Json?
+  criadoEm     DateTime      @default(now())
+  atualizadoEm DateTime      @updatedAt
+  deletedAt     DateTime?
+
+  empresa      Empresa       @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  usuario      Usuario?      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  cliente      Cliente?      @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  lead         Lead?         @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  implantacao  Implantacao?  @relation(fields: [implantacaoId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, tipo])
+  @@index([empresaId, deletedAt])
+  @@index([clienteId])
+  @@index([leadId])
+  @@index([usuarioId])
+  @@index([implantacaoId])
+  @@index([clienteId, criadoEm])
+  @@map("historicos")
+}
+
+enum TipoHistorico {
+  NOTA
+  LIGACAO
+  EMAIL
+  REUNIAO
+  WHATSAPP
+  PROPOSTA
+  CONTRATO
+  SISTEMA
+}
+
+// ─── FINANCEIRO ───────────────────────────────────────────────────────────────
+
+model Transacao {
+  id            String          @id @default(cuid())
+  empresaId     String
+  clienteId     String?
+  tipo          TipoTransacao
+  categoria     String?
+  descricao     String
+  valor         Decimal         @db.Decimal(10, 2)
+  status        StatusTransacao @default(PENDENTE)
+  dataVencimento DateTime?
+  dataPagamento  DateTime?
+  recorrente     Boolean        @default(false)
+  observacoes    String?
+  criadaEm      DateTime        @default(now())
+  atualizadaEm  DateTime        @updatedAt
+  deletedAt     DateTime?
+
+  empresa       Empresa         @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente       Cliente?        @relation(fields: [clienteId], references: [id], onDelete: SetNull)
+
+  @@index([empresaId, status, dataVencimento])
+  @@index([empresaId, tipo])
+  @@index([empresaId, dataPagamento])
+  @@index([empresaId, categoria])
+  @@index([empresaId, criadaEm])
+  @@index([empresaId, deletedAt])
+  @@index([clienteId])
+  @@index([empresaId, tipo, status, dataVencimento])
+  @@map("transacoes")
+}
+
+enum TipoTransacao {
+  RECEITA
+  DESPESA
+}
+
+enum StatusTransacao {
+  PENDENTE
+  PAGO
+  VENCIDO
+  CANCELADO
+}
+
+// ─── CONFIGURAÇÕES ────────────────────────────────────────────────────────────
+
+model ConfiguracaoEmpresa {
+  id               String   @id @default(cuid())
+  empresaId        String   @unique
+  moeda            String   @default("BRL")
+  fuso             String   @default("America/Sao_Paulo")
+  corPrimaria      String   @default("#2563EB")
+  notificacoes     Boolean  @default(true)
+  etapasImplantacao Json?
+  atualizadaEm     DateTime @updatedAt
+  deletedAt        DateTime?
+
+  empresa          Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, deletedAt])
+  @@map("configuracoes_empresa")
+}
+
+// ─── HISTÓRICO DE SINAIS ──────────────────────────────────────────────────────
+// Fundação de dado para a futura Camada de Contexto / Motor de Contexto —
+// a "Memória Operacional" da Ponte Digital.
+//
+// Este modelo é deliberadamente um registro puro: NÃO interpreta, NÃO
+// calcula tendência, NÃO compara "antes vs agora". É a responsabilidade
+// que cabe ao banco nesta arquitetura — guardar o fato, nunca decidir
+// sobre ele.
+//
+// Sem histórico real acumulado, qualquer resposta a perguntas como "isso
+// piorou?" ou "isso é frequente?" seria inventada, não calculada. Esta
+// tabela existe para que, quando houver volume de uso suficiente, essas
+// perguntas possam ser respondidas com dado real — não antes disso.
+//
+// motorOrigem existe preparado para o futuro (Motor Financeiro, Motor CRM,
+// Motor Estoque etc. gravando na mesma memória), mas hoje só um motor
+// roda de fato — a Camada de Sinais em src/engine/ — então o valor
+// default reflete a realidade atual, sem fingir uma taxonomia que ainda
+// não existe.
+model HistoricoSinal {
+  id             String   @id @default(cuid())
+  empresaId      String
+  motorOrigem    String   @default("camada-sinais")
+  sinalId        String
+  dominio        String
+  urgencia       String
+  titulo         String
+  descricao      String?
+  dadosOriginais Json?
+  metadata       Json?
+  criadoEm      DateTime @default(now())
+  deletedAt     DateTime?
+
+  empresa       Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  decisoesSinais DecisaoSinal[]
+
+  @@index([empresaId, sinalId, criadoEm])
+  @@index([empresaId, motorOrigem])
+  @@index([empresaId, deletedAt])
+  @@map("historico_sinais")
+}
+
+// ─── EVIDENCE ENGINE ─────────────────────────────────────────────────────────
+// Patrimônio cognitivo #1 — toda interação relevante produz uma evidência.
+// Evidência NÃO é log. Evidência representa algo que aprendemos sobre a empresa.
+
+enum CategoriaEvidencia {
+  FINANCEIRO
+  CLIENTES
+  OPERACAO
+  GESTAO
+  PESSOAS
+  PRODUTO
+  ESTRATEGIA
+}
+
+enum OrigemEvidencia {
+  PRIMEIRA_CONVERSA
+  CONVERSA_MENSAL
+  MODULO_CLIENTES
+  MODULO_FINANCEIRO
+  MODULO_TAREFAS
+  MODULO_CRM
+  MODULO_IMPLANTACAO
+  ASSISTENTE
+  SISTEMA
+  ACAO_USUARIO
+}
+
+enum ConfiancaEvidencia {
+  ALTA
+  MEDIA
+  BAIXA
+}
+
+model Evidencia {
+  id             String             @id @default(cuid())
+  empresaId      String
+  categoria      CategoriaEvidencia
+  origem         OrigemEvidencia
+  descricao      String
+  confianca      ConfiancaEvidencia @default(MEDIA)
+  dados          Json?
+  criadaEm       DateTime           @default(now())
+  atualizadaEm   DateTime           @updatedAt
+  deletedAt      DateTime?
+
+  empresa        Empresa            @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, categoria, criadaEm])
+  @@index([empresaId, criadaEm])
+  @@index([empresaId, origem])
+  @@index([empresaId, confianca])
+  @@index([empresaId, deletedAt])
+  @@index([empresaId, categoria, confianca])
+  @@map("evidencias")
+}
+
+// ─── COGNITIVE MEMORY ENGINE ─────────────────────────────────────────────────
+// Patrimônio cognitivo #3 — rastreia a evolução do entendimento sobre a empresa.
+
+enum EstadoHipotese {
+  NOVA
+  EM_OBSERVACAO
+  FORTALECIDA
+  CONFIRMADA
+  ENFRAQUECIDA
+  DESCARTADA
+}
+
+model Hipotese {
+  id             String         @id @default(cuid())
+  empresaId      String
+  descricao      String
+  categoria      CategoriaEvidencia
+  estado         EstadoHipotese @default(NOVA)
+  confianca      ConfiancaEvidencia @default(MEDIA)
+  evidenciaOrigem String?
+  criadaEm       DateTime       @default(now())
+  atualizadaEm   DateTime       @updatedAt
+  deletedAt      DateTime?
+
+  empresa        Empresa        @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, estado])
+  @@index([empresaId, categoria])
+  @@index([empresaId, atualizadaEm])
+  @@index([empresaId, deletedAt])
+  @@map("hipoteses")
+}
+
+// Timeline Cognitiva — registra apenas mudanças relevantes de entendimento
+model MemoriaCognitiva {
+  id             String   @id @default(cuid())
+  empresaId      String
+  tipo           String
+  descricao      String
+  categoria      CategoriaEvidencia
+  versao         Int
+  metadados      Json?
+  criadaEm       DateTime @default(now())
+  deletedAt      DateTime?
+
+  empresa        Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, criadaEm])
+  @@index([empresaId, versao])
+  @@index([empresaId, tipo])
+  @@index([empresaId, deletedAt])
+  @@map("memoria_cognitiva")
+}
+
+// ─── ACTION INTELLIGENCE ENGINE ─────────────────────────────────────────────
+// Camada de execução — cada decisão gera uma ação acompanhável.
+
+enum StatusAcao {
+  PENDENTE
+  EM_ANDAMENTO
+  CONCLUIDA
+  ABANDONADA
+}
+
+enum OrigemAcao {
+  DECISION_ENGINE
+  ASSISTENTE
+  USUARIO
+}
+
+model AcaoCognitiva {
+  id              String          @id @default(cuid())
+  empresaId       String
+  decisaoId       String?
+  titulo          String
+  descricao       String
+  categoria       CategoriaEvidencia
+  status          StatusAcao      @default(PENDENTE)
+  origem          OrigemAcao      @default(DECISION_ENGINE)
+  impactoEsperado Json?
+  resultado       Json?
+  evidenciaGeradaId String?
+  criadaEm        DateTime        @default(now())
+  atualizadaEm    DateTime        @updatedAt
+  deletedAt       DateTime?
+
+  empresa         Empresa         @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  feedbacks       FeedbackAcao[]
+  decisoesSinais  DecisaoSinal[]
+
+  @@index([empresaId, status])
+  @@index([empresaId, categoria])
+  @@index([empresaId, criadaEm])
+  @@index([empresaId, deletedAt])
+  @@map("acoes_cognitivas")
+}
+
+// ─── FOUNDER ACTIVATION ENGINE ─────────────────────────────────────────────
+// Mede a construção de valor real do fundador com a Ponte Digital.
+
+enum TipoEventoAtivacao {
+  DIAGNOSTICO_COMPLETO
+  IDENTIDADE_CRIADA
+  PRIMEIRA_DECISAO_VISTA
+  PRIMEIRA_ACAO_CRIADA
+  PRIMEIRA_ACAO_CONCLUIDA
+  PRIMEIRO_FEEDBACK
+  PRIMEIRO_RETORNO
+  CONVERSA_MENSAL_REALIZADA
+}
+
+model EventoAtivacao {
+  id        String              @id @default(cuid())
+  empresaId String
+  tipo      TipoEventoAtivacao
+  dados     Json?
+  criadoEm  DateTime            @default(now())
+  deletedAt DateTime?
+
+  empresa   Empresa             @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@unique([empresaId, tipo])
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, deletedAt])
+  @@map("eventos_ativacao")
+}
+
+// ─── OUTCOME INTELLIGENCE ENGINE ───────────────────────────────────────────
+// Mede consequências reais geradas pela Ponte — mudanças percebidas na empresa
+
+enum CategoriaOutcome {
+  FINANCEIRO
+  ORGANIZACAO
+  OPERACAO
+  CLIENTES
+  PRODUTIVIDADE
+  PREVISIBILIDADE
+  BEM_ESTAR
+  ESTRATEGIA
+}
+
+enum OrigemOutcome {
+  ACAO
+  FEEDBACK
+  CONVERSA
+  SISTEMA
+}
+
+model Outcome {
+  id             String              @id @default(cuid())
+  empresaId      String
+  categoria      CategoriaOutcome
+  origem         OrigemOutcome
+  descricao      String
+  detalhes       Json?
+  confianca      ConfiancaEvidencia  @default(MEDIA)
+  evidenciasIds  String[]
+  criadoEm       DateTime            @default(now())
+  atualizadoEm   DateTime            @updatedAt
+  deletedAt      DateTime?
+
+  empresa        Empresa             @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, categoria])
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, deletedAt])
+  @@map("outcomes")
+}
+
+// ─── KNOWLEDGE GOVERNANCE ENGINE ──────────────────────────────────────────
+// Conhecimento validado — aprovado pelo governance engine para consumo da Identity.
+
+model ConhecimentoValidado {
+  id                String             @id @default(cuid())
+  empresaId         String
+  hipoteseId        String?
+  descricao         String
+  categoria         CategoriaEvidencia
+  scoreConfianca    Int                @default(0)
+  quantidadeEvidencias   Int           @default(0)
+  quantidadeConfirmacoes Int           @default(0)
+  quantidadeRefutacoes   Int           @default(0)
+  ultimaValidacao   DateTime?
+  ultimaAuditoria   DateTime?
+  origem            String
+  dados             Json?
+  criadoEm          DateTime           @default(now())
+  atualizadoEm      DateTime           @updatedAt
+  deletedAt         DateTime?
+
+  empresa           Empresa            @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, categoria])
+  @@index([empresaId, scoreConfianca])
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, ultimaAuditoria])
+  @@index([empresaId, deletedAt])
+  @@map("conhecimentos_validados")
+}
+
+// ─── FEEDBACK INTELLIGENCE ENGINE ──────────────────────────────────────────
+// Fecha o ciclo cognitivo: ação → feedback → evidência → memória → evolução.
+
+enum TipoFeedbackAcao {
+  AJUDOU
+  AJUDOU_PARCIALMENTE
+  NAO_AJUDOU
+  NAO_EXECUTADA
+}
+
+model FeedbackAcao {
+  id               String           @id @default(cuid())
+  empresaId        String
+  acaoId           String
+  tipo             TipoFeedbackAcao
+  comentario       String?
+  impactoPercebido Json?
+  dados            Json?
+  criadoEm         DateTime         @default(now())
+  atualizadoEm     DateTime         @updatedAt
+  deletedAt        DateTime?
+
+  empresa          Empresa          @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  acao             AcaoCognitiva    @relation(fields: [acaoId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, tipo])
+  @@index([empresaId, deletedAt])
+  @@index([acaoId])
+  @@map("feedback_acoes")
+}
+
+// ─── ENGINE DE CONVERSAS ─────────────────────────────────────────────────────
+// A conversa é anônima até ser vinculada a uma empresa no momento da criação
+// da conta. O token identifica o visitante sem exigir cadastro prévio.
+
+model Conversa {
+  id        String   @id @default(cuid())
+  token     String
+  fluxo     String   @default("primeira-conversa")
+  etapa     String?
+  respostas Json     @default("{}")
+  empresaId String?
+  concluida Boolean  @default(false)
+  criadaEm  DateTime @default(now())
+  atualizadaEm DateTime @updatedAt
+  deletedAt DateTime?
+
+  empresa   Empresa? @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([token, concluida])
+  @@index([empresaId])
+  @@index([empresaId, criadaEm])
+  @@index([empresaId, deletedAt])
+  @@map("conversas")
+}
+
+// ─── IDENTIDADE DIGITAL ──────────────────────────────────────────────────────
+// Patrimônio cognitivo da empresa. Cada conversa mensal gera uma nova versão.
+// Nunca substituir — sempre acumular.
+
+model IdentidadeDigital {
+  id                String   @id @default(cuid())
+  empresaId         String   @unique
+  versao            Int      @default(1)
+  dados             Json?
+  interpretacoes    Json?
+  conhecimentos     Json?
+  crencas           Json?
+  lacunas           Json?
+  narrativaVersao   String?
+  ultimaConversa    DateTime?
+  criadaEm          DateTime @default(now())
+  atualizadaEm      DateTime @updatedAt
+  deletedAt         DateTime?
+
+  empresa           Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId])
+  @@index([empresaId, deletedAt])
+  @@map("identidade_digital")
+}
+
+// Histórico mensal de conversas — a biografia empresarial
+model ConversaHistorico {
+  id              String   @id @default(cuid())
+  empresaId       String
+  identidadeId    String?
+  mes             Int
+  ano             Int
+  respostas       Json
+  interpretacoes  Json?
+  criadaEm        DateTime @default(now())
+  deletedAt       DateTime?
+
+  empresa         Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, ano, mes])
+  @@index([empresaId, deletedAt])
+  @@index([identidadeId])
+  @@map("conversas_historico")
+}
+
+// ─── CONVERSATIONAL LEARNING ──────────────────────────────────────────────
+// Conhecimento explícito ensinado pelo empresário através de conversas.
+
+model Aprendizado {
+  id             String   @id @default(cuid())
+  empresaId      String
+  descricao      String
+  categoria      String
+  origem         String
+  contexto       String?
+  ativo          Boolean  @default(true)
+  criadoEm       DateTime @default(now())
+  atualizadoEm   DateTime @updatedAt
+  deletedAt      DateTime?
+
+  empresa        Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, categoria])
+  @@index([empresaId, ativo])
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, deletedAt])
+  @@map("aprendizados")
+}
+
+// ─── ANOTAÇÕES ──────────────────────────────────────────────────────────────
+// Notas e anotações dos usuários sobre entidades do sistema.
+
+model Anotacao {
+  id            String   @id @default(cuid())
+  empresaId     String
+  criadoPorId   String?
+  entidadeTipo  String   // 'LEAD' | 'CLIENTE' | 'TAREFA' | 'ACAO' | 'TRANSAcaO' | 'IMPLANTACAO'
+  entidadeId    String
+  conteudo      String
+  criadoEm      DateTime @default(now())
+  atualizadoEm  DateTime @updatedAt
+  deletedAt     DateTime?
+
+  empresa       Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  criadoPor     Usuario? @relation(fields: [criadoPorId], references: [id], onDelete: SetNull)
+
+  @@index([empresaId, entidadeTipo, entidadeId])
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, deletedAt])
+  @@index([criadoPorId])
+  @@map("anotacoes")
+}
+
+// ─── TAGS ───────────────────────────────────────────────────────────────────
+// Etiquetas para categorização de entidades.
+
+model Tag {
+  id            String   @id @default(cuid())
+  empresaId     String
+  nome          String
+  cor           String   @default("#3B82F6")
+  criadoEm      DateTime @default(now())
+  atualizadoEm  DateTime @updatedAt
+  deletedAt     DateTime?
+
+  empresa       Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@unique([empresaId, nome])
+  @@index([empresaId])
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, deletedAt])
+  @@map("tags")
+}
+
+// ─── ONBOARDING DECISÕES ────────────────────────────────────────────────────
+// Decisões tomadas durante o processo de onboarding/implantação.
+
+model OnboardingDecisao {
+  id            String      @id @default(cuid())
+  empresaId     String
+  implantacaoId String?
+  titulo        String
+  descricao     String?
+  decisao       String
+  tipo          String      @default("ESCOLHA") // 'ESCOLHA' | 'APROVACAO' | 'PRIORIZACAO' | 'PRAZO' | 'OUTRO'
+  dataDecisao   DateTime    @default(now())
+  responsavelId String?
+  criadoEm      DateTime    @default(now())
+  atualizadoEm  DateTime    @updatedAt
+  deletedAt     DateTime?
+
+  empresa       Empresa      @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  implantacao   Implantacao? @relation(fields: [implantacaoId], references: [id], onDelete: SetNull)
+  responsavel   Usuario?     @relation(fields: [responsavelId], references: [id], onDelete: SetNull)
+
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, deletedAt])
+  @@index([implantacaoId])
+  @@index([responsavelId])
+  @@map("onboarding_decisoes")
+}
+
+// ─── EVENT BUS ───────────────────────────────────────────────────────────────
+// WP-2.1: Modelos de Evento no Schema
+// Barramento formal de eventos do Motor Cognitivo (ADR-011, ADR-012, ADR-027)
+
+enum EventStatus {
+  PENDENTE
+  PROCESSADO
+  FALHA
+}
+
+model Event {
+  id             String       @id @default(cuid())
+  eventType      String
+  aggregateId    String
+  aggregateType  String
+  tenantId       String
+  correlationId  String
+  causationId    String?
+  version        Int          @default(1)
+  payload        Json
+  metadata       Json?
+  status         EventStatus  @default(PENDENTE)
+  occurredAt     DateTime
+  criadoEm       DateTime     @default(now())
+  processadoEm   DateTime?
+  tentativas     Int          @default(0)
+  deletedAt      DateTime?
+
+  empresa        Empresa      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, eventType, occurredAt])
+  @@index([tenantId, status])
+  @@index([tenantId, deletedAt])
+  @@index([correlationId])
+  @@index([eventType, occurredAt])
+  @@map("eventos")
+}
+
+model EventSubscription {
+  id            String   @id @default(cuid())
+  eventType     String
+  handlerId     String
+  empresaId     String?
+  ativo         Boolean  @default(true)
+  criadoEm      DateTime @default(now())
+  atualizadoEm  DateTime @updatedAt
+  deletedAt     DateTime?
+
+  empresa       Empresa? @relation(fields: [empresaId], references: [id], onDelete: SetNull)
+
+  @@unique([eventType, handlerId])
+  @@index([eventType, ativo])
+  @@index([empresaId, deletedAt])
+  @@map("event_subscriptions")
+}
+
+model DeadLetter {
+  id             String   @id @default(cuid())
+  eventId        String?
+  eventType      String
+  aggregateId    String
+  aggregateType  String
+  tenantId       String
+  correlationId  String
+  handlerName    String
+  payload        Json
+  errorName      String
+  errorMessage   String
+  error          String
+  stack          String?
+  tentativas     Int      @default(0)
+  occurredAt     DateTime
+  failedAt       DateTime @default(now())
+  criadoEm       DateTime @default(now())
+  deletedAt      DateTime?
+
+  empresa        Empresa  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, eventType])
+  @@index([tenantId, correlationId])
+  @@index([handlerName])
+  @@index([criadoEm])
+  @@index([tenantId, deletedAt])
+  @@map("dead_letters")
+}
+
+// ─── RITMO ENGINE — CICLO CONFIGURATION ─────────────────────────────────────
+// WP-4.2: Configuração de frequência dos ciclos cognitivos por empresa.
+
+enum FrequenciaCiclo {
+  DIARIA
+  SEMANAL
+  MENSAL
+}
+
+model CicloConfiguracao {
+  id            String          @id @default(cuid())
+  empresaId     String
+  tipo          String          // 'DIAGNOSTICO' | 'SINTESE' | 'GOVERNANCA' | 'IDENTIDADE'
+  frequencia    FrequenciaCiclo
+  ativo         Boolean         @default(true)
+  ultimaExecucao DateTime?
+  proximaExecucao DateTime?
+  heartbeatEm   DateTime?
+  heartbeatOk   Boolean         @default(true)
+  config        Json?
+  criadoEm      DateTime        @default(now())
+  atualizadoEm  DateTime        @updatedAt
+  deletedAt     DateTime?
+
+  empresa       Empresa         @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@unique([empresaId, tipo])
+  @@index([empresaId, ativo])
+  @@index([empresaId, proximaExecucao])
+  @@index([empresaId, deletedAt])
+  @@map("ciclo_configuracoes")
+}
+
+// ─── TRUST ENGINE — CONFIANÇA DE FONTES ────────────────────────────────────
+// WP-5.2: Score de fontes, histórico de acertos, decaimento temporal.
+
+model ConfiancaFonte {
+  id              String   @id @default(cuid())
+  empresaId       String
+  nomeFonte       String   // 'clientes.sinais' | 'tarefas.sinais' | 'evidence-engine' | etc
+  scoreAtual      Int      @default(50)
+  totalAcertos    Int      @default(0)
+  totalErros      Int      @default(0)
+  ultimoAcertoEm  DateTime?
+  ultimoErroEm    DateTime?
+  criadoEm        DateTime @default(now())
+  atualizadoEm    DateTime @updatedAt
+  deletedAt       DateTime?
+
+  empresa         Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@unique([empresaId, nomeFonte])
+  @@index([empresaId, scoreAtual])
+  @@index([empresaId, deletedAt])
+  @@map("confianca_fontes")
+}
+
+// ─── DECISÃO-SINAL ──────────────────────────────────────────────────────────
+// Relacionamento entre decisões (AcaoCognitiva) e sinais (HistoricoSinal).
+// Garante rastreabilidade: quais sinais geraram ou foram gerados por cada decisão.
+
+model DecisaoSinal {
+  id            String   @id @default(cuid())
+  empresaId     String
+  decisaoId     String
+  sinalId       String
+  tipoRelacao   String   @default("GEROU")
+  peso          Float    @default(1.0)
+  criadoEm      DateTime @default(now())
+  deletedAt     DateTime?
+
+  empresa       Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  decisao       AcaoCognitiva  @relation(fields: [decisaoId], references: [id], onDelete: Cascade)
+  sinal         HistoricoSinal @relation(fields: [sinalId], references: [id], onDelete: Cascade)
+
+  @@unique([decisaoId, sinalId, tipoRelacao])
+  @@index([empresaId])
+  @@index([empresaId, decisaoId])
+  @@index([empresaId, sinalId])
+  @@index([empresaId, deletedAt])
+  @@index([decisaoId])
+  @@index([sinalId])
+  @@map("decisoes_sinais")
+}

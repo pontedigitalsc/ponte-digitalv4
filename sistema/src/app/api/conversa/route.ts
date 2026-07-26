@@ -1,0 +1,95 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { criarConversa, carregarConversa, responder, obterEstado } from '@/engine/conversation-engine'
+import { handleApiError } from '@/lib/api-error'
+import { conversaRespostaSchema } from '@/lib/validations'
+import { assertRateLimit } from '@/lib/rate-limit'
+import { requireUserApi } from '@/lib/authorize'
+import { AuthenticationError } from '@/lib/app-errors'
+
+function obterToken(request: NextRequest): string | null {
+  return request.cookies.get('conv_token')?.value ?? null
+}
+
+// Valida que o usuário autenticado tem acesso à conversa
+// (se a conversa já estiver vinculada a uma empresa)
+async function validarAcessoConversa(token: string, usuario: Awaited<ReturnType<typeof requireUserApi>> | null): Promise<void> {
+  if (!usuario) return
+  const { prismaSeguro } = await import('@/lib/prisma-tenant-safe')
+  const conversa = await prismaSeguro.conversa.findFirst({
+    where: { token },
+    select: { empresaId: true },
+  })
+  if (conversa?.empresaId && conversa.empresaId !== usuario.empresaId) {
+    throw new AuthenticationError('Acesso negado a esta conversa')
+  }
+}
+
+// GET /api/conversa — retorna estado atual da conversa (requer conv_token)
+export async function GET(request: NextRequest) {
+  try {
+    const token = obterToken(request)
+    if (!token) {
+      return NextResponse.json({ error: 'Conversa nao iniciada. Acesse a pagina inicial para comecar.' }, { status: 400 })
+    }
+
+    const usuario = await requireUserApi().catch(() => null)
+    await validarAcessoConversa(token, usuario)
+    const estado = await obterEstado(token)
+
+    let jsonResponse: NextResponse
+
+    if (!estado) {
+      const nova = await criarConversa(token)
+      const fluxo = (await import('@/engine/fluxos/primeira-conversa')).FLUXOS[nova.fluxo]
+      const primeira = fluxo?.etapas[0] ?? null
+
+      jsonResponse = NextResponse.json({
+        token,
+        perguntaAtual: primeira,
+        progresso: { blocoAtual: 1, totalBlocos: 5, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 },
+        concluida: false,
+        respostas: {},
+      })
+    } else {
+      jsonResponse = NextResponse.json({
+        token,
+        ...estado,
+      })
+    }
+
+    return jsonResponse
+  } catch (err) {
+    return handleApiError(err)
+  }
+}
+
+// POST /api/conversa — envia resposta e avança
+export async function POST(request: NextRequest) {
+  try {
+    const usuario = await requireUserApi().catch(() => null)
+
+    const ip = request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? 'unknown'
+    assertRateLimit(`conversa:${ip}`, 'CONVERSA')
+
+    const token = obterToken(request)
+    if (!token) {
+      return NextResponse.json({ error: 'Conversa não iniciada' }, { status: 400 })
+    }
+    await validarAcessoConversa(token, usuario)
+
+    const body = await request.json()
+    const validacao = conversaRespostaSchema.safeParse(body)
+
+    if (!validacao.success) {
+      return NextResponse.json({ error: 'Dados inválidos', detalhes: validacao.error.flatten() }, { status: 422 })
+    }
+
+    const { perguntaId, valor } = validacao.data
+
+    const resultado = await responder(token, perguntaId, valor)
+
+    return NextResponse.json({ data: resultado })
+  } catch (err) {
+    return handleApiError(err)
+  }
+}

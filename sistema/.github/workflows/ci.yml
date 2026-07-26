@@ -1,0 +1,40 @@
+name: CI/CD Ponte Digital
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./sistema
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: ./sistema/package-lock.json
+
+      - run: npm ci
+
+      - run: npx prisma generate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy Preview (Vercel)
+        if: github.event_name == 'pull_request'
+        run: npx vercel --cwd . --token=${{ secrets.VERCEL_TOKEN }} --yes

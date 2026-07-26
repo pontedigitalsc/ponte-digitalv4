@@ -1,0 +1,64 @@
+# Known Issues
+
+## Soft Delete incompleto
+
+**Status:** Pendente
+**Prioridade:** Alta
+**Descrição:** Parte dos models do Prisma não possui campo `deletedAt`. Duas auditorias reportaram listas diferentes e inconsistentes entre si — antes de corrigir, é necessário gerar uma lista real e completa direto do `schema.prisma` (não confiar em listagem gerada por IA sem conferência manual).
+**Ação:** rodar `grep -L "deletedAt" **/*.prisma` ou revisão manual do schema, listar todos os models e seu status, então corrigir os que deveriam ter e não têm.
+**Sprint:** pode ser corrigido em paralelo, não precisa de sprint dedicada.
+
+## HistoricoSinal com nomenclatura técnica, não semântica
+
+**Status:** Aceito (não é bug)
+**Prioridade:** Baixa, congelado até Fase 2
+**Descrição:** nomes como `clientes-sem-contato` não seguem a convenção semântica formal de `DomainEvent`. Ver `04-DECISIONS/ADR/ADR-001-historico-sinal-vs-domain-event.md`.
+**Ação:** nenhuma agora.
+
+## Zero cobertura de teste automatizado
+
+**Status:** Pendente, prioridade proporcional à fase
+**Prioridade:** Média
+**Descrição:** nenhum teste automatizado no repositório.
+**Ação recomendada:** testes de fumaça mínimos em autenticação e transações financeiras (maior risco silencioso) — não uma suíte completa, que seria sofisticação prematura para esta fase.
+
+## README.md é o template padrão do projeto
+
+**Status:** Resolvido em 2026-07-13
+**Prioridade:** Baixa
+**Descrição:** README não documentava o projeto real.
+**Ação:** README raiz agora aponta direto para `docs/00-START-HERE.md`, ponto de entrada do Sistema Operacional de Engenharia. Nenhum conteúdo de negócio foi adicionado ao README — ele só direciona.
+
+## Gap de Row Level Security confirmado (auditoria de patrimônio intelectual, 2026-07-13)
+
+**Status:** Pendente
+**Prioridade:** Alta
+**Descrição:** `sistema/prisma/rls-policies.sql` habilita RLS em 11 tabelas, mas só cria a policy `empresa_isolamento` em 8 delas. `empresas`, `contatos` e `etapas_implantacao` têm RLS habilitado sem nenhuma policy — dependendo da role de conexão do Prisma, isso pode significar acesso bloqueado (se a role respeita RLS) ou RLS simplesmente inofensivo (se a role usada, como `service_role` do Supabase, ignora RLS por padrão). `HistoricoSinal` não tem RLS habilitado de forma nenhuma.
+**Ação:** confirmar qual role o Prisma usa para conectar; criar as policies faltantes; decidir se `HistoricoSinal` precisa de RLS.
+**Detalhe técnico completo:** `../08-KNOWLEDGE/ENGINEERING_KNOWLEDGE.md`.
+
+## Wrapper de tenant guard (`prismaSeguro`) existe mas não está conectado
+
+**Status:** Pendente
+**Prioridade:** Alta
+**Descrição:** `sistema/src/lib/prisma-tenant-safe.ts` define um cliente Prisma estendido que detecta queries multi-tenant sem `empresaId`. Nenhum dos 7 services do projeto o importa — todos usam o cliente Prisma direto (`@/lib/prisma`). O "segundo nível de proteção" descrito no comentário do próprio arquivo não está, de fato, rodando.
+**Ação:** decidir se os services devem migrar para `prismaSeguro`, ou se o arquivo deve ser removido caso a abordagem tenha sido abandonada — não deixar código morto que sugere uma garantia que não existe.
+**Detalhe técnico completo:** `../08-KNOWLEDGE/ENGINEERING_KNOWLEDGE.md`.
+
+## Soft delete — lista real confirmada por inspeção direta do schema (não mais "rodar grep depois")
+
+**Status:** Parcialmente resolvido — dado real levantado, decisão de correção ainda pendente
+**Prioridade:** Alta
+**Descrição:** confirmado contra `schema.prisma`: têm `deletedAt` — Cliente, Implantacao, Lead, Tarefa, Transacao (5 de 12 models). Não têm — Empresa, Usuario, Contato, EtapaImplantacao, Historico, ConfiguracaoEmpresa, HistoricoSinal (7 de 12 models).
+**Ação:** decidir quais dos 7 são exceção legítima (ex.: Empresa é a raiz do tenant; Historico/HistoricoSinal são logs) e quais são lacuna real a corrigir.
+**Detalhe técnico completo:** `../08-KNOWLEDGE/ENGINEERING_KNOWLEDGE.md`.
+
+## Sistema não modela um usuário "Apoiador" fora do conceito de empresa/tenant
+
+**Status:** Pendente
+**Prioridade:** Média — não bloqueia a sprint ativa, mas bloqueia operar a Escada Comunitária de ponta a ponta
+**Descrição:** desde `ADR-003` (2026-07-14), a jornada do usuário prevê um estágio "Apoiador" — alguém que completou o Diagnóstico mas ainda não é Fundador, sem necessariamente ter uma "Empresa" cadastrada no sentido atual do schema (multiempresa, papéis ADMIN/GESTOR/MEMBRO). Hoje o sistema só reconhece usuários dentro de uma empresa já criada.
+**Ação:** decisão de engenharia pendente — se um Apoiador precisa de um registro leve próprio (não uma Empresa completa), ou se a Empresa é criada de forma simplificada já no Diagnóstico. Não decidir sozinho; ver `07-BUSINESS/JORNADA_APOIADOR.md`.
+**Detalhe estratégico completo:** `04-DECISIONS/ADR/ADR-003-ecossistema-publico-vs-plataforma-cognitiva.md`.
+
+*(Adicionar uma entrada por problema identificado, com status, prioridade e ação.)*
