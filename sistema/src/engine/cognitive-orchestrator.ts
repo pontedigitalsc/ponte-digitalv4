@@ -66,7 +66,7 @@ import { criarAcao } from './action-intelligence-engine'
 import { obterRespostas, vincularConversa } from './conversation-engine'
 import { interpretarRespostas, atualizarIdentidade, registrarHistoricoConversa } from './identity-engine'
 import { obterProximaPergunta } from './adaptive-question-engine'
-import { gerarHipotesesDeEvidencias } from './hypothesis-engine'
+import { gerarHipotesesDeEvidencias } from './cognitive-memory-engine'
 import { aprenderComResposta } from './aprendizado-service'
 
 // ─── Tipos do Orchestrator ────────────────────────────────────────────────

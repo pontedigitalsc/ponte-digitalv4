@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { requireUserApi } from '@/lib/authorize'
 import { handleApiError } from '@/lib/api-error'
-import { listarHipoteses } from '@/engine/hypothesis-engine'
+import { listarHipoteses } from '@/engine/cognitive-memory-engine'
 import { contagemPorCategoria } from '@/engine/evidence-engine'
 import { consultarMemoria } from '@/engine/cognitive-memory-engine'
 import { obterEstadoCognitivoCompleto } from '@/engine/cognitive-orchestrator'
