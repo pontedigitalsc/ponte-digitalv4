@@ -1,8 +1,26 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **Atualização Programa 32 — Materialização da Teoria da Evolução Empresarial**
+>
+> A Ponte Digital foi reposicionada em torno de **8 Capacidades Fundamentais**: Observar, Compreender, Esclarecer, Priorizar, Decidir, Executar, Aprender, Evoluir.
+>
+> **Capital Cognitivo** passa a ser o patrimônio central da plataforma — composto por decisões validadas, capacidades desenvolvidas, aprendizados registrados, hipóteses confirmadas, conhecimento acumulado e consistência operacional.
+>
+> **Novo ciclo cognitivo:** OBSERVAR → COMPREENDER → ESCLARECER → PRIORIZAR → DECIDIR → EXECUTAR → APRENDER → EVOLUIR → OBSERVAR_NOVAMENTE
+>
+> **Motor de Clareza** — 5 perguntas em todo ciclo: Onde estamos? O que mudou? O que importa? O que pode esperar? Próximo melhor movimento?
+>
+> **Memória Estratégica** — registro obrigatório pós-decisão: Funcionou? Por quê? O que aprendemos? O que repetir? O que não repetir?
+>
+> **Painel do Fundador** — visão diária: evolução das capacidades, patrimônio cognitivo, capacidades estagnadas, novos conhecimentos.
+>
+> **Princípio absoluto reformulado:** toda funcionalidade deve responder **"Qual capacidade empresarial ela fortalece?"** Critério universal: (1) Qual capacidade fortalece? (2) Como aumenta Capital Cognitivo? (3) Como reduz esforço mental do empresário?
+>
+> Ver `docs/03-ENGINEERING/ARCHITECTURE.md` e `docs/09-ARCHITECTURE/ESPECIFICACAO_DO_MOTOR_COGNITIVO.md` para a arquitetura atualizada.
+
 *Documento operacional, complementar ao FOUNDATION.md e à Tese de Valor (Nível 1). É a referência principal para qualquer agente de código — Roo Code, Gemini CLI, Claude ou outro — antes de qualquer tarefa de implementação. Atualizar a cada sprint concluída. Máximo duas páginas: se crescer além disso, o excesso vira Playbook (Nível 3), não fica aqui.*
 
-**Objetivo desta fase:** colocar 100 fundadores usando uma versão básica, mas funcional, da Ponte — para acumular evidências reais antes de investir em arquitetura cognitiva sofisticada. Os 100 primeiros não são clientes comuns: são o laboratório que valida as hipóteses da Tese de Valor.
+**Objetivo desta fase:** validar as **8 Capacidades Fundamentais** com 100 fundadores — não apenas acumular evidências, mas testar se a materialização da Teoria da Evolução Empresarial produz empresários mais conscientes, adaptáveis e tranquilos. Os 100 primeiros são co-autores da tese: cada interação fortalece ou questiona uma capacidade, gera Capital Cognitivo e alimenta a Curva Evolutiva.
 
 **Nota de posicionamento (2026-07-14):** desde `ADR-003`, o produto é entendido em duas camadas — Ecossistema Público (Diagnóstico) e Plataforma Cognitiva (os outros 6 pilares). Isso é reposicionamento estratégico, não muda o que está descrito tecnicamente abaixo: a V4 Founder continua sendo uma única aplicação. Ver `01-VISION/THESIS.md` e `07-BUSINESS/JORNADA_APOIADOR.md`.
 
@@ -128,13 +146,14 @@ Tratar como pergunta em aberto até validar com os 100 fundadores, nunca como re
 
 ## 5. Princípios que nunca podem ser quebrados, nem nesta fase enxuta
 
-1. Não crie um ERP completo — crie um empresário mais tranquilo.
-2. Toda funcionalidade responde: ajuda a decidir esta semana? aumenta conhecimento futuro? fortalece um Patrimônio Empresarial?
-3. O estágio da empresa (hoje: MVP/0-25 empresas) é o teto da sofisticação técnica — nunca ativar um recurso avançado antes de evidência real.
-4. Soft delete, audit trail e tenant guard em todo model, desde o primeiro módulo.
-5. O Centro de Decisão nunca mostra mais itens do que a empresa consegue executar naquele dia.
-6. Nenhuma funcionalidade entra sem passar pela Matriz de Decisão de Funcionalidades.
-7. Todo pedido para o agente de código chega como especificação fechada (objetivo, arquivos, regras, critérios de aceite) — nunca como "continue o projeto" ou "pense em melhorias".
+1. Não crie um ERP completo — crie um empresário mais tranquilo. Toda funcionalidade deve responder: **Qual capacidade empresarial ela fortalece?** Se não fortalece nenhuma das 8 (Observar, Compreender, Esclarecer, Priorizar, Decidir, Executar, Aprender, Evoluir), não implementar.
+2. **Capital Cognitivo é o patrimônio central** — decisões validadas, capacidades desenvolvidas, aprendizados registrados, hipóteses confirmadas, conhecimento acumulado, consistência operacional. Toda funcionalidade deve aumentar pelo menos um destes.
+3. **Esforço mental é o inimigo** — o critério universal de avaliação inclui: a funcionalidade reduz o esforço mental do empresário? Se não, ela precisa gerar Capital Cognitivo suficiente para justificar o custo de atenção.
+4. O estágio da empresa (hoje: MVP/0-25 empresas) é o teto da sofisticação técnica — nunca ativar um recurso avançado antes de evidência real.
+5. Soft delete, audit trail e tenant guard em todo model, desde o primeiro módulo.
+6. O Centro de Decisão nunca mostra mais itens do que a empresa consegue executar naquele dia.
+7. Nenhuma funcionalidade entra sem passar pelo critério universal: (a) Qual capacidade fortalece? (b) Como aumenta Capital Cognitivo? (c) Como reduz esforço mental?
+8. Todo pedido para o agente de código chega como especificação fechada (objetivo, arquivos, regras, critérios de aceite) — nunca como "continue o projeto" ou "pense em melhorias".
 
 ---
 

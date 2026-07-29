@@ -3,6 +3,8 @@ import { FLUXOS } from '@/engine/fluxos/primeira-conversa'
 import { obterReacao, REACOES_BLOCO } from '@/engine/reacoes'
 import { registrarEvidencia } from '@/engine/evidence-engine'
 import { registrarEventoAtivacao } from '@/engine/founder-activation-engine'
+import { registrarResposta } from '@/engine/question-answer-engine'
+import { obterProximaPergunta } from '@/engine/adaptive-question-engine'
 import type { EstadoConversa, RespostaConversa, Progresso, Fluxo } from '@/engine/tipos'
 import { NotFoundError, BusinessRuleError } from '@/lib/app-errors'
 
@@ -110,12 +112,30 @@ export async function responder(
   const respostasAtuais = (conversa.respostas as Record<string, string | null>) ?? {}
   respostasAtuais[perguntaId] = valor
 
-  // Encontra o índice da etapa atual
   const etapaIndex = fluxo.etapas.findIndex((e) => e.id === perguntaId)
-  const proximaEtapa = fluxo.etapas[etapaIndex + 1] ?? null
+
+  let proximaEtapa: Fluxo['etapas'][0] | null = null
+  let foiConcluida = false
+
+  if (conversa.empresaId) {
+    const adaptativa = await obterProximaPergunta(conversa.empresaId, token)
+    if (adaptativa) {
+      proximaEtapa = {
+        id: adaptativa.id,
+        pergunta: adaptativa.pergunta,
+        tipo: adaptativa.tipo,
+        opcoes: adaptativa.opcoes,
+        categoria: adaptativa.categoria,
+      }
+    } else {
+      foiConcluida = true
+    }
+  } else {
+    proximaEtapa = fluxo.etapas[etapaIndex + 1] ?? null
+    foiConcluida = !proximaEtapa
+  }
 
   const etapaSalvar = proximaEtapa?.id ?? null
-  const foiConcluida = !proximaEtapa
 
   await prisma.conversa.update({
     where: { id: conversa.id },
@@ -129,28 +149,31 @@ export async function responder(
   // Reação
   const reacao = obterReacao(perguntaId)
 
-  // Transição de bloco
-  const blocoAtual = BLOCO_POR_ETAPA[perguntaId]
-  const proxBloco = proximaEtapa ? BLOCO_POR_ETAPA[proximaEtapa.id] : null
-  const transicao = blocoAtual !== proxBloco && proxBloco ? REACOES_BLOCO[proxBloco] : null
+  const reacaoFinal = reacao
 
-  const reacaoFinal = transicao ? `${reacao}\n\n${transicao}` : reacao
-
-  // Se for a última pergunta do bloco de problemas, adiciona transição especial
   let reacaoExtra = reacaoFinal
-  if (perguntaId === 'problemas.perda') {
-    reacaoExtra = `${reacaoFinal}\n\n${REACOES_BLOCO['objetivos']}`
-  }
 
-  // Registra evidência (apenas se vinculada a uma empresa)
+  // Registra evidência + Q&A individual (apenas se vinculada a uma empresa)
   if (conversa.empresaId) {
-    const categoriaEvidencia = mapearBlocoParaCategoria(BLOCO_POR_ETAPA[perguntaId])
+    const blocoAtual = BLOCO_POR_ETAPA[perguntaId] ?? 'gestao'
+    const categoriaEvidencia = mapearBlocoParaCategoria(blocoAtual)
     void registrarEvidencia(conversa.empresaId, {
       categoria: categoriaEvidencia,
       origem: 'PRIMEIRA_CONVERSA',
       descricao: `Resposta: ${valor.slice(0, 120)}`,
       confianca: 'ALTA',
-      dados: { perguntaId, bloco: BLOCO_POR_ETAPA[perguntaId] },
+      dados: { perguntaId, bloco: blocoAtual },
+    })
+
+    void registrarResposta({
+      empresaId: conversa.empresaId,
+      token,
+      perguntaId,
+      pergunta: fluxo.etapas.find((e) => e.id === perguntaId)?.pergunta ?? perguntaId,
+      valor,
+      bloco: blocoAtual,
+      origem: 'PRIMEIRA_CONVERSA',
+      ordem: etapaIndex,
     })
   }
 
@@ -188,6 +211,24 @@ export async function obterEstado(token: string): Promise<{
 } | null> {
   const estado = await carregarConversa(token)
   if (!estado) return null
+
+  const conversa = await prisma.conversa.findFirst({
+    where: { token, concluida: false },
+    orderBy: { criadaEm: 'desc' },
+    select: { empresaId: true },
+  })
+
+  if (conversa?.empresaId && estado.etapa) {
+    const adaptativa = await obterProximaPergunta(conversa.empresaId, token)
+    if (adaptativa) {
+      return {
+        perguntaAtual: { id: adaptativa.id, pergunta: adaptativa.pergunta, tipo: adaptativa.tipo, opcoes: adaptativa.opcoes, categoria: adaptativa.categoria },
+        progresso: { blocoAtual: 1, totalBlocos: 5, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 50 },
+        concluida: false,
+        respostas: estado.respostas,
+      }
+    }
+  }
 
   const fluxo = FLUXOS[estado.fluxo]
   if (!fluxo) return null

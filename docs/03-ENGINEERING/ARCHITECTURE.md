@@ -1,3 +1,39 @@
+## Atualização Programa 32 — Materialização da Teoria da Evolução Empresarial
+
+A arquitetura da Ponte Digital foi reposicionada para refletir as **8 Capacidades Fundamentais** da Teoria da Evolução Empresarial:
+
+| Capacidade | Descrição | Engine Correspondente |
+|:-----------|-----------|:---------------------:|
+| **Observar** | Capturar estímulos, sinais e dados do ambiente | perception-engine |
+| **Compreender** | Analisar contexto, detectar padrões e formular hipóteses | context-engine + analysis-engine |
+| **Esclarecer** | Validar hipóteses e eliminar ambiguidades | hypothesis-engine + validation-engine |
+| **Priorizar** | Classificar urgência, impacto e relevância | priority-engine |
+| **Decidir** | Construir decisões ponderadas com base em evidências | decision-engine |
+| **Executar** | Agir: alertas, tarefas, planos, intervenções | action-engine |
+| **Aprender** | Extrair aprendizado dos resultados e registrar na memória | memory-engine + learning-engine |
+| **Evoluir** | Consolidar patrimônio cognitivo e evoluir a identidade | heritage-engine |
+
+O ciclo cognitivo foi atualizado para **8 etapas**:
+```
+OBSERVAR → COMPREENDER → ESCLARECER → PRIORIZAR → DECIDIR → EXECUTAR → APRENDER → EVOLUIR → OBSERVAR_NOVAMENTE
+```
+
+**Novo fluxo do dashboard (visão evolutiva do empresário):**
+```
+Retrato Vivo → Índice de Capacidade Adaptativa → Capital Cognitivo → Curva Evolutiva → Maior Avanço → Maior Risco → Maior Aprendizado → Próximo Salto → Próximo Melhor Movimento
+```
+
+**Capital Cognitivo** — patrimônio invisível composto por: decisões validadas, capacidades desenvolvidas, aprendizados registrados, hipóteses confirmadas, conhecimento acumulado, consistência operacional.
+
+**Princípio absoluto reformulado:** toda funcionalidade deve responder **"Qual capacidade empresarial ela fortalece?"** O critério universal de avaliação passa a ser:
+1. Qual capacidade fortalece?
+2. Como aumenta o Capital Cognitivo?
+3. Como reduz o esforço mental do empresário?
+
+Ver `docs/02-PRODUCT/CURRENT_PRODUCT.md` para detalhes do impacto no produto e `docs/09-ARCHITECTURE/ESPECIFICACAO_DO_MOTOR_COGNITIVO.md` para a especificação atualizada do Motor Cognitivo com o ciclo de 8 estágios.
+
+---
+
 # Arquitetura-Alvo (Fase 2/3 — NÃO é checklist obrigatório agora)
 
 Este documento descreve para onde a arquitetura técnica caminha depois da validação com os 100 fundadores. Nada aqui deve ser implementado durante a V4 Founder sem uma decisão explícita registrada em `04-DECISIONS/DECISIONS.md` — ver a hierarquia em `00-START-HERE.md`: se este arquivo sugerir algo que `02-PRODUCT/CURRENT_PRODUCT.md` não autoriza para a fase atual, `CURRENT_PRODUCT.md` vence.
@@ -24,13 +60,21 @@ Ver `03-ENGINEERING/DOMAIN_EVENTS.md` para a regra de nomenclatura e o estado at
 - Ser emitido pelos quatro sistemas (hoje só uma parte emite sinal).
 - Ser consumido pelo Motor Cognitivo (ver abaixo), que ainda não existe.
 
-## Motor Cognitivo (congelado — ver `02-PRODUCT/MVP_SCOPE.md`)
+## Motor Cognitivo (Programa 32 — ciclo de 8 capacidades)
 
-Ciclo alvo: Observação → Hipótese → Experimento → Conhecimento. Consome o catálogo formal de `DomainEvent` e alimenta o Centro de Decisão, o Modelo Cognitivo do Empresário e o KnowledgeRegistry. Nenhuma peça deste motor deve ser implementada antes da Fase 2.
+O Motor Cognitivo foi atualizado para o ciclo de **8 capacidades fundamentais**: OBSERVAR → COMPREENDER → ESCLARECER → PRIORIZAR → DECIDIR → EXECUTAR → APRENDER → EVOLUIR.
 
-## Modelo Cognitivo do Empresário (congelado)
+As 11 engines anteriores foram reorganizadas em 8 grupos de capacidade. O Motor agora é orientado a fortalecer **Capital Cognitivo** — não apenas processar dados. Consome o catálogo formal de `DomainEvent` e alimenta o Centro de Decisão, o Modelo Cognitivo do Empresário e o KnowledgeRegistry.
 
-Perfil adaptativo do empresário, construído a partir das respostas de Gestão do Diagnóstico (ver `07-BUSINESS/DIAGNOSTIC.md`, Bloco 3) e do comportamento observado ao longo do uso. As respostas já podem ser coletadas e guardadas hoje — o motor que as interpreta é que está congelado.
+**Motor de Clareza** — novo componente que aplica 5 perguntas a cada ciclo: Onde estamos? O que mudou? O que importa? O que pode esperar? Próximo melhor movimento?
+
+**Memória Estratégica** — nova camada que registra sobre toda decisão: Funcionou? Por quê? O que aprendemos? O que repetir? O que não repetir?
+
+Nenhuma peça do Motor Cognitivo completo deve ser implementada antes da Fase 2, mas o novo alinhamento conceitual (8 capacidades, Capital Cognitivo) já orienta o design de novas funcionalidades.
+
+## Modelo Cognitivo do Empresário (Programa 32 — evolução contínua)
+
+Perfil adaptativo do empresário, construído a partir das 8 capacidades. A **Curva Evolutiva** mostra a maturidade de cada capacidade ao longo do tempo. O **Índice de Capacidade Adaptativa (ICA)** é a métrica central — mede quão adaptável o empresário está para enfrentar o próximo desafio. O **Painel do Fundador** oferece visão diária de: evolução das capacidades, patrimônio cognitivo acumulado, capacidades estagnadas e novos conhecimentos gerados.
 
 ## Regra de desacoplamento (vale desde já, não é congelada)
 

@@ -22,6 +22,20 @@
   --input: 214 32% 91%;
   --ring: 221 83% 53%;
   --radius: 0.5rem;
+
+  --confidence-low: 0 84% 60%;
+  --confidence-mid: 38 92% 50%;
+  --confidence-high: 142 71% 45%;
+  --glow-insight: 45 100% 50%;
+  --avatar-idle-opacity: 0.8;
+  --thinking-glow: 221 83% 53%;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+  --duration-fast: 200ms;
+  --duration-normal: 400ms;
+  --duration-slow: 600ms;
+  --duration-insight: 800ms;
 }
 
 .dark {
@@ -44,6 +58,11 @@
   --border: 217 33% 17%;
   --input: 217 33% 17%;
   --ring: 217 91% 60%;
+
+  --confidence-low: 0 70% 50%;
+  --confidence-mid: 38 90% 45%;
+  --confidence-high: 142 60% 40%;
+  --glow-insight: 45 90% 45%;
 }
 
 @layer base {
@@ -74,16 +93,57 @@
 
 @layer utilities {
   .animate-fade-in {
-    animation: fadeIn 0.4s ease-out;
+    animation: fadeIn var(--duration-normal) var(--ease-out-expo);
+  }
+  .animate-fade-in-fast {
+    animation: fadeIn var(--duration-fast) var(--ease-out-expo);
   }
   .animate-slide-up {
-    animation: slideUp 0.35s ease-out;
+    animation: slideUp 0.35s var(--ease-out-expo);
   }
   .animate-scale-in {
-    animation: scaleIn 0.25s ease-out;
+    animation: scaleIn 0.25s var(--ease-out-expo);
   }
   .animate-pulse-soft {
     animation: pulseSoft 2s ease-in-out infinite;
+  }
+  .animate-breathing {
+    animation: breathing 4s ease-in-out infinite;
+  }
+  .animate-thinking-glow {
+    animation: thinkingGlow 2s ease-in-out infinite;
+  }
+  .animate-insight-glow {
+    animation: insightGlow 800ms var(--ease-out-expo) forwards;
+  }
+  .animate-insight-star {
+    animation: insightStar 600ms var(--ease-out-expo) forwards;
+  }
+  .animate-slide-down {
+    animation: slideDown 0.3s var(--ease-out-expo);
+  }
+  .animate-shake {
+    animation: shake 0.4s ease-in-out;
+  }
+  .animate-progress-fill {
+    animation: progressFill 600ms var(--ease-out-expo);
+  }
+  .animate-toast-in {
+    animation: toastIn 400ms var(--ease-out-expo);
+  }
+  .animate-toast-out {
+    animation: toastOut 300ms ease-in forwards;
+  }
+  .animate-typewriter {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typewriter 0.5s steps(40) forwards;
+  }
+  .animate-overlay-in {
+    animation: overlayIn 300ms var(--ease-out-expo) forwards;
+  }
+  .animate-overlay-out {
+    animation: overlayOut 250ms ease-in forwards;
   }
 }
 
@@ -105,4 +165,64 @@
 @keyframes pulseSoft {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
+}
+
+@keyframes breathing {
+  0%, 100% { transform: scale(1); opacity: var(--avatar-idle-opacity); }
+  50% { transform: scale(1.03); opacity: 1; }
+}
+
+@keyframes thinkingGlow {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--thinking-glow) / 0); }
+  50% { box-shadow: 0 0 12px 4px hsl(var(--thinking-glow) / 0.2); }
+}
+
+@keyframes insightGlow {
+  0% { box-shadow: 0 0 0 0 hsl(var(--glow-insight) / 0); }
+  30% { box-shadow: 0 0 40px 20px hsl(var(--glow-insight) / 0.15); }
+  100% { box-shadow: 0 0 0 0 hsl(var(--glow-insight) / 0); }
+}
+
+@keyframes insightStar {
+  0% { opacity: 0; transform: scale(0) rotate(-45deg); }
+  60% { opacity: 1; transform: scale(1.2) rotate(0deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+@keyframes progressFill {
+  from { width: 0%; }
+  to { width: var(--progress-target, 100%); }
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-12px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(-12px) scale(0.96); }
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes overlayOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }

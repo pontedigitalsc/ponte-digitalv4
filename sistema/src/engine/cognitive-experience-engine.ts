@@ -35,8 +35,36 @@ import type { CognitiveMilestone } from './cognitive-milestone-engine'
 import { gerarMilestones } from './cognitive-milestone-engine'
 import type { CompanyMaturity } from './company-maturity-engine'
 import { calcularMaturidade } from './company-maturity-engine'
-import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
+import { construirCentroCognitivo } from './centro-cognitivo-engine'
+import { melhorDecisao } from './decision-engine'
+import { gerarOportunidades } from './growth-opportunity-engine'
+import type { GrowthEngineOutput } from './growth-opportunity-engine'
+import { gerarMapaCalor } from './cognitive-heatmap-engine'
+import type { MapaCalor } from './cognitive-heatmap-engine'
+import { gerarCenarios } from './cognitive-brainstorm-engine'
+import type { CenarioAlternativo } from './cognitive-brainstorm-engine'
 import { consultarMemoria } from './cognitive-memory-engine'
+import type { Decisao } from './decision-engine'
+import { obterEstadoPatrimonio } from './cognitive-heritage-facade'
+import { gerarNarrativaEmpresarial } from './cognitive-narrative-engine'
+import type { NarrativaEmpresarial } from './cognitive-narrative-engine'
+import { gerarAlertasCognitivos } from './cognitive-alert-engine'
+import type { SaidaAlertas } from './cognitive-alert-engine'
+import { construirCiclosDecisao } from './decision-learning-cycle-engine'
+import type { ResumoCiclos } from './decision-learning-cycle-engine'
+import { calcularCapacidadeAdaptativa } from './adaptive-capacity-engine'
+import type { AdaptiveCapacity } from './adaptive-capacity-engine'
+import { calcularCapitalCognitivo } from './cognitive-capital-engine'
+import { gerarCurvaEvolutiva } from './cognitive-curve-engine'
+import { gerarRadarCapacidades } from './cognitive-radar-engine'
+import { gerarComparacoesAntesDepois } from './cognitive-before-after-engine'
+import { gerarAnaliseClareza } from './clarity-engine'
+import type { AnaliseClareza } from './clarity-engine'
+import { construirMemoriaEstrategica } from './strategic-memory-engine'
+import type { MemoriaEstrategica } from './strategic-memory-engine'
+import { gerarVisaoFundador } from './founder-panel-engine'
+import type { FundadorVisaoDiaria } from './founder-panel-engine'
+import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { listarAprendizados, contagemPorCategoria as contagemAprendizados, obterPerguntasRapidas } from './aprendizado-service'
 import type { AprendizadoItem } from './aprendizado-service'
 
@@ -105,7 +133,43 @@ export interface BaseExperience extends CognitiveOSFields {
   workflows: CognitiveWorkflow[]
 }
 
-export interface DashboardExperience extends BaseExperience {}
+export interface CentroCognitivoData {
+  estadoGeral: { status: 'POSITIVO' | 'ATENCAO' | 'CRITICO'; titulo: string; resumo: string }
+  statusAtual: { scoreMaturidade: number; nivelMaturidade: string; scoreSaude: number; confiancaMedia: number; areasExploradas: number; totalAreas: number }
+  mudancas: { evolucaoGeral: number; variacaoMaturidade: number; principaisMudancas: Array<{ area: string; tipo: 'POSITIVA' | 'NEGATIVA' | 'ATENCAO'; descricao: string }> }
+  pontosAtencao: Array<{ categoria: string; descricao: string; severidade: 'ALTA' | 'MEDIA' | 'BAIXA' }>
+  melhorDecisao: { titulo: string; descricao: string; impacto: string; confianca: number; urgencia: number } | null
+  decisaoCompleta: Decisao | null
+  aprendizadosRecentes: number
+}
+
+export interface DashboardExperience extends BaseExperience {
+  centroCognitivo: CentroCognitivoData
+  oportunidades: GrowthEngineOutput
+  timeline: _TimelineExperience
+  mapaCalor: MapaCalor
+  cenarios: CenarioAlternativo[]
+  memoriasRecentes: Array<{ tipo: string; descricao: string; data: Date; confianca?: number }>
+  totalMemorias: number
+  idadeMediaMemorias: number
+  patrimonioScore: number
+  patrimonioAtivos: number
+  patrimonioMaiorConfianca: number
+  totalHipoteses: number
+  totalDescartados: number
+  evolucaoMaturidade: number
+  narrativaEmpresarial: import('./cognitive-narrative-engine').NarrativaEmpresarial | null
+  alertasCognitivos: import('./cognitive-alert-engine').SaidaAlertas
+  ciclosDecisao: import('./decision-learning-cycle-engine').ResumoCiclos
+  capacidadeAdaptativa: import('./adaptive-capacity-engine').AdaptiveCapacity
+  curvaEvolutiva: import('./cognitive-curve-engine').CurvaEvolutiva
+  capitalCognitivo: import('./cognitive-capital-engine').CapitalCognitivo
+  radarCapacidades: import('./cognitive-radar-engine').RadarCapacidades
+  antesDepois: import('./cognitive-before-after-engine').AntesDepoisEngine
+  analiseClareza: import('./clarity-engine').AnaliseClareza
+  memoriaEstrategica: import('./strategic-memory-engine').MemoriaEstrategica
+  visaoFundador: import('./founder-panel-engine').FundadorVisaoDiaria
+}
 
 export interface SidebarExperience extends CognitiveOSFields {
   foco: { rotulo: string; href: string } | null
@@ -1455,7 +1519,7 @@ async function construirEvolutionPlatformFields(
     avaliarEnvelhecimento(empresaId),
     calcularDrift(empresaId),
     gerarMilestones(empresaId, estado),
-    Promise.resolve(calcularMaturidade(estado)),
+    calcularMaturidade(empresaId, estado),
   ])
 
   return {
@@ -1495,13 +1559,58 @@ export function createExperienceEngine(orchestrator: OrchestratorInterface) {
           proximosPassos: estado.jornada.proximosPassos,
         },
       )
+      const [companyMaturity, evolution, decisao, mapaCalor, cenarios] = await Promise.all([
+        calcularMaturidade(empresaId, estado),
+        calcularEvolucao(empresaId, estado),
+        melhorDecisao(empresaId),
+        Promise.resolve(gerarMapaCalor(estado)),
+        Promise.resolve(gerarCenarios(estado)),
+      ])
+      const osFields = construirOSFields(estado, insightsDashboard, actions, workflows, journeys)
+      const oportunidades = gerarOportunidades(estado, companyMaturity, osFields.healthScore, evolution)
+      const milestones = await gerarMilestones(empresaId, estado).catch(() => [])
       return {
         narrativa: construirNarrativa(estado, 'dashboard'),
         foco: determinarFoco(estado),
         blocks: factoryBuildBlocks(estado),
         actions,
         workflows,
-        ...construirOSFields(estado, insightsDashboard, actions, workflows, journeys),
+        ...osFields,
+        centroCognitivo: construirCentroCognitivo(
+          estado,
+          osFields.healthScore,
+          companyMaturity,
+          evolution,
+          decisao,
+          estado.topOutcomes.length,
+        ),
+        oportunidades,
+        timeline: gerarTimeline(
+          { feedbackRecente: estado.feedbackRecente as any, acoesAtivas: estado.acoesAtivas as any, topOutcomes: estado.topOutcomes as any, jornada: estado.jornada, auditoria: estado.auditoria ?? undefined, impacto: estado.impacto },
+          journeys, workflows,
+        ),
+        mapaCalor,
+        cenarios,
+        memoriasRecentes: [],
+        totalMemorias: 0,
+        idadeMediaMemorias: 0,
+        patrimonioScore: 0,
+        patrimonioAtivos: 0,
+        patrimonioMaiorConfianca: 0,
+        totalHipoteses: 0,
+        totalDescartados: 0,
+        evolucaoMaturidade: 0,
+        narrativaEmpresarial: null,
+        alertasCognitivos: { alertas: [], resumo: '', prioridadeDoMomento: '' },
+        ciclosDecisao: { ciclos: [], ciclosCompletos: 0, totalCiclos: 0, taxaAprendizado: 0, proximoPasso: '' },
+        capacidadeAdaptativa: { scoreGeral: 0, variacaoGeral: 0, capacidades: [], nivelGeral: '', maiorCapacidade: '', menorCapacidade: '' },
+        curvaEvolutiva: { pontos: [], capacidades: [], totais: {}, maiorEvolucao: { capacidade: '', variacao: 0 }, tendenciaGeral: 'ESTAVEL', historiaCompleta: '' },
+        capitalCognitivo: { scoreTotal: 0, variacaoMensal: 0, componentes: [], scoreAnterior: 0, scoreAtual: 0, nivel: 'INICIAL' },
+        radarCapacidades: { muitoForte: [], forte: [], emEvolucao: [], critica: [], areasQuentes: [], sugestaoFoco: '' },
+        antesDepois: { comparacoes: [], totalMelhorias: 0, resumoGeral: '' },
+        analiseClareza: { ondeEstamos: '', oQueMudou: '', oQueImporta: '', oQuePodeEsperar: '', proximoMelhorMovimento: '', capacidadeFortalecida: '' },
+        memoriaEstrategica: { registros: [], totalRegistros: 0, taxaAcertos: 0, maioresAprendizados: [], padroesIdentificados: [] },
+        visaoFundador: { evolucaoEmpresa: '', patrimonioCresceu: '', capacidadeEstagnada: '', conhecimentoNovo: '', rfcsCriadas: 0, hipotesesQueMorreram: 0, scoreCapacidadeAdaptativa: 0, scoreCapitalCognitivo: 0, tendencia: 'ESTAVEL', sugestaoFoco: '', maiorAprendizado: '', riscoPrincipal: '' },
       }
     },
 
@@ -1675,13 +1784,76 @@ export function createExperienceEngine(orchestrator: OrchestratorInterface) {
         },
       )
 
+      const [companyMaturity, evolution, decisao, mapaCalor, cenarios, memorias, patrimonio] = await Promise.all([
+        calcularMaturidade(empresaId, estado),
+        calcularEvolucao(empresaId, estado),
+        melhorDecisao(empresaId),
+        Promise.resolve(gerarMapaCalor(estado)),
+        Promise.resolve(gerarCenarios(estado)),
+        consultarMemoria(empresaId).catch(() => []),
+        obterEstadoPatrimonio(empresaId).catch(() => null),
+      ])
+      const milestones = await gerarMilestones(empresaId, estado).catch(() => [])
+      const oportunidades = gerarOportunidades(estado, companyMaturity, null, evolution as any)
+      const capacidade = calcularCapacidadeAdaptativa(estado, companyMaturity.score)
+      const ciclosDecisao = construirCiclosDecisao(estado)
+      const osFields = construirOSFields(estado, insights, actions, workflows, journeys)
+
+      const memoriasRecentes = memorias.map((m: any) => ({
+        tipo: m.tipo ?? 'evidencia',
+        descricao: m.descricao ?? '',
+        data: m.criadaEm ?? m.createdAt ?? new Date(),
+        confianca: m.confianca ?? undefined,
+      }))
+      const idadeMediaMemorias = memoriasRecentes.length > 0
+        ? Math.round(memoriasRecentes.reduce((acc: number, m: any) => {
+            const idade = (Date.now() - new Date(m.data).getTime()) / (1000 * 60 * 60 * 24)
+            return acc + idade
+          }, 0) / memoriasRecentes.length)
+        : 0
+
       return {
         narrativa: construirNarrativa(estado, 'dashboard'),
         foco: determinarFoco(estado),
         blocks: factoryBuildBlocks(estado),
         actions,
         workflows,
-        ...construirOSFields(estado, insights, actions, workflows, journeys),
+        ...osFields,
+        centroCognitivo: construirCentroCognitivo(
+          estado,
+          osFields.healthScore,
+          companyMaturity,
+          evolution,
+          decisao,
+          estado.topOutcomes.length,
+        ),
+        oportunidades,
+        timeline: gerarTimeline(
+          { feedbackRecente: estado.feedbackRecente as any, acoesAtivas: estado.acoesAtivas as any, topOutcomes: estado.topOutcomes as any, jornada: estado.jornada, auditoria: estado.auditoria ?? undefined, impacto: estado.impacto },
+          journeys, workflows,
+        ),
+        mapaCalor,
+        cenarios,
+        memoriasRecentes,
+        totalMemorias: memorias.length,
+        idadeMediaMemorias,
+        patrimonioScore: Math.round((patrimonio?.metricas?.scoreMedioAuditoria ?? 0) * 100),
+        patrimonioAtivos: patrimonio?.metricas?.totalConhecimentos ?? 0,
+        patrimonioMaiorConfianca: Math.round((patrimonio?.metricas?.scoreMedioAuditoria ?? 0) * 100),
+        totalHipoteses: (estado.auditoria as any)?.totalHipoteses ?? 0,
+        totalDescartados: (estado.auditoria as any)?.hipotesesDescartadas ?? 0,
+        evolucaoMaturidade: companyMaturity.variacaoSemanal,
+        narrativaEmpresarial: gerarNarrativaEmpresarial(estado, companyMaturity, evolution, milestones, oportunidades, mapaCalor, cenarios, capacidade, null, null),
+        alertasCognitivos: gerarAlertasCognitivos(estado, companyMaturity, evolution, oportunidades, mapaCalor),
+        ciclosDecisao,
+        capacidadeAdaptativa: capacidade,
+        curvaEvolutiva: gerarCurvaEvolutiva(capacidade, evolution),
+        capitalCognitivo: calcularCapitalCognitivo(estado, companyMaturity, capacidade, ciclosDecisao),
+        radarCapacidades: gerarRadarCapacidades(capacidade, mapaCalor, companyMaturity),
+        antesDepois: gerarComparacoesAntesDepois(estado, capacidade, evolution, companyMaturity),
+        analiseClareza: gerarAnaliseClareza(estado, companyMaturity, capacidade),
+        memoriaEstrategica: construirMemoriaEstrategica(ciclosDecisao.ciclos),
+        visaoFundador: gerarVisaoFundador(capacidade, calcularCapitalCognitivo(estado, companyMaturity, capacidade, ciclosDecisao), gerarRadarCapacidades(capacidade, mapaCalor, companyMaturity), evolution, gerarCurvaEvolutiva(capacidade, evolution), companyMaturity, milestones),
       }
     },
 

@@ -36,6 +36,7 @@ export interface Etapa {
   pergunta: string
   tipo: 'texto' | 'selecao' | 'faixa'
   opcoes?: Opcao[]
+  categoria?: string
 }
 
 export interface Opcao {

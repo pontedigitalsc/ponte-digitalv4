@@ -51,6 +51,7 @@ model Empresa {
   deadLetters           DeadLetter[]
   cicloConfiguracoes    CicloConfiguracao[]
   confiancaFontes       ConfiancaFonte[]
+  respostasConversa     RespostasConversa[]
 
   @@index([ativa])
   @@index([criadaEm])
@@ -581,22 +582,40 @@ enum EstadoHipotese {
   DESCARTADA
 }
 
+enum ImpactoHipotese {
+  BAIXO
+  MEDIO
+  ALTO
+}
+
+enum OrigemHipotese {
+  ANALISE_EVIDENCIAS
+  PRIMEIRA_CONVERSA
+  ASSISTENTE_IA
+  SISTEMA
+  MANUAL
+}
+
 model Hipotese {
-  id             String         @id @default(cuid())
+  id             String           @id @default(cuid())
   empresaId      String
   descricao      String
   categoria      CategoriaEvidencia
-  estado         EstadoHipotese @default(NOVA)
+  estado         EstadoHipotese   @default(NOVA)
   confianca      ConfiancaEvidencia @default(MEDIA)
+  impacto        ImpactoHipotese  @default(MEDIO)
+  origem         OrigemHipotese   @default(ANALISE_EVIDENCIAS)
   evidenciaOrigem String?
-  criadaEm       DateTime       @default(now())
-  atualizadaEm   DateTime       @updatedAt
+  contagemEvidencias Int          @default(0)
+  criadaEm       DateTime         @default(now())
+  atualizadaEm   DateTime         @updatedAt
   deletedAt      DateTime?
 
-  empresa        Empresa        @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  empresa        Empresa          @relation(fields: [empresaId], references: [id], onDelete: Cascade)
 
   @@index([empresaId, estado])
   @@index([empresaId, categoria])
+  @@index([empresaId, impacto])
   @@index([empresaId, atualizadaEm])
   @@index([empresaId, deletedAt])
   @@map("hipoteses")
@@ -1111,6 +1130,41 @@ model ConfiancaFonte {
   @@index([empresaId, scoreAtual])
   @@index([empresaId, deletedAt])
   @@map("confianca_fontes")
+}
+
+// ─── RESPOSTAS INDIVIDUAIS (MC-001) ─────────────────────────────────────────
+// Memória Contextual Permanente — cada pergunta e resposta da conversa vira um
+// registro imutável no banco, permitindo que o Motor Cognitivo referencie
+// respostas individuais mesmo após a conversa ser concluída.
+
+enum OrigemResposta {
+  PRIMEIRA_CONVERSA
+  ASSISTENTE_IA
+  FORMULARIO
+  MANUAL
+}
+
+model RespostasConversa {
+  id             String           @id @default(cuid())
+  empresaId      String
+  token          String?
+  perguntaId     String
+  pergunta       String
+  valor          String
+  bloco          String?
+  origem         OrigemResposta   @default(PRIMEIRA_CONVERSA)
+  ordem          Int              @default(0)
+  criadaEm       DateTime         @default(now())
+  deletedAt      DateTime?
+
+  empresa        Empresa          @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, criadaEm])
+  @@index([empresaId, bloco])
+  @@index([empresaId, perguntaId])
+  @@index([token])
+  @@index([empresaId, deletedAt])
+  @@map("respostas_conversa")
 }
 
 // ─── DECISÃO-SINAL ──────────────────────────────────────────────────────────

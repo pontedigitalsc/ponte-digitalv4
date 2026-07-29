@@ -1,4 +1,5 @@
 import type { EstadoCognitivoCompleto } from './cognitive-orchestrator'
+import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 
 export type NivelMaturidade = 'INICIAL' | 'EM_DESENVOLVIMENTO' | 'MADURA' | 'EVOLUIDA' | 'REFERENCIA'
 
@@ -6,9 +7,25 @@ export interface CompanyMaturity {
   score: number
   nivel: NivelMaturidade
   fatores: string[]
+  maiorEvolucao: { area: string; descricao: string } | null
+  maiorRisco: { area: string; descricao: string } | null
+  maiorOportunidade: { area: string; descricao: string } | null
+  variacaoSemanal: number
 }
 
-export function calcularMaturidade(estado: EstadoCognitivoCompleto): CompanyMaturity {
+async function buscarMaturidadeAnterior(empresaId: string): Promise<number | null> {
+  const registro = await prisma.memoriaCognitiva.findFirst({
+    where: { empresaId, tipo: 'evolucao', descricao: { startsWith: 'Maturidade:' } },
+    orderBy: { criadaEm: 'desc' },
+    select: { metadados: true },
+  })
+  if (registro?.metadados && typeof registro.metadados === 'object' && 'score' in registro.metadados) {
+    return (registro.metadados as { score: number }).score
+  }
+  return null
+}
+
+export async function calcularMaturidade(empresaId: string, estado: EstadoCognitivoCompleto): Promise<CompanyMaturity> {
   const fatores: string[] = []
   let score = 0
 
@@ -94,5 +111,65 @@ export function calcularMaturidade(estado: EstadoCognitivoCompleto): CompanyMatu
     nivel = 'INICIAL'
   }
 
-  return { score, nivel, fatores }
+  const scoreAnterior = await buscarMaturidadeAnterior(empresaId)
+  const variacaoSemanal = scoreAnterior !== null ? score - scoreAnterior : 0
+
+  let maiorEvolucao: { area: string; descricao: string } | null = null
+  if (impacto.areaMaisEvoluiu) {
+    const rotulo: Record<string, string> = {
+      FINANCEIRO: 'Financeiro', CLIENTES: 'Clientes', OPERACAO: 'Operação',
+      GESTAO: 'Gestão', PESSOAS: 'Pessoas', PRODUTO: 'Produto', ESTRATEGIA: 'Estratégia',
+    }
+    maiorEvolucao = { area: rotulo[impacto.areaMaisEvoluiu.categoria] ?? impacto.areaMaisEvoluiu.categoria, descricao: impacto.areaMaisEvoluiu.justificativa }
+  }
+
+  let maiorRisco: { area: string; descricao: string } | null = null
+  if (impacto.areaAtencao) {
+    const rotulo: Record<string, string> = {
+      FINANCEIRO: 'Financeiro', CLIENTES: 'Clientes', OPERACAO: 'Operação',
+      GESTAO: 'Gestão', PESSOAS: 'Pessoas', PRODUTO: 'Produto', ESTRATEGIA: 'Estratégia',
+    }
+    maiorRisco = { area: rotulo[impacto.areaAtencao.categoria] ?? impacto.areaAtencao.categoria, descricao: impacto.areaAtencao.justificativa }
+  }
+
+  let maiorOportunidade: { area: string; descricao: string } | null = null
+  if (estado.contexto?.acaoSugerida) {
+    const areaPrioridade = estado.contexto.prioridade
+    const areaRotulo: Record<string, string> = {
+      FINANCEIRO: 'Financeiro', CLIENTES: 'Clientes', OPERACAO: 'Operação',
+      GESTAO: 'Gestão', PESSOAS: 'Pessoas', PRODUTO: 'Produto', ESTRATEGIA: 'Estratégia',
+    }
+    maiorOportunidade = { area: areaRotulo[areaPrioridade] ?? areaPrioridade, descricao: estado.contexto.acaoSugerida }
+  }
+
+    await registrarScoreMaturidade(empresaId, score)
+
+  return { score, nivel, fatores, maiorEvolucao, maiorRisco, maiorOportunidade, variacaoSemanal }
+}
+
+async function registrarScoreMaturidade(empresaId: string, score: number): Promise<void> {
+  try {
+    const { registrarNaMemoria } = await import('./cognitive-memory-engine')
+    await registrarNaMemoria(empresaId, {
+      tipo: 'evolucao',
+      descricao: `Maturidade: ${score}/100`,
+      categoria: 'ESTRATEGIA',
+      versao: 1,
+      metadados: { score, registradoEm: new Date().toISOString() },
+    })
+  } catch {
+    // Silencioso
+  }
+}
+
+export function calcularMaturidadeSincrono(estado: EstadoCognitivoCompleto): CompanyMaturity & { variacaoSemanal: number } {
+  return {
+    score: 0,
+    nivel: 'INICIAL',
+    fatores: [],
+    maiorEvolucao: null,
+    maiorRisco: null,
+    maiorOportunidade: null,
+    variacaoSemanal: 0,
+  }
 }

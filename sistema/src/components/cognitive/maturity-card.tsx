@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle, Separator } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { TrendingUp, CheckCircle2 } from 'lucide-react'
+import { TrendingUp, TrendingDown, AlertTriangle, Sparkles } from 'lucide-react'
 import type { CompanyMaturity, NivelMaturidade } from '@/engine'
 
 const ROTULO_NIVEL: Record<NivelMaturidade, string> = {
@@ -32,7 +32,7 @@ export function MaturityCard({ maturity }: MaturityCardProps) {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <TrendingUp className="h-4 w-4 text-indigo-500" />
-          Estágio da empresa
+          Maturidade Estratégica
           <span className={cn('ml-auto text-xs font-medium px-2 py-0.5 rounded-full border', nivelBadge(maturity.nivel))}>
             {ROTULO_NIVEL[maturity.nivel] ?? maturity.nivel}
           </span>
@@ -56,6 +56,45 @@ export function MaturityCard({ maturity }: MaturityCardProps) {
               style={{ width: `${maturity.score}%` }}
             />
           </div>
+          {maturity.variacaoSemanal !== 0 && (
+            <span className={cn(
+              'flex items-center gap-0.5 text-xs font-medium',
+              maturity.variacaoSemanal > 0 ? 'text-emerald-500' : 'text-red-500'
+            )}>
+              <TrendingUp className={cn('h-3 w-3', maturity.variacaoSemanal < 0 && 'rotate-180 scale-y-[-1]')} />
+              {Math.abs(maturity.variacaoSemanal)}
+            </span>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 gap-2">
+          {maturity.maiorEvolucao && (
+            <div className="rounded-lg border border-emerald-100 dark:border-emerald-900/50 bg-emerald-50/50 dark:bg-emerald-950/10 p-2.5">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-400 mb-1">
+                <TrendingUp className="h-3 w-3" />
+                Maior evolução
+              </div>
+              <p className="text-xs text-muted-foreground">{maturity.maiorEvolucao.area} — {maturity.maiorEvolucao.descricao}</p>
+            </div>
+          )}
+          {maturity.maiorRisco && (
+            <div className="rounded-lg border border-amber-100 dark:border-amber-900/50 bg-amber-50/50 dark:bg-amber-950/10 p-2.5">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium text-amber-700 dark:text-amber-400 mb-1">
+                <AlertTriangle className="h-3 w-3" />
+                Maior risco
+              </div>
+              <p className="text-xs text-muted-foreground">{maturity.maiorRisco.area} — {maturity.maiorRisco.descricao}</p>
+            </div>
+          )}
+          {maturity.maiorOportunidade && (
+            <div className="rounded-lg border border-blue-100 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-950/10 p-2.5">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium text-blue-700 dark:text-blue-400 mb-1">
+                <Sparkles className="h-3 w-3" />
+                Maior oportunidade
+              </div>
+              <p className="text-xs text-muted-foreground">{maturity.maiorOportunidade.area} — {maturity.maiorOportunidade.descricao}</p>
+            </div>
+          )}
         </div>
 
         <Separator />
@@ -64,7 +103,7 @@ export function MaturityCard({ maturity }: MaturityCardProps) {
           <p className="text-xs font-medium text-muted-foreground">Fatores</p>
           {maturity.fatores.map((f, i) => (
             <div key={i} className="flex items-center gap-2">
-              <CheckCircle2 className="h-3 w-3 text-emerald-500 shrink-0" />
+              <TrendingDown className="h-3 w-3 text-emerald-500 shrink-0" />
               <span className="text-xs text-muted-foreground">{f}</span>
             </div>
           ))}

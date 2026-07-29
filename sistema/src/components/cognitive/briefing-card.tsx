@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle, Separator } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { Sun, TrendingUp, AlertTriangle, Clock, Sparkles, CheckSquare } from 'lucide-react'
+import { Sun, TrendingUp, AlertTriangle, Clock, Sparkles, CheckSquare, ChevronRight } from 'lucide-react'
 import type { CognitiveBriefing } from '@/engine'
 
 const iconePonto: Record<string, React.ReactNode> = {
@@ -21,37 +21,61 @@ const corPonto: Record<string, string> = {
 
 interface BriefingCardProps {
   briefing: CognitiveBriefing | null
+  semana?: number
 }
 
-export function BriefingCard({ briefing }: BriefingCardProps) {
+function calcularSemana(): number {
+  const agora = new Date()
+  const inicio = new Date(agora.getFullYear(), 0, 1)
+  const diff = agora.getTime() - inicio.getTime()
+  return Math.ceil(diff / (1000 * 60 * 60 * 24 * 7))
+}
+
+export function BriefingCard({ briefing, semana }: BriefingCardProps) {
   if (!briefing) return null
+  const numSemana = semana ?? calcularSemana()
 
   return (
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <Sun className="h-4 w-4 text-amber-500" />
-          {briefing.saudacao}
-          <span className="text-xs font-normal text-muted-foreground ml-auto">{briefing.data}</span>
+          Briefing Semanal
+          <span className="text-[10px] font-normal text-muted-foreground ml-auto">
+            Semana {numSemana}
+          </span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
+        <p className="text-xs text-muted-foreground italic">{briefing.saudacao}</p>
+        <p className="text-xs text-muted-foreground">{briefing.data}</p>
+
         {briefing.prioridadePrincipal && (
-          <p className="text-sm font-medium text-foreground">{briefing.prioridadePrincipal}</p>
+          <div className="rounded-lg border border-emerald-100 dark:border-emerald-900/50 bg-emerald-50/50 dark:bg-emerald-950/10 p-2.5">
+            <div className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-400 mb-0.5">
+              <TrendingUp className="h-3 w-3" />
+              Maior evolução
+            </div>
+            <p className="text-xs text-muted-foreground">{briefing.prioridadePrincipal}</p>
+          </div>
         )}
+
         {briefing.evolucaoRecente && (
           <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400">
             <TrendingUp className="h-4 w-4" />
             <span>{briefing.evolucaoRecente}</span>
           </div>
         )}
+
         {briefing.acoesPendentes > 0 && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <CheckSquare className="h-4 w-4" />
             <span>{briefing.acoesPendentes} ação(ns) pendente(s)</span>
           </div>
         )}
+
         <Separator />
+
         <div className="space-y-2">
           {briefing.pontos.map((ponto, i) => (
             <div key={i} className={cn('flex items-start gap-3 border-l-4 p-2 rounded-r-lg bg-muted/30', corPonto[ponto.tipo] ?? 'border-l-muted')}>
@@ -63,6 +87,20 @@ export function BriefingCard({ briefing }: BriefingCardProps) {
             </div>
           ))}
         </div>
+
+        {briefing.acoesPendentes > 0 && (
+          <Separator />
+        )}
+
+        {briefing.acoesPendentes > 0 && (
+          <div className="rounded-lg border border-blue-100 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-950/10 p-2.5">
+            <div className="flex items-center gap-1.5 text-[11px] font-medium text-blue-700 dark:text-blue-400 mb-0.5">
+              <ChevronRight className="h-3 w-3" />
+              Próximo acompanhamento
+            </div>
+            <p className="text-xs text-muted-foreground">Avaliar resultado em 30 dias</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   )

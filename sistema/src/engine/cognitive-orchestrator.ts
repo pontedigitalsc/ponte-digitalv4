@@ -65,6 +65,9 @@ import { registrarNaMemoria } from './cognitive-memory-engine'
 import { criarAcao } from './action-intelligence-engine'
 import { obterRespostas, vincularConversa } from './conversation-engine'
 import { interpretarRespostas, atualizarIdentidade, registrarHistoricoConversa } from './identity-engine'
+import { obterProximaPergunta } from './adaptive-question-engine'
+import { gerarHipotesesDeEvidencias } from './hypothesis-engine'
+import { aprenderComResposta } from './aprendizado-service'
 
 // ─── Tipos do Orchestrator ────────────────────────────────────────────────
 
@@ -346,6 +349,89 @@ export async function processarConversa(
     estado: erros.length === 0
       ? await obterEstadoCognitivoCompleto(empresaId, { skipDecidirContexto: true, skipCalcularNivelAtivacao: true }).catch(() => undefined)
       : undefined,
+  }
+}
+
+// ─── 2B. PROCESSAR RESPOSTA ADAPTATIVA ────────────────────────────────────
+// Dispara após cada resposta do usuário em conversa adaptativa:
+// evidence → memory → adaptive-question
+
+export async function processarNovaResposta(
+  empresaId: string,
+  perguntaId: string,
+  valor: string
+): Promise<ResultadoProcessamento> {
+  const acionamentos: string[] = []
+  const erros: string[] = []
+
+  try {
+    await registrarEvidencia(empresaId, {
+      categoria: 'GESTAO',
+      origem: 'PRIMEIRA_CONVERSA',
+      descricao: `Nova resposta registrada: ${valor.slice(0, 120)}`,
+      confianca: 'ALTA',
+      dados: { perguntaId },
+    })
+    acionamentos.push('evidence:registrarEvidencia')
+
+    await registrarNaMemoria(empresaId, {
+      tipo: 'evolucao',
+      descricao: `Resposta registrada para: ${perguntaId}`,
+      categoria: 'GESTAO',
+      versao: 1,
+      metadados: { perguntaId, valor: valor.slice(0, 200) },
+    })
+    acionamentos.push('memory:registrarNaMemoria')
+
+    void aprenderComResposta(empresaId, perguntaId, perguntaId, valor).catch(() => {})
+    acionamentos.push('learning:aprenderComResposta')
+
+    const proximaPergunta = await obterProximaPergunta(empresaId)
+    if (proximaPergunta) {
+      acionamentos.push(`adaptive-question:${proximaPergunta.id}`)
+
+      await registrarNaMemoria(empresaId, {
+        tipo: 'descoberta',
+        descricao: `Próxima pergunta adaptativa gerada: ${proximaPergunta.categoria}`,
+        categoria: proximaPergunta.categoria,
+        versao: 1,
+        metadados: { perguntaId: proximaPergunta.id, lacuna: proximaPergunta.lacuna },
+      })
+    } else {
+      acionamentos.push('adaptive-question:complete')
+    }
+
+    void gerarHipotesesDeEvidencias(empresaId).catch(() => {})
+    acionamentos.push('hypothesis:gerarDeEvidencias')
+
+    void validarHipoteses(empresaId).then(async (validacoes) => {
+      for (const v of validacoes) {
+        if (v.podePromover) {
+          await promoverConhecimento(empresaId, v.hipoteseId, v.scoreConfianca)
+            .catch(() => {})
+        }
+      }
+    }).catch(() => {})
+    acionamentos.push('knowledge:validarEPromover')
+
+    void eventBusPublisher.publish({
+      eventType: EVENTOS_COGNITIVOS.DECISAO_TOMADA,
+      aggregateId: empresaId,
+      aggregateType: 'Empresa',
+      data: { tipo: 'RESPOSTA_REGISTRADA', perguntaId },
+      tenantId: empresaId,
+      correlationId: randomUUID(),
+    })
+  } catch (err) {
+    erros.push(err instanceof Error ? err.message : String(err))
+  }
+
+  return {
+    sucesso: erros.length === 0,
+    evento: 'RESPOSTA_PROCESSADA',
+    empresaId,
+    acionamentos,
+    erros,
   }
 }
 

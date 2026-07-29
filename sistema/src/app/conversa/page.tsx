@@ -1,16 +1,19 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { QuestionCard } from '@/components/conversa/question-card'
 import { MicroReaction } from '@/components/conversa/micro-reaction'
 import { RevelacaoCard } from '@/components/conversa/revelacao-card'
 import { ProgressBar } from '@/components/conversa/progress-bar'
+import { CognitiveAvatar } from '@/components/ui/avatar'
+import { ConfidenceRing } from '@/components/cognitive/confidence-ring'
 
 interface Pergunta {
   id: string
   pergunta: string
   tipo: 'texto' | 'selecao' | 'faixa'
   opcoes?: { valor: string; rotulo: string }[]
+  categoria?: string
 }
 
 interface Progresso {
@@ -45,6 +48,17 @@ export default function ConversaPage() {
   const [resumoNatural, setResumoNatural] = useState<ResumoNaturalData | null>(null)
   const [enviando, setEnviando] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
+  const [faseLoading, setFaseLoading] = useState<string>('')
+
+  const FASES_LOADING = useMemo(() => [
+    'Relacionando dados da sua empresa...',
+    'Comparando padrões de mercado...',
+    'Construindo hipótese...',
+    'Calculando nível de confiança...',
+    'Detectando oportunidades...',
+    'Organizando conhecimento...',
+    'Preparando recomendações...',
+  ], [])
 
   const recuperarInterpretacoes = useCallback(async () => {
     setInterpretacoes(null)
@@ -151,12 +165,48 @@ export default function ConversaPage() {
     }
   }
 
+  const CARREGANDO_FASES = FASES_LOADING
+
+  useEffect(() => {
+    if (!carregando) return
+    let i = 0
+    setFaseLoading(CARREGANDO_FASES[0])
+    const interval = setInterval(() => {
+      i++
+      if (i < CARREGANDO_FASES.length) {
+        setFaseLoading(CARREGANDO_FASES[i])
+      } else {
+        clearInterval(interval)
+      }
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [carregando, CARREGANDO_FASES])
+
   if (carregando) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-background to-muted/30">
-        <div className="text-center space-y-3">
-          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-          <p className="text-sm text-muted-foreground">Iniciando conversa...</p>
+        <div className="text-center space-y-4">
+          <CognitiveAvatar state="thinking" size="lg" />
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground animate-fade-in" key={faseLoading}>
+              {faseLoading}
+            </p>
+            <div className="flex items-center justify-center gap-1">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:0ms]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:150ms]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:300ms]" />
+            </div>
+            <div className="w-48 mx-auto mt-4">
+              <div className="h-1 rounded-full bg-muted overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-primary/60 to-primary transition-all duration-1000"
+                  style={{ width: `${Math.min(progresso.percentual || 5, 95)}%` }}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">Bloco {progresso.blocoAtual} de {progresso.totalBlocos}</p>
+            </div>
+          </div>
+          <ConfidenceRing value={35} size="sm" showLabel />
         </div>
       </div>
     )
@@ -166,7 +216,10 @@ export default function ConversaPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-background to-muted/30 p-4">
       <div className="w-full max-w-lg space-y-6">
         {/* Logo / identidade */}
-        <div className="text-center">
+        <div className="text-center space-y-2">
+          <div className="mx-auto">
+            <CognitiveAvatar state="breathing" size="md" />
+          </div>
           <h1 className="text-lg font-semibold tracking-tight">Ponte Digital</h1>
           <p className="text-xs text-muted-foreground">Conhecendo sua empresa</p>
         </div>
@@ -215,6 +268,7 @@ export default function ConversaPage() {
               onChange={setResposta}
               onEnviar={enviarResposta}
               enviando={enviando}
+              contexto={perguntaAtual.categoria}
             />
           ) : (
             <p className="text-center text-muted-foreground">Preparando...</p>

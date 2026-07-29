@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { obterRespostas } from '@/engine/conversation-engine'
+import { obterRespostas, vincularConversa } from '@/engine/conversation-engine'
 import { interpretarRespostas } from '@/engine/identity-engine'
 import { gerarResumoNatural } from '@/engine/interpretacoes'
+import { processarConversa } from '@/engine/cognitive-orchestrator'
 import { prismaSeguro } from '@/lib/prisma-tenant-safe'
 import { handleApiError } from '@/lib/api-error'
 import { assertRateLimit } from '@/lib/rate-limit'
@@ -52,6 +53,18 @@ export async function POST(request: NextRequest) {
 
     const interpretacoes = await interpretarRespostas(respostas)
     const resumoNatural = gerarResumoNatural(respostas, interpretacoes)
+
+    let empresaId = conversa.empresaId
+    if (!empresaId && usuario) {
+      empresaId = usuario.empresaId
+      await vincularConversa(token, empresaId)
+    }
+
+    if (empresaId) {
+      processarConversa(empresaId, token).catch(() => {
+        // Processamento cognitivo em background — falha não quebra o fluxo
+      })
+    }
 
     return NextResponse.json({
       data: {

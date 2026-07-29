@@ -11,7 +11,10 @@ export { registrarEvidencia, consultarEvidencias, contagemPorCategoria } from '.
 export type { DadosEvidencia, FiltroEvidencias } from './evidence-engine'
 export type { CategoriaEvidencia, OrigemEvidencia, ConfiancaEvidencia } from './evidence-engine'
 export { decidirContexto } from './cognitive-context-engine'
-export { analisarEvolucao, atualizarEstadoHipotese, listarHipoteses, consultarMemoria, registrarNaMemoria } from './cognitive-memory-engine'
+export { analisarEvolucao, consultarMemoria, registrarNaMemoria } from './cognitive-memory-engine'
+export { atualizarEstadoHipotese as atualizarEstadoHipoteseLegado, listarHipoteses as listarHipotesesLegado } from './cognitive-memory-engine'
+export { criarHipotese, atualizarEstadoHipotese, listarHipoteses, obterHipoteseCompleta, gerarHipotesesDeEvidencias } from './hypothesis-engine'
+export type { HipoteseCompleta } from './hypothesis-engine'
 export { gerarDecisoes, melhorDecisao, classificarDecisoesPorPrioridade, enriquecerDecisoesComTrust, filtrarDecisoesPorRelevancia } from './decision-engine'
 export type { Decisao } from './decision-engine'
 export { criarAcao, listarAcoesAtivas } from './action-intelligence-engine'
@@ -27,6 +30,7 @@ export { criarConversa, responder, carregarConversa, obterEstado, vincularConver
 export {
   obterEstadoCognitivoCompleto,
   processarConversa,
+  processarNovaResposta,
   processarAcao,
   processarFeedback,
   processarOutcome,
@@ -74,9 +78,9 @@ export type {
   AprendizadoExplicito,
   PerguntaRapida,
 } from './cognitive-experience-engine'
-export { adicionarAprendizado, listarAprendizados, contagemPorCategoria as contagemAprendizados, aprendizadosParaContexto, aprendizadosRecentes, desativarAprendizado, obterPerguntasRapidas, obterPerguntaAleatoria, CATEGORIAS_APRENDIZADO, ORIGENS_APRENDIZADO } from './aprendizado-service'
+export { adicionarAprendizado, listarAprendizados, contagemPorCategoria as contagemAprendizados, aprendizadosParaContexto, aprendizadosRecentes, desativarAprendizado, obterPerguntasRapidas, obterPerguntaAleatoria, aprenderComResposta, CATEGORIAS_APRENDIZADO, ORIGENS_APRENDIZADO } from './aprendizado-service'
 export type { AprendizadoItem, CategoriaAprendizado, OrigemAprendizado, ContagemCategoria } from './aprendizado-service'
-export type { TimelineExperience, CognitiveOSFields, HomeExperience, ModulosLiberados } from './cognitive-experience-engine'
+export type { TimelineExperience, CognitiveOSFields, HomeExperience, ModulosLiberados, CentroCognitivoData } from './cognitive-experience-engine'
 
 export type { ExperienceAction } from './cognitive-action-composer'
 export { gerarActions } from './cognitive-action-composer'
@@ -189,6 +193,10 @@ export { _initSubs as inicializarSubscribers }
 import { inicializarPipelines as _initPipes } from './pipelines/pipeline-registry'
 export { _initPipes as inicializarPipelines }
 
+export { registrarResposta, listarRespostasPorEmpresa, listarRespostasPorToken } from './question-answer-engine'
+export { obterProximaPergunta, obterMultiplasPerguntas } from './adaptive-question-engine'
+export type { AdaptiveQuestion } from './adaptive-question-engine'
+
 export { obterEventBus, criarEvento, EventEmitterBus } from './cognitive-bus'
 export type { EventBus, EventoPonteDigital, MetadadosEvento, TipoHandlerEvento, MiddlewareEvento } from './cognitive-bus'
 
@@ -201,6 +209,48 @@ export type { AtualizarConfigInput } from './ritmo-engine'
 
 export type { CompanyMaturity, NivelMaturidade } from './company-maturity-engine'
 export { calcularMaturidade } from './company-maturity-engine'
+
+export type { GrowthOpportunity, GrowthEngineOutput, NivelImpacto, NivelEsforco, NivelRisco, HorizonteTempo } from './growth-opportunity-engine'
+export { gerarOportunidades } from './growth-opportunity-engine'
+
+export type { MapaCalor, AreaCalor } from './cognitive-heatmap-engine'
+export { gerarMapaCalor } from './cognitive-heatmap-engine'
+
+export type { CenarioAlternativo } from './cognitive-brainstorm-engine'
+export { gerarCenarios } from './cognitive-brainstorm-engine'
+
+export type { NarrativaEmpresarial, SecaoNarrativa, RetratoVivo, EmpresaTransformacao, ProximoNivel, ComparacaoTemporal } from './cognitive-narrative-engine'
+export { gerarNarrativaEmpresarial } from './cognitive-narrative-engine'
+
+export type { AlertaCognitivo, SaidaAlertas } from './cognitive-alert-engine'
+export { gerarAlertasCognitivos } from './cognitive-alert-engine'
+
+export type { CicloDecisao, ResumoCiclos, EtapaCiclo } from './decision-learning-cycle-engine'
+export { construirCiclosDecisao } from './decision-learning-cycle-engine'
+
+export type { AdaptiveCapacity, Capacidade } from './adaptive-capacity-engine'
+export { calcularCapacidadeAdaptativa } from './adaptive-capacity-engine'
+
+export type { CapitalCognitivo, ComponenteCapital } from './cognitive-capital-engine'
+export { calcularCapitalCognitivo } from './cognitive-capital-engine'
+
+export type { CurvaEvolutiva, PontoCurva } from './cognitive-curve-engine'
+export { gerarCurvaEvolutiva } from './cognitive-curve-engine'
+
+export type { RadarCapacidades, CapacidadeRadar } from './cognitive-radar-engine'
+export { gerarRadarCapacidades } from './cognitive-radar-engine'
+
+export type { AntesDepoisEngine, ComparacaoAntesDepois } from './cognitive-before-after-engine'
+export { gerarComparacoesAntesDepois } from './cognitive-before-after-engine'
+
+export type { AnaliseClareza } from './clarity-engine'
+export { gerarAnaliseClareza } from './clarity-engine'
+
+export type { MemoriaEstrategica, RegistroMemoriaEstrategica } from './strategic-memory-engine'
+export { construirMemoriaEstrategica } from './strategic-memory-engine'
+
+export type { FundadorVisaoDiaria } from './founder-panel-engine'
+export { gerarVisaoFundador } from './founder-panel-engine'
 
 export type { EvolutionExperience } from './cognitive-experience-engine'
 import { obterEstadoCognitivoCompleto as _obterEstado } from './cognitive-orchestrator'

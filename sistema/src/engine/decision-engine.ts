@@ -27,6 +27,8 @@ export interface Decisao {
   impacto: Impacto
   urgencia: Urgencia
   dificuldade: Dificuldade
+  riscos: string[]
+  desconhecidos: string[]
   dependencias?: string[]
   expiraEm?: Date
 }
@@ -45,7 +47,7 @@ interface RegraDecisao {
   impacto: Impacto
   urgencia: Urgencia
   dificuldade: Dificuldade
-  condicao: (params: ContextoDecisao) => { atende: boolean; motivo: string; evidencias: string[]; confianca: number }
+  condicao: (params: ContextoDecisao) => { atende: boolean; motivo: string; evidencias: string[]; confianca: number; riscos?: string[]; desconhecidos?: string[] }
   dependencias?: string[]
   expiraEmHoras?: number
 }
@@ -310,10 +312,9 @@ export async function gerarDecisoes(empresaId: string): Promise<Decisao[]> {
   const decisoes: Decisao[] = []
 
   for (const regra of REGRAS) {
-    const { atende, motivo, evidencias, confianca } = regra.condicao(contexto)
+    const { atende, motivo, evidencias, confianca, riscos, desconhecidos } = regra.condicao(contexto)
     if (!atende) continue
 
-    // Verifica se já existe uma ação ativa para esta decisão
     const acaoAtiva = await acaoAtivaPorDecisao(empresaId, regra.id)
     if (acaoAtiva) continue
 
@@ -330,6 +331,8 @@ export async function gerarDecisoes(empresaId: string): Promise<Decisao[]> {
       impacto: regra.impacto,
       urgencia: regra.urgencia,
       dificuldade: regra.dificuldade,
+      riscos: riscos ?? gerarRiscosPadrao(regra.categoria, regra.tipoAcao),
+      desconhecidos: desconhecidos ?? gerarDesconhecidosPadrao(regra.categoria, contexto),
       dependencias: regra.dependencias,
       expiraEm: regra.expiraEmHoras
         ? new Date(Date.now() + regra.expiraEmHoras * 60 * 60 * 1000)
@@ -362,6 +365,43 @@ export async function registrarExecucaoDecisao(
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────
+
+function gerarRiscosPadrao(categoria: string, tipoAcao: string): string[] {
+  const mapa: Record<string, string[]> = {
+    FINANCEIRO: ['Decisão baseada em dados financeiros parciais', 'Mudanças no mercado podem alterar o cenário'],
+    CLIENTES: ['Cliente pode não responder ao contato', 'Priorização pode deixar outros leads sem atenção'],
+    GESTAO: ['Mudanças na gestão podem encontrar resistência interna', 'Resultados podem levar tempo para aparecer'],
+    OPERACAO: ['Intervenções operacionais podem causar curto prazo instável', 'Gargalos podem ter causas não mapeadas'],
+    ESTRATEGIA: ['Decisão estratégica requer validação com dados adicionais', 'Cenário econômico pode mudar'],
+    PESSOAS: ['Mudanças na equipe podem gerar desconforto inicial', 'Capacitação requer investimento de tempo'],
+    PRODUTO: ['Mudanças no produto podem afetar clientes existentes', 'Retorno pode não ser imediato'],
+  }
+  return mapa[categoria] ?? ['Impacto pode variar conforme fatores externos', 'Dados insuficientes para prever efeitos colaterais']
+}
+
+function gerarDesconhecidosPadrao(categoria: string, contexto: ContextoDecisao): string[] {
+  const desconhecidos: string[] = []
+
+  const temHipotese = contexto.hipoteses.some(h => h.categoria === categoria)
+  if (!temHipotese) {
+    desconhecidos.push('Não temos uma hipótese formal sobre esta área ainda')
+  }
+
+  const evidenciasRecentes = contexto.evidencias.filter(e => e.categoria === categoria).length
+  if (evidenciasRecentes < 5) {
+    desconhecidos.push(`Apenas ${evidenciasRecentes} evidências coletadas — podem não contar a história completa`)
+  }
+
+  if (!contexto.identidade) {
+    desconhecidos.push('A identidade digital da empresa ainda não foi completamente formada')
+  }
+
+  if (desconhecidos.length === 0) {
+    desconhecidos.push('Cenários futuros imprevistos podem alterar as premissas atuais')
+  }
+
+  return desconhecidos
+}
 
 async function montarContexto(empresaId: string): Promise<ContextoDecisao> {
   const situacao = await buscarSituacaoEmpresa(empresaId)

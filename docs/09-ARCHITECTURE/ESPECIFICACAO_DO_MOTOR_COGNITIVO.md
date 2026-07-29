@@ -1,6 +1,64 @@
 # Especificação do Motor Cognitivo
 
-> **Programa 12 — Fase 3: Motor Cognitivo**
+> **Programa 32 — Materialização da Teoria da Evolução Empresarial**
+> Versão: 2.0
+> Propósito: Especificação definitiva do Motor Cognitivo orientado a **8 Capacidades Fundamentais** — evolução do ciclo de 10 estágios (Programa 12) para o ciclo de 8 capacidades
+
+## Atualização Programa 32 — mudanças em relação à versão 1.0
+
+O Motor Cognitivo foi reformulado para refletir as **8 Capacidades Fundamentais** da Teoria da Evolução Empresarial. As principais mudanças:
+
+### O que mudou
+
+| Aspecto | Versão 1.0 (Programa 12) | Versão 2.0 (Programa 32) |
+|:--------|:-------------------------|:-------------------------|
+| **Estágios** | 10 estágios técnicos | 8 capacidades fundamentais |
+| **Orientação** | Pipeline de dados → decisão | Fortalecimento de capacidades |
+| **Patrimônio** | Dados processados | **Capital Cognitivo** (decisões validadas, capacidades desenvolvidas, aprendizados registrados, hipóteses confirmadas, conhecimento acumulado, consistência operacional) |
+| **Priorização** | Sub-etapa da decisão | Capacidade própria (**Priorizar**) |
+| **Compreensão** | Contexto + Análise separados | Fundidos em **Compreender** |
+| **Esclarecimento** | Hipótese + Validação separados | Fundidos em **Esclarecer** |
+| **Aprendizado** | Memória + Aprendizado separados | Fundidos em **Aprender** |
+| **Dashboard** | Técnico (engines, eventos) | Evolutivo (Retrato Vivo, ICA, Capital Cognitivo, Curva Evolutiva) |
+| **Motor de Clareza** | Inexistente | **Novo** — 5 perguntas: Onde estamos? O que mudou? O que importa? O que pode esperar? Próximo melhor movimento? |
+| **Memória Estratégica** | Inexistente | **Novo** — pós-decisão: Funcionou? Por quê? O que aprendemos? O que repetir? O que não repetir? |
+| **Painel do Fundador** | Inexistente | **Novo** — visão diária de evolução, patrimônio, capacidades estagnadas |
+| **Princípio** | A funcionalidade ajuda a decidir? | **Qual capacidade ela fortalece?** |
+
+### Mapeamento 10 estágios → 8 capacidades
+
+```
+10 estágios (v1.0)             8 capacidades (v2.0)
+─────────────────              ────────────────────
+01 Perception    ──► OBSERVAR
+02 Context       ──┐
+03 Analysis      ──┤─► COMPREENDER
+04 Hypothesis    ──┐
+05 Validation    ──┤─► ESCLARECER
+06 Decision      ──► DECIDIR
+   Priority      ──► PRIORIZAR           (elevado a capacidade própria)
+07 Action        ──► EXECUTAR
+08 Memory        ──┐
+09 Learning      ──┤─► APRENDER
+10 Heritage      ──► EVOLUIR
+```
+
+### Ciclo cognitivo atualizado
+
+```
+OBSERVAR → COMPREENDER → ESCLARECER → PRIORIZAR → DECIDIR → EXECUTAR → APRENDER → EVOLUIR → OBSERVAR_NOVAMENTE
+```
+
+### Critério universal do Motor Cognitivo v2.0
+
+Toda engine, todo ciclo, toda saída deve responder:
+1. **Qual capacidade empresarial fortalece?** (das 8)
+2. **Como aumenta o Capital Cognitivo?** (qual componente do patrimônio?)
+3. **Como reduz o esforço mental do empresário?** (a cognição não é sobre processar mais — é sobre processar melhor)
+
+---
+
+> **Programa 12 — Fase 3: Motor Cognitivo** (versão original mantida para referência)
 > Versão: 1.0
 > Propósito: Especificação definitiva do Motor Cognitivo da Ponte Digital — suficiente para implementação por engenheiro experiente sem consulta aos fundadores
 
@@ -63,51 +121,56 @@ Este documento respeita os seguintes princípios, nessa ordem:
 
 ### 2.1 Visão Geral
 
-O Motor Cognitivo é composto por 11 engines especializadas, cada uma responsável por um estágio do ciclo cognitivo, coordenadas pelo cognitive-orchestrator:
+O Motor Cognitivo é composto por engines organizadas em **8 Capacidades Fundamentais**, coordenadas pelo cognitive-orchestrator:
 
 ```
-                   ┌──────────────────────────────────────────┐
-                   │           COGNITIVE-ORCHESTRATOR          │
-                   │    Coordena o ciclo de 10 estágios       │
-                   └──────┬──────┬──────┬──────┬──────┬───────┘
-                          │      │      │      │      │
-       ┌──────────────────┘      │      │      │      └──────────────────┐
-       ▼                         ▼      ▼      ▼                         ▼
-┌──────────────┐    ┌──────────────┐    ┌──────────┐    ┌──────────────┐
-│ PERCEPTION   │    │ CONTEXT      │    │ ANALYSIS │    │ HYPOTHESIS   │
-│ ENGINE       │───►│ ENGINE       │───►│ ENGINE   │───►│ ENGINE       │
-│ (Estágio 01) │    │ (Estágio 02) │    │(Estágio03)│    │ (Estágio 04) │
-└──────────────┘    └──────────────┘    └──────────┘    └──────────────┘
-                                                              │
-                                                              ▼
-┌──────────────┐    ┌──────────────┐    ┌──────────┐    ┌──────────────┐
-│ VALIDATION   │    │ DECISION     │    │ ACTION   │    │ MEMORY       │
-│ ENGINE       │───►│ ENGINE       │───►│ ENGINE   │───►│ ENGINE       │
-│ (Estágio 05) │    │ (Estágio 06) │    │(Estágio07)│    │ (Estágio 08) │
-└──────────────┘    └──────────────┘    └──────────┘    └──────────────┘
-                                                              │
-                                                              ▼
-┌──────────────┐    ┌──────────────┐
-│ LEARNING     │    │ HERITAGE     │
-│ ENGINE       │◄───│ ENGINE       │
-│ (Estágio 09) │    │ (Estágio 10) │
-└──────────────┘    └──────────────┘
+                    ┌──────────────────────────────────────────────┐
+                    │           COGNITIVE-ORCHESTRATOR              │
+                    │    Coordena o ciclo de 8 capacidades         │
+                    └──────┬──────┬──────┬──────┬──────┬───────────┘
+                           │      │      │      │      │
+        ┌──────────────────┘      │      │      │      └──────────────────────┐
+        ▼                         ▼      ▼      ▼                             ▼
+┌──────────────────┐    ┌──────────────────────────────┐    ┌──────────────────────────────┐
+│   OBSERVAR       │    │   COMPREENDER                │    │   ESCLARECER                 │
+│ (perception)     │───►│ (context + analysis)         │───►│ (hypothesis + validation)     │
+│ 1 engine         │    │ 2 engines integradas         │    │ 2 engines integradas         │
+└──────────────────┘    └──────────────────────────────┘    └──────────────────────────────┘
+                                                                          │
+                                                                          ▼
+┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
+│   PRIORIZAR      │    │   DECIDIR        │    │   EXECUTAR       │    │   APRENDER       │
+│ (priority)       │───►│ (decision)       │───►│ (action)         │───►│ (memory +        │
+│ 1 engine         │    │ 1 engine         │    │ 1 engine         │    │  learning)       │
+│                  │    │                  │    │                  │    │ 2 engines        │
+└──────────────────┘    └──────────────────┘    └──────────────────┘    └──────────────────┘
+                                                                          │
+                                                                          ▼
+                                                               ┌──────────────────┐
+                                                               │   EVOLUIR        │
+                                                               │ (heritage)       │
+                                                               │ 1 engine         │
+                                                               └──────────────────┘
 ```
 
-### 2.2 Engines do Motor Cognitivo
+**Nota:** as engines individuais (perception, context, analysis, hypothesis, validation, decision, priority, action, memory, learning, heritage) continuam existindo como unidades de implementação. O que muda é o agrupamento conceitual em 8 capacidades e a adição de novos componentes transversais:
 
-| Engine | Estágio | Função | Estado na Arquitetura Atual |
-|--------|:-------:|--------|:---------------------------:|
-| `perception-engine` | 01 | Converter estímulo em sinal processável | ❌ Nova — não existe |
-| `cognitive-context-engine` | 02 | Montar contexto enriquecido | ✅ Existe (precisa de extensões) |
-| `analysis-engine` | 03 | Detectar padrões, anomalias, correlações | ❌ Nova — não existe |
-| `hypothesis-engine` | 04 | Formular e gerenciar hipóteses | 🔶 Parcial (cognitive-hypothesis-engine existe mas incompleta) |
-| `validation-engine` | 05 | Validar hipóteses contra evidências | ❌ Nova — a existente estava DEPRECIADA e com função diferente |
-| `decision-engine` | 06 | Construir decisões ponderadas | ✅ Existe (decision-engine + priority-engine + trust-engine) |
-| `action-engine` | 07 | Executar intervenções (alerta, tarefa, plano) | 🔶 Parcial (cognitive-experience-engine faz parte) |
-| `memory-engine` | 08 | Registrar ciclo no patrimônio | ✅ Existe (cognitive-memory-engine) |
-| `learning-engine` | 09 | Extrair aprendizado do resultado | ❌ Nova — não existe |
-| `heritage-engine` | 10 | Consolidar patrimônio cognitivo | ✅ Existe (cognitive-heritage-facade) |
+- **Motor de Clareza** — orquestra as 5 perguntas em cada ciclo
+- **Memória Estratégica** — registra o pós-decisão obrigatório
+- **Painel do Fundador** — consolida a visão evolutiva para o empresário
+
+### 2.2 Capacidades e Engines do Motor Cognitivo
+
+| Capacidade | Engines | Função | Estado na Arquitetura Atual |
+|:-----------|:--------|:------|:---------------------------:|
+| **OBSERVAR** | `perception-engine` | Converter estímulo em sinal processável | ❌ Nova — não existe |
+| **COMPREENDER** | `cognitive-context-engine` + `analysis-engine` | Montar contexto + detectar padrões e anomalias | 🔶 Parcial (context existe, analysis é nova) |
+| **ESCLARECER** | `hypothesis-engine` + `validation-engine` | Formular hipóteses + validar contra evidências | 🔶 Parcial (hypothesis incompleta, validation nova) |
+| **PRIORIZAR** | `priority-engine` | Classificar urgência, impacto e relevância | ✅ Existe (era sub-etapa, agora é capacidade própria) |
+| **DECIDIR** | `decision-engine` | Construir decisões ponderadas | ✅ Existe (decision-engine + trust-engine) |
+| **EXECUTAR** | `action-engine` | Executar intervenções (alerta, tarefa, plano) | 🔶 Parcial (cognitive-experience-engine faz parte) |
+| **APRENDER** | `memory-engine` + `learning-engine` | Registrar ciclo + extrair aprendizado do resultado | 🔶 Parcial (memory existe, learning é nova) |
+| **EVOLUIR** | `heritage-engine` | Consolidar e evoluir o patrimônio cognitivo | ✅ Existe (cognitive-heritage-facade) |
 
 ### 2.3 Engines de Suporte Existentes (já implementadas)
 
@@ -489,9 +552,9 @@ interface PatrimonioConsolidado {
 
 ## Seção 4 — O Orchestrator
 
-### 4.1 Cognitive-Orchestrator
+### 4.1 Cognitive-Orchestrator (Programa 32 — ciclo de 8 capacidades)
 
-O orchestrator existente (`cognitive-orchestrator.ts`) precisa ser adaptado para coordenar os 10 estágios.
+O orchestrator existente (`cognitive-orchestrator.ts`) foi adaptado para coordenar o ciclo de **8 capacidades fundamentais**. Novos componentes transversais foram adicionados: **Motor de Clareza** (5 perguntas) e **Memória Estratégica** (pós-decisão).
 
 **Fluxo de orquestração:**
 
@@ -499,35 +562,62 @@ O orchestrator existente (`cognitive-orchestrator.ts`) precisa ser adaptado para
 interface CognitiveOrchestrator {
   executarCiclo(estimulo: Estimulo): Promise<ResultadoCiclo>;
   executarCicloNoturno(empresaId: string): Promise<ResultadoCiclo>;
+  aplicarMotorDeClareza(contexto: ContextoCognitivo): Promise<RespostasClareza>;
+  registrarMemoriaEstrategica(decisao: Decisao, resultado: ResultadoObservado): Promise<void>;
 }
 
 interface ResultadoCiclo {
   correlationId: string;
-  estagiosExecutados: number;
+  capacidadesExecutadas: number;  // antes: estagiosExecutados
   sinalProcessado: SinalProcessado | null;
   analise: Analise | null;
   hipoteses: number;
   decisoes: Decisao[];
   acoes: ResultadoExecucao[];
   aprendizados: Aprendizado[];
+  capitalCognitivoGerado: CapitalCognitivoDelta;  // novo — mede impacto no patrimônio
+  respostasClareza?: RespostasClareza;             // novo — Motor de Clareza
   duracaoMs: number;
   modo: 'COMPLETO' | 'CONVERSA' | 'ONBOARDING' | 'SILENCIO' | 'NOTURNO';
 }
+
+// Novo — Capital Cognitivo
+interface CapitalCognitivoDelta {
+  decisoesValidadas: number;
+  capacidadesFortificadas: string[];   // quais das 8 foram exercitadas
+  aprendizadosNovos: number;
+  hipotesesConfirmadas: number;
+  conhecimentoAcumulado: number;
+  consistenciaOperacional: number;     // delta
+}
+
+// Novo — Motor de Clareza
+interface RespostasClareza {
+  ondeEstamos: string;
+  oQueMudou: string;
+  oQueImporta: string;
+  oQuePodeEsperar: string;
+  proximoMelhorMovimento: string;
+}
 ```
 
-**Sequência de chamadas:**
+**Sequência de chamadas (8 capacidades):**
 
 ```
-1. perception-engine.processar(estimulo)
-2. context-engine.enriquecer(sinal)
-3. analysis-engine.analisar(contexto)
-4. hypothesis-engine.formular(analise, empresaId)
-5. validation-engine.validar(hipotese)  [para cada hipótese]
-6. decision-engine.decidir(hipoteses, contexto)
-7. action-engine.executar(decisao)
-8. memory-engine.registrar(cicloCompleto)
-9. learning-engine.processarResultado(decisaoId, resultado)  [assíncrono — quando resultado chega]
-10. heritage-engine.consolidar(patrimonio)
+1. OBSERVAR    —  perception-engine.processar(estimulo)
+2. COMPREENDER —  context-engine.enriquecer(sinal)
+                  analysis-engine.analisar(contexto)
+3. ESCLARECER  —  hypothesis-engine.formular(analise, empresaId)
+                  validation-engine.validar(hipotese)  [para cada hipótese]
+4. PRIORIZAR   —  priority-engine.classificar(hipotesesValidadas, contexto)
+5. DECIDIR     —  decision-engine.decidir(hipotesesPriorizadas, contexto)
+                  ★ Motor de Clareza: 5 perguntas
+6. EXECUTAR    —  action-engine.executar(decisao)
+7. APRENDER    —  memory-engine.registrar(cicloCompleto)
+                  learning-engine.processarResultado(decisaoId, resultado)  [assíncrono]
+                  ★ Memória Estratégica: Funcionou? Por quê? O que aprendemos?
+8. EVOLUIR     —  heritage-engine.consolidar(patrimonio)
+                  heritage-engine.atualizarCurvaEvolutiva(capacidades)
 ```
 
 ### 4.2 Modos de Operação
@@ -546,18 +636,16 @@ function determinarModo(estimulo: Estimulo, empresaId: string): ModoCiclo {
 
 ### 4.3 Tolerância a Falhas do Orchestrator
 
-| Estágio | Se falhar | O orchestrator faz |
-|:-------:|:---------:|--------------------|
-| 01 | Sim | Retry 1x. Se persistir, loga e para o ciclo. |
-| 02 | Sim | Usa último contexto válido (stale). |
-| 03 | Parcial | Processa detectores que funcionaram, ignora falhos. |
-| 04 | Sim | Loga, pula hipóteses, vai para registro. |
-| 05 | Sim | Mantém hipótese EM_OBSERVAÇÃO. |
-| 06 | Sim | Nível 0 (SILÊNCIO) — seguro. |
-| 07 | Sim | Re-tenta no próximo ciclo. |
-| 08 | CRÍTICO | Retry com backoff exponencial (1s, 2s, 4s, 8s). |
-| 09 | Sim | Recalcula no próximo ciclo (resultado não expira em 1 ciclo). |
-| 10 | Sim | Próximo ciclo corrige. |
+| Capacidade | Se falhar | O orchestrator faz |
+|:----------:|:---------:|--------------------|
+| OBSERVAR | Sim | Retry 1x. Se persistir, loga e para o ciclo. |
+| COMPREENDER | Parcial | Processa detectores que funcionaram, ignora falhos. Usa último contexto válido se context falhar. |
+| ESCLARECER | Sim | Mantém hipóteses EM_OBSERVAÇÃO, pula validação. |
+| PRIORIZAR | Sim | Usa prioridade padrão (média) para todas as hipóteses. |
+| DECIDIR | Sim | Nível 0 (SILÊNCIO) — seguro. Motor de Clareza não bloqueia. |
+| EXECUTAR | Sim | Re-tenta no próximo ciclo. |
+| APRENDER | Sim | Memória: CRÍTICO — retry com backoff exponencial (1s, 2s, 4s, 8s). Learning: recalcula no próximo ciclo. |
+| EVOLUIR | Sim | Próximo ciclo corrige. |
 
 ---
 
@@ -692,24 +780,28 @@ Para suportar o novo modelo, os seguintes campos devem ser adicionados aos model
 
 | Pergunta | Resposta | Onde |
 |----------|----------|------|
-| Como a Ponte pensa? | Ciclo de 10 estágios determinístico | Documento 1, Seções 1-8 |
-| Como monta raciocínio? | Percepção → Contexto → Análise → Hipótese → Validação → Decisão | Documento 1, Seção 1 |
+| Como a Ponte pensa? | Ciclo de **8 capacidades fundamentais**: OBSERVAR → COMPREENDER → ESCLARECER → PRIORIZAR → DECIDIR → EXECUTAR → APRENDER → EVOLUIR | Documento 1, Seções 1-8 |
+| Quais são as 8 capacidades? | Observar, Compreender, Esclarecer, Priorizar, Decidir, Executar, Aprender, Evoluir | Documento 1, Seção 2 |
+| Como monta raciocínio? | Observar → Compreender (Contexto + Análise) → Esclarecer (Hipótese + Validação) | Documento 1, Seção 1 |
 | Como escolhe hipóteses? | 4 critérios (poder explicativo, consistência, especificidade, falsificabilidade) | Documento 1, Seção 2 |
-| Como elimina hipóteses? | 5 critérios + Pareto de 7 por domínio | Documento 1, Seção 3 |
-| Como aprende? | Ciclo decisão → resultado → ajuste de confiança → conhecimento validado | Documento 1, Seção 4 |
+| Como elimina hipóteses? | Escolha por Priorizar + 5 critérios + Pareto de 7 por domínio | Documento 1, Seção 3 |
+| Como aprende? | Ciclo decisão → resultado → ajuste de confiança → conhecimento validado → evolui | Documento 1, Seção 4 |
 | Como muda de opinião? | 5 gatilhos + resistência inercial por convicção | Documento 1, Seção 5 |
 | Como evita alucinação? | 6 barreiras + verificação de integridade | Documento 1, Seção 6 |
 | Quando decide permanecer em silêncio? | 6 regras de silêncio + nível 0 de intervenção | Documento 1, Seção 7 |
-| Como constrói decisões? | 5 fases: entrada, ponderação, classificação, formulação, registro | Documento 2 |
+| Como constrói decisões? | Capacidade Decidir (5 fases: entrada, ponderação, classificação, formulação, registro) + **Motor de Clareza** (5 perguntas) | Documento 1 + Programa 32 |
 | Como resolve conflitos? | Matriz de resolução por tipo de conflito | Documento 2, Seção 2 |
-| Como reduz milhares de informações? | 5 técnicas (janela, sumarização, filtro, priorização, referências) | Documento 3, Seção 2 |
+| Como reduz milhares de informações? | 5 técnicas (janela, sumarização, filtro, priorização — que virou capacidade própria, referências) | Documento 3, Seção 2 |
 | Como descarta contexto? | 5 gatilhos de descarte + preservação do patrimônio | Documento 3, Seção 6 |
 | Como funciona a memória? | 4 níveis com políticas de retenção e condensação | Documento 4 |
 | Quando perguntar? | ValorLíquido > 0 + 6 gatilhos específicos | Documento 5, Seção 1 |
-| Como classificar prioridade? | 5 categorias + fórmula com 5 fatores | Documento 6 |
+| Como classificar prioridade? | 5 categorias + fórmula com 5 fatores — **Priorizar** é capacidade própria | Documento 6 + Programa 32 |
 | O que observar continuamente? | 7 domínios com indicadores por domínio | Documento 7, Seção 1 |
 | Quando intervir? | 7 níveis de intervenção com thresholds de confiança | Documento 8 |
-| Qual o ciclo completo? | 10 estágios integrados em 4 modos de operação | Documento 9 |
+| Qual o ciclo completo? | **8 capacidades** integradas em 4 modos de operação | Documento 9 + Programa 32 |
+| **O que é Capital Cognitivo?** | Patrimônio composto por: decisões validadas, capacidades desenvolvidas, aprendizados registrados, hipóteses confirmadas, conhecimento acumulado, consistência operacional | Programa 32 |
+| **O que é o Motor de Clareza?** | 5 perguntas em cada ciclo: Onde estamos? O que mudou? O que importa? O que pode esperar? Próximo melhor movimento? | Programa 32 |
+| **O que é a Memória Estratégica?** | Registro obrigatório pós-decisão: Funcionou? Por quê? O que aprendemos? O que repetir? O que não repetir? | Programa 32 |
 
 ### 9.2 Um engenheiro experiente consegue implementar?
 

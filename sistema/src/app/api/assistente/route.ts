@@ -7,6 +7,7 @@ import { getEmpresaDoUsuario } from '@/lib/auth'
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { assistenteRequisicaoSchema } from '@/lib/validations'
 import { getAIProvider } from '@/lib/ai-provider'
+import { registrarResposta } from '@/engine/question-answer-engine'
 
 // ─── CONTEXTO DO BANCO ────────────────────────────────────────────────────────
 // Busca um snapshot compacto dos dados reais para fundamentar as respostas da IA.
@@ -289,10 +290,18 @@ export async function POST(request: NextRequest) {
     // ── Curto-circuito por fórmula: pergunta factual simples não precisa de IA ──
     const ultimaMensagem = mensagens[mensagens.length - 1]
     if (ultimaMensagem?.role === 'user' && typeof ultimaMensagem.content === 'string') {
-      const respostaFormula = tentarResponderPorFormula(ultimaMensagem.content, contexto)
+      const perguntaUsuario = ultimaMensagem.content
+
+      const respostaFormula = tentarResponderPorFormula(perguntaUsuario, contexto)
       if (respostaFormula) {
-        // Simula o mesmo formato de stream que o frontend já sabe consumir,
-        // só que a "geração" é instantânea — sem custo de IA.
+        void registrarResposta({
+          empresaId: usuario.empresaId,
+          perguntaId: `assistente:${Date.now()}`,
+          pergunta: perguntaUsuario.slice(0, 300),
+          valor: respostaFormula.slice(0, 500),
+          origem: 'ASSISTENTE_IA',
+        })
+
         const encoder = new TextEncoder()
         const readable = new ReadableStream({
           start(controller) {
@@ -312,6 +321,14 @@ export async function POST(request: NextRequest) {
     const aiStream = await provider.streamChat(mensagens, {
       system: systemPrompt(formatarContextoParaPrompt(contexto)),
       maxTokens: 1024,
+    })
+
+    void registrarResposta({
+      empresaId: usuario.empresaId,
+      perguntaId: `assistente-ai:${Date.now()}`,
+      pergunta: (ultimaMensagem?.content as string)?.slice(0, 300) ?? '',
+      valor: '[resposta gerada por IA]',
+      origem: 'ASSISTENTE_IA',
     })
 
     const encoder = new TextEncoder()

@@ -156,3 +156,52 @@ export function obterPerguntaAleatoria(jaRespondidas: string[] = []) {
   if (disponiveis.length === 0) return null
   return disponiveis[Math.floor(Math.random() * disponiveis.length)]
 }
+
+const CATEGORIA_POR_PERGUNTA_ID: Record<string, string> = {
+  'gestao.decisao': 'REGRAS',
+  'gestao.caixa': 'FINANCEIRO',
+  'empresa.segmento': 'VISAO',
+  'empresa.tempo': 'VISAO',
+  'empresa.funcionarios': 'EQUIPE',
+  'empresa.faturamento': 'FINANCEIRO',
+  'operacao.aquisicao': 'CLIENTES',
+  'operacao.produto': 'OPERACAO',
+  'operacao.lucro': 'FINANCEIRO',
+  'operacao.trabalhoso': 'OPERACAO',
+  'operacao.horas': 'ROTINAS',
+  'gestao.contratacao': 'EQUIPE',
+  'gestao.promocao': 'CLIENTES',
+  'problemas.insonia': 'RISCOS',
+  'problemas.repeticao': 'OPERACAO',
+  'problemas.perda': 'FINANCEIRO',
+  'objetivos.meta': 'OBJETIVOS',
+  'objetivos.automatizar': 'OPERACAO',
+  'objetivos.delegar': 'EQUIPE',
+}
+
+export async function aprenderComResposta(
+  empresaId: string,
+  perguntaId: string,
+  pergunta: string,
+  valor: string,
+): Promise<void> {
+  const categoria = CATEGORIA_POR_PERGUNTA_ID[perguntaId] ?? 'OPERACAO'
+
+  const palavrasSignificativas = valor
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(p => p.length > 3)
+    .slice(0, 5)
+
+  const descricao = `Resposta sobre ${pergunta.slice(0, 60)}: "${valor.slice(0, 100)}"`
+
+  await adicionarAprendizado(empresaId, descricao, categoria, 'CONVERSA', pergunta)
+
+  await registrarNaMemoria(empresaId, {
+    tipo: 'descoberta',
+    descricao: `Aprendizado registrado: ${categoria.toLowerCase()} — "${palavrasSignificativas.slice(0, 3).join(', ')}"`,
+    categoria: 'ESTRATEGIA',
+    versao: 1,
+    metadados: { perguntaId, categoria, palavrasChave: palavrasSignificativas },
+  })
+}

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
+import { ToastProvider } from '@/components/ui/toat'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -15,11 +16,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: { default: 'Ponte Digital', template: '%s | Ponte Digital' },
-  description: 'Sistema de gestão inteligente para pequenas e médias empresas',
+  description: 'A inteligência da sua empresa — diagnóstico gratuito em 5 minutos',
   metadataBase: new URL(appUrl),
   openGraph: {
     title: 'Ponte Digital',
-    description: 'Sistema de gestão inteligente para pequenas e médias empresas',
+    description: 'A inteligência da sua empresa — diagnóstico gratuito em 5 minutos',
     url: appUrl,
     siteName: 'Ponte Digital',
     locale: 'pt_BR',
@@ -43,7 +44,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ToastProvider>
+            {children}
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

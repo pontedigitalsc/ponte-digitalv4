@@ -62,6 +62,34 @@ function Avatar({ src, nome, size = 'md', className }: AvatarProps) {
   )
 }
 
+// ─── AVATAR IA (estados cognitivos) ───────────────────────────────────────────
+
+type CognitiveState = 'idle' | 'breathing' | 'thinking' | 'speaking' | 'success'
+
+interface CognitiveAvatarProps {
+  state?: CognitiveState
+  size?: 'sm' | 'md' | 'lg'
+  className?: string
+}
+
+function CognitiveAvatar({ state = 'breathing', size = 'md', className }: CognitiveAvatarProps) {
+  const dimension = size === 'sm' ? 'h-8 w-8' : size === 'lg' ? 'h-14 w-14' : 'h-10 w-10'
+
+  const animClass =
+    state === 'thinking' ? 'animate-thinking-glow' :
+    state === 'breathing' ? 'animate-breathing' :
+    state === 'speaking' ? 'animate-scale-in' :
+    state === 'success' ? 'animate-scale-in' : ''
+
+  return (
+    <AvatarRoot className={cn(dimension, animClass, className)}>
+      <AvatarFallback className="bg-gradient-to-br from-primary/20 via-primary/10 to-transparent text-primary text-sm font-semibold">
+        <span className="text-lg">✦</span>
+      </AvatarFallback>
+    </AvatarRoot>
+  )
+}
+
 // ─── SKELETON ─────────────────────────────────────────────────────────────────
 
 function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
@@ -81,4 +109,5 @@ function Spinner({ className }: { className?: string }) {
   )
 }
 
-export { Avatar, AvatarRoot, AvatarImage, AvatarFallback, Skeleton, Spinner }
+export { Avatar, AvatarRoot, AvatarImage, AvatarFallback, Skeleton, Spinner, CognitiveAvatar }
+export type { CognitiveState }
