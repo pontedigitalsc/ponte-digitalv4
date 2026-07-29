@@ -1,22 +1,31 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
-> **Atualização Programa 32 — Materialização da Teoria da Evolução Empresarial**
+> **MARCO: Foundation Freeze V1 — 29 de julho de 2026**
 >
-> A Ponte Digital foi reposicionada em torno de **8 Capacidades Fundamentais**: Observar, Compreender, Esclarecer, Priorizar, Decidir, Executar, Aprender, Evoluir.
+> A Fundação V1 da Ponte Digital está oficialmente congelada.
+>
+> Programas 21 a 32 concluídos. Constituição aprovada (13 documentos). Motor Cognitivo implementado. Dashboard Evolutivo com 33 componentes. Curva de Evolução, Capital Cognitivo, Capacidades e Patrimônios implementados.
+>
+> **A partir deste ponto:**
+> - Nenhuma alteração na Constituição sem emenda
+> - Nenhuma alteração na Teoria da Evolução Empresarial sem ADR
+> - Toda nova funcionalidade deve passar pela Árvore de Decisões de Produto (10 nós)
+> - A Regra de Ouro ("A Ponte Digital não decide pela empresa") é inegociável
+>
+> Ver `docs/07-MILESTONES/FOUNDATION_FREEZE_V1.md` para o congelamento completo.
+> Ver `docs/07-MILESTONES/RELATORIO_EXECUTIVO_FOUNDATION_V1.md` para a auditoria completa.
+>
+> ---
+>
+> **Registro histórico da fase (Programa 32):**
+>
+> A Ponte Digital foi reposicionada em torno de **9 Capacidades Fundamentais**: Observar, Compreender, Esclarecer, Priorizar, Decidir, Executar, Aprender, Incorporar, Adaptar.
 >
 > **Capital Cognitivo** passa a ser o patrimônio central da plataforma — composto por decisões validadas, capacidades desenvolvidas, aprendizados registrados, hipóteses confirmadas, conhecimento acumulado e consistência operacional.
 >
-> **Novo ciclo cognitivo:** OBSERVAR → COMPREENDER → ESCLARECER → PRIORIZAR → DECIDIR → EXECUTAR → APRENDER → EVOLUIR → OBSERVAR_NOVAMENTE
+> **Ciclo oficial de evolução:** OBSERVAR → COMPREENDER → ESCLARECER → PRIORIZAR → DECIDIR → EXECUTAR → APRENDER → INCORPORAR → NOVA CAPACIDADE
 >
-> **Motor de Clareza** — 5 perguntas em todo ciclo: Onde estamos? O que mudou? O que importa? O que pode esperar? Próximo melhor movimento?
->
-> **Memória Estratégica** — registro obrigatório pós-decisão: Funcionou? Por quê? O que aprendemos? O que repetir? O que não repetir?
->
-> **Painel do Fundador** — visão diária: evolução das capacidades, patrimônio cognitivo, capacidades estagnadas, novos conhecimentos.
->
-> **Princípio absoluto reformulado:** toda funcionalidade deve responder **"Qual capacidade empresarial ela fortalece?"** Critério universal: (1) Qual capacidade fortalece? (2) Como aumenta Capital Cognitivo? (3) Como reduz esforço mental do empresário?
->
-> Ver `docs/03-ENGINEERING/ARCHITECTURE.md` e `docs/09-ARCHITECTURE/ESPECIFICACAO_DO_MOTOR_COGNITIVO.md` para a arquitetura atualizada.
+> Ver `docs/06-CONSTITUTION/P32/` para a Constituição completa.
 
 *Documento operacional, complementar ao FOUNDATION.md e à Tese de Valor (Nível 1). É a referência principal para qualquer agente de código — Roo Code, Gemini CLI, Claude ou outro — antes de qualquer tarefa de implementação. Atualizar a cada sprint concluída. Máximo duas páginas: se crescer além disso, o excesso vira Playbook (Nível 3), não fica aqui.*
 
@@ -58,41 +67,29 @@
 
 **Zero cobertura de teste** — aceitável por ora, mas recomenda-se um mínimo de testes de fumaça em autenticação e transações financeiras (área de maior risco silencioso), não uma suíte completa — isso ainda seria sofisticação prematura pra esta fase.
 
-## 2. O que foi construído nas últimas sprints
+## 2. Foundation Freeze V1 (Programas 21–32 concluídos)
 
-**Sprints concluídas:**
+**A fundação está congelada.** Os programas abaixo foram concluídos e documentados em `docs/07-MILESTONES/CHANGELOG_OFICIAL.md`.
 
-### Sprint 7.1 — Knowledge Vault (Biblioteca de Conhecimento)
-Camada de visualização e gestão do conhecimento validado da empresa. Reaproveita modelos existentes (`ConhecimentoValidado`, `Hipotese`, `Evidencia`, `MemoriaCognitiva`) — sem novos models Prisma.
+**Programas concluídos:**
+- P21 — Empresa Zero
+- P22 — Motor Cognitivo
+- P23 — Experiência Cognitiva
+- P24 — Certificação da Fundação
+- P25 — Era da Observação
+- P26 — Empresa que Aprende
+- P27 — Polimento & Microinterações
+- P28 — Sistema Visual Oficial
+- P29 — Materialização & Auditoria
+- P30 — Critérios & Matriz de Materialização
+- P31 — Dashboard Evolutivo + Fase Final
+- P31D — Experiência da Evolução (Finalização)
+- P32 — Constituição da Ponte Digital
 
-**Entregues:**
-- Página `/dashboard/conhecimento` com sumário, filtros (busca textual, categoria, status, ordenação), lista de conhecimentos validados
-- Componentes: `KnowledgeTag`, `KnowledgeCard`, `KnowledgeSummary`, `KnowledgeFilters`, `KnowledgeTimeline`
-- Factory `construirConhecimentoExperience` no Experience Engine
-- Métrica `obterKnowledgeVaultMetrics` no Observatório
-- Sidebar: item "Conhecimento" (Sparkles) no grupo Inteligência
-- Status derivado do `scoreConfiança` (≥60 confirmado, <20 descartado, 20-59 em observação)
+**Próxima fase:** Fase 2 — Primeiros Clientes.
+Ver `docs/07-MILESTONES/ROADMAP_POS_FUNDACAO.md` para a visão macro das próximas fases.
 
-### Sprint 7.2 — Conversational Learning (Aprendizados)
-Captura explícita de aprendizados do empresário sobre valores, regras, preferências e objetivos da empresa. Primeira camada de aprendizado ativo — o empresário ensina a Ponte, não o contrário.
-
-**Entregues:**
-- Modelo Prisma `Aprendizado` (11 categorias: VALORES, PREFERENCIAS, REGRAS, OBJETIVOS, ROTINAS, EQUIPE, CLIENTES, FINANCEIRO, OPERACAO, VISAO, RISCOS; origens CONVERSA/MANUAL/PERGUNTA)
-- `aprendizado-service.ts` — CRUD completo + perguntas rápidas (12 perguntas)
-- `identity-engine.ts` — `construirIdentidade` inclui `aprendizadosParaContexto` nas `verdadesEstaveis`; `contextoParaAssistente` retorna `aprendizados`
-- Factory `construirLearningExperience` no Experience Engine
-- Página `/dashboard/aprendizados` com `ConversationKnowledgeCard`, `QuickLearningQuestion`, `LearningHistory`
-- API route `/api/aprendizados` (POST + DELETE)
-- Sidebar: item "Aprendizados" (RefreshCw) no grupo Inteligência
-- Dashboard: seção "O que aprendemos sobre sua empresa" com top 3
-- Métrica `obterLearningMetrics` no Observatório
-
-### Próximas sprints (ordem proposta):
-1. **Agenda como capacidade** — ainda não existe
-2. **Centro de Decisão** — tela dedicada sobre `HistoricoSinal` com regras de priorização
-3. **Assistente IA com contexto completo** — já existe, mas integrar mais dados do diagnóstico + aprendizados
-
-**Fora de escopo para estas sprints:** implementação física das ADRs aprovadas (009–034) que envolvem mudança de código. As ADRs estão aceitas como arquitetura-alvo, mas seguem o plano de 6 fases da auditoria (`03-ENGINEERING/AUDITORIA_ARQUITETURAL.md`). Nenhuma implementação começa antes das ADRs de fundação (Fase 0 documental) estarem refletidas nos documentos de engenharia.
+**Nota importante:** A auditoria da Foundation V1 (ver `docs/07-MILESTONES/RELATORIO_EXECUTIVO_FOUNDATION_V1.md`) identificou débitos técnicos significativos (P0–P3) que devem ser resolvidos antes de iniciar a Fase 2. Em especial: simplificação do dashboard (33 → 7 cards), eliminação de 60% dos engines, correção de rotas quebradas e remoção de dead code.
 
 ## 3. O que está congelado para versões futuras
 
