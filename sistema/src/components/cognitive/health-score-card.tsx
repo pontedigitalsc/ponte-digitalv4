@@ -25,7 +25,7 @@ interface HealthScoreCardProps {
   healthScore: HealthScore | null
 }
 
-export function HealthScoreCard({ healthScore }: HealthScoreCardProps) {
+export function IndiceSaudeCard({ healthScore }: HealthScoreCardProps) {
   if (!healthScore) return null
 
   return (

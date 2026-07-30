@@ -63,7 +63,7 @@ function renderImpactSummary(block: {
             <Bot className="h-4 w-4 text-primary shrink-0 mt-0.5" />
             <div>
               <span className="font-medium">{block.aprendizadosRecentes} aprendizado{block.aprendizadosRecentes !== 1 ? 's' : ''} recente{block.aprendizadosRecentes !== 1 ? 's' : ''}</span>
-              <span className="text-muted-foreground"> — baseado no seu feedback</span>
+              <span className="text-muted-foreground"> — baseado no seu retorno</span>
             </div>
           </div>
         )}

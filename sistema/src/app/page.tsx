@@ -13,7 +13,7 @@ export default function LandingPage() {
             <span className="text-2xl font-bold text-primary-foreground">P</span>
           </div>
           <h1 className="text-3xl font-bold tracking-tight animate-slide-up">
-            A inteligência da sua empresa
+            A clareza que seu negócio precisa
           </h1>
           <p className="text-base text-muted-foreground leading-relaxed max-w-sm mx-auto animate-slide-up">
             Responda 5 perguntas sobre seu negócio.<br />

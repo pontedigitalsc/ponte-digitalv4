@@ -45,7 +45,7 @@ interface NotificationCardProps {
   notifications: CognitiveNotification[]
 }
 
-export function NotificationCard({ notifications }: NotificationCardProps) {
+export function NotificacaoCard({ notifications }: NotificationCardProps) {
   if (notifications.length === 0) return null
 
   return (

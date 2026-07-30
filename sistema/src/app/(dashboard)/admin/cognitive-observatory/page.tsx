@@ -79,15 +79,15 @@ export default async function CognitiveObservatoryPage() {
             <p className="text-lg font-semibold mt-0.5 text-emerald-600">{resumo.conhecimentosPromovidos}</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Outcomes positivos</p>
+            <p className="text-xs text-muted-foreground">Resultados positivos</p>
             <p className="text-lg font-semibold mt-0.5 text-emerald-600">{resumo.outcomesPositivos}</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Outcomes negativos</p>
+            <p className="text-xs text-muted-foreground">Resultados negativos</p>
             <p className="text-lg font-semibold mt-0.5 text-destructive">{resumo.outcomesNegativos}</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Score médio conhecimentos</p>
+            <p className="text-xs text-muted-foreground">Confiança média</p>
             <p className="text-lg font-semibold mt-0.5">{resumo.scoreMedioConhecimentos}%</p>
           </div>
           <div>
@@ -110,7 +110,7 @@ export default async function CognitiveObservatoryPage() {
                 <th className="text-right py-2 pr-4 font-medium">Evidências</th>
                 <th className="text-right py-2 pr-4 font-medium">Hipóteses</th>
                 <th className="text-right py-2 pr-4 font-medium">Conhecimentos</th>
-                <th className="text-right py-2 font-medium">Outcomes</th>
+                <th className="text-right py-2 font-medium">Resultados</th>
               </tr>
             </thead>
             <tbody>
@@ -210,7 +210,7 @@ export default async function CognitiveObservatoryPage() {
             ))}
           </div>
           <div>
-            <p className="text-[10px] font-medium text-muted-foreground mb-1">Mais outcomes</p>
+            <p className="text-[10px] font-medium text-muted-foreground mb-1">Mais resultados</p>
             {empresas.maisOutcomes.slice(0, 3).map((e) => (
               <p key={e.empresaId} className="text-xs">{e.nome} — {e.totalOutcomes} out.</p>
             ))}

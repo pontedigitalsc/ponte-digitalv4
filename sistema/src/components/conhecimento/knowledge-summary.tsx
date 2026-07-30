@@ -60,7 +60,7 @@ export function KnowledgeSummary({
         <CardContent className="p-3 space-y-1">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
-            <span>Score médio</span>
+            <span>Confiança média</span>
           </div>
           <p className="text-xl font-bold">{scoreMedio}%</p>
         </CardContent>

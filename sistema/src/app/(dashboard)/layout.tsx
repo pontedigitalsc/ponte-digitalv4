@@ -14,14 +14,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   if (!empresa) redirect('/login')
 
-  const cognitiveOS = await experienceEngine.obterCognitiveOS(usuario.empresaId).catch(() => null)
   const modulosLiberados = await experienceEngine.obterModulosLiberados(usuario.empresaId).catch(() => null)
 
   return (
     <AppShell
       usuario={usuario}
       nomeEmpresa={empresa.nome}
-      cognitiveOS={cognitiveOS}
       modulosLiberados={modulosLiberados}
     >
       {children}

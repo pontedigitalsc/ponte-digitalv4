@@ -31,7 +31,7 @@ function getLabel(value: number): string {
 const DIMENSIONS = { sm: 16, md: 24, lg: 32 }
 const STROKE_WIDTH = { sm: 2, md: 2.5, lg: 3 }
 
-export function ConfidenceRing({ value, size = 'md', showLabel = false, className }: ConfidenceRingProps) {
+export function AnelConfianca({ value, size = 'md', showLabel = false, className }: ConfidenceRingProps) {
   const dim = DIMENSIONS[size]
   const stroke = STROKE_WIDTH[size]
   const radius = (dim - stroke) / 2

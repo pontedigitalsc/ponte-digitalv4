@@ -4,18 +4,17 @@ import { useState } from 'react'
 import { Sidebar } from './sidebar'
 import { Header } from './header'
 import type { Usuario } from '@/types'
-import type { CognitiveOSFields, ModulosLiberados } from '@/engine'
+import type { ModulosLiberados } from '@/engine'
 
 interface AppShellProps {
   children: React.ReactNode
   usuario?: Pick<Usuario, 'nome' | 'email' | 'avatar' | 'cargo'> | null
   nomeEmpresa?: string
   titulo?: string
-  cognitiveOS?: CognitiveOSFields | null
   modulosLiberados?: ModulosLiberados | null
 }
 
-export function AppShell({ children, usuario, nomeEmpresa, titulo, cognitiveOS, modulosLiberados }: AppShellProps) {
+export function AppShell({ children, usuario, nomeEmpresa, titulo, modulosLiberados }: AppShellProps) {
   const [collapsed, setCollapsed] = useState(false)
 
   return (
@@ -24,7 +23,6 @@ export function AppShell({ children, usuario, nomeEmpresa, titulo, cognitiveOS, 
         collapsed={collapsed}
         onToggle={() => setCollapsed(!collapsed)}
         nomeEmpresa={nomeEmpresa}
-        cognitiveOS={cognitiveOS}
         modulosLiberados={modulosLiberados?.modulos ?? null}
       />
       <div className="flex flex-1 flex-col overflow-hidden">

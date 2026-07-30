@@ -58,7 +58,7 @@ export function KnowledgeCard({ item }: KnowledgeCardProps) {
                 <p className="font-medium">{origemLabel}</p>
               </div>
               <div>
-                <span className="text-muted-foreground">Score de confiança</span>
+                <span className="text-muted-foreground">Confiança</span>
                 <div className="flex items-center gap-2 mt-1">
                   <div className="flex-1 h-1.5 rounded-full bg-muted">
                     <div className={`h-1.5 rounded-full ${barraCor}`} style={{ width: `${item.scoreConfianca}%` }} />

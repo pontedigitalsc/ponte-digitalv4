@@ -1,6 +1,6 @@
 # Foundation — Princípios Inegociáveis
 
-Este é o documento de fundação da Ponte Digital: o que não muda, independentemente da fase do produto, da sprint ativa, ou de qualquer pressão de prazo. `01-VISION/PRINCIPLES.md` é o resumo de consulta rápida deste arquivo — este aqui é a versão completa.
+Este é o documento de fundação da Ponte Digital: o que não muda, independentemente da fase do produto, da sprint ativa, ou de qualquer pressão de prazo. Foundation V2.0 foi aprovada em 29 de julho de 2026 — a fundação está oficialmente congelada. `01-VISION/PRINCIPLES.md` é o resumo de consulta rápida deste arquivo — este aqui é a versão completa.
 
 ## O mantra
 

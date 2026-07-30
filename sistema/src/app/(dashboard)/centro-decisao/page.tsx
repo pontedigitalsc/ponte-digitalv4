@@ -9,7 +9,7 @@ const COR_PRIORIDADE: Record<string, string> = {
   BAIXA: 'secondary',
 }
 
-function ScoreBar({ value, label }: { value: number; label: string }) {
+function BarraIndice({ value, label }: { value: number; label: string }) {
   const cor = value >= 70 ? 'bg-destructive' : value >= 45 ? 'bg-amber-500' : value >= 20 ? 'bg-blue-500' : 'bg-gray-300'
   return (
     <div className="space-y-1">
@@ -45,7 +45,7 @@ const grupos = {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold tracking-tight">Centro de Decisão</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Decisões recomendadas com base em sinais, confiança das fontes e relevância contextual.
+          Decisões recomendadas para sua empresa com base no que conhecemos do seu negócio.
         </p>
       </div>
 
@@ -87,9 +87,9 @@ const grupos = {
                       <span>Dificuldade: {d.dificuldade}</span>
                     </div>
                     <div className="grid grid-cols-3 gap-3">
-                      <ScoreBar value={d.prioridade * 20} label="Prioridade" />
-                      <ScoreBar value={d.trustScore?.scoreAtual ?? 50} label="Confiança Fonte" />
-                      <ScoreBar value={d.relevancia} label="Relevância" />
+                      <BarraIndice value={d.prioridade * 20} label="Prioridade" />
+                      <BarraIndice value={d.trustScore?.scoreAtual ?? 50} label="Confiança" />
+                      <BarraIndice value={d.relevancia} label="Relevância" />
                     </div>
                     <p className="text-sm text-muted-foreground">{d.motivo}</p>
                     {d.evidenciasChave.length > 0 && (
@@ -108,7 +108,7 @@ const grupos = {
         {decisoesFiltradas.length === 0 && (
           <Card>
             <CardContent className="p-8 text-center text-sm text-muted-foreground">
-              Nenhuma decisão recomendada no momento. Continue usando o sistema para gerar novas recomendações.
+              Nenhuma decisão recomendada no momento. Continue usando a Ponte Digital para receber novas recomendações.
             </CardContent>
           </Card>
         )}

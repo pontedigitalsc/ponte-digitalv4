@@ -63,7 +63,7 @@ export function KnowledgeFilters({
           className="h-9 rounded-md border bg-background px-2.5 text-sm outline-none focus:ring-1 focus:ring-primary"
         >
           <option value="recentes">Mais recentes</option>
-          <option value="score">Maior score</option>
+          <option value="score">Maior confiança</option>
           <option value="antigos">Mais antigos</option>
         </select>
       </div>

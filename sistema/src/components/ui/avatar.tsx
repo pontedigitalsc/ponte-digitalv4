@@ -62,17 +62,17 @@ function Avatar({ src, nome, size = 'md', className }: AvatarProps) {
   )
 }
 
-// ─── AVATAR IA (estados cognitivos) ───────────────────────────────────────────
+// ─── AVATAR PONTE DIGITAL ────────────────────────────────────────────────────
 
-type CognitiveState = 'idle' | 'breathing' | 'thinking' | 'speaking' | 'success'
+type AvatarPonteState = 'idle' | 'breathing' | 'thinking' | 'speaking' | 'success'
 
-interface CognitiveAvatarProps {
-  state?: CognitiveState
+interface AvatarPonteProps {
+  state?: AvatarPonteState
   size?: 'sm' | 'md' | 'lg'
   className?: string
 }
 
-function CognitiveAvatar({ state = 'breathing', size = 'md', className }: CognitiveAvatarProps) {
+function AvatarPonte({ state = 'breathing', size = 'md', className }: AvatarPonteProps) {
   const dimension = size === 'sm' ? 'h-8 w-8' : size === 'lg' ? 'h-14 w-14' : 'h-10 w-10'
 
   const animClass =
@@ -109,5 +109,5 @@ function Spinner({ className }: { className?: string }) {
   )
 }
 
-export { Avatar, AvatarRoot, AvatarImage, AvatarFallback, Skeleton, Spinner, CognitiveAvatar }
-export type { CognitiveState }
+export { Avatar, AvatarRoot, AvatarImage, AvatarFallback, Skeleton, Spinner, AvatarPonte }
+export type { AvatarPonteState }

@@ -61,7 +61,7 @@ export default function LoginPage() {
           <Input
             id="email"
             type="email"
-            placeholder="voce@empresa.com.br"
+            placeholder="seu@email.com"
             autoComplete="email"
             {...register('email')}
           />

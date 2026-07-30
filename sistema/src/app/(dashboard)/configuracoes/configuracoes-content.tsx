@@ -227,8 +227,8 @@ export default function ConfiguracoesContent({ experience }: Props) {
           {abaAtiva === 'cognitivo' && (
             <Card>
               <CardHeader>
-                <CardTitle>Parâmetros Cognitivos</CardTitle>
-                <CardDescription>Configure os ciclos e frequências do motor cognitivo da sua empresa.</CardDescription>
+                <CardTitle>Aprendizado da empresa</CardTitle>
+                <CardDescription>Configure os ciclos e frequências de aprendizado da sua empresa.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {cicloLoading ? (

@@ -277,3 +277,40 @@ export function gerarSinais({ clientes, tarefas, financeiro, agora = new Date() 
 
   return ordenarPorUrgencia(sinais)
 }
+
+// ─── P36 — Validação Científica ─────────────────────────────────────────────
+export {
+  registrarAcao,
+  registrarRecomendacao,
+} from './p36/evidence-autologger'
+export type { AcoesImportantes } from './p36/evidence-autologger'
+
+export {
+  detectarWow,
+  registrarWow,
+} from './p36/wow-detector'
+
+export {
+  registrarFriccao,
+  obterFricoesRecentes,
+  obterFricoesAgrupadas,
+} from './p36/friction-radar'
+export type { TipoFriccao } from './p36/friction-radar'
+
+export {
+  registrarSinalValor,
+  calcularIndiceValor,
+  calcularIndiceGlobal,
+} from './p36/value-index'
+export type { SinalValorTipo } from './p36/value-index'
+
+export {
+  auditarRecomendacao,
+  obterRecomendacoesIgnoradas,
+  calcularPrecisaoRecomendacoes,
+} from './p36/recommendation-auditor'
+
+export {
+  calcularMetricasPlataforma,
+  gerarSnapshotPlataforma,
+} from './p36/platform-capital-engine'

@@ -52,7 +52,13 @@ model Empresa {
   cicloConfiguracoes    CicloConfiguracao[]
   confiancaFontes       ConfiancaFonte[]
   respostasConversa     RespostasConversa[]
-
+  momentosWow           MomentoWow[]
+  fricoes               Friccao[]
+  sinaisValor           SinalValor[]
+  auditoriasRecomendacao AuditoriaRecomendacao[]
+  conhecimentosColetivos  ConhecimentoColetivo[]
+  casosReais              CasoReal[]
+ 
   @@index([ativa])
   @@index([criadaEm])
   @@index([deletedAt])
@@ -1167,6 +1173,112 @@ model RespostasConversa {
   @@map("respostas_conversa")
 }
 
+// ─── P36 — VALIDAÇÃO CIENTÍFICA ─────────────────────────────────────────────
+
+// ETAPA 4 — Momentos WOW: surpresa positiva do empresário
+model MomentoWow {
+  id             String   @id @default(cuid())
+  empresaId      String
+  frase          String
+  contexto       String?
+  categoria      String?
+  intensidade    Int      @default(1)
+  origem         String
+  metadata       Json?
+  criadoEm       DateTime @default(now())
+  deletedAt      DateTime?
+
+  empresa        Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, criadoEm])
+  @@index([categoria])
+  @@index([empresaId, deletedAt])
+  @@map("momentos_wow")
+}
+
+// ETAPA 5 — Radar de Fricção: dificuldades do empresário
+model Friccao {
+  id              String   @id @default(cuid())
+  empresaId       String
+  tipo            String
+  contexto        String
+  duracaoSegundos Int?
+  cliquesExtras   Int?
+  pagina          String?
+  elemento        String?
+  metadata        Json?
+  criadoEm        DateTime @default(now())
+  deletedAt       DateTime?
+
+  empresa         Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, tipo])
+  @@index([empresaId, contexto, criadoEm])
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, deletedAt])
+  @@map("fricoes")
+}
+
+// ETAPA 3 — Sinais de Valor Percebido
+model SinalValor {
+  id             String   @id @default(cuid())
+  empresaId      String
+  tipo           String
+  origem         String
+  peso           Float    @default(1.0)
+  metadata       Json?
+  criadoEm       DateTime @default(now())
+  deletedAt      DateTime?
+
+  empresa        Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, tipo])
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, deletedAt])
+  @@map("sinais_valor")
+}
+
+// ETAPA 8 — Auditoria de Recomendações
+model AuditoriaRecomendacao {
+  id              String   @id @default(cuid())
+  empresaId       String
+  recomendacaoId  String?
+  tipo            String
+  resultado       String?
+  justificativa   String?
+  metadata        Json?
+  criadoEm        DateTime @default(now())
+  deletedAt       DateTime?
+
+  empresa         Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, tipo, resultado])
+  @@index([empresaId, recomendacaoId])
+  @@index([empresaId, criadoEm])
+  @@index([empresaId, deletedAt])
+  @@map("auditoria_recomendacoes")
+}
+
+// ETAPA 9 — Snapshots do Capital Cognitivo da Plataforma
+model PlataformaSnapshot {
+  id                      String   @id @default(cuid())
+  hipotesesValidadas       Int      @default(0)
+  hipotesesDescartadas     Int      @default(0)
+  conhecimentosReutilizados Int     @default(0)
+  recomendacoesEficazes    Int      @default(0)
+  capacidadesFortalecidas  Int      @default(0)
+  precisaoRecomendacoes   Float    @default(0)
+  totalEmpresas            Int      @default(0)
+  periodo                  String
+  dataRef                  DateTime
+  metadados                Json?
+  criadoEm                 DateTime @default(now())
+
+  @@index([periodo, dataRef])
+  @@index([criadoEm])
+  @@map("plataforma_snapshots")
+}
+
 // ─── DECISÃO-SINAL ──────────────────────────────────────────────────────────
 // Relacionamento entre decisões (AcaoCognitiva) e sinais (HistoricoSinal).
 // Garante rastreabilidade: quais sinais geraram ou foram gerados por cada decisão.
@@ -1193,4 +1305,102 @@ model DecisaoSinal {
   @@index([decisaoId])
   @@index([sinalId])
   @@map("decisoes_sinais")
+}
+
+// ─── PROGRAMA 40 — REGISTRO CIENTÍFICO ───────────────────────────────────────
+// Diário científico da plataforma — ETAPA 1
+// Cada entrada registra uma observação, evidência, hipótese, experimento,
+// validação ou conhecimento gerado pelo aprendizado com Founders reais.
+
+enum TipoRegistroCientifico {
+  OBSERVACAO
+  EVIDENCIA
+  HIPOTESE
+  EXPERIMENTO
+  VALIDACAO
+  CONHECIMENTO
+}
+
+model RegistroCientifico {
+  id            String                    @id @default(cuid())
+  tipo          TipoRegistroCientifico
+  titulo        String
+  descricao     String
+  contexto      String?
+  autoria       String?
+  tags          String[]
+  metadados     Json?
+  criadoEm      DateTime                  @default(now())
+  atualizadoEm  DateTime                  @updatedAt
+  deletedAt     DateTime?
+
+  @@index([tipo])
+  @@index([criadoEm])
+  @@index([deletedAt])
+  @@index([tipo, criadoEm])
+  @@map("registros_cientificos")
+}
+
+// ─── PROGRAMA 40 — CONHECIMENTO COLETIVO ─────────────────────────────────────
+// Aprendizados promovidos do individual para o coletivo — ETAPA 4
+// Só entra aqui após: validação → repetição → confiança suficiente.
+
+enum StatusConhecimentoColetivo {
+  CANDIDATO
+  VALIDADO
+  REPLICADO
+  CONSOLIDADO
+}
+
+model ConhecimentoColetivo {
+  id              String                       @id @default(cuid())
+  empresaOrigemId String?
+  titulo          String
+  descricao       String
+  categoria       String?
+  evidencia       String?
+  status          StatusConhecimentoColetivo    @default(CANDIDATO)
+  scoreConfianca  Float                         @default(0)
+  repeticoes      Int                           @default(0)
+  metadados       Json?
+  criadoEm        DateTime                      @default(now())
+  atualizadoEm    DateTime                      @updatedAt
+  deletedAt       DateTime?
+
+  empresaOrigem   Empresa?                      @relation(fields: [empresaOrigemId], references: [id])
+
+  @@index([status])
+  @@index([categoria])
+  @@index([scoreConfianca])
+  @@index([criadoEm])
+  @@index([deletedAt])
+  @@map("conhecimentos_coletivos")
+}
+
+// ─── PROGRAMA 40 — CASOS REAIS ───────────────────────────────────────────────
+// Biblioteca de casos documentados — ETAPA 8
+// Cada caso registra: contexto → problema → hipótese → ação → resultado → aprendizado
+
+model CasoReal {
+  id              String    @id @default(cuid())
+  empresaId       String?
+  titulo          String
+  contexto        String
+  problema        String
+  hipotese        String?
+  acao            String?
+  resultado       String?
+  aprendizado     String
+  conhecimentoGerado String?
+  metadados       Json?
+  criadoEm        DateTime  @default(now())
+  atualizadoEm    DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  empresa         Empresa?  @relation(fields: [empresaId], references: [id])
+
+  @@index([empresaId])
+  @@index([criadoEm])
+  @@index([deletedAt])
+  @@map("casos_reais")
 }

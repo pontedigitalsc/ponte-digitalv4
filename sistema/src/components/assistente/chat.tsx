@@ -289,7 +289,7 @@ export function Chat({
                 <>
                   <h3 className="text-base font-semibold">Aprendi algo novo sobre sua empresa</h3>
                   <p className="text-sm text-muted-foreground mt-1 max-w-sm">
-                    Com base no seu feedback recente, ajustei meu entendimento sobre:
+                    Com base no seu retorno recente, ajustei meu entendimento sobre:
                   </p>
                   {feedbackRecente!.slice(0, 2).map((fb) => (
                     <div key={fb.id} className="mt-2 rounded-lg border bg-card px-4 py-3 text-left max-w-sm">

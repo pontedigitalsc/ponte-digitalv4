@@ -234,4 +234,17 @@ O que está congelado é a **fundação conceitual**, não a implementação.
 
 ---
 
-*Este documento marca o congelamento oficial da Fundação V1 da Ponte Digital. Qualquer mudança estrutural a partir deste ponto requer ADR ou Emenda Constitucional.*
+## 11. Foundation Database V1 (Pós-P37)
+
+A partir de 29 de julho de 2026, a **Foundation Database V1** complementa o Foundation Freeze:
+
+- O schema do banco está representado na baseline `001_foundation_database_v1`
+- A política oficial de migrations está em `docs/07-MILESTONES/FOUNDATION_DATABASE_V1.md`
+- Migrações antigas estão arquivadas em `prisma/migrations_archive/`
+- Toda nova migration segue a política: nome sequencial, atômica, imutável após aplicada
+
+Ver `docs/07-MILESTONES/FOUNDATION_DATABASE_V1.md` para o documento completo.
+
+---
+
+*Este documento marca o congelamento oficial da Fundação V1 da Ponte Digital. Qualquer mudança estrutural a partir deste ponto requer ADR ou Emenda Constitucional. O Foundation Database V1 (P37) complementa o congelamento com a consolidação da infraestrutura de dados.*

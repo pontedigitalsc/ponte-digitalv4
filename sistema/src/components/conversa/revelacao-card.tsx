@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { ResumoNatural } from '@/engine/tipos'
-import { CognitiveAvatar } from '@/components/ui/avatar'
-import { ConfidenceRing } from '@/components/cognitive/confidence-ring'
+import { AvatarPonte } from '@/components/ui/avatar'
+import { AnelConfianca } from '@/components/cognitive/confidence-ring'
 
 interface RevelacaoCardProps {
   interpretacoes: {
@@ -55,7 +55,7 @@ function PausaCognitiva({ onComplete }: { onComplete: () => void }) {
 
   return (
     <div className="text-center space-y-4 py-8">
-      <CognitiveAvatar state="thinking" size="lg" />
+      <AvatarPonte state="thinking" size="lg" />
       <div className="space-y-2">
         <p className="text-sm font-medium text-foreground animate-fade-in" key={fase}>
           {fases[fase] ?? 'Finalizando...'}
@@ -66,7 +66,7 @@ function PausaCognitiva({ onComplete }: { onComplete: () => void }) {
           <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:300ms]" />
         </div>
       </div>
-      <ConfidenceRing value={65} size="sm" showLabel />
+      <AnelConfianca value={65} size="sm" showLabel />
     </div>
   )
 }
@@ -104,8 +104,8 @@ export function RevelacaoCard({ interpretacoes, resumoNatural }: RevelacaoCardPr
     </div>
   ) : (
     <div className="text-sm leading-relaxed text-muted-foreground space-y-3">
-      <p><span className="font-semibold text-foreground">Ponto de atencao:</span> {interpretacoes.pontoAtencao}</p>
-      <p><span className="font-semibold text-foreground">Observacao:</span> {interpretacoes.observacao}</p>
+      <p><span className="font-semibold text-foreground">Ponto de atenção:</span> {interpretacoes.pontoAtencao}</p>
+      <p><span className="font-semibold text-foreground">Observação:</span> {interpretacoes.observacao}</p>
       <p><span className="font-semibold text-foreground">Alinhamento:</span> {interpretacoes.alinhamento}</p>
     </div>
   )
@@ -121,11 +121,11 @@ export function RevelacaoCard({ interpretacoes, resumoNatural }: RevelacaoCardPr
       <div className="space-y-5 animate-fade-in relative">
         <div className="text-center space-y-3">
           <div className="mx-auto">
-            <CognitiveAvatar state="success" size="lg" />
+            <AvatarPonte state="success" size="lg" />
           </div>
           <div className="flex items-center justify-center gap-2">
-            <ConfidenceRing value={85} size="sm" />
-            <h2 className="text-xl font-semibold tracking-tight">Aqui esta o que entendi sobre sua empresa</h2>
+            <AnelConfianca value={85} size="sm" />
+            <h2 className="text-xl font-semibold tracking-tight">Aqui está o que entendi sobre sua empresa</h2>
           </div>
         </div>
         {content}

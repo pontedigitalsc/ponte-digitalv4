@@ -5,8 +5,8 @@ import { QuestionCard } from '@/components/conversa/question-card'
 import { MicroReaction } from '@/components/conversa/micro-reaction'
 import { RevelacaoCard } from '@/components/conversa/revelacao-card'
 import { ProgressBar } from '@/components/conversa/progress-bar'
-import { CognitiveAvatar } from '@/components/ui/avatar'
-import { ConfidenceRing } from '@/components/cognitive/confidence-ring'
+import { AvatarPonte } from '@/components/ui/avatar'
+import { AnelConfianca } from '@/components/cognitive/confidence-ring'
 
 interface Pergunta {
   id: string
@@ -52,11 +52,11 @@ export default function ConversaPage() {
 
   const FASES_LOADING = useMemo(() => [
     'Relacionando dados da sua empresa...',
-    'Comparando padrões de mercado...',
-    'Construindo hipótese...',
-    'Calculando nível de confiança...',
-    'Detectando oportunidades...',
-    'Organizando conhecimento...',
+    'Comparando com outras empresas...',
+    'Montando retrato da empresa...',
+    'Verificando consistência das respostas...',
+    'Identificando oportunidades...',
+    'Organizando o que aprendemos...',
     'Preparando recomendações...',
   ], [])
 
@@ -186,7 +186,7 @@ export default function ConversaPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-background to-muted/30">
         <div className="text-center space-y-4">
-          <CognitiveAvatar state="thinking" size="lg" />
+          <AvatarPonte state="thinking" size="lg" />
           <div className="space-y-2">
             <p className="text-sm font-medium text-foreground animate-fade-in" key={faseLoading}>
               {faseLoading}
@@ -206,7 +206,7 @@ export default function ConversaPage() {
               <p className="text-xs text-muted-foreground mt-1">Bloco {progresso.blocoAtual} de {progresso.totalBlocos}</p>
             </div>
           </div>
-          <ConfidenceRing value={35} size="sm" showLabel />
+          <AnelConfianca value={35} size="sm" showLabel />
         </div>
       </div>
     )
@@ -218,7 +218,7 @@ export default function ConversaPage() {
         {/* Logo / identidade */}
         <div className="text-center space-y-2">
           <div className="mx-auto">
-            <CognitiveAvatar state="breathing" size="md" />
+            <AvatarPonte state="breathing" size="md" />
           </div>
           <h1 className="text-lg font-semibold tracking-tight">Ponte Digital</h1>
           <p className="text-xs text-muted-foreground">Conhecendo sua empresa</p>
@@ -281,7 +281,7 @@ export default function ConversaPage() {
             <p className="text-sm text-muted-foreground">
               {resumoNatural
                 ? `Quer que eu te ajude a resolver isso? Crie sua conta e continuamos de onde paramos.`
-                : `Quer guardar tudo isso? Crie sua conta e a Identidade Digital da sua empresa ficara salva.`}
+                : `Quer guardar tudo isso? Crie sua conta e a Identidade Digital da sua empresa ficará salva.`}
             </p>
             <a
               href="/criar-conta"
@@ -290,7 +290,7 @@ export default function ConversaPage() {
               Quero criar minha conta e continuar
             </a>
             <p className="text-xs text-muted-foreground">
-              Suas respostas estao seguras. A conta e para preservar seu conhecimento.
+              Suas respostas estão seguras. A conta é para preservar seu conhecimento.
             </p>
           </div>
         )}

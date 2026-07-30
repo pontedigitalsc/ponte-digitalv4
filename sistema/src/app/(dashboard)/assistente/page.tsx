@@ -3,10 +3,10 @@ import { requireUser } from '@/lib/auth'
 import { obterEstadoCognitivoCompleto, experienceEngine, decidirContexto } from '@/engine'
 import { Chat } from '@/components/assistente/chat'
 import { BriefingCard } from '@/components/cognitive/briefing-card'
-import { NotificationCard } from '@/components/cognitive/notification-card'
-import { HealthScoreCard } from '@/components/cognitive/health-score-card'
+import { NotificacaoCard } from '@/components/cognitive/notification-card'
+import { IndiceSaudeCard } from '@/components/cognitive/health-score-card'
 
-export const metadata: Metadata = { title: 'Assistente IA' }
+export const metadata: Metadata = { title: 'Assistente' }
 
 export default async function AssistentePage() {
   const usuario = await requireUser().catch(() => null)
@@ -34,11 +34,11 @@ export default async function AssistentePage() {
       )}
 
       {experience.notifications.length > 0 && (
-        <NotificationCard notifications={experience.notifications} />
+        <NotificacaoCard notifications={experience.notifications} />
       )}
 
       {experience.healthScore && (
-        <HealthScoreCard healthScore={experience.healthScore} />
+        <IndiceSaudeCard healthScore={experience.healthScore} />
       )}
 
       <Chat

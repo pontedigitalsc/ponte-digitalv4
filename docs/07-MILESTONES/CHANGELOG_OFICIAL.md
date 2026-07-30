@@ -1,6 +1,40 @@
 # Changelog Oficial — Ponte Digital
 
-*Histórico completo da evolução da empresa, do Programa 0 ao 32.*
+*Histórico completo da evolução da empresa, do Programa 0 ao 41.*
+
+---
+
+## Programa 41 — Stable Release V3
+
+**29 de julho de 2026**
+
+Preparação definitiva para produção. Auditorias completas de aplicação, banco, segurança, deploy, experiência Founder, conversa, conformidade constitucional e performance. Ativação do proxy de autenticação. Correção do tenant guard para bloquear em produção. Remoção de rota morta (`/register`). Atualização de documentação (CURRENT_PRODUCT, FEATURE_MATRIX, CHANGELOG). Snapshot oficial da plataforma (STABLE_RELEASE_V3.md). Congelamento técnico formal (FOUNDATION_STABLE_V3.md). Checklist final de produção. Relatório executivo de liberação.
+
+**Build: 19.1s compile. TypeScript: 0 erros. Proxy: ATIVO. Status: LIBERADO.**
+
+---
+
+## Programa 40 — Era da Validação
+
+**29 de julho de 2026**
+
+Criação do sistema científico da plataforma: Diário Científico (`/admin/diario-cientifico`), Sistema Oficial de Evidências (RegistroCientifico, ConhecimentoColetivo, CasoReal), Radar dos Founders (`/admin/radar-founders`), Índice de Transformação (engine de 6 dimensões), Manifesto da Era da Validação. A plataforma passa a aprender continuamente com Founders reais.
+
+---
+
+## Programas 35–39 — Foundation Release V2.0
+
+**Julho de 2026**
+
+Auditoria patrimonial completa. Auditoria de experiência Founder (22 páginas verificadas, 4 pontos de fricção corrigidos). Auditoria de valor (CaixaDia sem hardcoded zeros). Auditoria de linguagem (6 acentos corrigidos, placeholders unificados, 14 referências no COGNITIVE_MAP.md). Auditoria radical de simplicidade (cards redundantes removidos). Correção constitucional da landing ("A inteligência da sua empresa" → "A clareza que seu negócio precisa"). Manifesto Founder publicado. Plano dos primeiros 10 Founders. Política de evolução baseada em evidência. Foundation Release V2.0 publicada. Foundation Day registrado.
+
+---
+
+## Programas 33–34 — Limpeza & Fluxo Cognitivo
+
+**Julho de 2026**
+
+P33: Eliminação de aparência de ERP — 35 componentes mortos deletados, jargão técnico removido (HealthScore, ConfidenceRing, CognitiveAvatar, ScoreBar), 4 documentos de auditoria produzidos. P34: Design do Fluxo Cognitivo Operacional. P34B: Materialização completa — Página Única de Atendimento, Centro Diário, Timeline Viva, Caixa Inteligente, Ciclo Cognitivo Visual, sidebar simplificada.
 
 ---
 

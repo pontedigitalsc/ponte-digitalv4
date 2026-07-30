@@ -46,7 +46,7 @@ flowchart TD
 
 ### 1. Orchestrator
 
-**Arquivo:** `sistema/src/engine/orchestrator-engine.ts`
+**Arquivo:** `sistema/src/engine/cognitive-orchestrator.ts`
 
 **Responsabilidade:** Roteia a execução entre engines em pipelines pré-definidos. É o ponto de entrada central.
 
@@ -68,7 +68,7 @@ flowchart TD
 
 ### 2. Context Engine
 
-**Arquivo:** `sistema/src/engine/context-engine.ts`
+**Arquivo:** `sistema/src/engine/cognitive-context-engine.ts`
 
 **Responsabilidade:** Montar o contexto cognitivo atual da empresa a partir de dados do banco, memórias recentes e sinais ativos.
 
@@ -86,7 +86,7 @@ flowchart TD
 
 ### 3. Experience Engine
 
-**Arquivo:** `sistema/src/engine/experience-engine.ts`
+**Arquivo:** `sistema/src/engine/cognitive-experience-engine.ts`
 
 **Responsabilidade:** Produzir objetos de experiência (Experience) que o frontend renderiza. Cada página tem um método `obter<Nome>Experience()`.
 
@@ -136,7 +136,7 @@ flowchart TD
 
 ### 5. Knowledge Engine
 
-**Arquivo:** `sistema/src/engine/knowledge-engine.ts`
+**Arquivo:** `sistema/src/engine/knowledge-governance-engine.ts`
 
 **Responsabilidade:** Gerenciar o ciclo de vida do conhecimento: evidências → hipóteses → conhecimentos validados.
 
@@ -163,7 +163,7 @@ Observação → Evidência → Hipótese (fraca)
 
 ### 6. Memory Engine
 
-**Arquivo:** `sistema/src/engine/memory-engine.ts`
+**Arquivo:** `sistema/src/engine/cognitive-memory-engine.ts`
 
 **Responsabilidade:** Gerenciar memória cognitiva de curto e longo prazo, incluindo envelhecimento e esquecimento programado.
 
@@ -199,7 +199,7 @@ Observação → Evidência → Hipótese (fraca)
 
 ### 8. Evolution Engine
 
-**Arquivo:** `sistema/src/engine/evolution-engine.ts`
+**Arquivo:** `sistema/src/engine/cognitive-evolution-engine.ts`
 
 **Responsabilidade:** Calcular métricas de evolução da empresa ao longo do tempo.
 
@@ -217,7 +217,7 @@ Observação → Evidência → Hipótese (fraca)
 
 ### 9. Health Engine
 
-**Arquivo:** `sistema/src/engine/health-engine.ts`
+**Arquivo:** `sistema/src/engine/cognitive-health-engine.ts`
 
 **Responsabilidade:** Avaliar a saúde do conhecimento: score de saúde, categorized risks, aging do patrimônio cognitivo.
 
@@ -235,7 +235,7 @@ Observação → Evidência → Hipótese (fraca)
 
 ### 10. Journey Engine
 
-**Arquivo:** `sistema/src/engine/journey-engine.ts`
+**Arquivo:** `sistema/src/engine/cognitive-journey-engine.ts`
 
 **Responsabilidade:** Gerenciar a jornada de ativação da empresa: identificar em qual nível o usuário está e quais próximos passos sugerir.
 
@@ -253,7 +253,7 @@ Observação → Evidência → Hipótese (fraca)
 
 ### 11. Timeline Engine
 
-**Arquivo:** `sistema/src/engine/timeline-engine.ts`
+**Arquivo:** `sistema/src/engine/cognitive-timeline-engine.ts`
 
 **Responsabilidade:** Produzir uma timeline de eventos, descobertas e ações para uma empresa.
 
@@ -265,7 +265,7 @@ Observação → Evidência → Hipótese (fraca)
 
 ### 12. Workflow Engine
 
-**Arquivo:** `sistema/src/engine/workflow-engine.ts`
+**Arquivo:** `sistema/src/engine/cognitive-workflow-engine.ts`
 
 **Responsabilidade:** Gerenciar workflows cognitivos — sequências de passos que o sistema executa ou sugere ao usuário.
 
@@ -277,7 +277,7 @@ Observação → Evidência → Hipótese (fraca)
 
 ### 13. Sinal Engine
 
-**Arquivo:** `sistema/src/engine/sinal-engine.ts`
+**Arquivos:** `sistema/src/engine/clientes.sinais.ts`, `sistema/src/engine/financeiro.sinais.ts`, `sistema/src/engine/tarefas.sinais.ts` (distribuído por domínio — não existe como engine única)
 
 **Responsabilidade:** Gerar sinais de atenção baseados em mudanças no contexto da empresa.
 
@@ -291,7 +291,7 @@ Observação → Evidência → Hipótese (fraca)
 
 ### 14. Notification Engine
 
-**Arquivo:** `sistema/src/engine/notification-engine.ts`
+**Arquivo:** `sistema/src/engine/cognitive-notification-engine.ts`
 
 **Responsabilidade:** Consolidar notificações para o dashboard com base em sinais e mudanças.
 
@@ -315,7 +315,7 @@ Observação → Evidência → Hipótese (fraca)
 
 ### 16. Feedback Engine
 
-**Arquivo:** `sistema/src/engine/feedback-engine.ts`
+**Arquivo:** `sistema/src/engine/feedback-intelligence-engine.ts`
 
 **Responsabilidade:** Processar feedback do usuário sobre ações e decisões, alimentando o ciclo de aprendizado.
 
@@ -331,7 +331,7 @@ Observação → Evidência → Hipótese (fraca)
 
 ### 17. Outcome Engine
 
-**Arquivo:** `sistema/src/engine/outcome-engine.ts`
+**Arquivo:** `sistema/src/engine/outcome-intelligence-engine.ts`
 
 **Responsabilidade:** Registrar outcomes — mudanças reais que ocorreram na empresa como resultado do uso da plataforma.
 

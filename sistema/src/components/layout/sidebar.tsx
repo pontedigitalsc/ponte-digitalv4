@@ -3,49 +3,36 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  LayoutDashboard, Users, UserCheck, Layers, CheckSquare,
+  LayoutDashboard, Users, UserCheck,
   DollarSign, Settings, Bot, ChevronLeft, Building2,
   TrendingUp, Clock, Sparkles, RefreshCw,
-  Bell,
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
-import type { CognitiveOSFields } from '@/engine'
 
 const navItems = [
   {
-    group: 'Principal',
+    group: 'Trabalho',
     items: [
-      { href: '/dashboard', label: 'Início', icon: LayoutDashboard },
-      { href: '/tarefas',   label: 'Tarefas',   icon: CheckSquare },
+      { href: '/atendimento', label: 'Atendimento', icon: UserCheck },
+      { href: '/dashboard',   label: 'Centro Hoje', icon: LayoutDashboard },
     ],
   },
   {
-    group: 'Comercial',
+    group: 'Consultar',
     items: [
-      { href: '/crm',      label: 'CRM',      icon: TrendingUp },
-      { href: '/clientes', label: 'Clientes', icon: UserCheck },
+      { href: '/historico',     label: 'Timeline',    icon: Clock },
+      { href: '/centro-decisao', label: 'Decisões',    icon: TrendingUp },
+      { href: '/conhecimento',  label: 'Conhecimento', icon: Sparkles },
+      { href: '/financeiro',    label: 'Caixa',        icon: DollarSign },
+      { href: '/clientes',      label: 'Pessoas',      icon: UserCheck },
     ],
   },
   {
-    group: 'Operacional',
+    group: 'Aprender',
     items: [
-      { href: '/implantacoes', label: 'Implantações', icon: Layers },
-      { href: '/historico',    label: 'Histórico',    icon: Clock },
-    ],
-  },
-  {
-    group: 'Financeiro',
-    items: [
-      { href: '/financeiro', label: 'Financeiro', icon: DollarSign },
-    ],
-  },
-  {
-    group: 'Inteligência',
-    items: [
-      { href: '/conhecimento', label: 'Conhecimento', icon: Sparkles },
       { href: '/aprendizados', label: 'Aprendizados', icon: RefreshCw },
-      { href: '/assistente',   label: 'Assistente IA', icon: Bot },
+      { href: '/assistente',   label: 'Assistente',   icon: Bot },
     ],
   },
   {
@@ -57,14 +44,13 @@ const navItems = [
 ]
 
 const MODULO_MAP: Record<string, string> = {
+  '/atendimento': 'atendimento',
   '/dashboard': 'inicio',
-  '/tarefas': 'tarefas',
-  '/crm': 'crm',
-  '/clientes': 'clientes',
-  '/implantacoes': 'implantacoes',
   '/historico': 'historico',
-  '/financeiro': 'financeiro',
+  '/centro-decisao': 'centro-decisao',
   '/conhecimento': 'conhecimento',
+  '/financeiro': 'financeiro',
+  '/clientes': 'clientes',
   '/aprendizados': 'aprendizados',
   '/assistente': 'assistente',
   '/configuracoes': 'configuracoes',
@@ -74,18 +60,10 @@ interface SidebarProps {
   collapsed?: boolean
   onToggle?: () => void
   nomeEmpresa?: string
-  cognitiveOS?: CognitiveOSFields | null
   modulosLiberados?: string[] | null
 }
 
-function corHealth(score: number | null | undefined): string {
-  if (score == null) return 'text-muted-foreground'
-  if (score >= 70) return 'text-emerald-500'
-  if (score >= 40) return 'text-amber-500'
-  return 'text-red-500'
-}
-
-export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digital', cognitiveOS, modulosLiberados }: SidebarProps) {
+export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digital', modulosLiberados }: SidebarProps) {
   const pathname = usePathname()
 
   const isLiberado = (href: string): boolean => {
@@ -94,9 +72,6 @@ export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digi
     if (!moduloId) return true
     return modulosLiberados.includes(moduloId)
   }
-
-  const notifCount = cognitiveOS?.notifications?.length ?? 0
-  const healthScore = cognitiveOS?.healthScore?.score ?? null
 
   return (
     <aside
@@ -182,30 +157,6 @@ export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digi
           </div>
         ))}
       </nav>
-
-      {/* Cognitive OS Summary */}
-      {!collapsed && cognitiveOS && (
-        <div className="border-t p-3 space-y-2">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <TrendingUp className="h-3 w-3" />
-              Saúde
-            </span>
-            <span className={cn('font-semibold', corHealth(healthScore))}>
-              {healthScore != null ? `${healthScore}/100` : '—'}
-            </span>
-          </div>
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Bell className="h-3 w-3" />
-              Notificações
-            </span>
-            <span className={cn('font-semibold', notifCount > 0 ? 'text-amber-500' : 'text-muted-foreground')}>
-              {notifCount}
-            </span>
-          </div>
-        </div>
-      )}
 
       {/* Collapse toggle (when collapsed) */}
       {collapsed && onToggle && (

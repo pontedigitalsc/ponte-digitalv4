@@ -54,7 +54,7 @@ export function RitualCard({ ondeEstamos, oqueMudou, oqueMereceAtencao, oquePode
 
         {oquePodeEsperar && (
           <div>
-            <p className="text-xs text-muted-foreground mb-0.5">Pode esperar</p>
+            <p className="text-xs text-muted-foreground mb-0.5">Quem precisa de você</p>
             <p className="text-sm leading-relaxed text-card-foreground/60">{oquePodeEsperar}</p>
           </div>
         )}

@@ -154,8 +154,10 @@ function avisarRisco(operation: string, model: string, args: unknown): void {
 
   if (process.env.NODE_ENV === 'development') {
     throw new InternalApplicationError(mensagem)
+  } else if (process.env.NODE_ENV === 'production') {
+    log.error('Risco de vazamento entre empresas — query bloqueada', { details: { model, operation } })
+    throw new InternalApplicationError('Consulta rejeitada por segurança: empresaId não especificado.')
   } else {
-    // eslint-disable-next-line no-console
-    log.error('Risco de vazamento entre empresas', { details: { args } })
+    log.error('Risco de vazamento entre empresas', { details: { model, operation } })
   }
 }
