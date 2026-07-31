@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { createSupabaseBrowserClient } from '@/lib/supabase-browser'
 
 export default function CriarContaPage() {
   const [nome, setNome] = useState('')
@@ -45,6 +46,14 @@ export default function CriarContaPage() {
       if (!res.ok) {
         const err = await res.json()
         throw new Error(err.error ?? 'Erro ao criar conta')
+      }
+
+      // Auto-login: a conta foi criada no Supabase, agora inicia a sessão
+      // para que a jornada continue sem o visitante passar pelo login
+      const supabase = createSupabaseBrowserClient()
+      const { error: loginError } = await supabase.auth.signInWithPassword({ email, password: senha })
+      if (!loginError) {
+        router.refresh()
       }
 
       router.push('/minha-empresa-hoje')
