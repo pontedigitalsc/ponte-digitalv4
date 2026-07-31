@@ -29,6 +29,8 @@ export async function proxy(request: NextRequest) {
                         request.nextUrl.pathname.startsWith('/reset-password/confirmar') ||
                         request.nextUrl.pathname.startsWith('/conversa') ||
                         request.nextUrl.pathname.startsWith('/criar-conta') ||
+                        request.nextUrl.pathname.startsWith('/diagnostico') ||
+                        request.nextUrl.pathname.startsWith('/fundador') ||
                         request.nextUrl.pathname === '/'
 
   if (!session && !isPublicRoute) {

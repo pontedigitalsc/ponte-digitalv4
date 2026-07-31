@@ -27,9 +27,14 @@ async function validarAcessoConversa(token: string, usuario: Awaited<ReturnType<
 // GET /api/conversa — retorna estado atual da conversa (requer conv_token)
 export async function GET(request: NextRequest) {
   try {
-    const token = obterToken(request)
+    let token = obterToken(request)
+    let novoToken = false
+
+    // Fluxo público: se não há token, cria um automaticamente
+    // para que visitantes possam iniciar a conversa sem cadastro
     if (!token) {
-      return NextResponse.json({ error: 'Conversa nao iniciada. Acesse a pagina inicial para comecar.' }, { status: 400 })
+      token = crypto.randomUUID()
+      novoToken = true
     }
 
     const usuario = await requireUserApi().catch(() => null)
@@ -54,6 +59,16 @@ export async function GET(request: NextRequest) {
       jsonResponse = NextResponse.json({
         token,
         ...estado,
+      })
+    }
+
+    if (novoToken) {
+      jsonResponse.cookies.set('conv_token', token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7,
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
       })
     }
 

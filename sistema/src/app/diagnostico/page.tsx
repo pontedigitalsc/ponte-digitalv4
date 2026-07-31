@@ -52,6 +52,25 @@ function gerarRevelacao(respostas: Record<string, string>): { forca: string; ate
   }
 }
 
+function gerarCarta(respostas: Record<string, string>, revelacao: { forca: string; atencao: string; oportunidade: string }): { observacao: string; padrao: string; movimento: string; continuidade: string } {
+  const peso = (respostas.peso ?? '').toLowerCase()
+  let observacao = 'Você dedicou tempo para pensar sobre sua empresa. Isso já é um movimento que poucos fazem.'
+  if (peso.includes('tempo') || peso.includes('sozinho') || peso.includes('sobrecar')) {
+    observacao = 'Você carrega muito sozinho. Notei que você descreve sua empresa como algo que depende diretamente de você.'
+  } else if (peso.includes('equipe') || peso.includes('pessoa') || peso.includes('funcion')) {
+    observacao = 'A questão de equipe aparece com força. Você parece sentir que a empresa depende de mais pessoas, mas isso ainda não aconteceu.'
+  } else if (peso.includes('dinheiro') || peso.includes('financeiro') || peso.includes('faturamento')) {
+    observacao = 'A preocupação financeira aparece no que você descreveu — mas ela parece ser a consequência, não a causa.'
+  }
+
+  return {
+    observacao,
+    padrao: revelacao.atencao,
+    movimento: revelacao.oportunidade,
+    continuidade: 'Hoje apareceu um padrão interessante. Quero observar isso junto com você durante esta semana. Na próxima conversa quero descobrir se algo mudou.',
+  }
+}
+
 function gerarDimensoes(): { label: string; valor: number; descricao: string }[] {
   return [
     { label: 'Clareza', valor: 35, descricao: 'Você sabe o que quer, mas o caminho ainda precisa ficar mais nítido.' },
@@ -62,7 +81,7 @@ function gerarDimensoes(): { label: string; valor: number; descricao: string }[]
   ]
 }
 
-type Etapa = 'situacao' | 'perguntas' | 'revelacao'
+type Etapa = 'situacao' | 'perguntas' | 'revelacao' | 'retrato' | 'carta'
 
 export default function DiagnosticoPage() {
   const [etapa, setEtapa] = useState<Etapa>('situacao')
@@ -71,44 +90,96 @@ export default function DiagnosticoPage() {
   const [valorInput, setValorInput] = useState('')
   const [apoiadorId] = useState(gerarApoiadorId)
 
-  // Revelação
   const revelacao = gerarRevelacao(respostas)
+  const carta = gerarCarta(respostas, revelacao)
   const dimensoes = gerarDimensoes()
 
-  // Tela de revelação
-  if (etapa === 'revelacao') {
+  // ETAPA CARTA — valor entregue, cadastro só depois
+  if (etapa === 'carta') {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 p-4">
         <div className="max-w-lg mx-auto space-y-8 py-8 animate-fade-in">
           <div className="text-center space-y-3">
             <AvatarPonte state="success" size="lg" />
-            <p className="text-xs text-muted-foreground italic">— Primeiro Retrato da Sua Empresa —</p>
-            <h1 className="text-xl font-semibold tracking-tight">
-              Depois dessa conversa, percebemos algo
-            </h1>
+            <p className="text-xs text-muted-foreground italic">— Carta para sua empresa —</p>
+            <h1 className="text-xl font-semibold tracking-tight">Olhando para sua empresa</h1>
           </div>
 
-          {/* 3 itens da revelação */}
-          <div className="space-y-4">
-            <div className="rounded-xl border-l-4 border-green-400/30 bg-card p-4 space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-green-600 dark:text-green-400">Uma força</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">{revelacao.forca}</p>
+          <div className="rounded-xl border bg-card p-6 space-y-5 text-sm leading-relaxed">
+            <div className="border-l-2 border-primary/30 pl-4 py-2">
+              <p className="font-semibold text-foreground">O que mais me chamou atenção hoje</p>
+              <p className="mt-1 text-muted-foreground italic">&ldquo;{carta.observacao}&rdquo;</p>
             </div>
-            <div className="rounded-xl border-l-4 border-amber-400/30 bg-card p-4 space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">Um ponto de atenção</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">{revelacao.atencao}</p>
+            <div className="border-l-2 border-amber-500/30 pl-4 py-2">
+              <p className="font-semibold text-foreground">Existe um padrão aparecendo</p>
+              <p className="mt-1 text-muted-foreground">{carta.padrao}</p>
             </div>
-            <div className="rounded-xl border-l-4 border-primary/30 bg-card p-4 space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-primary">Uma oportunidade</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">{revelacao.oportunidade}</p>
+            <div className="border-l-2 border-green-500/30 pl-4 py-2">
+              <p className="font-semibold text-foreground">O menor movimento que pode melhorar sua próxima semana</p>
+              <p className="mt-1 text-muted-foreground">{carta.movimento}</p>
+            </div>
+            <div className="mt-4 pt-4 border-t space-y-2">
+              <p className="font-semibold">O que quero observar na próxima conversa</p>
+              <p className="text-xs text-muted-foreground italic leading-relaxed">{carta.continuidade}</p>
             </div>
           </div>
 
-          {/* Retrato Inicial */}
+          {/* FASE 5 — convite, não assinatura */}
+          <div className="text-center space-y-3">
+            <p className="text-sm font-medium">
+              Gostaria que eu acompanhasse sua empresa daqui para frente?
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Criar sua jornada significa continuar essa conversa — e construir a história da sua empresa com a Ponte.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Link
+              href="/criar-conta"
+              className="block w-full rounded-xl bg-primary px-6 py-4 text-sm font-medium text-primary-foreground shadow-lg hover:bg-primary/90 transition-colors text-center"
+            >
+              Criar minha Jornada
+            </Link>
+            <Link
+              href="/"
+              className="block w-full rounded-xl border border-border bg-card px-6 py-4 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors text-center"
+            >
+              Continuar depois
+            </Link>
+            <div className="text-center pt-2">
+              <Link
+                href="/fundador"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
+              >
+                Conhecer o Founder
+              </Link>
+            </div>
+          </div>
+
+          <p className="text-[10px] text-muted-foreground text-center">
+            Você é o Apoiador {apoiadorId}. Ao criar sua jornada, este número será preservado.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  // ETAPA RETRATO — fotografia inicial
+  if (etapa === 'retrato') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 p-4">
+        <div className="max-w-lg mx-auto space-y-8 py-8 animate-fade-in">
+          <div className="text-center space-y-3">
+            <AvatarPonte state="success" size="lg" />
+            <p className="text-xs text-muted-foreground italic">— Retrato Inicial da Sua Empresa —</p>
+            <h1 className="text-xl font-semibold tracking-tight">O primeiro retrato da sua empresa</h1>
+          </div>
+
           <div className="rounded-xl border bg-card p-6 space-y-4">
             <div className="text-center space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Retrato Inicial da Empresa</p>
-              <p className="text-[10px] text-muted-foreground/60">Isso não é uma avaliação. É apenas o primeiro retrato.</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Fotografia inicial</p>
+              <p className="text-[10px] text-muted-foreground/60">Como sua empresa pensa hoje, onde existe força, onde existe peso.</p>
             </div>
             <div className="space-y-3">
               {dimensoes.map((d) => (
@@ -126,50 +197,57 @@ export default function DiagnosticoPage() {
             </div>
           </div>
 
-          {/* Apoiador */}
-          <div className="text-center border-2 border-dashed border-primary/20 rounded-xl bg-card p-4 space-y-2">
+          <div className="text-center border-2 border-dashed border-primary/20 rounded-xl bg-card p-4 space-y-1">
             <p className="text-xs text-muted-foreground">Você é o</p>
             <p className="text-2xl font-bold tracking-widest text-primary">Apoiador {apoiadorId}</p>
             <p className="text-[10px] text-muted-foreground">Você esteve aqui quando a Ponte estava sendo construída.</p>
           </div>
 
-          {/* FASE 5 — por que criar conta */}
-          <div className="rounded-xl border bg-card p-5 space-y-3">
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Esse é apenas o primeiro retrato. Conforme a Ponte conhece sua empresa, ela consegue enxergar padrões que uma conversa única não revela.
-            </p>
-            <p className="text-sm font-medium">
-              Criar conta significa continuar construindo a história da sua empresa.
-            </p>
+          <button
+            onClick={() => setEtapa('carta')}
+            className="w-full rounded-xl bg-primary px-6 py-4 text-sm font-medium text-primary-foreground shadow-lg hover:bg-primary/90 transition-colors"
+          >
+            Quero receber minha carta
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ETAPA REVELAÇÃO — três observações
+  if (etapa === 'revelacao') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 p-4">
+        <div className="max-w-lg mx-auto space-y-8 py-8 animate-fade-in">
+          <div className="text-center space-y-3">
+            <AvatarPonte state="speaking" size="lg" />
+            <p className="text-xs text-muted-foreground italic">— Primeira observação —</p>
+            <h1 className="text-xl font-semibold tracking-tight">
+              Depois dessa conversa, percebemos três coisas sobre sua empresa
+            </h1>
           </div>
 
-          {/* 3 caminhos */}
-          <div className="space-y-2">
-            <Link
-              href="/diagnostico"
-              className="block w-full rounded-xl border border-border bg-card px-6 py-4 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors text-center"
-            >
-              Quero continuar explorando
-            </Link>
-            <Link
-              href="/criar-conta"
-              className="block w-full rounded-xl bg-primary px-6 py-4 text-sm font-medium text-primary-foreground shadow-lg hover:bg-primary/90 transition-colors text-center"
-            >
-              Quero criar minha jornada
-            </Link>
-            <div className="text-center pt-2">
-              <Link
-                href="/criar-conta"
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
-              >
-                Quero ser Fundador — os primeiros 1000 empresários que estão construindo uma nova forma de pensar empresas
-              </Link>
+          <div className="space-y-4">
+            <div className="rounded-xl border-l-4 border-green-400/30 bg-card p-4 space-y-1">
+              <p className="text-xs font-semibold uppercase tracking-wider text-green-600 dark:text-green-400">Uma força</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{revelacao.forca}</p>
+            </div>
+            <div className="rounded-xl border-l-4 border-amber-400/30 bg-card p-4 space-y-1">
+              <p className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">Um ponto de atenção</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{revelacao.atencao}</p>
+            </div>
+            <div className="rounded-xl border-l-4 border-primary/30 bg-card p-4 space-y-1">
+              <p className="text-xs font-semibold uppercase tracking-wider text-primary">Uma oportunidade</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{revelacao.oportunidade}</p>
             </div>
           </div>
 
-          <p className="text-[10px] text-muted-foreground text-center">
-            Apoiador {apoiadorId} reservado. Ao criar conta, seu número será preservado.
-          </p>
+          <button
+            onClick={() => setEtapa('retrato')}
+            className="w-full rounded-xl bg-primary px-6 py-4 text-sm font-medium text-primary-foreground shadow-lg hover:bg-primary/90 transition-colors"
+          >
+            Ver meu retrato inicial
+          </button>
         </div>
       </div>
     )
@@ -248,7 +326,7 @@ export default function DiagnosticoPage() {
               disabled={!valorInput.trim()}
               className="w-full rounded-xl bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {perguntaAtual < PERGUNTAS_ABERTAS.length - 1 ? 'Continuar' : 'Ver meu retrato'}
+              {perguntaAtual < PERGUNTAS_ABERTAS.length - 1 ? 'Continuar' : 'Ver o que percebi'}
             </button>
           </div>
         </div>
