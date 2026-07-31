@@ -11,49 +11,39 @@ export default function LandingPage() {
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-primary/80 to-primary/60 shadow-lg shadow-primary/20">
             <span className="text-xl font-bold text-primary-foreground">P</span>
           </div>
-          <p className="text-sm text-muted-foreground">
-            A Ponte Digital
+          <p className="text-xs text-muted-foreground tracking-widest uppercase font-medium">
+            Ponte Digital
           </p>
         </div>
 
-        {/* Proposta */}
-        <div className="space-y-4">
+        {/* Proposta — dor invisível do empresário */}
+        <div className="space-y-6">
           <h1 className="text-2xl font-bold tracking-tight leading-snug">
-            A melhor conversa que você já teve<br />sobre sua própria empresa
+            O peso invisível de administrar uma empresa
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
-            Não somos um sistema de gestão. Somos uma companhia que ajuda você a enxergar sua empresa com mais clareza — uma conversa de cada vez.
+            Você toma centenas de decisões carregando dúvidas que ninguém vê. Mas toda empresa deixa sinais. A Ponte ajuda você a enxergar esses sinais.
           </p>
         </div>
 
-        {/* Dois caminhos */}
+        {/* CTA único — diagnóstico sem cadastro */}
         <div className="space-y-3">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
-            Como deseja começar?
-          </p>
           <Link
-            href="/api/sessao/iniciar"
-            prefetch={false}
+            href="/diagnostico"
             className="block w-full rounded-xl bg-primary px-6 py-4 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 transition-colors"
           >
-            Quero entender melhor minha empresa
-          </Link>
-          <Link
-            href="/criar-conta"
-            className="block w-full rounded-xl border border-border bg-card px-6 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
-          >
-            Quero ser Founder
+            Entender minha empresa
           </Link>
           <Link
             href="/login"
-            className="block w-full rounded-xl border border-border bg-card px-6 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
+            className="block w-full rounded-xl border border-border bg-card px-6 py-4 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
           >
-            Conhecer a Ponte
+            Já tenho conta
           </Link>
         </div>
 
-        <p className="text-xs text-muted-foreground">
-          Gratuito. Confidencial. Leva alguns minutos.
+        <p className="text-xs text-muted-foreground leading-relaxed max-w-xs mx-auto">
+          Gratuito. Confidencial. Sem cadastro. Leva menos de 3 minutos.
         </p>
       </div>
     </div>

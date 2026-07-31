@@ -2,7 +2,7 @@
 
 > **MARCO: Stable Release V3 — Preparação Definitiva para Produção — 29 de julho de 2026**
 > 
-> Programas 21 a 46 concluídos. Fundação completa, congelada e liberada. Sistema científico implementado. Todas as auditorias de produção aprovadas.
+> Programas 21 a 47 concluídos. Fundação completa, congelada e liberada. Sistema científico implementado. Todas as auditorias de produção aprovadas.
 > 
 > **A Ponte Digital deixa de ser um projeto em desenvolvimento. Passa a ser uma plataforma em produção, pronta para receber empresas reais e evoluir exclusivamente por meio de evidências coletadas com seus Founders.**
 > 
@@ -192,6 +192,7 @@ Tratar como pergunta em aberto até validar com os 100 fundadores, nunca como re
 ---
 
 *A Tese de Valor e o FOUNDATION.md continuam sendo a referência de visão de longo prazo, mas não devem guiar decisões de escopo do dia a dia enquanto a V4 Founder estiver em construção — esse papel é deste documento. Quando uma sprint terminar, atualizar as seções 1 e 2 antes de começar a próxima.*
+
 
 
 

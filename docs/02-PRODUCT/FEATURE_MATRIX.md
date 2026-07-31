@@ -1,6 +1,6 @@
 # Matriz de Funcionalidades — Stable Release V3
 
-*Atualizada em 30/07/2026 — Programa 46 concluído.*
+*Atualizada em 30/07/2026 — Programa 47 concluído.*
 
 | Funcionalidade | Status | Observação |
 |---|---|---|
@@ -25,6 +25,11 @@
 | Founder como Pertencimento | ✅ Novo, relacional | Linguagem não-comercial, comunidade, construção coletiva |
 | Sidebar "Sua empresa" | ✅ Novo, relacional | Conversar, Check-in, Jornada como grupo primário |
 | Header sem ruído | ✅ Novo, relacional | Search e sinos removidos |
+| Diagnóstico Inicial Sem Cadastro (`/diagnostico`) | ✅ Novo, aquisição | 5 perguntas abertas, revelação textual, sem auth |
+| Retrato Inicial da Empresa | ✅ Novo, aquisição | 5 dimensões (Clareza, Conhecimento, Decisão, Organização, Aprendizado) |
+| Sistema Apoiador Numerado | ✅ Novo, aquisição | AP-XXXXX único, permanente |
+| Programa Fundador Limitado | ✅ Novo, aquisição | 1000 posições históricas (#0001-#1000) |
+| Landing Relacional | ✅ Novo, aquisição | Dor invisível, CTA "Entender minha empresa", sem SaaS language |
 | Diário Científico (`/admin/diario-cientifico`) | ✅ Novo, funcional | Registro de observações, evidências, hipóteses |
 | Radar dos Founders (`/admin/radar-founders`) | ✅ Novo, funcional | Métricas por empresa ativa |
 | Cognitive Observatory (`/admin/cognitive-observatory`) | ✅ Ativo, funcional | Painel cognitivo avançado |

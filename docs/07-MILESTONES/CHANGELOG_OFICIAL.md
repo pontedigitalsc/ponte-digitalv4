@@ -1,6 +1,16 @@
 # Changelog Oficial — Ponte Digital
 
-*Histórico completo da evolução da empresa, do Programa 0 ao 46.*
+*Histórico completo da evolução da empresa, do Programa 0 ao 47.*
+
+---
+
+## Programa 47 — Acquisition Foundation V1
+
+**30 de julho de 2026**
+
+Primeira experiência pública de aquisição da Ponte Digital. Landing reescrita com base na dor invisível do empresário ("O peso invisível de administrar uma empresa"), CTA "Entender minha empresa" sem linguagem de vendas. Diagnóstico inicial sem cadastro (`/diagnostico`) com 5 perguntas abertas, revelação textual personalizada, Retrato Inicial da Empresa (5 dimensões), sistema Apoiador numerado (`AP-XXXXX`), programa Fundador limitado a 1000 posições históricas, e 3 caminhos equivalentes pós-revelação. Constituição da Aquisição criada.
+
+**Build: 48s compile. TypeScript: 0 erros. 55 rotas. Status: AQUISIÇÃO RELACIONAL ATIVA.**
 
 ---
 
