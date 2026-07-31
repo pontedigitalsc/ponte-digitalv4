@@ -1,71 +1,99 @@
-'use client'
-
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { requireUser } from '@/lib/auth'
+import { obterPerguntaVivaAtiva, obterReflexaoDaSemana, listarMemoriasEmocionais } from '@/engine/relacao-engine'
 import { AvatarPonte } from '@/components/ui/avatar'
+import { ComoEstaHoje } from '@/components/dashboard/como-esta-hoje'
+import Link from 'next/link'
 
-const HUMORES = [
-  { emoji: '😀', rotulo: 'Muito bem', cor: 'border-green-400/40 hover:bg-green-50 dark:hover:bg-green-950/20' },
-  { emoji: '🙂', rotulo: 'Bem',       cor: 'border-blue-400/40 hover:bg-blue-50 dark:hover:bg-blue-950/20' },
-  { emoji: '😐', rotulo: 'Mais ou menos', cor: 'border-amber-400/40 hover:bg-amber-50 dark:hover:bg-amber-950/20' },
-  { emoji: '😟', rotulo: 'Difícil',    cor: 'border-orange-400/40 hover:bg-orange-50 dark:hover:bg-orange-950/20' },
-  { emoji: '😔', rotulo: 'Muito difícil', cor: 'border-red-400/40 hover:bg-red-50 dark:hover:bg-red-950/20' },
-]
+export const metadata = { title: 'Ponte Digital' }
 
-export default function HomePage() {
-  const [selecionado, setSelecionado] = useState<string | null>(null)
-  const router = useRouter()
+export default async function DashboardPage() {
+  const usuario = await requireUser()
+  const nome = usuario.nome.split(' ')[0]
 
-  if (selecionado) {
-    return (
-      <div className="flex min-h-[70vh] items-center justify-center">
-        <div className="max-w-md text-center space-y-6 animate-fade-in">
-          <AvatarPonte state="speaking" size="lg" />
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            Me conta o que aconteceu.
-          </p>
-          <textarea
-            autoFocus
-            className="w-full rounded-xl border bg-card p-4 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[120px]"
-            placeholder="Pode escrever à vontade. Estou aqui para ouvir."
-          />
-          <button
-            onClick={() => router.push('/conversa')}
-            className="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-          >
-            Quero conversar sobre isso
-          </button>
-        </div>
-      </div>
-    )
-  }
+  const [perguntaViva, reflexao, memorias] = await Promise.all([
+    obterPerguntaVivaAtiva(usuario.empresaId).catch(() => null),
+    obterReflexaoDaSemana(usuario.empresaId).catch(() => null),
+    listarMemoriasEmocionais(usuario.empresaId, 3).catch(() => []),
+  ])
 
   return (
-    <div className="flex min-h-[70vh] items-center justify-center">
-      <div className="max-w-lg text-center space-y-8 animate-fade-in">
-        <div className="space-y-3">
-          <AvatarPonte state="breathing" size="lg" />
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Como sua empresa está hoje?
-          </h1>
-        </div>
-
-        <div className="grid grid-cols-5 gap-3">
-          {HUMORES.map((h) => (
-            <button
-              key={h.rotulo}
-              onClick={() => setSelecionado(h.rotulo)}
-              className={`flex flex-col items-center gap-2 rounded-xl border-2 bg-card p-4 transition-all ${h.cor}`}
-            >
-              <span className="text-3xl">{h.emoji}</span>
-              <span className="text-xs font-medium text-muted-foreground">{h.rotulo}</span>
-            </button>
-          ))}
-        </div>
-
-        <p className="text-xs text-muted-foreground">
-          Não precisa ser perfeito. É sobre como você se sente hoje.
+    <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
+      {/* Cabeçalho — presença, não painel */}
+      <div className="text-center space-y-3">
+        <AvatarPonte state="breathing" size="lg" />
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {nome}, sua empresa está sendo escrita
+        </h1>
+        <p className="text-sm text-muted-foreground leading-relaxed max-w-md mx-auto">
+          Não é um painel com números. É uma conversa que continua — com uma pergunta que acompanha você.
         </p>
+      </div>
+
+      {/* Pergunta Viva — UMA pergunta */}
+      {perguntaViva && (
+        <div className="rounded-xl border border-primary/20 bg-card p-6 space-y-3 animate-fade-in">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-primary">
+            A pergunta que acompanha você
+          </p>
+          <p className="text-lg font-medium leading-relaxed">
+            {perguntaViva.pergunta}
+          </p>
+          {perguntaViva.contexto && (
+            <p className="text-xs text-muted-foreground italic leading-relaxed">
+              {perguntaViva.contexto}
+            </p>
+          )}
+          <Link
+            href="/minha-jornada"
+            className="inline-block text-xs text-primary hover:underline underline-offset-2"
+          >
+            Ver como essa pergunta evolui na minha história →
+          </Link>
+        </div>
+      )}
+
+      {/* Reflexão da Semana — UMA observação, não tarefa */}
+      {reflexao && (
+        <div className="rounded-xl border border-dashed border-amber-400/40 bg-card/50 p-6 space-y-3">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-amber-600 dark:text-amber-400">
+            Para esta semana — apenas observe
+          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {reflexao.reflexao}
+          </p>
+          <p className="text-[10px] text-muted-foreground/60">
+            Não precisa responder agora. A Ponte apenas planta a observação.
+          </p>
+        </div>
+      )}
+
+      {/* Memória Emocional — o que a Ponte lembra como sentiu */}
+      {memorias.length > 0 && (
+        <div className="rounded-xl border bg-card p-6 space-y-3">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+            O que a Ponte lembra de como você se sentiu
+          </p>
+          <div className="space-y-2">
+            {memorias.map((m) => (
+              <p key={m.id} className="text-sm text-muted-foreground leading-relaxed border-l-2 border-muted pl-3">
+                {m.sentimento}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Como está hoje — sentimento, não status */}
+      <ComoEstaHoje />
+
+      {/* Linha da História */}
+      <div className="text-center pt-2">
+        <Link
+          href="/minha-jornada"
+          className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-6 py-3 text-sm text-foreground hover:bg-muted/50 transition-colors"
+        >
+          Ler minha história
+        </Link>
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ import { conversaRespostaSchema } from '@/lib/validations'
 import { assertRateLimit } from '@/lib/rate-limit'
 import { requireUserApi } from '@/lib/authorize'
 import { AuthenticationError } from '@/lib/app-errors'
+import { listarMemoriasEmocionais } from '@/engine/relacao-engine'
 
 function obterToken(request: NextRequest): string | null {
   return request.cookies.get('conv_token')?.value ?? null
@@ -41,6 +42,15 @@ export async function GET(request: NextRequest) {
     await validarAcessoConversa(token, usuario)
     const estado = await obterEstado(token)
 
+    // Memória Emocional — a conversa retoma de onde a última ficou no sentimento
+    let memoria = undefined
+    if (usuario) {
+      const memorias = await listarMemoriasEmocionais(usuario.empresaId, 1).catch(() => [])
+      if (memorias.length > 0) {
+        memoria = `${memorias[0].sentimento} Meses depois, esse assunto pode ter voltado — quero descobrir junto com você.`
+      }
+    }
+
     let jsonResponse: NextResponse
 
     if (!estado) {
@@ -54,11 +64,13 @@ export async function GET(request: NextRequest) {
         progresso: { blocoAtual: 1, totalBlocos: 5, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 },
         concluida: false,
         respostas: {},
+        memoria,
       })
     } else {
       jsonResponse = NextResponse.json({
         token,
         ...estado,
+        memoria,
       })
     }
 

@@ -22,15 +22,26 @@ export const reacoesIndividuais: Record<string, string> = {
 
 export const SILENCIO_INTELIGENTE = [
   'Vou guardar isso.',
-  'Ainda não tenho evidências suficientes para uma conclusão.',
-  'Prefiro observar mais algumas semanas antes de sugerir algo.',
-  'Isso ainda não permite uma conclusão — mas vou prestar atenção.',
-  'Percebi, mas ainda não consigo conectar com outros padrões.',
-  'Essa informação é importante. Vou acompanhar como evolui.',
+  'Isso me fez pensar. Vou deixar descansar um pouco antes de falar.',
+  'Prefiro observar mais um tempo antes de sugerir qualquer coisa.',
+  'Percebi. Mas ainda não quero concluir nada com pressa.',
+  'Essa informação é importante. Vou prestar atenção em como ela evolui.',
+  'Não vou dizer nada agora. Só quero que você saiba que eu ouvi.',
 ]
 
+function hashEtapa(etapaId: string): number {
+  let hash = 0
+  for (let i = 0; i < etapaId.length; i++) {
+    hash = (hash << 5) - hash + etapaId.charCodeAt(i)
+    hash |= 0
+  }
+  return Math.abs(hash)
+}
+
 export function obterReacao(etapaId: string): string {
-  return reacoesIndividuais[etapaId] ?? SILENCIO_INTELIGENTE[Math.floor(Math.random() * SILENCIO_INTELIGENTE.length)]
+  const individual = reacoesIndividuais[etapaId]
+  if (individual) return individual
+  return SILENCIO_INTELIGENTE[hashEtapa(etapaId) % SILENCIO_INTELIGENTE.length]
 }
 
 export const REACOES_BLOCO: Record<string, string> = {

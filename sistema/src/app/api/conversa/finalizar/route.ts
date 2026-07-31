@@ -3,6 +3,7 @@ import { obterRespostas, vincularConversa } from '@/engine/conversation-engine'
 import { interpretarRespostas } from '@/engine/identity-engine'
 import { gerarResumoNatural } from '@/engine/interpretacoes'
 import { processarConversa } from '@/engine/cognitive-orchestrator'
+import { criarPerguntaVivaSeNecessario, registrarMemoriasEmocionais } from '@/engine/relacao-engine'
 import { prismaSeguro } from '@/lib/prisma-tenant-safe'
 import { handleApiError } from '@/lib/api-error'
 import { assertRateLimit } from '@/lib/rate-limit'
@@ -63,6 +64,14 @@ export async function POST(request: NextRequest) {
     if (empresaId) {
       processarConversa(empresaId, token).catch(() => {
         // Processamento cognitivo em background — falha não quebra o fluxo
+      })
+
+      // P49 — Pergunta Viva e Memória Emocional nascem da conversa
+      criarPerguntaVivaSeNecessario(empresaId, respostas).catch(() => {
+        // não interrompe a resposta
+      })
+      registrarMemoriasEmocionais(empresaId, respostas).catch(() => {
+        // não interrompe a resposta
       })
     }
 

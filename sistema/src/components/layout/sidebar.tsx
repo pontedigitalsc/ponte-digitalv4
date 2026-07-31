@@ -16,13 +16,13 @@ const navItems = [
     items: [
       { href: '/minha-empresa-hoje', label: 'Minha empresa',  icon: LayoutDashboard },
       { href: '/conversa',           label: 'Conversar',      icon: Bot },
-      { href: '/minha-jornada',      label: 'Minha Jornada',  icon: RefreshCw },
+      { href: '/minha-jornada',      label: 'Minha História', icon: RefreshCw },
     ],
   },
   {
     group: 'Consultar',
     items: [
-      { href: '/historico',     label: 'Timeline',    icon: Clock },
+      { href: '/historico',     label: 'Histórico',   icon: Clock },
       { href: '/centro-decisao', label: 'Decisões',    icon: Sparkles },
       { href: '/conhecimento',  label: 'Conhecimento', icon: RefreshCw },
       { href: '/financeiro',    label: 'Caixa',        icon: DollarSign },

@@ -58,6 +58,9 @@ model Empresa {
   auditoriasRecomendacao AuditoriaRecomendacao[]
   conhecimentosColetivos  ConhecimentoColetivo[]
   casosReais              CasoReal[]
+  perguntasVivas          PerguntaViva[]
+  reflexoesSemanais       ReflexaoSemanal[]
+  memoriasEmocionais      MemoriaEmocional[]
  
   @@index([ativa])
   @@index([criadaEm])
@@ -1375,6 +1378,82 @@ model ConhecimentoColetivo {
   @@index([criadoEm])
   @@index([deletedAt])
   @@map("conhecimentos_coletivos")
+}
+
+// ─── PROGRAMA 49 — RELAÇÃO CONTÍNUA ─────────────────────────────────────────
+// P49 — O Nascimento da Relação Contínua.
+// A Ponte deixa de ser sistema e passa a ser o lugar onde empresários organizam
+// seus pensamentos ao longo dos anos. O patrimônio passa a ser a história.
+
+// Pergunta Viva — UMA pergunta por empresa, nascida da conversa.
+// Nunca duas. Nunca cinco. Acompanha o empresário durante semanas e, quando
+// respondida, nasce outra.
+enum EstadoPerguntaViva {
+  ATIVA
+  RESPONDIDA
+  ARQUIVADA
+}
+
+model PerguntaViva {
+  id          String              @id @default(cuid())
+  empresaId   String
+  pergunta    String
+  contexto    String?             // de onde nasceu (ex.: resposta sobre contratar)
+  estado      EstadoPerguntaViva  @default(ATIVA)
+  resposta    String?             // quando for respondida
+  respondidaEm DateTime?
+  criadaEm    DateTime            @default(now())
+  atualizadaEm DateTime           @updatedAt
+  deletedAt   DateTime?
+
+  empresa     Empresa             @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, estado, criadaEm])
+  @@index([empresaId, criadaEm])
+  @@index([empresaId, deletedAt])
+  @@map("perguntas_vivas")
+}
+
+// Reflexão da Semana — UMA reflexão por semana. Nunca checklist, nunca tarefa.
+// A Ponte planta uma observação; não cobra resposta.
+model ReflexaoSemanal {
+  id          String   @id @default(cuid())
+  empresaId   String
+  semana      String   // chave YYYY-WW para unicidade
+  reflexao    String
+  contexto    String?  // pergunta viva ou assunto que gerou a reflexão
+  criadaEm    DateTime @default(now())
+  atualizadaEm DateTime @updatedAt
+  deletedAt   DateTime?
+
+  empresa     Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@unique([empresaId, semana])
+  @@index([empresaId, semana])
+  @@index([empresaId, criadaEm])
+  @@index([empresaId, deletedAt])
+  @@map("reflexoes_semanais")
+}
+
+// Memória Emocional — a memória guarda contexto emocional, não apenas fatos.
+// "Você parecia inseguro para contratar alguém" — não apenas "você falou sobre contratar".
+model MemoriaEmocional {
+  id          String   @id @default(cuid())
+  empresaId   String
+  tipo        String   // 'inseguranca' | 'confianca' | 'peso' | 'realizacao' | 'cansaco' | ...
+  sentimento  String   // descrição emocional em linguagem natural
+  fato        String?  // o fato que originou o sentimento
+  contexto    String?
+  criadaEm    DateTime @default(now())
+  atualizadaEm DateTime @updatedAt
+  deletedAt   DateTime?
+
+  empresa     Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, tipo])
+  @@index([empresaId, criadaEm])
+  @@index([empresaId, deletedAt])
+  @@map("memoria_emocional")
 }
 
 // ─── PROGRAMA 40 — CASOS REAIS ───────────────────────────────────────────────

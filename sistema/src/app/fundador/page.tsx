@@ -1,4 +1,6 @@
 import { getCurrentUser } from '@/lib/auth'
+import { montarLinhaDaHistoria, obterPerguntaVivaAtiva } from '@/engine/relacao-engine'
+import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { AvatarPonte } from '@/components/ui/avatar'
 import Link from 'next/link'
 
@@ -7,6 +9,37 @@ export const metadata = { title: 'Fundador' }
 export default async function FundadorPage() {
   const usuario = await getCurrentUser().catch(() => null)
   const nome = usuario?.nome?.split(' ')[0]
+
+  let evolucao: {
+    capitulos: number
+    reflexoes: number
+    perguntasResolvidas: number
+    perguntaViva: string | null
+  } | null = null
+
+  if (usuario) {
+    const ultimaConversa = await prisma.conversa.findFirst({
+      where: { empresaId: usuario.empresaId, deletedAt: null },
+      orderBy: { criadaEm: 'desc' },
+      select: { respostas: true },
+    })
+    const respostas = (ultimaConversa?.respostas as Record<string, string | null>) ?? {}
+
+    const [historia, perguntaViva] = await Promise.all([
+      montarLinhaDaHistoria(usuario.empresaId, respostas).catch(() => null),
+      obterPerguntaVivaAtiva(usuario.empresaId).catch(() => null),
+    ])
+    const perguntasResolvidas = historia
+      ? await prisma.perguntaViva.count({ where: { empresaId: usuario.empresaId, estado: 'RESPONDIDA', deletedAt: null } }).catch(() => 0)
+      : 0
+
+    evolucao = {
+      capitulos: historia?.capitulos.filter((c) => c.paragrafos.length > 0).length ?? 0,
+      reflexoes: historia?.totalReflexoes ?? 0,
+      perguntasResolvidas,
+      perguntaViva: perguntaViva?.pergunta ?? null,
+    }
+  }
 
   const compromissos = [
     { titulo: 'Participar da evolução', descricao: 'Cada decisão que a Ponte toma passa por quem a constrói.' },
@@ -23,10 +56,50 @@ export default async function FundadorPage() {
           <h1 className="text-2xl font-semibold tracking-tight">Fundador</h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-md mx-auto">
             {nome
-              ? `${nome}, você já faz parte da história da Ponte. Alguns empresários escolhem participar ainda mais da construção.`
-              : 'Você já faz parte da história da Ponte. Alguns empresários escolhem participar ainda mais da construção.'}
+              ? `${nome}, você já faz parte da história da Ponte.`
+              : 'Você já faz parte da história da Ponte.'}
           </p>
         </div>
+
+        {/* Founder Invisível — mostra evolução, não vende plano (ETAPA 9) */}
+        {evolucao && (
+          <div className="rounded-xl border border-amber-400/30 bg-card p-6 space-y-4 animate-fade-in">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-amber-600 dark:text-amber-400">
+              O que sua empresa já construiu com a Ponte
+            </p>
+            <div className="grid grid-cols-3 gap-3 text-center">
+              <div className="rounded-lg bg-muted/40 p-4 space-y-1">
+                <p className="text-2xl font-bold">{evolucao.capitulos}</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                  {evolucao.capitulos === 1 ? 'capítulo escrito' : 'capítulos escritos'}
+                </p>
+              </div>
+              <div className="rounded-lg bg-muted/40 p-4 space-y-1">
+                <p className="text-2xl font-bold">{evolucao.reflexoes}</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                  {evolucao.reflexoes === 1 ? 'reflexão plantada' : 'reflexões plantadas'}
+                </p>
+              </div>
+              <div className="rounded-lg bg-muted/40 p-4 space-y-1">
+                <p className="text-2xl font-bold">{evolucao.perguntasResolvidas}</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                  {evolucao.perguntasResolvidas === 1 ? 'pergunta viva resolvida' : 'perguntas vivas resolvidas'}
+                </p>
+              </div>
+            </div>
+            {evolucao.perguntaViva && (
+              <p className="text-xs text-muted-foreground italic leading-relaxed">
+                A pergunta que acompanha sua empresa agora: {evolucao.perguntaViva}
+              </p>
+            )}
+            <Link
+              href="/minha-jornada"
+              className="inline-block text-xs text-primary hover:underline underline-offset-2"
+            >
+              Ler a história da sua empresa →
+            </Link>
+          </div>
+        )}
 
         <div className="space-y-3">
           {compromissos.map((c) => (
@@ -63,3 +136,4 @@ export default async function FundadorPage() {
     </div>
   )
 }
+

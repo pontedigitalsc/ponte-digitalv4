@@ -102,11 +102,15 @@ function CartaContent({ interpretacoes, resumoNatural }: RevelacaoCardProps) {
         <p className="mt-1 text-muted-foreground">{interpretacoes.alinhamento}</p>
       </div>
 
-      {/* Continuidade (ETAPA 1 + ETAPA 6) */}
+      {/* Continuidade (ETAPA 1 + ETAPA 6 + P49 Carta Nunca Termina) */}
       <div className="mt-6 pt-4 border-t space-y-3">
-        <p className="text-sm font-medium text-foreground">O que quero observar na próxima conversa</p>
+        <p className="text-sm font-medium text-foreground">O que quero descobrir na próxima conversa</p>
         <p className="text-xs text-muted-foreground italic leading-relaxed">
-          Hoje apareceu um padrão interessante. Quero observar isso junto com você durante esta semana. Na próxima conversa quero descobrir se algo mudou.
+          {interpretacoes.observacao ? (
+            <>Na próxima conversa quero descobrir se isso ainda continua acontecendo. Quero entender o que você percebeu quando passou a observar — e se alguma coisa já mudou.</>
+          ) : (
+            'Hoje apareceu um padrão interessante. Quero observar isso junto com você durante esta semana. Na próxima conversa quero descobrir se algo mudou.'
+          )}
         </p>
       </div>
     </div>

@@ -195,6 +195,18 @@ export { registrarResposta, listarRespostasPorEmpresa, listarRespostasPorToken }
 export { obterProximaPergunta, obterMultiplasPerguntas } from './adaptive-question-engine'
 export type { AdaptiveQuestion } from './adaptive-question-engine'
 
+export {
+  obterPerguntaVivaAtiva,
+  listarPerguntasVivas,
+  responderPerguntaViva,
+  criarPerguntaVivaSeNecessario,
+  obterReflexaoDaSemana,
+  registrarMemoriasEmocionais,
+  listarMemoriasEmocionais,
+  montarLinhaDaHistoria,
+} from './relacao-engine'
+export type { PerguntaViva, ReflexaoSemanal, MemoriaEmocional, CapituloHistoria, LinhaHistoria } from './relacao-engine'
+
 export { obterEventBus, criarEvento, EventEmitterBus } from './cognitive-bus'
 export type { EventBus, EventoPonteDigital, MetadadosEvento, TipoHandlerEvento, MiddlewareEvento } from './cognitive-bus'
 
