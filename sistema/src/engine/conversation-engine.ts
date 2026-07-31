@@ -9,28 +9,28 @@ import type { EstadoConversa, RespostaConversa, Progresso, Fluxo } from '@/engin
 import { NotFoundError, BusinessRuleError } from '@/lib/app-errors'
 
 const BLOCO_POR_ETAPA: Record<string, string> = {
-  'empresa.segmento': 'empresa',
-  'empresa.tempo': 'empresa',
-  'empresa.funcionarios': 'empresa',
-  'empresa.faturamento': 'empresa',
-  'operacao.aquisicao': 'operacao',
-  'operacao.produto': 'operacao',
-  'operacao.lucro': 'operacao',
-  'operacao.trabalhoso': 'operacao',
-  'operacao.horas': 'operacao',
-  'gestao.contratacao': 'gestao',
-  'gestao.promocao': 'gestao',
-  'gestao.caixa': 'gestao',
-  'gestao.decisao': 'gestao',
-  'problemas.insonia': 'problemas',
-  'problemas.repeticao': 'problemas',
-  'problemas.perda': 'problemas',
-  'objetivos.meta': 'objetivos',
-  'objetivos.automatizar': 'objetivos',
-  'objetivos.delegar': 'objetivos',
+  'historia.nascer': 'historia',
+  'historia.comecar': 'historia',
+  'historia.momento': 'historia',
+  'historia.orgulho': 'historia',
+  'historia.mudanca': 'historia',
+  'rotina.dia': 'rotina',
+  'rotina.pressao': 'rotina',
+  'rotina.cabeca': 'rotina',
+  'rotina.tranquilo': 'rotina',
+  'rotina.energia': 'rotina',
+  'empresa.clientes': 'empresa',
+  'empresa.multiplicar': 'empresa',
+  'empresa.crescer': 'empresa',
+  'empresa.horalivre': 'empresa',
+  'empresa.decisao': 'empresa',
+  'frente.surpresa': 'frente',
+  'frente.funcionou': 'frente',
+  'frente.diferente': 'frente',
+  'frente.proximo': 'frente',
 }
 
-const BLOCO_ORDEM = ['empresa', 'operacao', 'gestao', 'problemas', 'objetivos']
+const BLOCO_ORDEM = ['historia', 'rotina', 'empresa', 'frente']
 
 function calcularProgresso(etapaIndex: number, total: number): Progresso {
   if (etapaIndex < 0 || total === 0) {
@@ -193,11 +193,10 @@ export async function responder(
 
 function mapearBlocoParaCategoria(bloco: string) {
   const mapa: Record<string, 'FINANCEIRO' | 'CLIENTES' | 'OPERACAO' | 'GESTAO' | 'PESSOAS' | 'PRODUTO' | 'ESTRATEGIA'> = {
+    historia: 'GESTAO',
+    rotina: 'OPERACAO',
     empresa: 'GESTAO',
-    operacao: 'OPERACAO',
-    gestao: 'GESTAO',
-    problemas: 'GESTAO',
-    objetivos: 'ESTRATEGIA',
+    frente: 'ESTRATEGIA',
   }
   return mapa[bloco] ?? 'GESTAO'
 }

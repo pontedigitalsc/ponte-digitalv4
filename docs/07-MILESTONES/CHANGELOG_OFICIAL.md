@@ -1,6 +1,16 @@
 # Changelog Oficial — Ponte Digital
 
-*Histórico completo da evolução da empresa, do Programa 0 ao 41.*
+*Histórico completo da evolução da empresa, do Programa 0 ao 46.*
+
+---
+
+## Programa 46 — Relationship Continuity V1
+
+**30 de julho de 2026**
+
+Nascimento da Relação Contínua. Transformação da Ponte de experiência única de diagnóstico em relação contínua de clareza empresarial. Check-in emocional (dashboard como "Como sua empresa está hoje?" com 5 emojis), carta evolutiva (admiração + descoberta + ação única + observação futura), Minha Jornada (7 capítulos narrativos), memória viva no GET /api/conversa, Founder como pertencimento (não venda), sidebar simplificada (grupo "Sua empresa"), header sem ruído, conversa contínua (carta prepara retorno), silêncio inteligente (reações de maturidade). Auditoria final, freeze da relação contínua, snapshot RELATIONSHIP_CONTINUITY_V1.md.
+
+**Build: 45s compile. TypeScript: 0 erros. 54 rotas. Proxy: ATIVO. Status: RELAÇÃO ATIVA.**
 
 ---
 

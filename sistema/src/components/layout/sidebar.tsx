@@ -5,25 +5,26 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, Users, UserCheck,
   DollarSign, Settings, Bot, ChevronLeft, Building2,
-  TrendingUp, Clock, Sparkles, RefreshCw,
+  Clock, Sparkles, RefreshCw,
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
 const navItems = [
   {
-    group: 'Trabalho',
+    group: 'Sua empresa',
     items: [
-      { href: '/atendimento', label: 'Atendimento', icon: UserCheck },
-      { href: '/dashboard',   label: 'Centro Hoje', icon: LayoutDashboard },
+      { href: '/dashboard',     label: 'Como está hoje?', icon: LayoutDashboard },
+      { href: '/conversa',       label: 'Conversar',       icon: Bot },
+      { href: '/minha-jornada', label: 'Minha Jornada',   icon: RefreshCw },
     ],
   },
   {
     group: 'Consultar',
     items: [
       { href: '/historico',     label: 'Timeline',    icon: Clock },
-      { href: '/centro-decisao', label: 'Decisões',    icon: TrendingUp },
-      { href: '/conhecimento',  label: 'Conhecimento', icon: Sparkles },
+      { href: '/centro-decisao', label: 'Decisões',    icon: Sparkles },
+      { href: '/conhecimento',  label: 'Conhecimento', icon: RefreshCw },
       { href: '/financeiro',    label: 'Caixa',        icon: DollarSign },
       { href: '/clientes',      label: 'Pessoas',      icon: UserCheck },
     ],
@@ -31,7 +32,7 @@ const navItems = [
   {
     group: 'Aprender',
     items: [
-      { href: '/aprendizados', label: 'Aprendizados', icon: RefreshCw },
+      { href: '/aprendizados', label: 'Aprendizados', icon: Clock },
       { href: '/assistente',   label: 'Assistente',   icon: Bot },
     ],
   },
@@ -44,8 +45,9 @@ const navItems = [
 ]
 
 const MODULO_MAP: Record<string, string> = {
-  '/atendimento': 'atendimento',
   '/dashboard': 'inicio',
+  '/conversa': 'conversa',
+  '/minha-jornada': 'minha-jornada',
   '/historico': 'historico',
   '/centro-decisao': 'centro-decisao',
   '/conhecimento': 'conhecimento',

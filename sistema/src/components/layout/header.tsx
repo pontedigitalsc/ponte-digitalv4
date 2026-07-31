@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Bell, Search, Sun, Moon, LogOut, User, Settings, ChevronDown } from 'lucide-react'
+import { Bell, Moon, Sun, LogOut, User, Settings } from 'lucide-react'
 import { DropdownMenu } from '@/components/shared/dropdown-menu'
 import { useTheme } from 'next-themes'
 import { Avatar } from '@/components/ui/avatar'
@@ -26,27 +26,13 @@ export function Header({ usuario, titulo }: HeaderProps) {
 
   return (
     <header className="flex h-14 items-center justify-between border-b bg-card px-4 lg:px-6">
-      {/* Left: Page title */}
       <div className="flex items-center gap-3">
         {titulo && (
           <h1 className="text-base font-semibold text-foreground">{titulo}</h1>
         )}
       </div>
 
-      {/* Right: Actions + User */}
       <div className="flex items-center gap-1">
-        {/* Search */}
-        <Button variant="ghost" size="icon" aria-label="Buscar">
-          <Search className="h-4 w-4" />
-        </Button>
-
-        {/* Notifications */}
-        <Button variant="ghost" size="icon" aria-label="Notificações" className="relative">
-          <Bell className="h-4 w-4" />
-          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-primary" />
-        </Button>
-
-        {/* Theme toggle */}
         <Button
           variant="ghost"
           size="icon"
@@ -57,10 +43,8 @@ export function Header({ usuario, titulo }: HeaderProps) {
           <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" />
         </Button>
 
-        {/* Divider */}
-        <div className="mx-2 h-6 w-px bg-border" />
+        <div className="mx-1 h-6 w-px bg-border" />
 
-        {/* User menu */}
         {usuario && (
           <DropdownMenu
             width="w-48"
@@ -71,7 +55,6 @@ export function Header({ usuario, titulo }: HeaderProps) {
                   <p className="text-xs font-medium leading-tight">{usuario.nome}</p>
                   <p className="text-[10px] text-muted-foreground leading-tight">{usuario.cargo ?? 'Membro'}</p>
                 </div>
-                <ChevronDown className="h-3 w-3 text-muted-foreground" />
               </div>
             }
             items={[
