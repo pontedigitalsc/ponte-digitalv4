@@ -16,13 +16,13 @@ export default function LandingPage() {
           </p>
         </div>
 
-        {/* Proposta — dor invisível do empresário */}
+        {/* Proposta — FASE 1: dor do empresário */}
         <div className="space-y-6">
           <h1 className="text-2xl font-bold tracking-tight leading-snug">
-            O peso invisível de administrar uma empresa
+            Administrar uma empresa significa tomar centenas de decisões todos os dias.
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
-            Você toma centenas de decisões carregando dúvidas que ninguém vê. Mas toda empresa deixa sinais. A Ponte ajuda você a enxergar esses sinais.
+            Mas quase ninguém tem um lugar para pensar sobre essas decisões. A Ponte é esse lugar.
           </p>
         </div>
 

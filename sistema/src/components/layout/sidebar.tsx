@@ -14,9 +14,9 @@ const navItems = [
   {
     group: 'Sua empresa',
     items: [
-      { href: '/dashboard',     label: 'Como está hoje?', icon: LayoutDashboard },
-      { href: '/conversa',       label: 'Conversar',       icon: Bot },
-      { href: '/minha-jornada', label: 'Minha Jornada',   icon: RefreshCw },
+      { href: '/minha-empresa-hoje', label: 'Minha empresa',  icon: LayoutDashboard },
+      { href: '/conversa',           label: 'Conversar',      icon: Bot },
+      { href: '/minha-jornada',      label: 'Minha Jornada',  icon: RefreshCw },
     ],
   },
   {
@@ -45,6 +45,7 @@ const navItems = [
 ]
 
 const MODULO_MAP: Record<string, string> = {
+  '/minha-empresa-hoje': 'inicio',
   '/dashboard': 'inicio',
   '/conversa': 'conversa',
   '/minha-jornada': 'minha-jornada',
@@ -159,6 +160,34 @@ export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digi
           </div>
         ))}
       </nav>
+
+      {/* Fundador — aparece dentro da conta, não como venda externa (FASE 8) */}
+      {!collapsed && (
+        <div className="border-t px-2 py-3">
+          <Link
+            href="/conversa"
+            className="flex items-center gap-3 rounded-lg px-2 py-2 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+          >
+            <svg className="h-3.5 w-3.5 shrink-0 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            <span>Fundador — faça parte da construção</span>
+          </Link>
+        </div>
+      )}
+      {collapsed && (
+        <div className="border-t p-2">
+          <Link
+            href="/conversa"
+            className="flex items-center justify-center rounded-lg p-2 text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+            title="Fundador"
+          >
+            <svg className="h-4 w-4 shrink-0 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          </Link>
+        </div>
+      )}
 
       {/* Collapse toggle (when collapsed) */}
       {collapsed && onToggle && (

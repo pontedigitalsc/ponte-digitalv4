@@ -47,7 +47,7 @@ export default function CriarContaPage() {
         throw new Error(err.error ?? 'Erro ao criar conta')
       }
 
-      router.push('/dashboard')
+      router.push('/minha-empresa-hoje')
     } catch (err) {
       setErro(err instanceof Error ? err.message : 'Erro ao criar conta')
       setEnviando(false)

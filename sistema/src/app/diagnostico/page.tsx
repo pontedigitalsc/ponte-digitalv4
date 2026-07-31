@@ -20,8 +20,8 @@ const PERGUNTAS_ABERTAS = [
 ]
 
 function gerarApoiadorId(): string {
-  const num = Math.floor(100000 + Math.random() * 900000)
-  return `AP-${num}`
+  const num = Math.floor(1 + Math.random() * 999999)
+  return `AP-#${String(num).padStart(6, '0')}`
 }
 
 function gerarRevelacao(respostas: Record<string, string>): { forca: string; atencao: string; oportunidade: string } {
