@@ -21,7 +21,7 @@ const PERGUNTAS_ABERTAS = [
 
 function gerarApoiadorId(): string {
   const num = Math.floor(1 + Math.random() * 999999)
-  return `AP-#${String(num).padStart(6, '0')}`
+  return `#${String(num).padStart(6, '0')}`
 }
 
 function gerarRevelacao(respostas: Record<string, string>): { forca: string; atencao: string; oportunidade: string } {
@@ -127,10 +127,20 @@ export default function DiagnosticoPage() {
           </div>
 
           {/* Apoiador */}
-          <div className="text-center border-2 border-dashed border-primary/20 rounded-xl bg-card p-4 space-y-1">
+          <div className="text-center border-2 border-dashed border-primary/20 rounded-xl bg-card p-4 space-y-2">
             <p className="text-xs text-muted-foreground">Você é o</p>
-            <p className="text-xl font-bold tracking-widest text-primary">Apoiador {apoiadorId}</p>
+            <p className="text-2xl font-bold tracking-widest text-primary">Apoiador {apoiadorId}</p>
             <p className="text-[10px] text-muted-foreground">Você esteve aqui quando a Ponte estava sendo construída.</p>
+          </div>
+
+          {/* FASE 5 — por que criar conta */}
+          <div className="rounded-xl border bg-card p-5 space-y-3">
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Esse é apenas o primeiro retrato. Conforme a Ponte conhece sua empresa, ela consegue enxergar padrões que uma conversa única não revela.
+            </p>
+            <p className="text-sm font-medium">
+              Criar conta significa continuar construindo a história da sua empresa.
+            </p>
           </div>
 
           {/* 3 caminhos */}

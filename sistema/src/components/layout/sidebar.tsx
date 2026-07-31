@@ -165,7 +165,7 @@ export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digi
       {!collapsed && (
         <div className="border-t px-2 py-3">
           <Link
-            href="/conversa"
+            href="/fundador"
             className="flex items-center gap-3 rounded-lg px-2 py-2 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
           >
             <svg className="h-3.5 w-3.5 shrink-0 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -178,7 +178,7 @@ export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digi
       {collapsed && (
         <div className="border-t p-2">
           <Link
-            href="/conversa"
+            href="/fundador"
             className="flex items-center justify-center rounded-lg p-2 text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
             title="Fundador"
           >
