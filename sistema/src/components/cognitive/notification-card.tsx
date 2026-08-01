@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle, Badge } from '@/components/ui
 import { cn } from '@/lib/utils'
 import { AlertCircle, CheckCircle2, TrendingUp, Bell, AlertTriangle } from 'lucide-react'
 import type { CognitiveNotification } from '@/engine'
+import { ORIGEM_AMIGAVEL } from '@/constants'
 
 const iconePorCategoria: Record<string, React.ReactNode> = {
   decisao: <CheckCircle2 className="h-4 w-4 text-emerald-500" />,
@@ -9,6 +10,14 @@ const iconePorCategoria: Record<string, React.ReactNode> = {
   insight: <CheckCircle2 className="h-4 w-4 text-blue-500" />,
   evolucao: <TrendingUp className="h-4 w-4 text-purple-500" />,
   acao: <Bell className="h-4 w-4 text-amber-500" />,
+}
+
+const categoriaLabel: Record<string, string> = {
+  decisao: 'Decisão',
+  alerta: 'Alerta',
+  insight: 'Descoberta',
+  evolucao: 'Evolução',
+  acao: 'Ação',
 }
 
 const corPrioridade: Record<string, string> = {
@@ -23,7 +32,14 @@ const variantBadge: Record<string, 'destructive' | 'warning' | 'default'> = {
   informativa: 'default',
 }
 
+const prioridadeLabel: Record<string, string> = {
+  urgente: 'Agora',
+  importante: 'Importante',
+  informativa: 'Para saber',
+}
+
 function NotificationItem({ notification }: { notification: CognitiveNotification }) {
+  const origemLabel = ORIGEM_AMIGAVEL[notification.origem] ?? notification.origem
   return (
     <div className={cn('flex items-start gap-3 border-l-4 p-3 rounded-r-lg bg-muted/30', corPrioridade[notification.prioridade] ?? 'border-l-muted')}>
       <span className="mt-0.5 shrink-0 text-muted-foreground">
@@ -32,10 +48,10 @@ function NotificationItem({ notification }: { notification: CognitiveNotificatio
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium">{notification.titulo}</p>
         <p className="text-xs text-muted-foreground mt-0.5">{notification.descricao}</p>
-        <p className="text-xs text-muted-foreground mt-0.5">{notification.categoria} &middot; {notification.origem}</p>
+        <p className="text-xs text-muted-foreground mt-0.5">{categoriaLabel[notification.categoria] ?? notification.categoria} &middot; {origemLabel}</p>
       </div>
       <Badge variant={variantBadge[notification.prioridade]} className="shrink-0">
-        {notification.prioridade}
+        {prioridadeLabel[notification.prioridade] ?? notification.prioridade}
       </Badge>
     </div>
   )

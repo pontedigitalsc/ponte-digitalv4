@@ -10,9 +10,9 @@ export default async function AprendizadosPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="space-y-1">
-        <h2 className="text-xl font-semibold tracking-tight">Aprendizados</h2>
+        <h2 className="text-xl font-semibold tracking-tight">O que fomos descobrindo juntos</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Ensine preferências, regras e valores da sua empresa. Cada resposta vira conhecimento para a plataforma.
+          Conte as preferências, regras e valores da sua empresa. Cada resposta me ajuda a entender melhor seu negócio.
         </p>
       </div>
       <ExperienceRenderer

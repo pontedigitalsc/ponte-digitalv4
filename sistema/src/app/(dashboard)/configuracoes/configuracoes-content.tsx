@@ -17,7 +17,7 @@ const ABAS = [
   { id: 'empresa'    as Aba, label: 'Empresa',    icone: Building2 },
   { id: 'perfil'     as Aba, label: 'Meu perfil', icone: User      },
   { id: 'aparencia'  as Aba, label: 'Aparência',  icone: Palette   },
-  { id: 'cognitivo'  as Aba, label: 'Cognitivo',  icone: Settings },
+  { id: 'cognitivo'  as Aba, label: 'Aprendizado', icone: Settings },
 ]
 
 interface DadosConfig {
@@ -123,7 +123,7 @@ export default function ConfiguracoesContent({ experience }: Props) {
             <Card>
               <CardHeader>
                 <CardTitle>Dados da empresa</CardTitle>
-                <CardDescription>Informações exibidas no sistema e nos documentos.</CardDescription>
+                <CardDescription>Informações que aparecem na sua conta.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-1.5">
@@ -135,13 +135,13 @@ export default function ConfiguracoesContent({ experience }: Props) {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label>URL do logo</Label>
+                  <Label>Endereço da imagem do logo</Label>
                   <Input
                     value={dados.empresa.logo}
                     onChange={(e) => setDados((prev) => ({ ...prev, empresa: { ...prev.empresa, logo: e.target.value } }))}
                     placeholder="https://..."
                   />
-                  <p className="text-xs text-muted-foreground">URL pública de uma imagem (PNG ou SVG recomendado).</p>
+                  <p className="text-xs text-muted-foreground">Cole o endereço de uma imagem (PNG ou SVG).</p>
                 </div>
               </CardContent>
             </Card>
@@ -151,7 +151,7 @@ export default function ConfiguracoesContent({ experience }: Props) {
             <Card>
               <CardHeader>
                 <CardTitle>Meu perfil</CardTitle>
-                <CardDescription>Suas informações pessoais no sistema.</CardDescription>
+                <CardDescription>Suas informações na sua conta.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-1.5">
@@ -174,7 +174,7 @@ export default function ConfiguracoesContent({ experience }: Props) {
                 <div className="space-y-1.5">
                   <Label>E-mail</Label>
                   <Input value={dados.perfil.email} disabled className="opacity-60" />
-                  <p className="text-xs text-muted-foreground">O e-mail é gerenciado pelo Supabase Auth e não pode ser alterado aqui.</p>
+                  <p className="text-xs text-muted-foreground">O e-mail não pode ser alterado por aqui.</p>
                 </div>
               </CardContent>
             </Card>
@@ -184,7 +184,7 @@ export default function ConfiguracoesContent({ experience }: Props) {
             <Card>
               <CardHeader>
                 <CardTitle>Aparência</CardTitle>
-                <CardDescription>Personalize a interface do sistema.</CardDescription>
+                <CardDescription>Personalize a aparência.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -192,7 +192,7 @@ export default function ConfiguracoesContent({ experience }: Props) {
                   <div className="grid grid-cols-3 gap-2">
                     {[{ valor: 'light', label: 'Claro',    preview: 'bg-white border-2' },
                       { valor: 'dark',  label: 'Escuro',   preview: 'bg-zinc-900 border-2' },
-                      { valor: 'system',label: 'Sistema',  preview: 'bg-gradient-to-br from-white to-zinc-900 border-2' },
+                      { valor: 'system',label: 'Automático',  preview: 'bg-gradient-to-br from-white to-zinc-900 border-2' },
                     ].map((t) => (
                       <button
                         key={t.valor}
@@ -207,7 +207,7 @@ export default function ConfiguracoesContent({ experience }: Props) {
                       </button>
                     ))}
                   </div>
-                  <p className="text-xs text-muted-foreground">Use o botão de tema no header para trocar rapidamente.</p>
+                  <p className="text-xs text-muted-foreground">Use o botão de tema no topo da página para trocar rapidamente.</p>
                 </div>
 
                 <Separator />
@@ -215,10 +215,9 @@ export default function ConfiguracoesContent({ experience }: Props) {
                 <div className="rounded-lg bg-muted/40 p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Shield className="h-4 w-4 text-muted-foreground" />
-                    <p className="text-sm font-medium">Versão do sistema</p>
+                    <p className="text-sm font-medium">Sobre a Ponte</p>
                   </div>
-                  <p className="text-xs text-muted-foreground">Ponte Digital v1.0.0 — MVP</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">Next.js 16 · Prisma · Supabase · TypeScript</p>
+                  <p className="text-xs text-muted-foreground">Cada conversa ajuda a Ponte a entender melhor sua empresa.</p>
                 </div>
               </CardContent>
             </Card>
@@ -228,7 +227,7 @@ export default function ConfiguracoesContent({ experience }: Props) {
             <Card>
               <CardHeader>
                 <CardTitle>Aprendizado da empresa</CardTitle>
-                <CardDescription>Configure os ciclos e frequências de aprendizado da sua empresa.</CardDescription>
+                <CardDescription>Acompanhe o ritmo com que a Ponte entende sua empresa.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {cicloLoading ? (
@@ -237,7 +236,7 @@ export default function ConfiguracoesContent({ experience }: Props) {
                   </div>
                 ) : ciclos.length === 0 ? (
                   <p className="text-sm text-muted-foreground py-4 text-center">
-                    Nenhum ciclo cognitivo configurado ainda. Os ciclos serão criados automaticamente com o uso do sistema.
+                    Ainda estou começando a acompanhar os aprendizados da sua empresa. Isso acontece naturalmente conforme usamos a Ponte.
                   </p>
                 ) : (
                   <div className="space-y-3">
@@ -250,8 +249,8 @@ export default function ConfiguracoesContent({ experience }: Props) {
                           </p>
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
                             <span className={cn('inline-block h-1.5 w-1.5 rounded-full', ciclo.saudavel ? 'bg-emerald-500' : 'bg-amber-500')} />
-                            {ciclo.saudavel ? 'Saudável' : 'Atenção'}
-                            {ciclo.ultimaExecucao && <> · Última: {new Date(ciclo.ultimaExecucao).toLocaleDateString()}</>}
+                            {ciclo.saudavel ? 'Em dia' : 'Precisamos conversar'}
+                            {ciclo.ultimaExecucao && <> · Última vez: {new Date(ciclo.ultimaExecucao).toLocaleDateString()}</>}
                           </div>
                         </div>
                         <button
@@ -268,7 +267,7 @@ export default function ConfiguracoesContent({ experience }: Props) {
                             ciclo.ativo ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
                           )}
                         >
-                          {ciclo.ativo ? 'Ativo' : 'Inativo'}
+                          {ciclo.ativo ? 'Ligado' : 'Desligado'}
                         </button>
                       </div>
                     ))}
@@ -282,10 +281,10 @@ export default function ConfiguracoesContent({ experience }: Props) {
             <div className="flex items-center gap-3 mt-4">
               <Button onClick={salvar} disabled={salvando}>
                 {salvando ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                {salvando ? 'Salvando...' : 'Salvar alterações'}
+                {salvando ? 'Guardando...' : 'Guardar alterações'}
               </Button>
               {sucesso && (
-                <span className="text-sm text-emerald-600 font-medium">✓ Salvo com sucesso</span>
+                <span className="text-sm text-emerald-600 font-medium">✓ Guardado</span>
               )}
             </div>
           )}

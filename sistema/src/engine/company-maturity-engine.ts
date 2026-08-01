@@ -60,7 +60,7 @@ export async function calcularMaturidade(empresaId: string, estado: EstadoCognit
 
   if (scoreMedio >= 70) {
     score += 15
-    fatores.push(`Score médio de confiança: ${scoreMedio}`)
+    fatores.push(`Confiança média: ${scoreMedio}`)
   } else if (scoreMedio >= 40) {
     score += 8
     fatores.push('Confiança média dos conhecimentos')

@@ -9,6 +9,13 @@ const COR_PRIORIDADE: Record<string, string> = {
   BAIXA: 'secondary',
 }
 
+const NIVEL_LABEL: Record<string, string> = {
+  URGENTE: 'Agora',
+  ALTA: 'Em breve',
+  MEDIA: 'Quando puder',
+  BAIXA: 'Vale acompanhar',
+}
+
 function BarraIndice({ value, label }: { value: number; label: string }) {
   const cor = value >= 70 ? 'bg-destructive' : value >= 45 ? 'bg-amber-500' : value >= 20 ? 'bg-blue-500' : 'bg-gray-300'
   return (
@@ -43,9 +50,9 @@ const grupos = {
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="space-y-1">
-        <h2 className="text-xl font-semibold tracking-tight">Centro de Decisão</h2>
+        <h2 className="text-xl font-semibold tracking-tight">O que merece sua atenção hoje</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Decisões recomendadas para sua empresa com base no que conhecemos do seu negócio.
+          Reuni aqui o que considero mais importante para sua empresa agora, com base em tudo que conhecemos do seu negócio.
         </p>
       </div>
 
@@ -54,7 +61,7 @@ const grupos = {
           <Card key={nivel}>
             <CardHeader className="p-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm">{nivel}</CardTitle>
+                <CardTitle className="text-sm">{NIVEL_LABEL[nivel] ?? nivel}</CardTitle>
                 <Badge variant={COR_PRIORIDADE[nivel] as never}>{lista.length}</Badge>
               </div>
             </CardHeader>
@@ -66,7 +73,7 @@ const grupos = {
         {Object.entries(grupos).map(([nivel, lista]) =>
           lista.length > 0 ? (
             <div key={nivel} className="space-y-3">
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{nivel} ({lista.length})</h3>
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{NIVEL_LABEL[nivel] ?? nivel} ({lista.length})</h3>
               {lista.map((d) => (
                 <Card key={d.id}>
                   <CardHeader className="pb-2">
@@ -75,21 +82,14 @@ const grupos = {
                         <CardTitle className="text-base">{d.titulo}</CardTitle>
                         <p className="text-sm text-muted-foreground">{d.descricao}</p>
                       </div>
-                      <Badge variant={COR_PRIORIDADE[nivel] as never}>{nivel}</Badge>
+                      <Badge variant={COR_PRIORIDADE[nivel] as never}>{NIVEL_LABEL[nivel] ?? nivel}</Badge>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                      <span>Categoria: {d.categoria}</span>
-                      <span>Tipo: {d.tipoAcao}</span>
-                      <span>Impacto: {d.impacto}</span>
-                      <span>Urgência: {d.urgencia}</span>
-                      <span>Dificuldade: {d.dificuldade}</span>
-                    </div>
                     <div className="grid grid-cols-3 gap-3">
-                      <BarraIndice value={d.prioridade * 20} label="Prioridade" />
-                      <BarraIndice value={d.trustScore?.scoreAtual ?? 50} label="Confiança" />
-                      <BarraIndice value={d.relevancia} label="Relevância" />
+                      <BarraIndice value={d.prioridade * 20} label="Importância" />
+                      <BarraIndice value={d.trustScore?.scoreAtual ?? 50} label="Nossa confiança" />
+                      <BarraIndice value={d.relevancia} label="Atenção" />
                     </div>
                     <p className="text-sm text-muted-foreground">{d.motivo}</p>
                     {d.evidenciasChave.length > 0 && (
@@ -108,7 +108,7 @@ const grupos = {
         {decisoesFiltradas.length === 0 && (
           <Card>
             <CardContent className="p-8 text-center text-sm text-muted-foreground">
-              Nenhuma decisão recomendada no momento. Continue usando a Ponte Digital para receber novas recomendações.
+              Por enquanto, nada precisa de atenção imediata. Quando algo surgir, vou trazer aqui.
             </CardContent>
           </Card>
         )}

@@ -51,7 +51,7 @@ export async function gerarMilestones(
 
   if (totalEvidencias >= 100 && !eventosExistentes.has('PRIMEIRO_RETORNO')) {
     milestones.push({
-      titulo: '100 evidências registradas',
+      titulo: '100 descobertas guardadas',
       descricao: `Sua empresa já gerou ${totalEvidencias} registros importantes — um marco de aprendizado.`,
       categoria: 'conhecimento',
       data: hoje,

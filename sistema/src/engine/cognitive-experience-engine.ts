@@ -1390,7 +1390,7 @@ async function construirLearningExperience(
     ))
   } else {
     insights.push(construirInsight(
-      'evolucao', `${aprendizados.length} aprendizado(s) registrado(s)`,
+      'evolucao', `${aprendizados.length} descoberta${aprendizados.length !== 1 ? 's' : ''}`,
       `Distribuídos em ${contagem.length} categoria(s).`,
       0.7, 'GESTAO', 'Learning Engine',
     ))

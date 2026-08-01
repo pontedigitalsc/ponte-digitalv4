@@ -41,11 +41,10 @@ export function IndiceSaudeCard({ healthScore }: HealthScoreCardProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-center gap-3">
-          <span className={cn('text-3xl font-bold', corScore(healthScore.score))}>
-            {healthScore.score}
+          <span className={cn('text-2xl font-bold', corScore(healthScore.score))}>
+            {healthScore.score >= 70 ? 'Boa' : healthScore.score >= 40 ? 'Em construção' : 'Precisa de cuidado'}
           </span>
-          <span className="text-sm text-muted-foreground">/ 100</span>
-          <div className="flex-1 h-2 rounded-full bg-muted ml-2">
+          <div className="flex-1 h-2 rounded-full bg-muted">
             <div
               className={cn('h-2 rounded-full transition-all', bgBarra(healthScore.score))}
               style={{ width: `${healthScore.score}%` }}
@@ -73,7 +72,7 @@ export function IndiceSaudeCard({ healthScore }: HealthScoreCardProps) {
         {healthScore.pontosFortes.length > 0 && (
           <div>
             <p className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-1">
-              <CheckCircle2 className="h-3 w-3 text-emerald-500" /> Pontos fortes
+              <CheckCircle2 className="h-3 w-3 text-emerald-500" /> O que está bem
             </p>
             <ul className="space-y-0.5">
               {healthScore.pontosFortes.map((p, i) => (
@@ -89,7 +88,7 @@ export function IndiceSaudeCard({ healthScore }: HealthScoreCardProps) {
         {healthScore.pontosFracos.length > 0 && (
           <div>
             <p className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-1">
-              <AlertTriangle className="h-3 w-3 text-amber-500" /> Pontos de atenção
+              <AlertTriangle className="h-3 w-3 text-amber-500" /> O que merece cuidado
             </p>
             <ul className="space-y-0.5">
               {healthScore.pontosFracos.map((p, i) => (
@@ -105,7 +104,7 @@ export function IndiceSaudeCard({ healthScore }: HealthScoreCardProps) {
         {healthScore.recomendacoes.length > 0 && (
           <div>
             <p className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-1">
-              <Sparkles className="h-3 w-3 text-blue-500" /> Recomendações
+              <Sparkles className="h-3 w-3 text-blue-500" /> Sugestões
             </p>
             <ul className="space-y-0.5">
               {healthScore.recomendacoes.map((r, i) => (

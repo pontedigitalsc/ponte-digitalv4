@@ -73,7 +73,7 @@ export default function ConversaPage() {
       setProgresso(data.progresso)
       setCarregando(false)
     } catch {
-      setErro('Não consegui conectar. Vamos tentar de novo?')
+      setErro('Não consegui conectar agora. Vamos tentar de novo?')
       setCarregando(false)
     }
   }, [recuperarInterpretacoes])
@@ -111,7 +111,7 @@ export default function ConversaPage() {
         avancarDaReacao(data.concluida, data.proximaPergunta, data.progresso)
       }, 3000)
     } catch {
-      setErro('Não foi dessa vez. Pode tentar de novo?')
+      setErro('Não consegui ouvir sua resposta agora. Pode tentar de novo?')
       setEnviando(false)
     }
   }
@@ -148,7 +148,7 @@ export default function ConversaPage() {
       if (data.resumoNatural) setResumoNatural(data.resumoNatural)
       setConcluida(true)
     } catch {
-      setErro('Não consegui finalizar. Pode tentar de novo?')
+      setErro('Não consegui guardar essa conversa agora. Pode tentar de novo?')
     }
   }
 
@@ -242,7 +242,6 @@ export default function ConversaPage() {
               onChange={setResposta}
               onEnviar={enviarResposta}
               enviando={enviando}
-              contexto={perguntaAtual.categoria}
             />
           ) : (
             <p className="text-center text-muted-foreground">Só um instante...</p>
@@ -274,7 +273,7 @@ export default function ConversaPage() {
                 href="/criar-conta"
                 className="block rounded-lg border border-primary/30 bg-primary/5 px-6 py-3 text-sm text-primary hover:bg-primary/10 transition-colors"
               >
-                Se você acredita que acompanhar sua empresa dessa forma pode fazer diferença ao longo dos próximos meses, existe uma maneira de construirmos essa jornada juntos.
+                Quero que a Ponte continue acompanhando minha empresa
               </Link>
             </div>
             <p className="text-xs text-muted-foreground">

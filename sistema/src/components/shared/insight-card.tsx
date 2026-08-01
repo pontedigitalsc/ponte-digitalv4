@@ -1,6 +1,7 @@
 import { Sparkles, AlertTriangle, TrendingUp, CheckSquare, Bot, Clock } from 'lucide-react'
 import type { Insight } from '@/engine'
 import { cn } from '@/lib/utils'
+import { ORIGEM_AMIGAVEL, PRIORIDADE_AMIGAVEL, CATEGORIA_EVIDENCIA } from '@/constants'
 
 const ICONE_POR_TIPO: Record<string, typeof Sparkles> = {
   descoberta:    Bot,
@@ -22,6 +23,9 @@ const COR_POR_PRIORIDADE = {
 export function InsightCard({ insight }: { insight: Insight }) {
   const Icon = ICONE_POR_TIPO[insight.tipo] ?? Sparkles
   const bordaCor = COR_POR_PRIORIDADE[insight.prioridade]
+  const origemLabel = ORIGEM_AMIGAVEL[insight.origem] ?? insight.origem
+  const prioridadeLabel = PRIORIDADE_AMIGAVEL[insight.prioridade] ?? insight.prioridade
+  const categoriaLabel = CATEGORIA_EVIDENCIA[insight.categoria]?.label ?? insight.categoria
 
   return (
     <div className={cn('rounded-lg border-l-4 px-5 py-4', bordaCor)}>
@@ -38,16 +42,14 @@ export function InsightCard({ insight }: { insight: Insight }) {
               insight.prioridade === 'media' && 'bg-blue-100 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400',
               insight.prioridade === 'baixa' && 'bg-muted text-muted-foreground',
             )}>
-              {insight.prioridade}
+              {prioridadeLabel}
             </span>
           </div>
           <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{insight.explicacao}</p>
           <div className="flex items-center gap-3 mt-2 text-[10px] text-muted-foreground">
-            <span>{insight.origem}</span>
+            <span>{origemLabel}</span>
             <span>·</span>
-            <span>Confiança: {insight.confianca}%</span>
-            <span>·</span>
-            <span>{insight.categoria}</span>
+            <span>{categoriaLabel}</span>
           </div>
           {insight.acao && (
             <a

@@ -45,7 +45,7 @@ export default function CriarContaPage() {
 
       if (!res.ok) {
         const err = await res.json()
-        throw new Error(err.error ?? 'Erro ao criar conta')
+        throw new Error(err.error ?? 'Não consegui guardar isso agora')
       }
 
       // Auto-login: a conta foi criada no Supabase, agora inicia a sessão
@@ -58,7 +58,7 @@ export default function CriarContaPage() {
 
       router.push('/minha-empresa-hoje')
     } catch (err) {
-      setErro(err instanceof Error ? err.message : 'Erro ao criar conta')
+      setErro(err instanceof Error ? err.message : 'Não consegui guardar isso agora')
       setEnviando(false)
     }
   }
@@ -77,9 +77,9 @@ export default function CriarContaPage() {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h1 className="text-xl font-semibold">Salvar minha Identidade Digital</h1>
+        <h1 className="text-xl font-semibold">Guardar esta caminhada</h1>
         <p className="text-sm text-muted-foreground">
-          Crie sua conta para preservar tudo que conversamos. Sua Identidade Digital ficará guardada e vai evoluir com você.
+          Crie sua conta para preservar tudo que conversamos. Tudo ficará guardado e vai evoluir com você.
         </p>
       </div>
 
@@ -157,7 +157,7 @@ export default function CriarContaPage() {
           disabled={enviando}
           className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-40"
         >
-          {enviando ? 'Criando conta...' : 'Salvar e acessar'}
+          {enviando ? 'Guardando...' : 'Guardar e acessar'}
         </button>
       </form>
     </div>

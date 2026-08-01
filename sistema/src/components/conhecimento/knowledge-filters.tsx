@@ -30,7 +30,7 @@ export function KnowledgeFilters({
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
           type="text"
-          placeholder="Buscar conhecimento..."
+          placeholder="Buscar na nossa conversa..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           className="w-full h-9 pl-8 pr-3 rounded-md border bg-background text-sm outline-none focus:ring-1 focus:ring-primary"
@@ -42,7 +42,7 @@ export function KnowledgeFilters({
           onChange={(e) => onCategoriaChange(e.target.value || null)}
           className="h-9 rounded-md border bg-background px-2.5 text-sm outline-none focus:ring-1 focus:ring-primary"
         >
-          <option value="">Todas categorias</option>
+          <option value="">Todas as áreas</option>
           {Object.entries(CATEGORIA_EVIDENCIA).map(([key, val]) => (
             <option key={key} value={key}>{val.label}</option>
           ))}
@@ -52,7 +52,7 @@ export function KnowledgeFilters({
           onChange={(e) => onStatusChange(e.target.value || null)}
           className="h-9 rounded-md border bg-background px-2.5 text-sm outline-none focus:ring-1 focus:ring-primary"
         >
-          <option value="">Todos status</option>
+          <option value="">Qualquer situação</option>
           {Object.entries(STATUS_CONHECIMENTO).map(([key, val]) => (
             <option key={key} value={key}>{val.label}</option>
           ))}

@@ -75,13 +75,13 @@ export const STATUS_IMPLANTACAO: Record<StatusImplantacao, { label: string; cor:
 }
 
 export const ETAPAS_PADRAO_IMPLANTACAO = [
-  'Kickoff com o cliente',
-  'Configuração inicial do sistema',
-  'Migração de dados',
-  'Treinamento da equipe',
+  'Primeira conversa com o cliente',
+  'Configuração inicial da Ponte',
+  'Acomodar os dados atuais',
+  'Apresentar para a equipe',
   'Período de testes',
-  'Go-live',
-  'Acompanhamento pós-implantação',
+  'Colocar no dia a dia',
+  'Acompanhamento depois disso',
 ]
 
 // ─── FINANCEIRO ───────────────────────────────────────────────────────────────
@@ -117,7 +117,7 @@ export const TIPO_HISTORICO: Record<TipoHistorico, { label: string; cor: string;
   WHATSAPP: { label: 'WhatsApp', cor: '#059669', bg: '#ECFDF5' },
   PROPOSTA: { label: 'Proposta', cor: '#DC2626', bg: '#FEF2F2' },
   CONTRATO: { label: 'Contrato', cor: '#059669', bg: '#ECFDF5' },
-  SISTEMA:  { label: 'Sistema',  cor: '#9CA3AF', bg: '#F9FAFB' },
+  SISTEMA:  { label: 'Ponte',  cor: '#9CA3AF', bg: '#F9FAFB' },
 }
 
 export const CATEGORIAS_DESPESA = [
@@ -142,16 +142,58 @@ export const CATEGORIA_EVIDENCIA: Record<string, { label: string; cor: string; b
 }
 
 export const ORIGEM_CONHECIMENTO: Record<string, { label: string }> = {
-  validacao_hipotese: { label: 'Validação de hipótese' },
-  conversa:           { label: 'Conversa' },
-  empresario:         { label: 'Empresário' },
-  equipe:             { label: 'Equipe' },
-  sistema:            { label: 'Sistema' },
+  validacao_hipotese: { label: 'Acompanhamento' },
+  conversa:           { label: 'Nossa conversa' },
+  empresario:         { label: 'Você' },
+  equipe:             { label: 'Sua equipe' },
+  sistema:            { label: 'Ponte' },
 }
 
 export const STATUS_CONHECIMENTO: Record<string, { label: string; cor: string; bg: string }> = {
   HIPOTESE:       { label: 'Hipótese',     cor: '#6B7280', bg: '#F3F4F6' },
-  EM_OBSERVACAO:  { label: 'Em observação', cor: '#2563EB', bg: '#EFF6FF' },
+  EM_OBSERVACAO:  { label: 'Em acompanhamento', cor: '#2563EB', bg: '#EFF6FF' },
   CONFIRMADO:     { label: 'Confirmado',   cor: '#059669', bg: '#ECFDF5' },
   DESCARTADO:     { label: 'Descartado',   cor: '#DC2626', bg: '#FEF2F2' },
+}
+
+// ─── LINGUAGEM AMIGÁVEL ──────────────────────────────────────────────────────
+
+// Origem exibida em cards de insight, notificações e linha do tempo.
+// Valores técnicos (Engine, SISTEMA etc.) são apresentados como "Ponte".
+export const ORIGEM_AMIGAVEL: Record<string, string> = {
+  SISTEMA: 'Ponte',
+  sistema: 'Ponte',
+  'Action Engine': 'Ponte',
+  'Decision Engine': 'Ponte',
+  'Feedback Engine': 'Ponte',
+  'Outcome Engine': 'Ponte',
+  'Activation Engine': 'Ponte',
+  'Journey Engine': 'Ponte',
+  'Knowledge Governance': 'Ponte',
+  'Learning Engine': 'Ponte',
+  'Context Engine': 'Ponte',
+  'Workflow Engine': 'Ponte',
+  'Brainstorm Engine': 'Ponte',
+  'Memory Engine': 'Ponte',
+  ANALISE_EVIDENCIAS: 'Ponte',
+  ACAO_USUARIO: 'Sua ação',
+  PRIMEIRA_CONVERSA: 'Nossa conversa',
+  'primeira-conversa': 'Nossa conversa',
+  CONVERSA: 'Nossa conversa',
+  conversa: 'Nossa conversa',
+  MANUAL: 'Registrado por você',
+  PERGUNTA: 'Pergunta rápida',
+  validacao_hipotese: 'Acompanhamento',
+  empresario: 'Você',
+  equipe: 'Sua equipe',
+}
+
+export const PRIORIDADE_AMIGAVEL: Record<string, string> = {
+  alta: 'Agora',
+  media: 'Em breve',
+  baixa: 'Quando puder',
+  URGENTE: 'Agora',
+  ALTA: 'Em breve',
+  MEDIA: 'Quando puder',
+  BAIXA: 'Vale acompanhar',
 }

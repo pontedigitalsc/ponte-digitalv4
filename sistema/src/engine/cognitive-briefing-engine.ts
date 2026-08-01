@@ -109,7 +109,7 @@ export function gerarBriefing(
   if (dados.topOutcomes && dados.topOutcomes.length > 0) {
     pontos.push({
       tipo: 'conquista',
-      mensagem: `${dados.topOutcomes.length} resultado(s) registrado(s): ${dados.topOutcomes[0].descricao}`,
+      mensagem: `${dados.topOutcomes.length} resultado(s): ${dados.topOutcomes[0].descricao}`,
       categoria: dados.topOutcomes[0].categoria,
     })
   }

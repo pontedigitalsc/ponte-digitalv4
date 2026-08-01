@@ -116,7 +116,7 @@ function construirEtapasJornada(workflow: CognitiveWorkflow, outcomes: OutcomeBa
   etapas.push({
     id: `jstep_aprender_${workflow.id}`,
     ordem: etapas.length + 1,
-    titulo: 'Aprendizado registrado',
+    titulo: 'Nova descoberta',
     descricao: 'A Ponte registra o que funcionou e fortalece o conhecimento',
     tipo: 'aprendizado',
     concluido: false,

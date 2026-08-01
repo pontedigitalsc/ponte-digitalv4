@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Ponte Digital',
     short_name: 'Ponte Digital',
-    description: 'Sistema de gestão inteligente para pequenas e médias empresas',
+    description: 'Um lugar para pensar sobre sua empresa',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',

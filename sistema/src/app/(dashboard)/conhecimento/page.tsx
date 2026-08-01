@@ -10,9 +10,9 @@ export default async function ConhecimentoPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="space-y-1">
-        <h2 className="text-xl font-semibold tracking-tight">Biblioteca de Conhecimento</h2>
+        <h2 className="text-xl font-semibold tracking-tight">O que estamos entendendo sobre sua empresa</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Todo conhecimento organizado da sua empresa em um só lugar. Informações confirmadas, suspeitas em observação e aprendizado acumulado.
+          Tudo que vamos descobrindo juntos, em um só lugar: o que já sabemos, o que ainda estamos acompanhando e o que aprendemos com você.
         </p>
       </div>
       <ExperienceRenderer

@@ -242,7 +242,7 @@ export function TransacaoList({
             <EstadoVazio
               icone={DollarSign}
               titulo="Nenhum lançamento por aqui ainda"
-              descricao="Registre sua primeira receita ou despesa para começar a acompanhar o dinheiro da empresa."
+              descricao="Anote sua primeira receita ou despesa para começar a acompanhar o dinheiro da empresa."
               acaoLabel="Nova receita"
               onAcao={() => abrirNova('RECEITA')}
               temFiltroAtivo={Boolean(busca || tipoFiltro !== 'TODOS' || statusFiltro !== 'TODOS')}

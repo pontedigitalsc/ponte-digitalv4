@@ -46,19 +46,19 @@ export function KnowledgeCard({ item }: KnowledgeCardProps) {
           <div className="border-t px-4 py-3 space-y-2 bg-muted/20">
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div>
-                <span className="text-muted-foreground">Criado em</span>
+                <span className="text-muted-foreground">Guardado em</span>
                 <p className="font-medium">{new Date(item.criadoEm).toLocaleDateString('pt-BR')}</p>
               </div>
               <div>
-                <span className="text-muted-foreground">Última validação</span>
+                <span className="text-muted-foreground">Última conversa</span>
                 <p className="font-medium">{item.ultimaValidacao ? new Date(item.ultimaValidacao).toLocaleDateString('pt-BR') : '—'}</p>
               </div>
               <div>
-                <span className="text-muted-foreground">Origem</span>
+                <span className="text-muted-foreground">Como apareceu</span>
                 <p className="font-medium">{origemLabel}</p>
               </div>
               <div>
-                <span className="text-muted-foreground">Confiança</span>
+                <span className="text-muted-foreground">Nossa confiança</span>
                 <div className="flex items-center gap-2 mt-1">
                   <div className="flex-1 h-1.5 rounded-full bg-muted">
                     <div className={`h-1.5 rounded-full ${barraCor}`} style={{ width: `${item.scoreConfianca}%` }} />

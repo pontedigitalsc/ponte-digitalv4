@@ -23,7 +23,7 @@ const TIPO_CONFIG: Record<string, { label: string; cor: string; bg: string }> = 
   WHATSAPP: { label: 'WhatsApp', cor: '#059669', bg: '#ECFDF5' },
   PROPOSTA: { label: 'Proposta', cor: '#DC2626', bg: '#FEF2F2' },
   CONTRATO: { label: 'Contrato', cor: '#059669', bg: '#ECFDF5' },
-  SISTEMA:  { label: 'Sistema',  cor: '#9CA3AF', bg: '#F9FAFB' },
+  SISTEMA:  { label: 'Ponte',  cor: '#9CA3AF', bg: '#F9FAFB' },
 }
 
 const TIPOS_MANUAIS = ['NOTA', 'LIGACAO', 'EMAIL', 'REUNIAO', 'WHATSAPP', 'PROPOSTA', 'CONTRATO']
@@ -111,26 +111,26 @@ export default function HistoricoContent({ experience }: Props) {
     <div className="space-y-5">
       <div className="flex justify-end">
         <Button size="sm" onClick={() => setModalOpen(true)}>
-          <Plus className="h-4 w-4" />Registrar
+          <Plus className="h-4 w-4" />Anotar algo
         </Button>
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
         <div className="relative flex-1 max-w-xs">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-          <Input placeholder="Buscar no histórico..." value={busca} onChange={(e) => setBusca(e.target.value)} className="pl-8 h-8 text-xs" />
+          <Input placeholder="Buscar na nossa caminhada..." value={busca} onChange={(e) => setBusca(e.target.value)} className="pl-8 h-8 text-xs" />
         </div>
         <Select value={tipoFiltro} onValueChange={(v) => { setTipoFiltro(v as TipoHistorico | 'TODOS'); setPage(1) }}>
           <SelectTrigger className="h-8 w-36 text-xs"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="TODOS">Todos os tipos</SelectItem>
+            <SelectItem value="TODOS">Tudo</SelectItem>
             {Object.entries(TIPO_CONFIG).map(([k, t]) => <SelectItem key={k} value={k}>{t.label}</SelectItem>)}
           </SelectContent>
         </Select>
         <button onClick={carregar} disabled={loading} className="flex h-8 w-8 items-center justify-center rounded-lg border hover:bg-accent transition-colors">
           <RefreshCw className={cn('h-3.5 w-3.5 text-muted-foreground', loading && 'animate-spin')} />
         </button>
-          {total > 0 && <span className="text-xs text-muted-foreground ml-auto"><strong className="text-foreground">{total}</strong> registros</span>}
+          {total > 0 && <span className="text-xs text-muted-foreground ml-auto"><strong className="text-foreground">{total}</strong> anotações</span>}
       </div>
 
       {error && (
@@ -153,10 +153,10 @@ export default function HistoricoContent({ experience }: Props) {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 via-primary/5 to-transparent mb-4 ring-1 ring-primary/10">
             <Clock className="h-5 w-5 text-primary" />
           </div>
-          <p className="text-sm font-semibold text-foreground">Ainda não há histórico de atividades</p>
+          <p className="text-sm font-semibold text-foreground">Ainda não temos o que mostrar aqui</p>
           <p className="text-xs text-muted-foreground mt-2 max-w-sm leading-relaxed">
             Conforme você usar a Ponte Digital, cada interação,
-            descoberta e decisão será registrada automaticamente,
+            descoberta e decisão será guardada automaticamente,
             construindo uma memória viva da evolução da sua empresa.
           </p>
         </div>
@@ -215,8 +215,8 @@ export default function HistoricoContent({ experience }: Props) {
       <Dialog open={modalOpen} onOpenChange={(v) => !v && setModalOpen(false)}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Registrar atividade</DialogTitle>
-            <DialogDescription>Registre uma interação, nota ou evento manualmente.</DialogDescription>
+            <DialogTitle>Anotar atividade</DialogTitle>
+            <DialogDescription>Conte uma interação, nota ou o que aconteceu.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-1.5">
@@ -238,7 +238,7 @@ export default function HistoricoContent({ experience }: Props) {
             </div>
             <div className="flex justify-end gap-2 pt-1">
               <Button variant="outline" onClick={() => setModalOpen(false)} disabled={salvando}>Cancelar</Button>
-              <Button onClick={handleSalvar} disabled={salvando || !novoTitulo.trim()}>{salvando ? 'Salvando...' : 'Registrar'}</Button>
+              <Button onClick={handleSalvar} disabled={salvando || !novoTitulo.trim()}>{salvando ? 'Guardando...' : 'Guardar'}</Button>
             </div>
           </div>
         </DialogContent>

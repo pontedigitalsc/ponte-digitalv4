@@ -104,7 +104,7 @@ export function ExperienceRenderer({ narrativa, blocks, actions, workflows, jour
       {actions && actions.length > 0 && (
         <div className="space-y-2">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            Ações sugeridas
+            Caminhos possíveis
           </p>
           <div className="grid gap-2 sm:grid-cols-2">
             {actions.map((action) => (
@@ -117,7 +117,7 @@ export function ExperienceRenderer({ narrativa, blocks, actions, workflows, jour
       {workflows && workflows.length > 0 && (
         <div className="space-y-2">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            Processos em andamento
+            O que está em movimento
           </p>
           <div className="grid gap-2 sm:grid-cols-2">
             {workflows.map((wf) => (

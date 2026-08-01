@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     if (usuario) {
       const memorias = await listarMemoriasEmocionais(usuario.empresaId, 1).catch(() => [])
       if (memorias.length > 0) {
-        memoria = `${memorias[0].sentimento} Meses depois, esse assunto pode ter voltado — quero descobrir junto com você.`
+        memoria = `${memorias[0].sentimento} Fiquei pensando nisso desde então — quero saber como está agora.`
       }
     }
 

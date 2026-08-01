@@ -13,8 +13,8 @@ const ORIGEM_ICONE: Record<string, React.ReactNode> = {
 }
 
 const ORIGEM_LABEL: Record<string, string> = {
-  CONVERSA: 'Conversa',
-  MANUAL: 'Manual',
+  CONVERSA: 'Nossa conversa',
+  MANUAL: 'Registrado por você',
   PERGUNTA: 'Pergunta rápida',
 }
 
@@ -40,7 +40,7 @@ export function LearningHistory({ aprendizados }: LearningHistoryProps) {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <Clock className="h-4 w-4 text-muted-foreground" />
-          Histórico de aprendizados
+          Histórico de descobertas
         </CardTitle>
       </CardHeader>
       <CardContent>

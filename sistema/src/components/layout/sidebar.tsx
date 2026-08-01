@@ -22,24 +22,24 @@ const navItems = [
   {
     group: 'Consultar',
     items: [
-      { href: '/historico',     label: 'Histórico',   icon: Clock },
-      { href: '/centro-decisao', label: 'Decisões',    icon: Sparkles },
-      { href: '/conhecimento',  label: 'Conhecimento', icon: RefreshCw },
-      { href: '/financeiro',    label: 'Caixa',        icon: DollarSign },
-      { href: '/clientes',      label: 'Pessoas',      icon: UserCheck },
+      { href: '/historico',      label: 'Nossa caminhada', icon: Clock },
+      { href: '/centro-decisao', label: 'O que merece atenção', icon: Sparkles },
+      { href: '/conhecimento',   label: 'O que entendemos', icon: RefreshCw },
+      { href: '/financeiro',     label: 'Caixa',            icon: DollarSign },
+      { href: '/clientes',       label: 'Pessoas',          icon: UserCheck },
     ],
   },
   {
     group: 'Aprender',
     items: [
-      { href: '/aprendizados', label: 'Aprendizados', icon: Clock },
+      { href: '/aprendizados', label: 'Descobertas', icon: Clock },
       { href: '/assistente',   label: 'Assistente',   icon: Bot },
     ],
   },
   {
-    group: 'Sistema',
+    group: 'Ajustes',
     items: [
-      { href: '/configuracoes', label: 'Configurações', icon: Settings },
+      { href: '/configuracoes', label: 'Preferências', icon: Settings },
     ],
   },
 ]
@@ -146,9 +146,9 @@ export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digi
                       <div className={classes} title={collapsed ? item.label : undefined}>
                         <Icon className="h-4 w-4 shrink-0" />
                         {!collapsed && (
-                          <span className="flex items-center gap-1">
+                            <span className="flex items-center gap-1">
                             {item.label}
-                            <span className="text-[10px] text-muted-foreground/30">bloqueado</span>
+                            <span className="text-[10px] text-muted-foreground/30">em breve</span>
                           </span>
                         )}
                       </div>
@@ -171,7 +171,7 @@ export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digi
             <svg className="h-3.5 w-3.5 shrink-0 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
             </svg>
-            <span>Fundador — faça parte da construção</span>
+            <span>Construir essa história conosco</span>
           </Link>
         </div>
       )}

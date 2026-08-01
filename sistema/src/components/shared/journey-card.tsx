@@ -1,6 +1,7 @@
 import { RefreshCw, ChevronRight, CheckSquare, Eye, TrendingUp } from 'lucide-react'
 import type { Journey } from '@/engine'
 import { cn } from '@/lib/utils'
+import { PRIORIDADE_AMIGAVEL } from '@/constants'
 
 function renderStepIcon(tipo: Journey['etapas'][number]['tipo'], concluido: boolean) {
   if (concluido) return <CheckSquare className="h-4 w-4 text-emerald-500 shrink-0" />
@@ -10,6 +11,7 @@ function renderStepIcon(tipo: Journey['etapas'][number]['tipo'], concluido: bool
 }
 
 export function JourneyCard({ journey }: { journey: Journey }) {
+  const prioridadeLabel = PRIORIDADE_AMIGAVEL[journey.prioridade] ?? journey.prioridade
   return (
     <div className="rounded-lg border bg-card px-5 py-4">
       <div className="flex items-center justify-between gap-3 mb-3">
@@ -23,7 +25,7 @@ export function JourneyCard({ journey }: { journey: Journey }) {
           journey.prioridade === 'media' && 'bg-blue-100 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400',
           journey.prioridade === 'baixa' && 'bg-muted text-muted-foreground',
         )}>
-          {journey.prioridade}
+          {prioridadeLabel}
         </span>
       </div>
 

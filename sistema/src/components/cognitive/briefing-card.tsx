@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle, Separator } from '@/component
 import { cn } from '@/lib/utils'
 import { Sun, TrendingUp, AlertTriangle, Clock, Sparkles, CheckSquare, ChevronRight } from 'lucide-react'
 import type { CognitiveBriefing } from '@/engine'
+import { CATEGORIA_EVIDENCIA } from '@/constants'
 
 const iconePonto: Record<string, React.ReactNode> = {
   evolucao: <TrendingUp className="h-4 w-4 text-emerald-500" />,
@@ -21,29 +22,17 @@ const corPonto: Record<string, string> = {
 
 interface BriefingCardProps {
   briefing: CognitiveBriefing | null
-  semana?: number
 }
 
-function calcularSemana(): number {
-  const agora = new Date()
-  const inicio = new Date(agora.getFullYear(), 0, 1)
-  const diff = agora.getTime() - inicio.getTime()
-  return Math.ceil(diff / (1000 * 60 * 60 * 24 * 7))
-}
-
-export function BriefingCard({ briefing, semana }: BriefingCardProps) {
+export function BriefingCard({ briefing }: BriefingCardProps) {
   if (!briefing) return null
-  const numSemana = semana ?? calcularSemana()
 
   return (
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <Sun className="h-4 w-4 text-amber-500" />
-          Briefing Semanal
-          <span className="text-[10px] font-normal text-muted-foreground ml-auto">
-            Semana {numSemana}
-          </span>
+          Sua semana
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -70,7 +59,7 @@ export function BriefingCard({ briefing, semana }: BriefingCardProps) {
         {briefing.acoesPendentes > 0 && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <CheckSquare className="h-4 w-4" />
-            <span>{briefing.acoesPendentes} ação(ns) pendente(s)</span>
+            <span>Há {briefing.acoesPendentes} coisa{briefing.acoesPendentes !== 1 ? 's' : ''} para acompanhar</span>
           </div>
         )}
 
@@ -82,7 +71,7 @@ export function BriefingCard({ briefing, semana }: BriefingCardProps) {
               <span className="mt-0.5 shrink-0">{iconePonto[ponto.tipo]}</span>
               <div className="flex-1 min-w-0">
                 <p className="text-sm">{ponto.mensagem}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">{ponto.categoria}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{CATEGORIA_EVIDENCIA[ponto.categoria]?.label ?? ponto.categoria}</p>
               </div>
             </div>
           ))}
@@ -96,9 +85,9 @@ export function BriefingCard({ briefing, semana }: BriefingCardProps) {
           <div className="rounded-lg border border-blue-100 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-950/10 p-2.5">
             <div className="flex items-center gap-1.5 text-[11px] font-medium text-blue-700 dark:text-blue-400 mb-0.5">
               <ChevronRight className="h-3 w-3" />
-              Próximo acompanhamento
+              Próximo passo
             </div>
-            <p className="text-xs text-muted-foreground">Avaliar resultado em 30 dias</p>
+            <p className="text-xs text-muted-foreground">Vamos revisar isso em 30 dias</p>
           </div>
         )}
       </CardContent>

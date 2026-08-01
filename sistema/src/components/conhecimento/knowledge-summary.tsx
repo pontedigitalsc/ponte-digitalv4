@@ -24,7 +24,7 @@ export function KnowledgeSummary({
         <CardContent className="p-3 space-y-1">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Bot className="h-3.5 w-3.5" />
-            <span>Total</span>
+            <span>O que guardamos</span>
           </div>
           <p className="text-xl font-bold">{total}</p>
         </CardContent>
@@ -42,7 +42,7 @@ export function KnowledgeSummary({
         <CardContent className="p-3 space-y-1">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
-            <span>Em observação</span>
+            <span>Em acompanhamento</span>
           </div>
           <p className="text-xl font-bold text-amber-600">{total - confirmados - descartados}</p>
         </CardContent>
@@ -60,7 +60,7 @@ export function KnowledgeSummary({
         <CardContent className="p-3 space-y-1">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
-            <span>Confiança média</span>
+            <span>Nossa confiança</span>
           </div>
           <p className="text-xl font-bold">{scoreMedio}%</p>
         </CardContent>
@@ -69,7 +69,7 @@ export function KnowledgeSummary({
         <CardContent className="p-3 space-y-1">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Sparkles className="h-3.5 w-3.5 text-violet-500" />
-            <span>Esta semana</span>
+            <span>Nesta semana</span>
           </div>
           <p className="text-xl font-bold text-violet-600">{criadosEstaSemana}</p>
         </CardContent>

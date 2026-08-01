@@ -89,7 +89,7 @@ export function gerarNotificacoes(
     if (fb.tipo === 'NAO_AJUDOU') {
       notificacoes.push({
         id: gerarId(),
-        titulo: 'Aprendizado registrado',
+        titulo: 'Nova descoberta',
         descricao: `"${fb.acao?.titulo ?? 'Ação'}" não funcionou como esperado`,
         categoria: fb.acao?.categoria ?? 'GESTAO',
         prioridade: 'informativa',
@@ -116,7 +116,7 @@ export function gerarNotificacoes(
   for (const oc of dados.topOutcomes ?? []) {
     notificacoes.push({
       id: gerarId(),
-      titulo: 'Outcome registrado',
+      titulo: 'Um resultado que percebi',
       descricao: oc.descricao,
       categoria: oc.categoria,
       prioridade: 'informativa',
@@ -134,7 +134,7 @@ export function gerarNotificacoes(
       notificacoes.push({
         id: gerarId(),
         titulo: 'Próximo passo disponível',
-        descricao: `Nível ${dados.jornada.nivel}: ${passo}`,
+        descricao: `Próximo: ${passo}`,
         categoria: 'GESTAO',
         prioridade: dados.jornada.progresso >= 80 ? 'importante' : 'informativa',
         origem: 'Activation Engine',
@@ -151,7 +151,7 @@ export function gerarNotificacoes(
       notificacoes.push({
         id: gerarId(),
         titulo: 'Jornada concluída',
-        descricao: `"${j.titulo}" — todas as etapas foram concluídas`,
+        descricao: `"${j.titulo}" — todos os passos foram concluídos`,
         categoria: j.categoria,
         prioridade: 'informativa',
         origem: 'Journey Engine',
@@ -165,12 +165,12 @@ export function gerarNotificacoes(
   if (dados.auditoria && dados.auditoria.totalConhecimentos > 0 && dados.auditoria.scoreMedio < 40) {
     notificacoes.push({
       id: gerarId(),
-      titulo: 'Conhecimento frágil',
-      descricao: `Score médio de ${dados.auditoria.scoreMedio}% — revisar hipóteses pode fortalecer`,
+      titulo: 'O que estamos acompanhando está frágil',
+      descricao: `A confiança média é de ${dados.auditoria.scoreMedio}% — vamos revisar o que ainda não está sólido.`,
       categoria: 'GESTAO',
       prioridade: 'importante',
       origem: 'Knowledge Governance',
-      cta: { rotulo: 'Auditar', href: '/configuracoes' },
+      cta: { rotulo: 'Revisar', href: '/configuracoes' },
       lida: false,
       criadaEm: agora,
       expiraEm: new Date(agora.getTime() + 30 * 24 * 60 * 60 * 1000),

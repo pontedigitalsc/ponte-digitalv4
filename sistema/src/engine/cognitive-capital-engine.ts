@@ -64,7 +64,7 @@ export function calcularCapitalCognitivo(
       { nome: 'Hipóteses confirmadas', peso: hipotesesConfirmadas, score: Math.min(150, hipotesesConfirmadas), descricao: `${outcomesCount} resultado(s) positivos` },
       { nome: 'Padrões identificados', peso: padroesIdentificados, score: Math.min(150, padroesIdentificados), descricao: `Capacidade: ${capacidade.scoreGeral}%` },
       { nome: 'Decisões registradas', peso: decisoesRegistradas, score: Math.min(150, decisoesRegistradas), descricao: `${ciclos.totalCiclos} ciclo(s), ${acoesCount} acao(ões)` },
-      { nome: 'Aprendizados compartilháveis', peso: aprendizadosCompartilhaveis, score: Math.min(200, aprendizadosCompartilhaveis), descricao: `Score médio: ${scoreMedio}, Evolução: ${evolucaoGeral}%` },
+      { nome: 'Aprendizados compartilháveis', peso: aprendizadosCompartilhaveis, score: Math.min(200, aprendizadosCompartilhaveis), descricao: `Confiança média: ${scoreMedio}, Evolução: ${evolucaoGeral}%` },
     ],
   }
 }

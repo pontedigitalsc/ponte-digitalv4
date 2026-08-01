@@ -19,6 +19,20 @@ const CATEGORIA_EMOJI: Record<string, string> = {
   RISCOS: '⚠️',
 }
 
+const CATEGORIA_LABEL: Record<string, string> = {
+  VALORES: 'Valores',
+  PREFERENCIAS: 'Preferências',
+  REGRAS: 'Regras',
+  OBJETIVOS: 'Objetivos',
+  ROTINAS: 'Rotinas',
+  EQUIPE: 'Equipe',
+  CLIENTES: 'Clientes',
+  FINANCEIRO: 'Financeiro',
+  OPERACAO: 'Operação',
+  VISAO: 'Visão',
+  RISCOS: 'Riscos',
+}
+
 interface QuickLearningQuestionProps {
   perguntas: PerguntaRapida[]
   onResponder: (pergunta: PerguntaRapida, resposta: string) => Promise<void>
@@ -44,7 +58,7 @@ export function QuickLearningQuestion({ perguntas, onResponder, jaRespondidas }:
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground">
-            Você já respondeu todas as perguntas disponíveis. Continue usando a plataforma para novas perguntas aparecerem.
+            Você já respondeu tudo por agora. Conforme conversamos, novas perguntas aparecem.
           </p>
         </CardContent>
       </Card>
@@ -100,13 +114,13 @@ export function QuickLearningQuestion({ perguntas, onResponder, jaRespondidas }:
             <div className="rounded-lg bg-muted/50 p-3">
               <p className="text-sm font-medium">{perguntaAtiva.pergunta}</p>
               <p className="text-xs text-muted-foreground mt-1">
-                Categoria: {perguntaAtiva.categoria.toLowerCase()}
+                Sobre: {CATEGORIA_LABEL[perguntaAtiva.categoria] ?? perguntaAtiva.categoria.toLowerCase()}
               </p>
             </div>
             <textarea
               value={resposta}
               onChange={(e) => setResposta(e.target.value)}
-              placeholder="Digite sua resposta..."
+              placeholder="Escreva à vontade..."
               className="w-full min-h-[80px] rounded-md border bg-background p-3 text-sm outline-none focus:ring-1 focus:ring-primary resize-none"
               disabled={enviando}
             />
@@ -124,12 +138,12 @@ export function QuickLearningQuestion({ perguntas, onResponder, jaRespondidas }:
                 className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors"
               >
                 {enviando ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
-                Enviar
+                Guardar
               </button>
             </div>
             {ultimaResposta === perguntaAtiva.contexto && (
               <p className="text-xs text-emerald-600 flex items-center gap-1">
-                <CheckCircle2 className="h-3 w-3" /> Aprendizado registrado!
+                <CheckCircle2 className="h-3 w-3" /> Guardei! Vou lembrar disso.
               </p>
             )}
           </div>

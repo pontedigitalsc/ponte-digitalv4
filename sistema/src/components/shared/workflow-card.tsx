@@ -1,12 +1,14 @@
 import { CheckSquare, ChevronRight, RefreshCw } from 'lucide-react'
 import type { CognitiveWorkflow } from '@/engine'
 import { cn } from '@/lib/utils'
+import { PRIORIDADE_AMIGAVEL } from '@/constants'
 
 export function WorkflowCard({ workflow }: { workflow: CognitiveWorkflow }) {
   const etapaAtual = workflow.etapas.find(e => !e.concluido)
   const progressoLabel = workflow.concluido
     ? 'Concluído'
     : `${etapaAtual ? etapaAtual.titulo : '—'}`
+  const prioridadeLabel = PRIORIDADE_AMIGAVEL[workflow.prioridade] ?? workflow.prioridade
 
   return (
     <div className="rounded-lg border bg-card px-5 py-4">
@@ -21,7 +23,7 @@ export function WorkflowCard({ workflow }: { workflow: CognitiveWorkflow }) {
           workflow.prioridade === 'media' && 'bg-blue-100 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400',
           workflow.prioridade === 'baixa' && 'bg-muted text-muted-foreground',
         )}>
-          {workflow.prioridade}
+          {prioridadeLabel}
         </span>
       </div>
 

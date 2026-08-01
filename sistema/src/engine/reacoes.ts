@@ -1,23 +1,23 @@
 export const reacoesIndividuais: Record<string, string> = {
-  'historia.nascer':     'É importante entender de onde a empresa veio. A origem revela muito sobre os valores que guiam suas decisões.',
-  'historia.comecar':    'Saber o que motivou o começo me ajuda a entender o que sustenta sua motivação até hoje.',
-  'historia.momento':    'Esse tipo de memória mostra o que realmente importa para você no negócio.',
-  'historia.orgulho':    'Saber do que você se orgulha me mostra onde estão seus maiores acertos até agora.',
-  'historia.mudanca':    'Interessante. As respostas mostram que você já reflete bastante sobre o que poderia ter sido diferente.',
-  'rotina.dia':          'Como o dia começa diz muito sobre como a energia é distribuída ao longo dele.',
-  'rotina.pressao':      'Identificar onde a pressão aparece ajuda a entender onde um processo faria diferença.',
-  'rotina.cabeca':       'O que ocupa a cabeça de um empresário raramente é o que parece de fora.',
-  'rotina.tranquilo':    'Essa resposta diz muito. Empresários tranquilos administram melhor.',
-  'rotina.energia':      'O que consome energia é geralmente o primeiro lugar onde uma mudança traria alívio.',
-  'empresa.clientes':    'Saber o que faz clientes voltarem é uma das informações mais valiosas de qualquer negócio.',
-  'empresa.multiplicar': 'Concentrar esforços no cliente ideal é uma das decisões que mais aceleram o crescimento.',
-  'empresa.crescer':     'Identificar o freio do crescimento é o primeiro passo para tirá-lo.',
-  'empresa.horalivre':   'Essa é uma pergunta reveladora — onde o empresário investiria tempo livre mostra onde ele sente que está perdendo oportunidades.',
-  'empresa.decisao':     'Entender como você decide me ajuda a ver onde uma informação melhor faria diferença.',
-  'frente.surpresa':     'Prestar atenção nas surpresas — boas ou ruins — é um dos maiores geradores de aprendizado.',
-  'frente.funcionou':    'Saber o que funcionou permite repetir. A maioria dos empresários só olha para o que deu errado.',
-  'frente.diferente':    'Essa reflexão semanal é um dos hábitos que separa empresas que evoluem das que estagnam.',
-  'frente.proximo':      'Ter um horizonte claro permite que cada decisão seja avaliada contra um destino desejado.',
+  'historia.nascer':     'Uma empresa nasce de um momento. O seu, agora, faz parte do que eu vou lembrar.',
+  'historia.comecar':    'Começar exige coragem. Você teve.',
+  'historia.momento':    'Esse momento importa. Vou guardá-lo com o cuidado que ele merece.',
+  'historia.orgulho':    'Sinto o orgulho nessa resposta. É dos seus.',
+  'historia.mudanca':    'Olhar para trás e enxergar o que mudaria exige honestidade. Você teve.',
+  'rotina.dia':          'Entendi como seu dia começa. Isso me diz muito sobre como ele termina.',
+  'rotina.pressao':      'Percebi onde a pressão aperta. Vou prestar atenção nisso.',
+  'rotina.cabeca':       'O que ocupa sua cabeça quase nunca é o que parece por fora.',
+  'rotina.tranquilo':    'Terminar o dia tranquilo é raro. Quando você me conta, eu noto.',
+  'rotina.energia':      'Onde a energia se vai costuma ser onde a empresa precisa de um descanso.',
+  'empresa.clientes':    'Quando o cliente volta, tem um motivo. Vou tentar enxergá-lo com você.',
+  'empresa.multiplicar': 'Saber quem você quer ver voltando é uma escolha. Você tem.',
+  'empresa.crescer':     'O que segura uma empresa costuma ser silencioso. Vamos olhar juntos.',
+  'empresa.horalivre':   'Essa resposta quase sempre revela o que a pessoa mais deseja. A sua, sim.',
+  'empresa.decisao':     'Decidir sem certeza é o trabalho mais difícil que existe. Você o faz todos os dias.',
+  'frente.surpresa':     'Surpresas guardam lições. Boas ou ruins, vale prestar atenção.',
+  'frente.funcionou':    'O que funcionou merece ser lembrado. Você raramente tem tempo para isso.',
+  'frente.diferente':    'Refletir sobre a semana é um hábito de quem evolui. Você está nele.',
+  'frente.proximo':      'Um horizonte claro orienta decisões pequenas. Vou lembrar do seu.',
 }
 
 export const SILENCIO_INTELIGENTE = [
@@ -27,6 +27,8 @@ export const SILENCIO_INTELIGENTE = [
   'Percebi. Mas ainda não quero concluir nada com pressa.',
   'Essa informação é importante. Vou prestar atenção em como ela evolui.',
   'Não vou dizer nada agora. Só quero que você saiba que eu ouvi.',
+  'Fico com isso em silêncio por um momento.',
+  'Escuto. Algumas coisas pedem calma antes de qualquer palavra.',
 ]
 
 function hashEtapa(etapaId: string): number {
@@ -45,8 +47,8 @@ export function obterReacao(etapaId: string): string {
 }
 
 export const REACOES_BLOCO: Record<string, string> = {
-  'historia': 'Obrigado por compartilhar a história. Isso me ajuda a entender quem está por trás da empresa.',
-  'rotina':   'Já consigo imaginar como é seu dia a dia. Vamos falar agora sobre o negócio em si.',
-  'empresa':  'Agora estou começando a enxergar padrões. Percebi algumas coisas que vou compartilhar em breve.',
-  'frente':   'Com isso já tenho material suficiente para escrever uma carta sobre sua empresa.',
+  'historia': 'Obrigado por compartilhar a história. Ela agora faz parte de quem acompanho.',
+  'rotina':   'Já imagino como é seu dia. Agora quero entender a empresa por trás dele.',
+  'empresa':  'Estou começando a enxergar padrões. Vou juntá-los com calma antes de falar.',
+  'frente':   'Com isso já consigo escrever sobre sua empresa — mas ainda quero observar mais.',
 }

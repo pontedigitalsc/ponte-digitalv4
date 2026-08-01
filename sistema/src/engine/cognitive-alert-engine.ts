@@ -50,7 +50,7 @@ export function gerarAlertasCognitivos(
       id: gerarId(),
       problema: `${formatarArea(area.categoria)} requer atenção estratégica`,
       impacto: area.justificativa,
-      evidencia: `Score de maturidade: ${maturity.score}/100 | Evolução: ${evolution.evolucaoTotal}%`,
+      evidencia: `Maturidade da empresa: ${maturity.score}/100 | Evolução: ${evolution.evolucaoTotal}%`,
       caminhoSugerido: `Revisar processos em ${formatarArea(area.categoria)} e criar plano de ação corretivo`,
       confianca: Math.min(85, maturity.score + 10),
       urgencia: maturity.score < 30 ? 'ALTA' : maturity.score < 60 ? 'MEDIA' : 'BAIXA',

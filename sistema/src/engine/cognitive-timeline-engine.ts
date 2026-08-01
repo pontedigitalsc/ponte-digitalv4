@@ -206,7 +206,7 @@ export function gerarTimeline(
       momento: agora.toISOString(),
       explicacao: `Nível de ativação: ${dados.jornada.nivel} (${dados.jornada.progresso}%)`,
       impacto: dados.jornada.eventos.length > 0
-        ? `${dados.jornada.eventos.length} evento(s) de ativação registrado(s)`
+        ? `${dados.jornada.eventos.length} movimento(s) registrado(s)`
         : 'Jornada do fundador em andamento',
     })
   }
@@ -220,7 +220,7 @@ export function gerarTimeline(
       categoria: 'GESTAO',
       momento: agora.toISOString(),
       explicacao: `${dados.auditoria.conhecimentosPromovidos} conhecimento(s) aprovados de ${dados.auditoria.totalConhecimentos}`,
-      impacto: `Score médio: ${dados.auditoria.scoreMedio}`,
+      impacto: `Confiança média: ${dados.auditoria.scoreMedio}`,
       confianca: dados.auditoria.scoreMedio / 100,
     })
   }

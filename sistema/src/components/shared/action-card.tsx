@@ -1,6 +1,7 @@
 import { ExternalLink, Plus, RefreshCw, Settings, Eye, ChevronRight } from 'lucide-react'
 import type { ExperienceAction } from '@/engine'
 import { cn } from '@/lib/utils'
+import { PRIORIDADE_AMIGAVEL } from '@/constants'
 
 const ICONE_POR_TIPO: Record<string, typeof ExternalLink> = {
   abrir: ExternalLink,
@@ -19,6 +20,7 @@ const COR_POR_PRIORIDADE = {
 export function ActionCard({ action }: { action: ExperienceAction }) {
   const Icon = ICONE_POR_TIPO[action.tipo] ?? ExternalLink
   const bordaCor = COR_POR_PRIORIDADE[action.prioridade]
+  const prioridadeLabel = PRIORIDADE_AMIGAVEL[action.prioridade] ?? action.prioridade
 
   return (
     <div className={cn('rounded-lg border-l-4 bg-card px-4 py-3', bordaCor)}>
@@ -35,7 +37,7 @@ export function ActionCard({ action }: { action: ExperienceAction }) {
               action.prioridade === 'media' && 'bg-blue-100 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400',
               action.prioridade === 'baixa' && 'bg-muted text-muted-foreground',
             )}>
-              {action.prioridade}
+              {prioridadeLabel}
             </span>
           </div>
           <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{action.descricao}</p>

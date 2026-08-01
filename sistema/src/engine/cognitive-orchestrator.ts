@@ -570,7 +570,7 @@ export async function processarOutcome(
 
     await registrarNaMemoria(empresaId, {
       tipo: 'mudanca',
-      descricao: `Outcome registrado: ${dados.descricao}`,
+      descricao: `Resultado percebido: ${dados.descricao}`,
       categoria: dados.categoria as CategoriaEvidencia,
       versao: 1,
       metadados: { outcomeId: outcome.id },

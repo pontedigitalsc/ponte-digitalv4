@@ -32,7 +32,7 @@ export function TransacaoModal({ open, transacao, tipoInicial, onClose, onSubmit
         <DialogHeader>
           <DialogTitle>{transacao ? 'Editar lançamento' : 'Novo lançamento'}</DialogTitle>
           <DialogDescription>
-            {transacao ? 'Atualize os dados do lançamento.' : 'Registre uma nova receita ou despesa.'}
+            {transacao ? 'Atualize os dados do lançamento.' : 'Anote uma nova receita ou despesa.'}
           </DialogDescription>
         </DialogHeader>
         <TransacaoForm

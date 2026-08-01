@@ -136,7 +136,7 @@ export function gerarNarrativaEmpresarial(
     resposta: [resumoStatus, evolucaoTexto, areasQuentesTexto, areasFriasTexto].filter(Boolean).join(' '),
     confianca: Math.max(60, score),
     evidencias: [
-      `Score de maturidade: ${score}/100`,
+      `Maturidade da empresa: ${score}/100`,
       `Evolução total: ${evolucaoTotal}%`,
       `Confiança média: ${Math.round(evolution.crescimentoConfianca * 100)}%`,
       ...(areaMaisEvoluiu ? [`Maior evolução: ${formatarArea(areaMaisEvoluiu.categoria)}`] : []),

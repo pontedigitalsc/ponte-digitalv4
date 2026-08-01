@@ -22,20 +22,20 @@ export default function RootErrorBoundary({ error, reset }: ErrorBoundaryProps) 
       </div>
 
       <div className="space-y-1.5 max-w-sm">
-        <h2 className="text-lg font-semibold">Algo deu errado</h2>
+        <h2 className="text-lg font-semibold">Isso acontece às vezes</h2>
         <p className="text-sm text-muted-foreground">
-          Tente novamente ou volte para o início.
+          Alguma coisa não carregou por completo. Pode tentar de novo.
         </p>
       </div>
 
       <div className="flex items-center gap-2 pt-2">
         <Button onClick={reset} variant="default" size="sm">
           <RefreshCw className="h-3.5 w-3.5" />
-          Tentar novamente
+          Tentar de novo
         </Button>
         <Button asChild variant="outline" size="sm">
           <Link href="/dashboard">
-            Ir para o Dashboard
+            Ir para o início
           </Link>
         </Button>
       </div>
