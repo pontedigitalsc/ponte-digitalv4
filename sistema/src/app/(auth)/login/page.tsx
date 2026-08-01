@@ -111,16 +111,12 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      {/*
-        O link "Criar conta" foi removido deliberadamente — não por esquecimento.
-        Cadastro público (signup + criação de empresa + trial) ainda não foi
-        implementado; hoje o onboarding de novas empresas é manual, feito
-        diretamente no banco. Um link para uma página inexistente é pior do
-        que a ausência do link. Quando cadastro público entrar em escopo,
-        a página /register e o fluxo de criação de empresa devem ser
-        implementados juntos, com o mesmo cuidado de planejamento aplicado
-        ao restante do sistema — não apenas reativar este link.
-      */}
+      <p className="text-center text-sm text-muted-foreground">
+        Ainda não tem conta?{' '}
+        <Link href="/criar-conta" className="text-primary hover:underline font-medium">
+          Comece pela conversa
+        </Link>
+      </p>
     </div>
   )
 }

@@ -71,13 +71,38 @@ function gerarCarta(respostas: Record<string, string>, revelacao: { forca: strin
   }
 }
 
-function gerarDimensoes(): { label: string; valor: number; descricao: string }[] {
-  return [
-    { label: 'Clareza', valor: 35, descricao: 'Você sabe o que quer, mas o caminho ainda precisa ficar mais nítido.' },
-    { label: 'Conhecimento', valor: 45, descricao: 'Você já identifica o que precisa mudar — isso é mais do que a maioria faz.' },
-    { label: 'Capacidade de decisão', valor: 30, descricao: 'Reconhecer as decisões importantes é o primeiro passo.' },
-    { label: 'Organização', valor: 25, descricao: 'A organização aparece como um ponto em construção.' },
-    { label: 'Aprendizado', valor: 50, descricao: 'Você está aberto a enxergar sua empresa de fora.' },
+function gerarRetrato(situacao: string): { titulo: string; texto: string }[] {
+  const porSituacao: Record<string, { titulo: string; texto: string }[]> = {
+    ideias: [
+      { titulo: 'Sua força', texto: 'Visão não falta. Você enxerga possibilidades que outros empresários nem notam.' },
+      { titulo: 'Seu peso', texto: 'Muitas ideias sem uma ordem viram dispersão — e o esforço se divide em tudo ao mesmo tempo.' },
+      { titulo: 'O primeiro passo', texto: 'Escolher uma única ideia para priorizar nesta semana já muda o jogo.' },
+    ],
+    trabalho: [
+      { titulo: 'Sua força', texto: 'Dedicação é rara. Empresas crescem porque alguém se dedica profundamente a elas.' },
+      { titulo: 'Seu peso', texto: 'Trabalhar muito sem evoluir na mesma medida costuma significar que o esforço está no lugar errado.' },
+      { titulo: 'O primeiro passo', texto: 'Observar onde as horas realmente vão — por uma semana, só observando — costuma revelar o que trava.' },
+    ],
+    dependente: [
+      { titulo: 'Sua força', texto: 'Você construiu algo que funciona pela sua capacidade de execução.' },
+      { titulo: 'Seu peso', texto: 'Quando tudo passa por uma pessoa, a empresa fica limitada ao que essa pessoa consegue fazer. Esse é o teto invisível.' },
+      { titulo: 'O primeiro passo', texto: 'Escolher uma única tarefa para dividir ou simplificar já alivia o peso de amanhã.' },
+    ],
+    decisao: [
+      { titulo: 'Sua força', texto: 'Reconhecer a dificuldade de decidir é sinal de maturidade. Muitos decidem sem pensar.' },
+      { titulo: 'Seu peso', texto: 'Decisões adiadas custam mais caro do que decisões imperfeitas executadas no tempo certo.' },
+      { titulo: 'O primeiro passo', texto: 'Nomear a decisão mais difícil — em uma frase — já tira metade do peso dela.' },
+    ],
+    clareza: [
+      { titulo: 'Sua força', texto: 'Perceber a falta de clareza já é mais do que a maioria percebe sobre si mesma.' },
+      { titulo: 'Seu peso', texto: 'Falta de clareza não se resolve com mais informação — se resolve com melhor direcionamento.' },
+      { titulo: 'O primeiro passo', texto: 'Definir o próximo passo concreto — mesmo pequeno — devolve a sensação de direção.' },
+    ],
+  }
+  return porSituacao[situacao] ?? [
+    { titulo: 'Sua força', texto: 'Você demonstra capacidade de adaptação aos desafios da sua empresa.' },
+    { titulo: 'Seu peso', texto: 'Existe uma concentração grande de decisões em você — e a empresa sente isso.' },
+    { titulo: 'O primeiro passo', texto: 'Escolher uma única coisa para observar durante uma semana é o menor movimento que muda a direção.' },
   ]
 }
 
@@ -92,7 +117,7 @@ export default function DiagnosticoPage() {
 
   const revelacao = gerarRevelacao(respostas)
   const carta = gerarCarta(respostas, revelacao)
-  const dimensoes = gerarDimensoes()
+  const retrato = gerarRetrato(respostas.situacao ?? '')
 
   // ETAPA CARTA — valor entregue, cadastro só depois
   if (etapa === 'carta') {
@@ -178,20 +203,14 @@ export default function DiagnosticoPage() {
 
           <div className="rounded-xl border bg-card p-6 space-y-4">
             <div className="text-center space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Fotografia inicial</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Retrato inicial</p>
               <p className="text-[10px] text-muted-foreground/60">Como sua empresa pensa hoje, onde existe força, onde existe peso.</p>
             </div>
             <div className="space-y-3">
-              {dimensoes.map((d) => (
-                <div key={d.label} className="space-y-1">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-muted-foreground">{d.label}</span>
-                    <span className="font-medium">{d.valor}%</span>
-                  </div>
-                  <div className="h-1.5 w-full rounded-full bg-secondary">
-                    <div className="h-1.5 rounded-full bg-primary/70 transition-all" style={{ width: `${d.valor}%` }} />
-                  </div>
-                  <p className="text-[10px] text-muted-foreground/60">{d.descricao}</p>
+              {retrato.map((r) => (
+                <div key={r.titulo} className="rounded-lg border-l-2 border-primary/30 bg-secondary/30 pl-4 py-3">
+                  <p className="text-xs font-medium text-foreground">{r.titulo}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{r.texto}</p>
                 </div>
               ))}
             </div>
