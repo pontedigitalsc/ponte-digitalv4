@@ -120,7 +120,7 @@ export function TarefaList() {
           <Select value={statusFiltro} onValueChange={(v) => setStatusFiltro(v as StatusTarefa | 'TODOS')}>
             <SelectTrigger className="h-8 w-36 text-xs"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="TODOS">Todos status</SelectItem>
+              <SelectItem value="TODOS">Qualquer situação</SelectItem>
               {Object.entries(STATUS_TAREFA).map(([k, s]) => (
                 <SelectItem key={k} value={k}>{s.label}</SelectItem>
               ))}
@@ -130,7 +130,7 @@ export function TarefaList() {
           <Select value={prioFiltro} onValueChange={(v) => setPrioFiltro(v as Prioridade | 'TODOS')}>
             <SelectTrigger className="h-8 w-36 text-xs"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="TODOS">Todas prioridades</SelectItem>
+              <SelectItem value="TODOS">Qualquer importância</SelectItem>
               {Object.entries(PRIORIDADE).map(([k, p]) => (
                 <SelectItem key={k} value={k}>{p.label}</SelectItem>
               ))}

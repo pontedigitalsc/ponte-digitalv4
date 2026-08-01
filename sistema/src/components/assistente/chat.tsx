@@ -6,6 +6,7 @@ import { ChatMessage } from './chat-message'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { apiFetchStream, mensagemDeErro } from '@/lib/api-client'
+import { CATEGORIA_EVIDENCIA } from '@/constants'
 
 interface Mensagem {
   id: string
@@ -224,7 +225,7 @@ export function Chat({
         }
       }
     } catch (e) {
-      setErro(mensagemDeErro(e, 'Erro ao comunicar com o assistente'))
+      setErro(mensagemDeErro(e, 'Não consegui responder agora. Vamos tentar novamente.'))
       // Remove a mensagem vazia do assistente
       setMensagens((prev) => prev.filter((m) => m.id !== idAssistente))
     } finally {
@@ -367,7 +368,7 @@ export function Chat({
                   </p>
                   {contexto?.prioridade && (
                     <span className="inline-block mt-2 rounded-full bg-primary/10 px-3 py-1 text-[10px] font-medium text-primary">
-                      Foco: {contexto.prioridade}
+                      Foco: {CATEGORIA_EVIDENCIA[contexto.prioridade]?.label ?? contexto.prioridade}
                     </span>
                   )}
                 </>
@@ -381,7 +382,7 @@ export function Chat({
                   <p className="text-sm text-muted-foreground mt-1 max-w-sm">
                     {nivelAtivacao === 'CONHECENDO'
                       ? 'Continue explorando para que eu possa ajudar com decisões mais precisas.'
-                      : 'Quando você usar a plataforma, vou aprender sobre sua empresa e poder ajudar melhor.'}
+                      : 'Quando conversarmos, vou aprender sobre sua empresa e poder ajudar melhor.'}
                   </p>
                 </>
               )}

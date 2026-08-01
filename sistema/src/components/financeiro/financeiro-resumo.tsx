@@ -106,10 +106,10 @@ export function FinanceiroResumo({ resumo, loading }: FinanceiroResumoProps) {
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-1">
               <DollarSign className="h-4 w-4 text-muted-foreground" />
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">MRR</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Todo mês</p>
             </div>
             <p className="text-2xl font-bold text-emerald-600">{formatarMoeda(resumo.mrr)}</p>
-            <p className="text-xs text-muted-foreground mt-0.5">Receita mensal recorrente</p>
+            <p className="text-xs text-muted-foreground mt-0.5">O que costuma entrar com regularidade</p>
           </CardContent>
         </Card>
         <Card className="border-dashed">

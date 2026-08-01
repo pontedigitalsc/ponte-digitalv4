@@ -45,7 +45,7 @@ export function useClientes(filtrosIniciais?: FiltroCliente): UseClientesReturn 
       setTotal(json.total ?? 0)
       setTotalPages(json.totalPages ?? 1)
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao carregar clientes'))
+      setError(mensagemDeErro(e, 'Não consegui carregar os contatos'))
     } finally {
       setLoading(false)
     }
@@ -63,7 +63,7 @@ export function useClientes(filtrosIniciais?: FiltroCliente): UseClientesReturn 
       setTotal((t) => t + 1)
       return data
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao criar cliente'))
+      setError(mensagemDeErro(e, 'Não consegui adicionar o contato'))
       return null
     }
   }, [])
@@ -79,7 +79,7 @@ export function useClientes(filtrosIniciais?: FiltroCliente): UseClientesReturn 
       setClientes((prev) => prev.map((c) => (c.id === id ? data : c)))
       return data
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao atualizar cliente'))
+      setError(mensagemDeErro(e, 'Não consegui guardar a alteração'))
       return null
     }
   }, [])
@@ -96,7 +96,7 @@ export function useClientes(filtrosIniciais?: FiltroCliente): UseClientesReturn 
     } catch (e) {
       // Reverte o update otimista e mostra a razão real (ex: "Esta ação
       // exige permissão de GESTOR ou superior", não mais um texto genérico)
-      setError(mensagemDeErro(e, 'Erro ao excluir cliente'))
+      setError(mensagemDeErro(e, 'Não consegui remover o contato'))
       await carregarClientes()
       return false
     }
@@ -114,7 +114,7 @@ export function useClientes(filtrosIniciais?: FiltroCliente): UseClientesReturn 
       setTotal((t) => t + 1)
       return data
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao converter lead'))
+      setError(mensagemDeErro(e, 'Não consegui concluir a conversa'))
       return null
     }
   }, [])

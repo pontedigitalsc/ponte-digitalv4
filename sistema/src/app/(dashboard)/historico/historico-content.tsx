@@ -56,12 +56,12 @@ export default function HistoricoContent({ experience }: Props) {
       if (busca) params.set('busca', busca)
       params.set('page', String(page))
       const res = await fetch(`/api/historicos?${params}`)
-      if (!res.ok) throw new Error('Erro ao carregar histórico')
+      if (!res.ok) throw new Error('Não consegui carregar a caminhada')
       const json = await res.json()
       setHistoricos(json.historicos ?? [])
       setTotal(json.total ?? 0)
       setTotalPages(json.totalPages ?? 1)
-    } catch { setError('Erro ao carregar histórico') }
+    } catch { setError('Não consegui carregar a caminhada') }
     finally { setLoading(false) }
   }, [tipoFiltro, busca, page])
 
@@ -81,11 +81,11 @@ export default function HistoricoContent({ experience }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tipo: novoTipo, titulo: novoTitulo, descricao: novaDescricao }),
       })
-      if (!res.ok) throw new Error('Erro ao salvar')
+      if (!res.ok) throw new Error('Não consegui guardar isso')
       setModalOpen(false)
       setNovoTitulo(''); setNovaDescricao(''); setNovoTipo('NOTA')
       await carregar()
-    } catch { setError('Erro ao salvar registro') }
+    } catch { setError('Não consegui guardar isso. Vamos tentar novamente.') }
     finally { setSalvando(false) }
   }
 
@@ -102,7 +102,7 @@ export default function HistoricoContent({ experience }: Props) {
     try {
       await apiFetch(`/api/historicos/${id}`, { method: 'DELETE' })
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao excluir registro'))
+      setError(mensagemDeErro(e, 'Não consegui remover isso. Vamos tentar novamente.'))
     }
     await carregar()
   }

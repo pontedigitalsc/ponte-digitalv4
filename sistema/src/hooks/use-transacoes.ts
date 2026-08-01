@@ -78,7 +78,7 @@ export function useTransacoes(): UseTransacoesReturn {
       setTotal(json.total ?? 0)
       setTotalPages(json.totalPages ?? 1)
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao carregar transações'))
+      setError(mensagemDeErro(e, 'Não consegui carregar o que entra e o que sai'))
     } finally { setLoading(false) }
   }, [])
 
@@ -111,7 +111,7 @@ export function useTransacoes(): UseTransacoesReturn {
       setTotal((n) => n + 1)
       return data
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao criar transação'))
+      setError(mensagemDeErro(e, 'Não consegui anotar isso'))
       return null
     }
   }, [])
@@ -127,7 +127,7 @@ export function useTransacoes(): UseTransacoesReturn {
       setTransacoes((prev) => prev.map((t) => t.id === id ? data : t))
       return data
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao atualizar transação'))
+      setError(mensagemDeErro(e, 'Não consegui guardar a alteração'))
       return null
     }
   }, [])
@@ -145,7 +145,7 @@ export function useTransacoes(): UseTransacoesReturn {
       })
       setTransacoes((prev) => prev.map((t) => t.id === id ? data : t))
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao marcar como pago'))
+      setError(mensagemDeErro(e, 'Não consegui marcar como pago'))
       await carregarTransacoes()
     }
   }, [carregarTransacoes])
@@ -159,7 +159,7 @@ export function useTransacoes(): UseTransacoesReturn {
       await apiFetch(`/api/transacoes/${id}`, { method: 'DELETE' })
       return true
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao excluir transação'))
+      setError(mensagemDeErro(e, 'Não consegui remover isso'))
       await carregarTransacoes()
       return false
     }

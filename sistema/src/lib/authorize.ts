@@ -49,5 +49,5 @@ export function respostaErroAuth(err: unknown): { error: string; status: number 
   if (err instanceof AuthenticationError || err instanceof AuthorizationError) {
     return { error: err.message, status: err.statusCode }
   }
-  return { error: 'Erro interno', status: 500 }
+  return { error: 'Não consegui fazer isso agora. Vamos tentar novamente.', status: 500 }
 }

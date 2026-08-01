@@ -20,10 +20,10 @@ function useImplantacoes() {
     try {
       const params = status && status !== 'TODAS' ? `?status=${status}` : ''
       const res = await fetch(`/api/implantacoes${params}`)
-      if (!res.ok) throw new Error('Erro ao carregar')
+      if (!res.ok) throw new Error('Não consegui carregar isso')
       const json = await res.json()
       setImplantacoes(json.implantacoes ?? [])
-    } catch { setError('Erro ao carregar implantações') }
+    } catch { setError('Não consegui carregar isso. Vamos tentar novamente.') }
     finally { setLoading(false) }
   }, [])
 

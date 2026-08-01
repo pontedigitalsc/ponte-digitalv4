@@ -53,7 +53,7 @@ export function LixeiraModal({
       const { itens } = await apiFetch<{ itens: ItemLixeira[] }>(`/api/lixeira/${tipo}`)
       setItens(itens)
     } catch (e) {
-      setErro(mensagemDeErro(e, 'Erro ao carregar itens excluídos'))
+      setErro(mensagemDeErro(e, 'Não consegui carregar o que foi removido'))
     } finally {
       setLoading(false)
     }
@@ -74,7 +74,7 @@ export function LixeiraModal({
     } catch (e) {
       // Mensagem real chega aqui — ex: "Esta ação exige permissão de
       // GESTOR ou superior" para um MEMBRO tentando restaurar.
-      setErro(mensagemDeErro(e, 'Erro ao restaurar'))
+      setErro(mensagemDeErro(e, 'Não consegui recuperar isso'))
     } finally {
       setRestaurandoId(null)
     }

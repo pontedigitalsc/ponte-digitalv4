@@ -12,7 +12,7 @@ export default async function ClientesPage() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold tracking-tight">Clientes</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Gerencie seus clientes ativos e acompanhe o relacionamento com cada um.
+          Acompanhe os relacionamentos com as pessoas importantes para sua empresa.
         </p>
       </div>
       <ExperienceRenderer

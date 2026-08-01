@@ -94,7 +94,7 @@ export class RateLimitError extends BaseAppError {
 }
 
 export class InternalApplicationError extends BaseAppError {
-  constructor(message = 'Erro interno do servidor', options?: { details?: unknown; cause?: Error; correlationId?: string; empresaId?: string }) {
+  constructor(message = 'Não consegui fazer isso agora. Vamos tentar novamente.', options?: { details?: unknown; cause?: Error; correlationId?: string; empresaId?: string }) {
     super(message, 500, 'INTERNAL_ERROR', { ...options, retryable: true })
   }
 }

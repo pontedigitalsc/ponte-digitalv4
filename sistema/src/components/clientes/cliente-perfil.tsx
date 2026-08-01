@@ -287,7 +287,7 @@ export function ClientePerfil({ cliente, onAtualizar }: ClientePerfilProps) {
           <div className="space-y-3">
             <div className="flex justify-end">
               <Button size="sm" variant="outline">
-                <MessageSquare className="h-3.5 w-3.5" /> Registrar contato
+                <MessageSquare className="h-3.5 w-3.5" /> Anotar contato
               </Button>
             </div>
             {cliente.historicos?.length === 0 ? (
@@ -295,8 +295,8 @@ export function ClientePerfil({ cliente, onAtualizar }: ClientePerfilProps) {
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted mb-3">
                   <Clock className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <p className="text-sm font-medium text-foreground">Histórico começará a ser registrado</p>
-                <p className="text-xs text-muted-foreground mt-1 max-w-xs">Toda interação com este cliente será registrada automaticamente aqui.</p>
+                <p className="text-sm font-medium text-foreground">Histórico começará a ser guardado</p>
+                <p className="text-xs text-muted-foreground mt-1 max-w-xs">Toda interação com este contato será guardada automaticamente aqui.</p>
               </div>
             ) : (
               <div className="relative space-y-0">
@@ -352,8 +352,8 @@ export function ClientePerfil({ cliente, onAtualizar }: ClientePerfilProps) {
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted mb-3">
                   <Layers className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <p className="text-sm font-medium text-foreground">Nenhuma implantação ativa</p>
-                <p className="text-xs text-muted-foreground mt-1 max-w-xs">Implantações aparecerão quando este cliente for cadastrado como lead.</p>
+                <p className="text-sm font-medium text-foreground">Nenhuma implantação em andamento</p>
+                <p className="text-xs text-muted-foreground mt-1 max-w-xs">Implantações aparecerão quando este contato estiver em uma oportunidade de negócio.</p>
               </div>
             ) : (
               cliente.implantacoes?.map((impl: { id: string; titulo: string; status: string; dataPrevisao?: string; etapas?: Array<{ id: string; titulo: string; concluida: boolean }> }) => {

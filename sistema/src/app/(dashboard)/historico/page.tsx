@@ -9,9 +9,9 @@ export default async function HistoricoPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="space-y-1">
-        <h2 className="text-xl font-semibold tracking-tight">Timeline da Empresa</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Nossa caminhada até aqui</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          A memória viva da sua empresa — atendimentos, decisões, aprendizados e conhecimento em um único lugar.
+          A memória viva da sua empresa: conversas, decisões, descobertas e o que vamos entendendo juntos.
         </p>
       </div>
       <TimelineViva experience={experience} empresaId={usuario.empresaId} />

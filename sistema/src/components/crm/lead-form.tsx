@@ -187,7 +187,7 @@ export function LeadForm({ lead, estagioInicial, onSubmit, onCancel, loading }: 
         </Button>
         <Button type="submit" disabled={loading}>
           {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-          {lead ? 'Salvar alterações' : 'Criar lead'}
+          {lead ? 'Guardar alterações' : 'Criar oportunidade'}
         </Button>
       </div>
     </form>

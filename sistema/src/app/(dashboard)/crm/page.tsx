@@ -10,9 +10,9 @@ export default async function CrmPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="space-y-1">
-        <h2 className="text-xl font-semibold tracking-tight">CRM</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Oportunidades</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Acompanhe seus leads em cada etapa do funil, da prospecção ao fechamento.
+          Acompanhe cada conversa de venda, do primeiro contato ao fechamento.
         </p>
       </div>
       <ExperienceRenderer

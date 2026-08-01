@@ -10,9 +10,9 @@ export default async function ConfiguracoesPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="space-y-1">
-        <h2 className="text-xl font-semibold tracking-tight">Configurações</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Preferências</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Personalize sua conta, empresa e a aparência do sistema do seu jeito.
+          Ajuste sua conta, sua empresa e a aparência do jeito que combina com você.
         </p>
       </div>
       <ExperienceRenderer

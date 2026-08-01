@@ -160,7 +160,7 @@ export function TarefaForm({ tarefa, clienteIdInicial, leadIdInicial, onSubmit, 
         </Button>
         <Button type="submit" disabled={loading}>
           {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-          {tarefa ? 'Salvar alterações' : 'Criar tarefa'}
+          {tarefa ? 'Guardar alterações' : 'Criar tarefa'}
         </Button>
       </div>
     </form>

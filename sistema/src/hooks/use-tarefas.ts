@@ -42,7 +42,7 @@ export function useTarefas(filtrosIniciais?: FiltroTarefa): UseTarefasReturn {
       setTarefas(json.tarefas ?? [])
       setTotal(json.total ?? 0)
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao carregar tarefas'))
+      setError(mensagemDeErro(e, 'Não consegui carregar as tarefas'))
     } finally {
       setLoading(false)
     }
@@ -60,7 +60,7 @@ export function useTarefas(filtrosIniciais?: FiltroTarefa): UseTarefasReturn {
       setTotal((t) => t + 1)
       return data
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao criar tarefa'))
+      setError(mensagemDeErro(e, 'Não consegui criar a tarefa'))
       return null
     }
   }, [])
@@ -76,7 +76,7 @@ export function useTarefas(filtrosIniciais?: FiltroTarefa): UseTarefasReturn {
       setTarefas((prev) => prev.map((t) => (t.id === id ? data : t)))
       return data
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao atualizar tarefa'))
+      setError(mensagemDeErro(e, 'Não consegui guardar a alteração'))
       return null
     }
   }, [])
@@ -101,7 +101,7 @@ export function useTarefas(filtrosIniciais?: FiltroTarefa): UseTarefasReturn {
     } catch (e) {
       // Reverter — e mostrar a razão real (ex: rate limit em cliques
       // muito rápidos), não mais um texto genérico fixo
-      setError(mensagemDeErro(e, 'Erro ao concluir tarefa'))
+      setError(mensagemDeErro(e, 'Não consegui concluir a tarefa'))
       await carregarTarefas()
     }
   }, [carregarTarefas])
@@ -115,7 +115,7 @@ export function useTarefas(filtrosIniciais?: FiltroTarefa): UseTarefasReturn {
       await apiFetch(`/api/tarefas/${id}`, { method: 'DELETE' })
       return true
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao excluir tarefa'))
+      setError(mensagemDeErro(e, 'Não consegui remover a tarefa'))
       await carregarTarefas()
       return false
     }

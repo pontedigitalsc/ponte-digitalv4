@@ -94,7 +94,7 @@ export function PipelineColumn({
         {leads.length === 0 && (
           <div className="flex-1 flex items-center justify-center py-8">
             <p className="text-xs text-muted-foreground/50 text-center">
-              {dragOver ? 'Solte aqui' : 'Arraste um lead para cá'}
+              {dragOver ? 'Solte aqui' : 'Arraste uma oportunidade para cá'}
             </p>
           </div>
         )}
@@ -106,7 +106,7 @@ export function PipelineColumn({
             className="flex items-center gap-2 w-full rounded-lg px-3 py-2 text-xs text-muted-foreground hover:bg-card hover:text-foreground hover:shadow-sm transition-all border border-dashed border-transparent hover:border-border mt-1"
           >
             <Plus className="h-3.5 w-3.5" />
-            Adicionar lead
+            Adicionar oportunidade
           </button>
         )}
       </div>

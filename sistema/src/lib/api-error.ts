@@ -46,12 +46,12 @@ export function handleApiError(err: unknown, options?: ErrorResponseOptions): Ne
 
   log.error('Erro não tipado na API', { error: err instanceof Error ? err : undefined, correlationId, durationMs })
   return NextResponse.json(
-    { success: false, error: 'Erro interno do servidor', code: 'INTERNAL_ERROR', correlationId },
+    { success: false, error: 'Não consegui fazer isso agora. Vamos tentar novamente.', code: 'INTERNAL_ERROR', correlationId },
     { status: 500 }
   )
 }
 
-export function respostaErroGenerico(erro: unknown, _mensagemAmigavel = 'Erro interno do servidor') {
+export function respostaErroGenerico(erro: unknown, _mensagemAmigavel = 'Não consegui fazer isso agora. Vamos tentar novamente.') {
   return handleApiError(erro)
 }
 

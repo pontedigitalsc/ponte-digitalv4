@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (authError) {
-      return NextResponse.json({ error: 'Erro ao criar conta. Verifique os dados e tente novamente.' }, { status: 400 })
+      return NextResponse.json({ error: 'Não consegui guardar isso agora. Confira os dados e tente novamente.' }, { status: 400 })
     }
 
     const supabaseId = authData.user.id

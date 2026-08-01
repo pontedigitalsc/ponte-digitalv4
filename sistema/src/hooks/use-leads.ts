@@ -42,7 +42,7 @@ export function useLeads(filtrosIniciais?: FiltroLead): UseLeadsReturn {
       const json = await apiFetch<{ leads: Lead[] }>(`/api/leads?${params}`)
       setLeads(json.leads ?? [])
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao carregar leads'))
+      setError(mensagemDeErro(e, 'Não consegui carregar as oportunidades'))
     } finally {
       setLoading(false)
     }
@@ -59,7 +59,7 @@ export function useLeads(filtrosIniciais?: FiltroLead): UseLeadsReturn {
       setLeads((prev) => [data, ...prev])
       return data
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao criar lead'))
+      setError(mensagemDeErro(e, 'Não consegui criar a oportunidade'))
       return null
     }
   }, [])
@@ -75,7 +75,7 @@ export function useLeads(filtrosIniciais?: FiltroLead): UseLeadsReturn {
       setLeads((prev) => prev.map((l) => (l.id === id ? data : l)))
       return data
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao atualizar lead'))
+      setError(mensagemDeErro(e, 'Não consegui guardar a alteração'))
       return null
     }
   }, [])
@@ -96,7 +96,7 @@ export function useLeads(filtrosIniciais?: FiltroLead): UseLeadsReturn {
     } catch (e) {
       // Reverter update otimista em caso de erro, mostrando a razão real
       // (ex: rate limit ou permissão), não mais um texto genérico
-      setError(mensagemDeErro(e, 'Erro ao mover lead'))
+      setError(mensagemDeErro(e, 'Não consegui mover a oportunidade'))
       await carregarLeads()
     }
   }, [carregarLeads])
@@ -110,7 +110,7 @@ export function useLeads(filtrosIniciais?: FiltroLead): UseLeadsReturn {
       await apiFetch(`/api/leads/${id}`, { method: 'DELETE' })
       return true
     } catch (e) {
-      setError(mensagemDeErro(e, 'Erro ao excluir lead'))
+      setError(mensagemDeErro(e, 'Não consegui remover a oportunidade'))
       await carregarLeads()
       return false
     }

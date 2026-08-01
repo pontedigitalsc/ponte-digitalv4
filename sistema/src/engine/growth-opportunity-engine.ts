@@ -88,7 +88,7 @@ export function gerarOportunidades(
       descricao: `Sua empresa ainda não registrou dados significativos em ${rotulo[area] ?? area}. Explorar esta área pode revelar oportunidades de melhoria.`,
       categoria: area, impacto: 'medio', esforco: 'baixo',
       risco: 'baixo', tempo: 'medio', confianca: 0.5, prioridade: 0,
-      evidencias: ['Nenhum dado registrado nesta categoria'],
+      evidencias: ['Ainda não temos o que mostrar nesta área'],
       gatilho: 'area_nao_explorada', acaoSugerida: { rotulo: 'Explorar', href: '/assistente' },
     })
   }

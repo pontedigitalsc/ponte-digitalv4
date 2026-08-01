@@ -10,9 +10,9 @@ export default async function FinanceiroPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="space-y-1">
-        <h2 className="text-xl font-semibold tracking-tight">Financeiro</h2>
+        <h2 className="text-xl font-semibold tracking-tight">Caixa</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Acompanhe receitas, despesas e tenha visibilidade total do fluxo de caixa.
+          Acompanhe o dinheiro que entra e o que sai, e saiba sempre onde sua empresa está.
         </p>
       </div>
       <ExperienceRenderer

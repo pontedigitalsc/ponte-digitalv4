@@ -252,7 +252,7 @@ export function ClienteList() {
             <EstadoVazio
               icone={UserPlus}
               titulo="Ainda não existem clientes cadastrados"
-              descricao="Cadastre seu primeiro cliente para começar a organizar seus contatos e acompanhar cada relacionamento."
+              descricao="Adicione seu primeiro contato para começar a organizar seus relacionamentos e acompanhar cada um."
               acaoLabel="Novo cliente"
               onAcao={() => { setClienteEditando(null); setModalOpen(true) }}
               temFiltroAtivo={Boolean(busca || statusFiltro !== 'TODOS')}
