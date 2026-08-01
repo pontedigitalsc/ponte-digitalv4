@@ -38,7 +38,7 @@ interface ResumoNaturalData {
 export default function ConversaPage() {
   const [carregando, setCarregando] = useState(true)
   const [perguntaAtual, setPerguntaAtual] = useState<Pergunta | null>(null)
-  const [progresso, setProgresso] = useState<Progresso>({ blocoAtual: 1, totalBlocos: 5, percentual: 0 })
+  const [progresso, setProgresso] = useState<Progresso>({ blocoAtual: 1, totalBlocos: 4, percentual: 0 })
   const [resposta, setResposta] = useState('')
   const [reacao, setReacao] = useState<string | null>(null)
   const [mostrandoReacao, setMostrandoReacao] = useState(false)
@@ -80,6 +80,17 @@ export default function ConversaPage() {
 
   useEffect(() => { iniciarConversa() }, [iniciarConversa])
 
+  // Memória viva: mostrar o contexto e seguir direto para a conversa,
+  // sem pedir um clique a mais do empresário.
+  useEffect(() => {
+    if (!memoria || perguntaAtual || concluida) return
+    const t = setTimeout(() => {
+      setMemoria(null)
+      iniciarConversa()
+    }, 2200)
+    return () => clearTimeout(t)
+  }, [memoria, perguntaAtual, concluida, iniciarConversa])
+
   const enviarResposta = async () => {
     if (!resposta.trim() || !perguntaAtual || enviando) return
 
@@ -109,7 +120,7 @@ export default function ConversaPage() {
 
       timerRef.current = setTimeout(() => {
         avancarDaReacao(data.concluida, data.proximaPergunta, data.progresso)
-      }, 3000)
+      }, 1400)
     } catch {
       setErro('Não consegui ouvir sua resposta agora. Pode tentar de novo?')
       setEnviando(false)
@@ -179,7 +190,7 @@ export default function ConversaPage() {
             </p>
           )}
           {!memoria && !concluida && (
-            <p className="text-sm text-muted-foreground">Antes de qualquer coisa, quero entender como é administrar sua empresa.</p>
+            <p className="text-sm text-muted-foreground">Oi! Antes da gente começar, me conta com suas palavras: o que você faz todos os dias?</p>
           )}
         </div>
 
@@ -195,15 +206,7 @@ export default function ConversaPage() {
         {/* Memória viva — mostrar antes da primeira pergunta */}
         {memoria && !perguntaAtual && !concluida && (
           <div className="text-center animate-fade-in">
-            <button
-              onClick={() => {
-                setMemoria(null)
-                iniciarConversa()
-              }}
-              className="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              Quero conversar
-            </button>
+            <AvatarPonte state="thinking" size="md" className="mx-auto" />
           </div>
         )}
 
@@ -221,17 +224,6 @@ export default function ConversaPage() {
           ) : mostrandoReacao && reacao ? (
             <div className="space-y-4 text-center">
               <p className="text-sm text-muted-foreground italic">{reacao}</p>
-              <div className="flex justify-center">
-                <button
-                  onClick={() => {
-                    const d = dadosRespostaRef.current
-                    avancarDaReacao(d?.concluida ?? false, d?.proximaPergunta ?? null, d?.progresso ?? progresso)
-                  }}
-                  className="rounded-lg border border-primary/30 bg-primary/5 px-5 py-2 text-xs font-medium text-primary hover:bg-primary/10 transition-colors"
-                >
-                  Continuar
-                </button>
-              </div>
             </div>
           ) : perguntaAtual ? (
             <QuestionCard
@@ -277,7 +269,7 @@ export default function ConversaPage() {
               </Link>
             </div>
             <p className="text-xs text-muted-foreground">
-              Não se preocupe, está tudo salvo. Podemos continuar quando você quiser.
+              Fica tranquilo — nossa conversa fica comigo. Continuamos quando você quiser.
             </p>
           </div>
         )}

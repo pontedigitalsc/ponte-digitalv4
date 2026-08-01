@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Send, Bot, Sparkles, RefreshCw } from 'lucide-react'
+import { Send, Sparkles, RefreshCw } from 'lucide-react'
 import { ChatMessage } from './chat-message'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -76,12 +76,11 @@ interface ImpactoResumido {
 }
 
 const SUGESTOES_PADRAO = [
-  'Quais tarefas estão atrasadas?',
-  'Como está o pipeline de vendas?',
-  'Qual o resultado financeiro deste mês?',
-  'Quais implantações estão em andamento?',
-  'Há clientes inadimplentes?',
-  'O que precisa de atenção hoje?',
+  'Como está a semana na empresa?',
+  'Alguma conta te preocupando agora?',
+  'Precisa de ajuda com alguma tarefa?',
+  'Quer conversar sobre algum cliente?',
+  'Tem alguma decisão difícil chegando?',
 ]
 
 export function Chat({
@@ -266,7 +265,7 @@ export function Chat({
           </div>
           <div>
             <h2 className="text-base font-semibold">Assistente</h2>
-            <p className="text-xs text-muted-foreground">Contexto baseado no que aprendemos sobre sua empresa</p>
+            <p className="text-xs text-muted-foreground">O que sei sobre sua empresa, pra decidirmos juntos</p>
           </div>
         </div>
         {!vazio && (
@@ -284,7 +283,7 @@ export function Chat({
           <div className="flex flex-col items-center justify-center h-full gap-6 text-center px-4">
             <div>
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 mx-auto mb-3">
-                <Bot className="h-7 w-7 text-primary" />
+                <Sparkles className="h-7 w-7 text-primary" />
               </div>
               {temFeedbackRecente ? (
                 <>
@@ -296,17 +295,17 @@ export function Chat({
                     <div key={fb.id} className="mt-2 rounded-lg border bg-card px-4 py-3 text-left max-w-sm">
                       <p className="text-xs font-medium text-primary">{fb.acao.titulo}</p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        {fb.tipo === 'AJUDOU' ? 'Você disse que funcionou — confirmei esse conhecimento.' :
-                         fb.tipo === 'AJUDOU_PARCIALMENTE' ? 'Você disse que funcionou parcialmente — ajustei meu entendimento.' :
-                         fb.tipo === 'NAO_AJUDOU' ? 'Você disse que não funcionou — enfraqueci essa hipótese.' :
-                         'Registrei que não foi executada.'}
+                        {fb.tipo === 'AJUDOU' ? 'Você disse que funcionou. Vou usar isso de novo quando precisar.' :
+                         fb.tipo === 'AJUDOU_PARCIALMENTE' ? 'Você disse que funcionou em parte. Vou levar isso em conta da próxima.' :
+                         fb.tipo === 'NAO_AJUDOU' ? 'Você disse que não funcionou. Vou parar de recomendar isso por enquanto.' :
+                         'Registrei que ainda não foi usada.'}
                       </p>
                     </div>
                   ))}
                 </>
               ) : temOutcomePositivo && !temFeedbackRecente ? (
                 <>
-                  <h3 className="text-base font-semibold">Na nossa última interação percebemos uma evolução</h3>
+                  <h3 className="text-base font-semibold">Desde a nossa última conversa, percebi uma evolução</h3>
                   <p className="text-sm text-muted-foreground mt-1 max-w-sm">
                     {impacto!.mudancasPositivas[0].descricao}. Isso continua acontecendo?
                   </p>
@@ -319,9 +318,9 @@ export function Chat({
                 </>
               ) : acoesAtivas && acoesAtivas.length > 0 ? (
                 <>
-                  <h3 className="text-base font-semibold">Estamos acompanhando uma mudança importante na sua empresa</h3>
+                  <h3 className="text-base font-semibold">Deixei algo marcado para a gente acompanhar junto</h3>
                   <p className="text-sm text-muted-foreground mt-1 max-w-sm">
-                    Estou monitorando essa ação — me conte como está sendo:
+                    Me conta como está indo:
                   </p>
                   {acoesAtivas.map((acao) => (
                     <div key={acao.id} className="mt-2 rounded-lg border bg-card px-4 py-3 text-left max-w-sm">
@@ -335,9 +334,9 @@ export function Chat({
                 </>
               ) : decisao ? (
                 <>
-                  <h3 className="text-base font-semibold">Analisando tudo o que sabemos...</h3>
+                  <h3 className="text-base font-semibold">Deixa eu pensar no que já sei sobre a sua empresa...</h3>
                   <p className="text-sm text-muted-foreground mt-1 max-w-sm">
-                    Existe uma decisão que considero mais importante neste momento:
+                    Acho que tem uma coisa que merece sua atenção agora:
                   </p>
                   <div className="mt-3 rounded-lg border bg-card px-4 py-3 text-left max-w-sm">
                     <p className="text-xs font-medium text-primary flex items-center gap-1">
@@ -368,7 +367,7 @@ export function Chat({
                   </p>
                   {contexto?.prioridade && (
                     <span className="inline-block mt-2 rounded-full bg-primary/10 px-3 py-1 text-[10px] font-medium text-primary">
-                      Foco: {CATEGORIA_EVIDENCIA[contexto.prioridade]?.label ?? contexto.prioridade}
+                      Hoje o assunto é: {CATEGORIA_EVIDENCIA[contexto.prioridade]?.label ?? contexto.prioridade}
                     </span>
                   )}
                 </>
@@ -381,8 +380,8 @@ export function Chat({
                   </h3>
                   <p className="text-sm text-muted-foreground mt-1 max-w-sm">
                     {nivelAtivacao === 'CONHECENDO'
-                      ? 'Continue explorando para que eu possa ajudar com decisões mais precisas.'
-                      : 'Quando conversarmos, vou aprender sobre sua empresa e poder ajudar melhor.'}
+                      ? 'Se quiser, me conta algo da rotina que eu entendo melhor o seu momento.'
+                      : 'Cada conversa que a gente tem, eu entendo melhor a sua empresa.'}
                   </p>
                 </>
               )}
@@ -434,7 +433,7 @@ export function Chat({
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder="Pergunte algo sobre a operação..."
+            placeholder="Me conta como está a semana..."
             rows={1}
             disabled={loading}
             className="flex-1 resize-none bg-transparent text-sm outline-none placeholder:text-muted-foreground disabled:opacity-50 py-1 px-1 max-h-[120px]"
@@ -448,9 +447,6 @@ export function Chat({
             <Send className="h-3.5 w-3.5" />
           </Button>
         </div>
-        <p className="text-[10px] text-muted-foreground text-center mt-2">
-          Enter para enviar · Shift+Enter para quebra de linha
-        </p>
       </div>
     </div>
   )

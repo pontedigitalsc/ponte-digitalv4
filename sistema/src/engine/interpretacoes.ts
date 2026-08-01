@@ -53,13 +53,13 @@ function gerarPontoAtencao(ctx: ContextoInterpretacao): string {
   const decisao = r(ctx, 'empresa.decisao')
 
   if (crescer) {
-    return `Você mencionou que o que impede sua empresa de crescer é "${crescer}". Esse tipo de bloqueio costuma aparecer em todas as áreas — e o primeiro passo é observar, não resolver.`
+    return `Você mencionou que o que impede sua empresa de crescer é "${crescer}". Esse tipo de coisa costuma aparecer em várias áreas da empresa — e o primeiro passo é observar, não tentar resolver de uma vez.`
   }
   if (pressao) {
     return `Você sente maior pressão em "${pressao}". Se esse momento do dia se repetir, há um padrão que vale a pena observar nesta semana.`
   }
   if (decisao) {
-    return `Você descreveu que descobre se pode investir assim: "${decisao}". Decisões assim, sem um método, costumam gerar o mesmo padrão repetidamente.`
+    return `Você descreveu que descobre se pode investir assim: "${decisao}". Decisões que dependem só do momento costumam se repetir do mesmo jeito.`
   }
   if (tranquilidade) {
     return `Você mencionou que a última vez que terminou o dia tranquilo foi "${tranquilidade}". O intervalo entre esses momentos é um padrão que quero observar.`
@@ -135,7 +135,7 @@ function gerarSecao2(ctx: ContextoInterpretacao, interpretacoes: Interpretacoes)
   ]
   const pressao = r(ctx, 'rotina.pressao')
   if (pressao) {
-    pontos.push({ evidencia: `O momento de maior pressão: "${pressao}"`, analise: 'Esse tipo de pressão raramente aparece sozinho — costuma estar ligado a como a empresa está estruturada.' })
+    pontos.push({ evidencia: `O momento de maior pressão: "${pressao}"`, analise: 'Esse tipo de pressão raramente aparece sozinho — quase sempre vem do jeito que a empresa é tocada no dia a dia.' })
   }
   return pontos
 }
@@ -157,12 +157,12 @@ function gerarSecao5(ctx: ContextoInterpretacao): string {
   const crescer = r(ctx, 'empresa.crescer')
   const pressao = r(ctx, 'rotina.pressao')
   if (crescer) {
-    return `Durante uma semana, apenas observe: quantas vezes o bloqueio de "${crescer}" aparece na sua semana. Não precisa resolver — só anote quando aparecer.`
+    return `Durante uma semana, apenas observe: quantas vezes aquele assunto aparece na sua semana — "${crescer}". Não precisa resolver, só anote quando ele aparecer.`
   }
   if (pressao) {
     return `Durante uma semana, observe o momento de maior pressão ("${pressao}"). Não precisa mudar nada — só perceber quando ele acontece e o que vem antes.`
   }
-  return 'Durante uma semana, escolha uma única coisa para observar — só observar, sem querer resolver. O simples registro já revela padrões.'
+  return 'Durante uma semana, escolha uma única coisa para observar — só observar, sem querer resolver. Só o fato de você registrar já mostra coisas que antes passavam despercebidas.'
 }
 
 export function gerarResumoNatural(respostas: Record<string, string | null>, interpretacoes: Interpretacoes): ResumoNatural {
@@ -181,7 +181,7 @@ export function gerarResumoNatural(respostas: Record<string, string | null>, int
       paragrafo: gerarSecao3(ctx, interpretacoes),
     },
     secao4: {
-      titulo: 'Ainda não sei',
+      titulo: 'O que ainda quero entender',
       lacunas: gerarSecao4(ctx),
     },
     secao5: {

@@ -11,18 +11,14 @@ interface RevelacaoCardProps {
   resumoNatural?: ResumoNatural | null
 }
 
-function DigitarTexto({ texto, onComplete }: { texto: string; onComplete?: () => void }) {
-  const [mostrado, setMostrado] = useState(0)
-  useEffect(() => {
-    if (mostrado >= texto.length) { onComplete?.(); return }
-    const t = setTimeout(() => setMostrado(p => p + 1), 15)
-    return () => clearTimeout(t)
-  }, [mostrado, texto, onComplete])
-  return <span>{texto.slice(0, mostrado)}<span className="animate-pulse">|</span></span>
-}
-
 function CartaContent({ interpretacoes, resumoNatural }: RevelacaoCardProps) {
   const [lido, setLido] = useState(false)
+
+  useEffect(() => {
+    if (lido || resumoNatural) return
+    const t = setTimeout(() => setLido(true), 1200)
+    return () => clearTimeout(t)
+  }, [lido, resumoNatural])
 
   if (resumoNatural) {
     return (
@@ -59,11 +55,8 @@ function CartaContent({ interpretacoes, resumoNatural }: RevelacaoCardProps) {
     return (
       <div className="text-center space-y-4 py-8">
         <AvatarPonte state="thinking" size="lg" />
-        <p className="text-sm text-muted-foreground">
-          <DigitarTexto
-            texto="Deixa eu organizar o que entendi sobre sua empresa..."
-            onComplete={() => setLido(true)}
-          />
+        <p className="text-sm text-muted-foreground animate-pulse">
+          Deixa eu organizar o que entendi sobre sua empresa...
         </p>
         <div className="flex items-center justify-center gap-1">
           <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:0ms]" />

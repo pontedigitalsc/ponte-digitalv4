@@ -37,7 +37,7 @@ const PERGUNTAS_POR_LACUNA: Record<string, { pergunta: string; tipo: 'texto' | '
   },
   'aquisicao': { pergunta: 'Como um cliente costuma encontrar você?', tipo: 'texto' },
   'produto_principal': { pergunta: 'Qual serviço ou produto sai mais da sua porta?', tipo: 'texto' },
-  'lucro': { pergunta: 'Qual deles deixa a maior margem?', tipo: 'texto' },
+  'lucro': { pergunta: 'Qual deles deixa mais dinheiro no bolso?', tipo: 'texto' },
   'trabalhoso': { pergunta: 'Qual dá mais trabalho para o retorno que gera?', tipo: 'texto' },
   'horas_trabalho': { pergunta: 'Quantas horas por dia a empresa pede de você?', tipo: 'texto' },
   'contratacao': { pergunta: 'Como você decide se está na hora de contratar alguém?', tipo: 'texto' },
@@ -55,12 +55,12 @@ const PERGUNTAS_POR_LACUNA: Record<string, { pergunta: string; tipo: 'texto' | '
   'margem': { pergunta: 'Você sabe quanto sobra de cada venda?', tipo: 'selecao', opcoes: [{ valor: 'sim', rotulo: 'Sim' }, { valor: 'nao', rotulo: 'Não' }, { valor: 'parcial', rotulo: 'Mais ou menos' }] },
   'clientes_top': { pergunta: 'Quem são os clientes que você não quer perder de jeito nenhum?', tipo: 'texto' },
   'clientes_problema': { pergunta: 'Que tipo de cliente dá mais dor de cabeça?', tipo: 'texto' },
-  'concorrencia': { pergunta: 'Quem mais disputa espaço com você no mercado?', tipo: 'texto' },
+  'concorrencia': { pergunta: 'Quem mais disputa cliente com você?', tipo: 'texto' },
   'diferencial': { pergunta: 'O que fazem só quando vão a você?', tipo: 'texto' },
-  'crescimento': { pergunta: 'Qual o maior obstáculo para crescer agora?', tipo: 'texto' },
-  'tecnologia': { pergunta: 'Que ferramentas você usa hoje para cuidar do negócio?', tipo: 'texto' },
+  'crescimento': { pergunta: 'O que mais atrapalha a empresa crescer hoje?', tipo: 'texto' },
+  'tecnologia': { pergunta: 'O que você usa hoje pra cuidar do negócio — caderno, planilha, aplicativo?', tipo: 'texto' },
   'equipe': { pergunta: 'Como está formada sua equipe hoje?', tipo: 'texto' },
-  'capacitacao': { pergunta: 'Sua equipe está preparada para o que vem pela frente?', tipo: 'selecao', opcoes: [{ valor: 'sim', rotulo: 'Sim' }, { valor: 'nao', rotulo: 'Não' }, { valor: 'parcial', rotulo: 'Parcialmente' }] },
+  'capacitacao': { pergunta: 'Sua equipe dá conta do que vem pela frente?', tipo: 'selecao', opcoes: [{ valor: 'sim', rotulo: 'Sim, dá conta' }, { valor: 'nao', rotulo: 'Não, não dá' }, { valor: 'parcial', rotulo: 'Mais ou menos' }] },
 }
 
 const GAPS_POR_CATEGORIA: Record<CategoriaEvidencia, string[]> = {

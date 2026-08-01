@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
       jsonResponse = NextResponse.json({
         token,
         perguntaAtual: primeira,
-        progresso: { blocoAtual: 1, totalBlocos: 5, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 },
+        progresso: { blocoAtual: 1, totalBlocos: 4, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 },
         concluida: false,
         respostas: {},
         memoria,

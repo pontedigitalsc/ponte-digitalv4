@@ -201,24 +201,24 @@ const REGRAS_FORMULA: RegraFormula[] = [
   {
     palavrasChave: [['quantos', 'clientes'], ['número', 'clientes'], ['total', 'clientes']],
     resposta: (c) =>
-      `Você tem ${c.totalClientes} cliente${c.totalClientes !== 1 ? 's' : ''} cadastrado${c.totalClientes !== 1 ? 's' : ''} no total, sendo ${c.clientesAtivos} ativo${c.clientesAtivos !== 1 ? 's' : ''}${c.clientesInadimplentes > 0 ? ` e ${c.clientesInadimplentes} inadimplente${c.clientesInadimplentes !== 1 ? 's' : ''}` : ''}.`,
+      `Hoje são ${c.totalClientes} cliente${c.totalClientes !== 1 ? 's' : ''} no cadastro, sendo ${c.clientesAtivos} ativo${c.clientesAtivos !== 1 ? 's' : ''}${c.clientesInadimplentes > 0 ? ` e ${c.clientesInadimplentes} devendo${c.clientesInadimplentes !== 1 ? '' : ''}` : ''}. Quer que a gente comece olhando os que estão devendo?`,
   },
   {
     palavrasChave: [['faturamento', 'mês'], ['receita', 'mês'], ['quanto', 'faturei']],
     resposta: (c) =>
-      `O faturamento recebido este mês é de R$ ${c.receitaMes.toFixed(2)}. As despesas pagas somam R$ ${c.despesaMes.toFixed(2)}, resultando em R$ ${(c.receitaMes - c.despesaMes).toFixed(2)} de resultado líquido.`,
+      `Este mês entraram R$ ${c.receitaMes.toFixed(2)} e saíram R$ ${c.despesaMes.toFixed(2)} — sobraram R$ ${(c.receitaMes - c.despesaMes).toFixed(2)}. Está dentro do que você esperava?`,
   },
   {
     palavrasChave: [['quantas', 'tarefas', 'atrasadas'], ['tarefas', 'atraso']],
     resposta: (c) =>
       c.tarefasAtrasadas.length === 0
-        ? 'Não há tarefas atrasadas no momento.'
-        : `Há ${c.tarefasAtrasadas.length} tarefa${c.tarefasAtrasadas.length !== 1 ? 's' : ''} atrasada${c.tarefasAtrasadas.length !== 1 ? 's' : ''}:\n${c.tarefasAtrasadas.map((t) => `- ${t.titulo}${t.cliente ? ` (${t.cliente})` : ''} — prioridade ${t.prioridade}`).join('\n')}`,
+        ? 'Não tem tarefa atrasada agora. Bom momento pra planejar a próxima.'
+        : `Tem ${c.tarefasAtrasadas.length} tarefa${c.tarefasAtrasadas.length !== 1 ? 's' : ''} atrasada${c.tarefasAtrasadas.length !== 1 ? 's' : ''}:\n${c.tarefasAtrasadas.map((t) => `- ${t.titulo}${t.cliente ? ` (${t.cliente})` : ''}`).join('\n')}\nVale olhar a que mais pesa no caixa primeiro.`,
   },
   {
     palavrasChave: [['quantos', 'leads'], ['leads', 'pipeline']],
     resposta: (c) =>
-      `Há ${c.totalLeadsAtivos} lead${c.totalLeadsAtivos !== 1 ? 's' : ''} ativo${c.totalLeadsAtivos !== 1 ? 's' : ''} no pipeline. Por estágio: ${c.statsLeads.map((s) => `${s.estagio}: ${s.total}`).join(', ')}.`,
+      `Tem ${c.totalLeadsAtivos} conversa${c.totalLeadsAtivos !== 1 ? 's' : ''} de venda em aberto: ${c.statsLeads.map((s) => `${s.estagio} (${s.total})`).join(', ')}.`,
   },
 ]
 
@@ -241,23 +241,20 @@ function tentarResponderPorFormula(pergunta: string, contexto: ContextoEstrutura
 // ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
 
 function systemPrompt(contexto: string): string {
-  return `Você é o assistente operacional da Ponte Digital, um sistema de gestão empresarial.
-
-Seu papel é ajudar o usuário a entender o estado atual da operação, priorizar atividades e tomar decisões com base nos dados reais do sistema.
+  return `Você é a Ponte, um empresário experiente que acompanha donos de pequenos negócios por dentro. Você não é um sistema, nem um consultor, nem um professor — é um sócio atento e direto.
 
 REGRAS FUNDAMENTAIS:
-1. Responda SEMPRE em português do Brasil
+1. Responda SEMPRE em português do Brasil, em tom de conversa entre empresários
 2. NUNCA invente dados, clientes, valores ou situações que não estejam no contexto abaixo
-3. Se não encontrar a informação nos dados, diga claramente que não tem essa informação
-4. Seja direto, objetivo e prático — foco em ação
-5. Quando identificar problemas (atrasos, inadimplência, oportunidades), sinalize proativamente
-6. Formate as respostas de forma clara: use listas quando houver múltiplos itens
-7. Responda de forma concisa — sem introduções longas ou rodeios
+3. Se não tiver a informação, diga com naturalidade: "isso ainda não passou pela nossa conversa"
+4. Use os dados para conversar, não para relatar. Prefira "você tem 12 clientes e 2 devendo — quer que a gente comece por eles?" a uma lista de números
+5. Sempre que notar algo que merece atenção (atraso, valor em aberto, oportunidade), chame como um parceiro faria, em voz de empresa, não de relatório
+6. Respostas curtas e diretas. Uma ideia por vez, com cara de conversa
 
-DADOS REAIS DO SISTEMA (atualizado agora):
+O QUE SABEMOS SOBRE A EMPRESA (atualizado agora):
 ${contexto}
 
-Com base nesses dados, responda às perguntas do usuário.`
+Com base nisso, converse com o dono da empresa.`
 }
 
 // ─── HANDLER ──────────────────────────────────────────────────────────────────
