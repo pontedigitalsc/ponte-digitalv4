@@ -1,9 +1,13 @@
 import { requireUser, getEmpresaDoUsuario } from '@/lib/auth'
 import { experienceEngine } from '@/engine'
+import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
+import { startOfDay } from 'date-fns'
 import { AvatarPonte } from '@/components/ui/avatar'
 import Link from 'next/link'
 
 export const metadata = { title: 'Minha Empresa Hoje' }
+
+const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
 
 export default async function MinhaEmpresaHojePage() {
   const usuario = await requireUser()
@@ -12,6 +16,47 @@ export default async function MinhaEmpresaHojePage() {
 
   const historia = await experienceEngine.obterHomeExperience(usuario.empresaId)
   const retrato = historia.narrativaEmpresarial?.retratoVivo
+
+  const agora = new Date()
+  const inicioHoje = startOfDay(agora)
+  const inicioOntem = startOfDay(new Date(agora.getTime() - 86400000))
+
+  const [receitaHoje, receitaOntem, atendimentosHoje, tarefasConcluidas, clientesNovos] = await Promise.all([
+    prisma.transacao.aggregate({
+      where: { empresaId: usuario.empresaId, deletedAt: null, tipo: 'RECEITA', dataPagamento: { gte: inicioHoje } },
+      _sum: { valor: true },
+    }),
+    prisma.transacao.aggregate({
+      where: { empresaId: usuario.empresaId, deletedAt: null, tipo: 'RECEITA', dataPagamento: { gte: inicioOntem, lt: inicioHoje } },
+      _sum: { valor: true },
+    }),
+    prisma.historico.count({
+      where: { empresaId: usuario.empresaId, criadoEm: { gte: inicioHoje }, descricao: { startsWith: 'Atendimento:' } },
+    }),
+    prisma.tarefa.count({
+      where: { empresaId: usuario.empresaId, deletedAt: null, status: 'CONCLUIDA', concluidaEm: { gte: inicioOntem } },
+    }),
+    prisma.cliente.count({
+      where: { empresaId: usuario.empresaId, deletedAt: null, criadoEm: { gte: inicioOntem } },
+    }),
+  ])
+
+  const mudancas: { texto: string; positivo?: boolean }[] = []
+
+  const valorHoje = Number(receitaHoje._sum.valor ?? 0)
+  const valorOntem = Number(receitaOntem._sum.valor ?? 0)
+  if (valorHoje > 0) {
+    mudancas.push({ texto: `${brl.format(valorHoje)} recebido hoje${valorOntem > 0 ? ` (ontem foram ${brl.format(valorOntem)})` : ''}.`, positivo: true })
+  }
+  if (atendimentosHoje > 0) {
+    mudancas.push({ texto: `${atendimentosHoje} atendimento${atendimentosHoje > 1 ? 's' : ''} registrado${atendimentosHoje > 1 ? 's' : ''} hoje.`, positivo: true })
+  }
+  if (tarefasConcluidas > 0) {
+    mudancas.push({ texto: `${tarefasConcluidas} tarefa${tarefasConcluidas > 1 ? 's' : ''} concluída${tarefasConcluidas > 1 ? 's' : ''} desde ontem.`, positivo: true })
+  }
+  if (clientesNovos > 0) {
+    mudancas.push({ texto: `${clientesNovos} cliente${clientesNovos > 1 ? 's' : ''} novo${clientesNovos > 1 ? 's' : ''} desde ontem.`, positivo: true })
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
@@ -48,7 +93,29 @@ export default async function MinhaEmpresaHojePage() {
         </div>
       </div>
 
-      {/* O que mudou? */}
+      {/* O que mudou desde ontem */}
+      <div className="rounded-xl border bg-card p-6 space-y-3">
+        <div className="flex items-center gap-2">
+          <AvatarPonte state="speaking" size="sm" />
+          <h2 className="text-base font-semibold tracking-tight">O que mudou desde ontem</h2>
+        </div>
+        {mudancas.length > 0 ? (
+          <ul className="space-y-1.5">
+            {mudancas.map((m, i) => (
+              <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                <span className={m.positivo ? 'text-emerald-500' : 'text-primary'} aria-hidden>✦</span>
+                {m.texto}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Nada mudou desde ontem — e isso também é informação. Quando algo acontecer, você vê aqui.
+          </p>
+        )}
+      </div>
+
+      {/* Vamos continuar entendendo sua empresa? */}
       <div className="rounded-xl border border-dashed border-primary/20 bg-card/50 p-6 space-y-4 text-center">
         <AvatarPonte state="speaking" size="md" />
         <h2 className="text-lg font-semibold tracking-tight">Vamos continuar entendendo sua empresa?</h2>

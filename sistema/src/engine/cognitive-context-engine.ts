@@ -284,22 +284,39 @@ export async function buscarSituacaoEmpresa(empresaId: string): Promise<Situacao
     where: { empresaId, deletedAt: null, criadaEm: { gte: ultimos7Dias } },
   })
 
-  const receitaMes = await prisma.transacao.aggregate({
-    where: { empresaId, deletedAt: null, tipo: 'RECEITA', status: 'PAGO' },
-    _sum: { valor: true },
-  })
-  const receitaPendente = await prisma.transacao.aggregate({
-    where: { empresaId, deletedAt: null, tipo: 'RECEITA', status: 'PENDENTE' },
-    _sum: { valor: true },
-  })
+  const inicioMesAtual = new Date(agora.getFullYear(), agora.getMonth(), 1)
+  const inicioMesAnterior = new Date(agora.getFullYear(), agora.getMonth() - 1, 1)
+
+  const [receitaMes, receitaMesAnterior, receitaPendente] = await Promise.all([
+    prisma.transacao.aggregate({
+      where: { empresaId, deletedAt: null, tipo: 'RECEITA', status: 'PAGO', criadaEm: { gte: inicioMesAtual } },
+      _sum: { valor: true },
+    }),
+    prisma.transacao.aggregate({
+      where: { empresaId, deletedAt: null, tipo: 'RECEITA', status: 'PAGO', criadaEm: { gte: inicioMesAnterior, lt: inicioMesAtual } },
+      _sum: { valor: true },
+    }),
+    prisma.transacao.aggregate({
+      where: { empresaId, deletedAt: null, tipo: 'RECEITA', status: 'PENDENTE' },
+      _sum: { valor: true },
+    }),
+  ])
+
+  const receitaAtual = Number(receitaMes._sum.valor ?? 0)
+  const receitaAnterior = Number(receitaMesAnterior._sum.valor ?? 0)
+  // Variação real em relação ao mês anterior. Só vira número quando há mês
+  // anterior para comparar — nunca inventamos essa comparação.
+  const variacaoReceita = receitaAnterior > 0
+    ? Math.round(((receitaAtual - receitaAnterior) / receitaAnterior) * 100)
+    : null
 
   const sinais = ordenarPorUrgencia([
     ...gerarSinaisClientes(clientes as never, agora),
     ...gerarSinaisTarefas(tarefas as never, agora),
     ...gerarSinaisFinanceiro({
-      receitaMes: Number(receitaMes._sum.valor ?? 0),
+      receitaMes: receitaAtual,
       receitaPendente: Number(receitaPendente._sum.valor ?? 0),
-      variacaoReceita: null,
+      variacaoReceita,
     }),
   ])
 

@@ -16,6 +16,24 @@ const NIVEL_LABEL: Record<string, string> = {
   BAIXA: 'Vale acompanhar',
 }
 
+const TIPO_ACAO_LABEL: Record<string, string> = {
+  registrar: 'Registrar',
+  revisar: 'Revisar',
+  contatar: 'Contatar um cliente',
+  negociar: 'Negociar',
+  organizar: 'Organizar',
+  mapear: 'Mapear',
+  conversar: 'Conversar',
+  analisar: 'Analisar',
+  planejar: 'Planejar',
+}
+
+const DIFICULDADE_LABEL: Record<string, string> = {
+  alta: 'Alto esforço',
+  media: 'Esforço médio',
+  baixa: 'Baixo esforço',
+}
+
 function BarraIndice({ value, label }: { value: number; label: string }) {
   const cor = value >= 70 ? 'bg-destructive' : value >= 45 ? 'bg-amber-500' : value >= 20 ? 'bg-blue-500' : 'bg-gray-300'
   return (
@@ -91,7 +109,24 @@ const grupos = {
                       <BarraIndice value={d.trustScore?.scoreAtual ?? 50} label="Nossa confiança" />
                       <BarraIndice value={d.relevancia} label="Atenção" />
                     </div>
+                    <p className="text-xs text-muted-foreground">
+                      A confiança mostra o quanto acreditamos nessa recomendação, com base no que você já nos contou.
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      <Badge variant="outline" className="text-xs">{TIPO_ACAO_LABEL[d.tipoAcao] ?? d.tipoAcao}</Badge>
+                      <Badge variant="outline" className="text-xs">{DIFICULDADE_LABEL[d.dificuldade] ?? d.dificuldade}</Badge>
+                    </div>
                     <p className="text-sm text-muted-foreground">{d.motivo}</p>
+                    {d.riscos.length > 0 && (
+                      <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2">
+                        <p className="text-xs font-medium text-amber-700 dark:text-amber-400">O que pode dar errado</p>
+                        <ul className="mt-1 space-y-0.5">
+                          {d.riscos.map((r, i) => (
+                            <li key={i} className="text-xs text-muted-foreground list-disc list-inside">{r}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                     {d.evidenciasChave.length > 0 && (
                       <div className="flex flex-wrap gap-1.5">
                         {d.evidenciasChave.map((ev, i) => (
