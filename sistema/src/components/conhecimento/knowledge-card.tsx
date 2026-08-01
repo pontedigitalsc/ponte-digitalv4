@@ -37,6 +37,7 @@ export function KnowledgeCard({ item }: KnowledgeCardProps) {
           <div className="flex items-center gap-2 shrink-0">
             <div className={`flex items-center gap-1.5 px-2 py-1 rounded-md ${scoreBg}`}>
               {item.scoreConfianca >= 60 ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> : item.scoreConfianca >= 30 ? <AlertCircle className="h-3.5 w-3.5 text-amber-500" /> : <Sparkles className="h-3.5 w-3.5 text-red-500" />}
+              <span className="text-[10px] text-muted-foreground">confiança</span>
               <span className={`text-xs font-semibold ${scoreLabel}`}>{item.scoreConfianca}%</span>
             </div>
             <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${expandido ? 'rotate-180' : ''}`} />
