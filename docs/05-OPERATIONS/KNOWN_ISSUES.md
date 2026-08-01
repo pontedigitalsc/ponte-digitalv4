@@ -62,3 +62,25 @@
 **Detalhe estratégico completo:** `04-DECISIONS/ADR/ADR-003-ecossistema-publico-vs-plataforma-cognitiva.md`.
 
 *(Adicionar uma entrada por problema identificado, com status, prioridade e ação.)*
+
+## P51 — produção ainda sem o P50/P51 (deploy manual pendente)
+
+**Status:** Pendente — ação do usuário
+**Prioridade:** Alta (bloqueia ETAPA 12 do P51 e a validação com Founder real)
+**Descrição:** o token da CLI Vercel está inválido; deploy precisa ser feito manualmente pelo usuário. Produção (`https://ponte-digital.vercel.app`) ainda roda a versão P47.1/`1242564`; P50 (linguagem) e P51 (atendimento/caixa/conversa/auth/recomendações/retorno diário) estão commitados em `main` (`7f99070` → `2ce62bc`) mas não publicados.
+**Ação:** usuário autenticar na Vercel (ou configurar `VERCEL_TOKEN`) e fazer deploy de `main`; rodar `prisma migrate deploy` se houver migrações novas (P51 não alterou schema).
+
+## P51 — ETAPAS que exigem validação com usuário real (ETAPAS 6 e 12)
+
+**Status:** Pendente — depende do primeiro Founder usar a plataforma
+**Prioridade:** Alta
+**Descrição:** ETAPA 6 (cronometrar perfis reais: lavagem, barbearia, corretor, oficina, clínica, loja) e ETAPA 12 ("o primeiro Founder usa sem ajuda do desenvolvedor") só podem ser confirmadas com um empresário real usando a versão publicada. A auditoria de código (P51 Lotes A-D) cobriu o que é verificável por código: build limpo, typecheck limpo, `/atendimento` no menu, caixa com valores reais, conversa sem jargão, diagnóstico sem percentuais fixos, recomendação com riscos/esforço visíveis.
+**Ação:** após o deploy, o usuário valida com o primeiro Founder e marca as ETAPAS 6/12 no `FOUNDER_V1_CHECKLIST.md` e no `FOUNDER_READINESS_CHECKLIST.md` (58 itens — Seções A/G dependem de deploy, CI, domínio e política de dados).
+
+## P51 — rotas de ERP legadas fora do menu Founder
+
+**Status:** Aceito por ora (decisão de produto pendente)
+**Prioridade:** Baixa
+**Descrição:** `/dashboard`, `/crm`, `/tarefas` e `/implantacoes` seguem acessíveis por URL mas não aparecem na sidebar Founder (grupos "Sua empresa / Consultar / Aprender / Ajustes"). Não são links quebrados; são telas fora do escopo Founder V1. O checklist "rotas órfãs" (Seção E) pode exigir decisão de desligá-las ou mantê-las com gate de módulo.
+**Ação:** decidir em próxima revisão se essas rotas são removidas, bloqueadas por módulo ou deixadas como estão.
+
