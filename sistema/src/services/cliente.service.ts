@@ -41,7 +41,49 @@ export async function listarClientes(empresaId: string, filtros: FiltroCliente =
     prisma.cliente.count({ where }),
   ])
 
-  return { clientes, total, page, pageSize, totalPages: Math.ceil(total / pageSize) }
+  let resultado = clientes
+
+  // Enriquecimento para a tela de Atendimento: último serviço/valor, visitas e
+  // total gasto, derivados das Transações reais (o caixa do dia é a consequência).
+  if (filtros.paraAtendimento && clientes.length > 0) {
+    const ids = clientes.map((c) => c.id)
+
+    const [ultimasTransacoes, porCliente] = await Promise.all([
+      prisma.transacao.findMany({
+        where: { empresaId, deletedAt: null, clienteId: { in: ids }, tipo: 'RECEITA' },
+        orderBy: { criadaEm: 'desc' },
+        select: { clienteId: true, descricao: true, valor: true, dataPagamento: true, criadaEm: true },
+      }),
+      prisma.transacao.groupBy({
+        by: ['clienteId'],
+        where: { empresaId, deletedAt: null, clienteId: { in: ids }, tipo: 'RECEITA' },
+        _count: { id: true },
+        _sum: { valor: true },
+      }),
+    ])
+
+    const ultimoPorCliente = new Map<string, typeof ultimasTransacoes[number]>()
+    for (const t of ultimasTransacoes) {
+      if (t.clienteId && !ultimoPorCliente.has(t.clienteId)) ultimoPorCliente.set(t.clienteId, t)
+    }
+
+    resultado = clientes.map((c) => {
+      const ultimo = ultimoPorCliente.get(c.id)
+      const agg = porCliente.find((p) => p.clienteId === c.id)
+      const referencia = ultimo?.dataPagamento ?? ultimo?.criadaEm
+      const dias = referencia ? Math.max(0, Math.floor((Date.now() - referencia.getTime()) / 86400000)) : null
+      return {
+        ...c,
+        ultimoServico: ultimo?.descricao ?? null,
+        ultimoValor: ultimo?.valor != null ? Number(ultimo.valor) : null,
+        diasDesdeUltimo: dias,
+        totalGasto: Number(agg?._sum.valor ?? 0),
+        totalVisitas: agg?._count.id ?? 0,
+      }
+    })
+  }
+
+  return { clientes: resultado, total, page, pageSize, totalPages: Math.ceil(total / pageSize) }
 }
 
 // ─── BUSCAR CLIENTE POR ID (perfil completo) ──────────────────────────────────

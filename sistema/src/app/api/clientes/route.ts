@@ -22,7 +22,8 @@ export async function GET(request: NextRequest) {
       segmento:  searchParams.get('segmento') ?? undefined,
       busca:     searchParams.get('busca') ?? undefined,
       page:      Number(searchParams.get('page') ?? 1),
-      pageSize:  Number(searchParams.get('pageSize') ?? 20),
+      pageSize:  Number(searchParams.get('pageSize') ?? searchParams.get('limite') ?? 20),
+      paraAtendimento: searchParams.get('paraAtendimento') === 'true',
     }
 
     const resultado = await listarClientes(usuario.empresaId, filtros)

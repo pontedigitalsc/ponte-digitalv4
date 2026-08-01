@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  LayoutDashboard, Users, UserCheck,
+  LayoutDashboard, UserCheck, Users,
   DollarSign, Settings, Bot, ChevronLeft, Building2,
   Clock, Sparkles, RefreshCw,
 } from 'lucide-react'
@@ -15,6 +15,7 @@ const navItems = [
     group: 'Sua empresa',
     items: [
       { href: '/minha-empresa-hoje', label: 'Minha empresa',  icon: LayoutDashboard },
+      { href: '/atendimento',        label: 'Atendimento',    icon: UserCheck },
       { href: '/conversa',           label: 'Conversar',      icon: Bot },
       { href: '/minha-jornada',      label: 'Minha História', icon: RefreshCw },
     ],
@@ -26,7 +27,7 @@ const navItems = [
       { href: '/centro-decisao', label: 'O que merece atenção', icon: Sparkles },
       { href: '/conhecimento',   label: 'O que entendemos', icon: RefreshCw },
       { href: '/financeiro',     label: 'Caixa',            icon: DollarSign },
-      { href: '/clientes',       label: 'Pessoas',          icon: UserCheck },
+      { href: '/clientes',       label: 'Pessoas',          icon: Users },
     ],
   },
   {
@@ -47,6 +48,7 @@ const navItems = [
 const MODULO_MAP: Record<string, string> = {
   '/minha-empresa-hoje': 'inicio',
   '/dashboard': 'inicio',
+  '/atendimento': 'inicio',
   '/conversa': 'conversa',
   '/minha-jornada': 'minha-jornada',
   '/historico': 'historico',

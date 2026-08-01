@@ -215,6 +215,7 @@ export interface FiltroCliente {
   segmento?: string
   page?: number
   pageSize?: number
+  paraAtendimento?: boolean
 }
 
 export interface FiltroTarefa {
