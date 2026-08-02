@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle, Badge } from '@/components/ui/card'
 import { AvatarRoot, AvatarFallback } from '@/components/ui/avatar'
 import { cn, formatarMoeda } from '@/lib/utils'
+import { MICROCOPY } from '@/constants'
 
 interface ClienteResumo {
   id: string
@@ -421,7 +422,7 @@ export function AtendimentoShell({ empresaId, caixaResumo: caixaInicial, notific
           <div className="rounded-lg border border-dashed p-8 text-center">
             <UserCheck className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
             <p className="text-sm text-muted-foreground">
-              Nenhum cliente encontrado para &ldquo;{busca}&rdquo;
+              {MICROCOPY.buscaClienteVazia} &ldquo;{busca}&rdquo; — mas podemos anotá-lo agora.
             </p>
             <button
               onClick={() => { setCriandoCliente(true); setNomeNovoCliente(busca.trim()) }}

@@ -66,6 +66,14 @@
 >
 > Ver `docs/07-MILESTONES/P53_EXPERIENCIA_PONTE.md`.
 
+> **MARCO: P54 — Experiência Founder V2: Auditoria Total de Valor e Missão — 1 de agosto de 2026**
+>
+> Após P54, cada interação da Ponte entrega valor percebido antes de pedir qualquer coisa — sem adicionar módulos. A auditoria percorreu conversa, visual, linguagem e recomendações.
+>
+> **Conteúdo:** primeira conversa reestruturada (v5, 22 perguntas) começando pela empresa antes do empresário; perguntas que ensinam antes de pedir resposta; alternativas inteligentes com campo opcional "Se quiser, conte mais" (permiteDetalhe); devolutiva que cita a empresa real; tokens visuais premium (card-premium, gradientes, sombras, tipografia); microcopy humano e remoção de jargão visível ("leads/pipeline/funil/follow-up" → "negociações/oportunidades/retomar contato", "Salvar" → "Guardar", "Excluir" → "Remover"); reações naturais; centro de decisão reestruturado na narrativa de conselheiro (O que percebemos / Por que importa / O que pode acontecer / Próximo passo); auditoria de telas e auditoria técnica com débitos registrados (`micro-reaction` órfão, `/diagnostico` legado). Nenhum schema novo, nenhum módulo novo, nenhuma tela ERP nova.
+>
+> Ver `docs/07-MILESTONES/P54_EXPERIENCIA_FOUNDER_V2.md`.
+
 *Documento operacional, complementar ao FOUNDATION.md e à Tese de Valor (Nível 1). É a referência principal para qualquer agente de código — Roo Code, Gemini CLI, Claude ou outro — antes de qualquer tarefa de implementação. Atualizar a cada sprint concluída. Máximo duas páginas: se crescer além disso, o excesso vira Playbook (Nível 3), não fica aqui.*
 
 **Objetivo desta fase:** validar as **8 Capacidades Fundamentais** com 100 fundadores — não apenas acumular evidências, mas testar se a materialização da Teoria da Evolução Empresarial produz empresários mais conscientes, adaptáveis e tranquilos. Os 100 primeiros são co-autores da tese: cada interação fortalece ou questiona uma capacidade, gera Capital Cognitivo e alimenta a Curva Evolutiva.

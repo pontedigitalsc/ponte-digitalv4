@@ -8,7 +8,7 @@ export function Celebracoes({ conquistas }: { conquistas: Conquista[] }) {
   if (conquistas.length === 0) return null
 
   return (
-    <section className="rounded-xl border border-emerald-500/15 bg-card p-6 space-y-4 animate-fade-in">
+    <section className="card-premium card-premium-hover rounded-xl p-6 space-y-4 animate-fade-in">
       <div>
         <h2 className="text-base font-semibold tracking-tight">Suas conquistas</h2>
         <p className="text-xs text-muted-foreground">Marcos de evolução — não apenas dinheiro</p>

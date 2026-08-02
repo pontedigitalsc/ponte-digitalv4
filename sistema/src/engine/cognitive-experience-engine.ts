@@ -834,13 +834,13 @@ function construirCRMExperience(estado: EstadoCognitivoCompleto): CRMExperience 
   else if (impacto.areaAtencao?.categoria === 'CLIENTES') tom = 'alerta'
   else if ((contexto?.confianca ?? 0) < 0.3) tom = 'desacelerando'
 
-  let resumo = 'O pipeline de vendas está estável.'
-  if (tom === 'crescendo') resumo = `O pipeline está crescendo — ${impacto.areaMaisEvoluiu?.justificativa}`
-  if (tom === 'alerta') resumo = `Atenção necessária no pipeline — ${impacto.areaAtencao?.justificativa}`
-  if (tom === 'desacelerando') resumo = 'O pipeline desacelerou. Identificar novos negócios pode ajudar.'
+  let resumo = 'As negociações de vendas estão estáveis.'
+  if (tom === 'crescendo') resumo = `As negociações estão crescendo — ${impacto.areaMaisEvoluiu?.justificativa}`
+  if (tom === 'alerta') resumo = `Atenção necessária nas negociações — ${impacto.areaAtencao?.justificativa}`
+  if (tom === 'desacelerando') resumo = 'As negociações desaceleraram. Identificar novos negócios pode ajudar.'
 
   const pipelineNarrative: PipelineNarrative = {
-    saudacao: prioridadeCRM ? 'Acompanhando seus clientes.' : 'Visão geral do pipeline.',
+    saudacao: prioridadeCRM ? 'Acompanhando seus clientes.' : 'Visão geral das negociações.',
     resumo,
     tom,
   }
@@ -877,7 +877,7 @@ function construirCRMExperience(estado: EstadoCognitivoCompleto): CRMExperience 
   if (!prioridadeCRM) {
     recomendacoes.push(construirInsight(
       'recomendacao', 'Explorar oportunidades comerciais',
-      'Revisar o pipeline de vendas pode revelar novas oportunidades.',
+      'Revisar as negociações de vendas pode revelar novas oportunidades.',
       0.5, 'CLIENTES', 'Recommendation Builder',
       { rotulo: 'Ver CRM', href: '/crm' },
     ))
@@ -1450,7 +1450,7 @@ function extrairSugestoes(estado: EstadoCognitivoCompleto): string[] {
   if (contexto?.prioridade === 'FINANCEIRO') {
     sugestoes.push('Como está o fluxo de caixa hoje?')
   } else if (contexto?.prioridade === 'CLIENTES') {
-    sugestoes.push('Como está o pipeline de vendas?')
+    sugestoes.push('Como estão as negociações de vendas?')
   } else {
     sugestoes.push('Quais tarefas estão atrasadas?')
   }

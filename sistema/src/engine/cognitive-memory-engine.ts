@@ -192,7 +192,7 @@ function gerarDescricaoHipotese(categoria: string, evidencias: Array<{ descricao
     },
     CLIENTES: (evs) => {
       if (evs.some(e => e.descricao.toLowerCase().includes('lead') || e.descricao.toLowerCase().includes('venda'))) {
-        return 'O pipeline de vendas e aquisição de clientes é uma área crítica'
+        return 'As negociações de vendas e a busca por novos clientes são uma área crítica'
       }
       return 'A base de clientes requer análise e estratégias de retenção'
     },

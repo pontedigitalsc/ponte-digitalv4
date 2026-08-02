@@ -347,7 +347,7 @@ function gerarAcaoSugerida(
   identidade: { interpretacoes?: unknown } | null
 ): string | undefined {
   if (categoria === 'FINANCEIRO') return 'Recomendo revisar o fluxo de caixa e as contas a receber.'
-  if (categoria === 'CLIENTES') return 'Que tal revisar o pipeline de vendas e os clientes ativos?'
+  if (categoria === 'CLIENTES') return 'Que tal revisar as negociações de vendas e os clientes ativos?'
   if (categoria === 'GESTAO') return 'Verificar tarefas e processos internos pode trazer clareza.'
   if (categoria === 'OPERACAO') return 'Analisar a operação pode revelar gargalos.'
   if (categoria === 'ESTRATEGIA' && !identidade) return 'Que tal começarmos com uma conversa para entender sua empresa?'

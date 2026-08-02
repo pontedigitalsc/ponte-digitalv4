@@ -125,14 +125,13 @@ const grupos = {
                     <p className="text-xs text-muted-foreground">
                       A confiança mostra o quanto acreditamos nessa recomendação, com base no que você já nos contou.
                     </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      <Badge variant="outline" className="text-xs">{TIPO_ACAO_LABEL[d.tipoAcao] ?? d.tipoAcao}</Badge>
-                      <Badge variant="outline" className="text-xs">{DIFICULDADE_LABEL[d.dificuldade] ?? d.dificuldade}</Badge>
+                    <div className="rounded-lg border border-primary/15 bg-primary/5 px-3 py-2">
+                      <p className="text-xs font-medium text-primary">Por que importa</p>
+                      <p className="text-sm leading-relaxed">{d.motivo}</p>
                     </div>
-                    <p className="text-sm text-muted-foreground">{d.motivo}</p>
                     {(d.evidenciasChave.length > 0 || outcomesDaCategoria.length > 0) && (
                       <div className="rounded-lg border border-primary/15 bg-primary/5 px-3 py-2 space-y-1">
-                        <p className="text-xs font-medium text-primary">A história dessa recomendação</p>
+                        <p className="text-xs font-medium text-primary">O que percebemos</p>
                         {d.evidenciasChave.length > 0 && (
                           <p className="text-xs text-muted-foreground leading-relaxed">
                             Nasceu de: {d.evidenciasChave.join('; ')}.
@@ -145,23 +144,29 @@ const grupos = {
                         )}
                       </div>
                     )}
-                    {d.riscos.length > 0 && (
-                      <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2">
-                        <p className="text-xs font-medium text-amber-700 dark:text-amber-400">O que pode dar errado</p>
-                        <ul className="mt-1 space-y-0.5">
-                          {d.riscos.map((r, i) => (
-                            <li key={i} className="text-xs text-muted-foreground list-disc list-inside">{r}</li>
-                          ))}
-                        </ul>
+                    {(d.riscos.length > 0 || d.desconhecidos.length > 0) && (
+                      <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 space-y-1.5">
+                        <p className="text-xs font-medium text-amber-700 dark:text-amber-400">O que pode acontecer</p>
+                        {d.riscos.length > 0 && (
+                          <ul className="space-y-0.5">
+                            {d.riscos.map((r, i) => (
+                              <li key={`r-${i}`} className="text-xs text-muted-foreground list-disc list-inside">Se não for cuidado: {r}</li>
+                            ))}
+                          </ul>
+                        )}
+                        {d.desconhecidos.length > 0 && (
+                          <ul className="space-y-0.5">
+                            {d.desconhecidos.map((u, i) => (
+                              <li key={`u-${i}`} className="text-xs text-muted-foreground list-disc list-inside">Ainda não sabemos: {u}</li>
+                            ))}
+                          </ul>
+                        )}
                       </div>
                     )}
-                    {d.evidenciasChave.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5">
-                        {d.evidenciasChave.map((ev, i) => (
-                          <Badge key={i} variant="outline" className="text-xs">{ev}</Badge>
-                        ))}
-                      </div>
-                    )}
+                    <div className="flex flex-wrap gap-1.5">
+                      <Badge variant="outline" className="text-xs">Próximo passo: {TIPO_ACAO_LABEL[d.tipoAcao] ?? d.tipoAcao}</Badge>
+                      <Badge variant="outline" className="text-xs">{DIFICULDADE_LABEL[d.dificuldade] ?? d.dificuldade}</Badge>
+                    </div>
                   </CardContent>
                 </Card>
                 )

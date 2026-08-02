@@ -190,6 +190,9 @@ A Ponte Digital concluiu sua fase de **construção da fundação** e inicia ofi
 | 37 | Foundation Database V1 | 29/07 | ✅ |
 | 38 | Foundation V2.0 (Congelamento) | 29/07 | ✅ |
 | **39** | **Foundation Release V2.0** | **29/07** | **✅** |
+| 52 | Inteligência Conversacional Estratégica | 01/08 | ✅ |
+| 53 | Experiência Ponte: Da Conversa ao Relacionamento | 01/08 | ✅ |
+| 54 | Experiência Founder V2 (Valor e Missão) | 01/08 | ✅ |
 
 ---
 

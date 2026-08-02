@@ -138,7 +138,7 @@ export function Chat({
           contexto.prioridade === 'FINANCEIRO'
             ? 'Como está o fluxo de caixa?'
             : contexto.prioridade === 'CLIENTES'
-              ? 'Como está o pipeline?'
+              ? 'Como estão as negociações com clientes novos?'
               : 'Quais tarefas estão atrasadas?',
           ...(contexto.mudancasRecentes?.slice(0, 1).map((m) => `Explique: ${m.slice(0, 60)}`) ?? []),
           'Qual o resultado financeiro deste mês?',

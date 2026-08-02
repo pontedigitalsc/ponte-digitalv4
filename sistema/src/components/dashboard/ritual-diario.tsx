@@ -8,7 +8,7 @@ import { AvatarPonte } from '@/components/ui/avatar'
 
 export function RitualDiario({ data }: { data: RitualDiarioData }) {
   return (
-    <section className="rounded-xl border border-primary/15 bg-card p-6 space-y-5 animate-fade-in">
+    <section className="card-premium card-premium-hover rounded-xl p-6 space-y-5 animate-fade-in">
       <div className="flex items-center gap-2">
         <AvatarPonte state="breathing" size="sm" />
         <div>

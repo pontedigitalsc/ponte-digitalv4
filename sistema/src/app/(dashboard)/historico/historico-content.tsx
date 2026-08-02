@@ -91,9 +91,9 @@ export default function HistoricoContent({ experience }: Props) {
 
   const handleExcluir = async (id: string) => {
     const ok = await confirmar({
-      titulo: 'Excluir este registro?',
-      descricao: 'Esta ação não pode ser desfeita — o registro será removido permanentemente.',
-      textoConfirmar: 'Excluir',
+      titulo: 'Remover este registro?',
+      descricao: 'Ele será removido da sua história — sem possibilidade de desfazer.',
+      textoConfirmar: 'Remover desta história',
       variante: 'destrutiva',
     })
     if (!ok) return

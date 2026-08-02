@@ -56,7 +56,7 @@ export function LeadCard({ lead, onEdit, onDelete, dragging = false }: LeadCardP
             width="w-36"
             items={[
               { label: 'Editar', onClick: () => onEdit(lead), icon: <Pencil className="h-3.5 w-3.5" /> },
-              { label: 'Excluir', onClick: () => onDelete(lead.id), variant: 'danger' as const, icon: <Trash2 className="h-3.5 w-3.5" /> },
+              { label: 'Remover', onClick: () => onDelete(lead.id), variant: 'danger' as const, icon: <Trash2 className="h-3.5 w-3.5" /> },
             ]}
           />
         </div>

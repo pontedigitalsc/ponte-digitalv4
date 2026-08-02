@@ -246,7 +246,7 @@ export function ClienteForm({ cliente, onSubmit, onCancel, loading }: ClienteFor
         </Button>
         <Button type="submit" disabled={loading}>
           {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-          {cliente ? 'Salvar alterações' : 'Criar cliente'}
+          {cliente ? 'Guardar alterações' : 'Criar cliente'}
         </Button>
       </div>
     </form>

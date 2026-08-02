@@ -197,3 +197,14 @@ export const PRIORIDADE_AMIGAVEL: Record<string, string> = {
   MEDIA: 'Quando puder',
   BAIXA: 'Vale acompanhar',
 }
+
+// ─── MICROCOPY ────────────────────────────────────────────────────────────────
+
+// Textos de interface com tom humano, sem jargão técnico (P54).
+export const MICROCOPY = {
+  buscaClienteVazia: 'Ainda não conhecemos nenhum cliente que combine com',
+  guardar: 'Guardar',
+  guardarAlteracoes: 'Guardar alterações',
+  remover: 'Remover',
+  removerDestaHistoria: 'Remover desta história',
+} as const

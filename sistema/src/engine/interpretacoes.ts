@@ -26,10 +26,13 @@ function r(ctx: ContextoInterpretacao, id: string): string | null {
 // ─── O que mais me chamou atenção hoje ─────────────────────────────────────
 function gerarObservacao(ctx: ContextoInterpretacao): string {
   const nascer = r(ctx, 'historia.nascer')
-  const comecar = r(ctx, 'historia.comecar')
   const energia = r(ctx, 'rotina.energia')
   const cabeca = r(ctx, 'rotina.cabeca')
+  const momento = r(ctx, 'empresa.momento')
 
+  if (momento) {
+    return `Você descreveu o momento da sua empresa como "${momento}". A forma como você lê esse momento costuma guiar as decisões que vêm pela frente.`
+  }
   if (energia) {
     return `Você me contou que o que mais consumiu sua energia foi "${energia}". Reparei que o que toma sua energia também é o que mais ocupa sua cabeça — não por acaso.`
   }
@@ -38,9 +41,6 @@ function gerarObservacao(ctx: ContextoInterpretacao): string {
   }
   if (nascer) {
     return `Sua empresa nasceu de "${nascer}". Pelo que você contou, essa origem ainda influencia a forma como você administra hoje.`
-  }
-  if (comecar) {
-    return `Você começou por "${comecar}". É interessante ver como essa motivação inicial ainda aparece na sua rotina.`
   }
   return 'Pelo que você me contou, sua empresa parece viver um momento em que muita coisa depende de uma só pessoa.'
 }
@@ -51,7 +51,11 @@ function gerarPontoAtencao(ctx: ContextoInterpretacao): string {
   const crescer = r(ctx, 'empresa.crescer')
   const tranquilidade = r(ctx, 'rotina.tranquilo')
   const decisao = r(ctx, 'empresa.decisao')
+  const preocupacao = r(ctx, 'empresa.preocupacao')
 
+  if (preocupacao) {
+    return `Você disse que sua maior preocupação hoje é "${preocupacao}". Preocupações têm raiz — encontrar a raiz costuma ser o primeiro passo.`
+  }
   if (crescer) {
     return `Você mencionou que o que impede sua empresa de crescer é "${crescer}". Esse tipo de coisa costuma aparecer em várias áreas da empresa — e o primeiro passo é observar, não tentar resolver de uma vez.`
   }
@@ -94,8 +98,9 @@ function gerarContinuidade(ctx: ContextoInterpretacao): string {
   const pressao = r(ctx, 'rotina.pressao')
   const decisao = r(ctx, 'empresa.decisao')
   const tranquilidade = r(ctx, 'rotina.tranquilo')
+  const preocupacao = r(ctx, 'empresa.preocupacao')
 
-  const tema = crescer ?? pressao ?? decisao ?? tranquilidade
+  const tema = preocupacao ?? crescer ?? pressao ?? decisao ?? tranquilidade
   if (tema) {
     return `Hoje apareceu um padrão sobre "${tema}". Na próxima conversa quero descobrir se isso ainda continua acontecendo — e o que você percebeu quando passou a observar.`
   }
@@ -115,13 +120,18 @@ export function interpretar(respostas: Record<string, string | null>): Interpret
 
 function gerarSecao1(ctx: ContextoInterpretacao): string {
   const nascer = r(ctx, 'historia.nascer')
-  const comecar = r(ctx, 'historia.comecar')
-  const rotina = r(ctx, 'rotina.dia')
+  const nome = r(ctx, 'empresa.nome')
+  const oque = r(ctx, 'empresa.oque')
+  const haquanto = r(ctx, 'empresa.haquanto')
+  const momento = r(ctx, 'empresa.momento')
 
   const partes: string[] = []
+  if (nome && oque) partes.push(`sua empresa é "${nome}", e ela se explica assim: "${oque}"`)
+  else if (nome) partes.push(`sua empresa se chama "${nome}"`)
+  else if (oque) partes.push(`sua empresa se explica assim: "${oque}"`)
+  if (haquanto) partes.push(`ela existe há "${haquanto}"`)
+  if (momento) partes.push(`você vive este momento como: "${momento}"`)
   if (nascer) partes.push(`sua empresa nasceu de "${nascer}"`)
-  if (comecar) partes.push(`você começou por "${comecar}"`)
-  if (rotina) partes.push(`seu dia costuma começar "${rotina}"`)
 
   if (partes.length > 0) {
     return `Pelo que você me contou, ${partes.join('; e ')}. Isso já me dá um retrato inicial de como você conduz sua empresa.`

@@ -228,7 +228,7 @@ export function TransacaoList({
                                 : []),
                               { label: 'Editar', onClick: () => { setTransacaoEditando(t); setModalOpen(true) }, icon: <Pencil className="h-3.5 w-3.5" /> },
                               'divider',
-                              { label: 'Excluir', onClick: () => onExcluir(t.id), variant: 'danger' as const, icon: <Trash2 className="h-3.5 w-3.5" /> },
+                              { label: 'Remover', onClick: () => onExcluir(t.id), variant: 'danger' as const, icon: <Trash2 className="h-3.5 w-3.5" /> },
                             ]}
                           />
                         </td>

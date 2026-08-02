@@ -67,7 +67,7 @@ function construirPrevisao(
   const metricas: Record<string, string> = {
     financeiro: 'Receita recebida / Inadimplência reduzida',
     clientes: 'Clientes reativados / Taxa de retorno',
-    crm: 'Leads avançados no pipeline',
+    crm: 'Negociações avançadas em andamento',
     tarefas: 'Tarefas concluídas dentro do prazo',
     implantacoes: 'Implantações dentro do cronograma',
   }

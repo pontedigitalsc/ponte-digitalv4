@@ -73,7 +73,7 @@ export default async function DashboardPage() {
     memoriasEmocionais: memorias.map((m) => m.sentimento),
     atencao: (situacao?.sinais ?? []).slice(0, 3).map((s) => ({ titulo: s.titulo, descricao: s.descricao ?? '' })),
     oportunidade: situacao?.temLeadsQuentes
-      ? 'Você tem leads em negociação no pipeline — o momento de retomá-los é agora.'
+      ? 'Você tem negociações com clientes novos em andamento — o momento de retomá-las é agora.'
       : situacao?.variacaoReceita && situacao.variacaoReceita > 0
         ? `Seu faturamento subiu ${situacao.variacaoReceita}% neste mês — entender o que funcionou vale virar padrão.`
         : null,

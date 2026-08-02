@@ -237,7 +237,7 @@ export function ClienteList() {
                               { label: 'Ver perfil', onClick: () => router.push(`/clientes/${cliente.id}`), icon: <ExternalLink className="h-3.5 w-3.5" /> },
                               { label: 'Editar', onClick: () => abrirEdicao(cliente), icon: <Pencil className="h-3.5 w-3.5" /> },
                               'divider',
-                              { label: 'Excluir', onClick: () => handleDelete(cliente.id), variant: 'danger', icon: <Trash2 className="h-3.5 w-3.5" /> },
+                              { label: 'Remover', onClick: () => handleDelete(cliente.id), variant: 'danger', icon: <Trash2 className="h-3.5 w-3.5" /> },
                             ]}
                           />
                         </td>

@@ -21,6 +21,7 @@ const config: Config = {
         primary: {
           DEFAULT:    'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
+          soft:       'hsl(var(--primary-soft))',
         },
         secondary: {
           DEFAULT:    'hsl(var(--secondary))',
@@ -46,6 +47,16 @@ const config: Config = {
           DEFAULT:    'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        institutional: {
+          900: 'hsl(var(--institutional-900))',
+          800: 'hsl(var(--institutional-800))',
+          700: 'hsl(var(--institutional-700))',
+        },
+      },
+      boxShadow: {
+        card:    'var(--shadow-card)',
+        lift:    'var(--shadow-lift)',
+        primary: 'var(--shadow-primary)',
       },
       borderRadius: {
         lg: 'var(--radius)',

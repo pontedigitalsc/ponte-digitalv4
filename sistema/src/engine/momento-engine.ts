@@ -76,7 +76,7 @@ export async function detectarMomentoEmpresa(empresaId: string): Promise<Momento
             : 'Faz 30 dias ou mais sem registro financeiro'
   } else if (temLeadsQuentes && variacaoReceita !== null && variacaoReceita >= 0) {
     momento = 'COMEMORANDO'
-    razao = 'Há leads em negociação e o faturamento não caiu no mês'
+    razao = 'Há negociações em andamento e o faturamento não caiu no mês'
   } else if (variacaoReceita !== null && variacaoReceita >= 20) {
     momento = 'CRESCENDO'
     razao = `O faturamento cresceu ${variacaoReceita}% em relação ao mês anterior`

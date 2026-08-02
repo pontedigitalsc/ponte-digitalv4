@@ -130,7 +130,7 @@ export function TarefaItem({ tarefa, onToggle, onEdit, onDelete, compact = false
               ? [{ label: 'Ver cliente', onClick: () => window.location.href = `/clientes/${tarefa.cliente!.id}`, icon: <ExternalLink className="h-3.5 w-3.5" /> }]
               : []),
             'divider',
-            { label: 'Excluir', onClick: () => onDelete(tarefa.id), variant: 'danger' as const, icon: <Trash2 className="h-3.5 w-3.5" /> },
+            { label: 'Remover', onClick: () => onDelete(tarefa.id), variant: 'danger' as const, icon: <Trash2 className="h-3.5 w-3.5" /> },
           ]}
         />
       </div>

@@ -1,10 +1,14 @@
 export const reacoesIndividuais: Record<string, string> = {
+  'empresa.nome': 'Agora sei com quem estou conversando. Vou lembrar do nome da sua empresa.',
+  'empresa.oque': 'Isso ajuda bastante. Já consigo enxergar melhor a sua empresa.',
+  'empresa.haquanto': 'O tempo que a sua empresa carrega muda o jeito de ler o momento. Vou levar isso em conta.',
+  'empresa.momento': 'Percebi como você lê o momento da sua empresa. Isso diz muito sobre as próximas escolhas.',
+  'empresario.quem': 'Entendi. Agora a empresa tem nome, história e uma pessoa por trás dela — você.',
   'historia.nascer':     'Uma empresa nasce de um momento. O seu, agora, faz parte do que eu vou lembrar.',
-  'historia.comecar':    'Começar exige coragem. Você teve.',
   'historia.momento':    'Esse momento importa. Vou guardá-lo com o cuidado que ele merece.',
   'historia.orgulho':    'Sinto o orgulho nessa resposta. É dos seus.',
   'historia.mudanca':    'Olhar para trás e enxergar o que mudaria exige honestidade. Você teve.',
-  'rotina.dia':          'Entendi como seu dia começa. Isso me diz muito sobre como ele termina.',
+  'empresa.preocupacao': 'Guardei onde o peso está agora. Vamos olhar isso com calma.',
   'rotina.pressao':      'Percebi onde a pressão aperta. Vou prestar atenção nisso.',
   'rotina.cabeca':       'O que ocupa sua cabeça quase nunca é o que parece por fora.',
   'rotina.tranquilo':    'Terminar o dia tranquilo é raro. Quando você me conta, eu noto.',
@@ -47,10 +51,11 @@ export function obterReacao(etapaId: string): string {
 }
 
 // P52 — reações de transição entre os 5 estágios do conselheiro.
+// P54 — transições mais naturais: a conversa respira entre os blocos.
 export const REACOES_BLOCO: Record<string, string> = {
-  'contexto': 'Uma empresa nasce de um momento — o seu já me conta muita coisa. Agora quero entender como esse começo virou o dia a dia.',
-  'realidade': 'Já imagino como é seu dia. Agora quero enxergar a empresa por trás dele, como ela funciona de verdade.',
-  'tensao': 'Estou começando a sentir onde a corda aperta. Vamos olhar isso com calma — é assim que encontramos o que trava.',
+  'contexto': 'Agora consigo enxergar melhor a sua empresa. Vamos avançar — quero entender como ela funciona no dia a dia.',
+  'realidade': 'Entendi como o dia a dia se desenha. Agora quero olhar a empresa por trás dele — o que a move e o que a segura.',
+  'tensao': 'Vamos avançar. Estou começando a sentir onde a corda aperta — é assim que encontramos o que trava.',
   'evolucao': 'Você carrega mais conquistas do que imagina. Deixa eu registrar o que já está funcionando.',
-  'proximo_movimento': 'Com o que você me contou, já consigo pensar em direção. Vamos definir o próximo movimento.',
+  'proximo_movimento': 'Falta muito pouco. Com o que você me contou, já consigo pensar em direção — vamos definir o próximo movimento.',
 }

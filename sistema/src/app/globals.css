@@ -2,33 +2,44 @@
 @config "../../tailwind.config.ts";
 
 :root {
-  --background: 0 0% 99%;
-  --foreground: 222 47% 11%;
+  --background: 223 45% 98%;
+  --foreground: 225 35% 12%;
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card-foreground: 225 35% 12%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
-  --primary: 221 83% 53%;
+  --popover-foreground: 225 35% 12%;
+  --primary: 221 72% 45%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222 47% 11%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222 47% 11%;
+  --primary-soft: 221 90% 96%;
+  --secondary: 220 32% 95%;
+  --secondary-foreground: 225 35% 12%;
+  --muted: 220 32% 95%;
+  --muted-foreground: 218 18% 42%;
+  --accent: 221 60% 94%;
+  --accent-foreground: 225 35% 12%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 221 83% 53%;
-  --radius: 0.5rem;
+  --border: 220 25% 88%;
+  --input: 220 25% 88%;
+  --ring: 221 72% 45%;
+  --radius: 0.75rem;
+
+  --primary-soft: 221 90% 96%;
+  --institutional-900: 226 64% 14%;
+  --institutional-800: 225 58% 20%;
+  --institutional-700: 223 55% 28%;
+  --surface-gradient-end: 220 45% 98%;
 
   --confidence-low: 0 84% 60%;
   --confidence-mid: 38 92% 50%;
-  --confidence-high: 142 71% 45%;
+  --confidence-high: 142 60% 42%;
   --glow-insight: 45 100% 50%;
   --avatar-idle-opacity: 0.8;
-  --thinking-glow: 221 83% 53%;
+  --thinking-glow: 221 72% 45%;
+
+  --shadow-card: 0 1px 2px hsl(225 40% 20% / 0.05), 0 10px 30px -12px hsl(225 40% 20% / 0.12);
+  --shadow-lift: 0 16px 40px -16px hsl(225 40% 20% / 0.22);
+  --shadow-primary: 0 10px 28px -10px hsl(221 72% 45% / 0.4);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
@@ -39,14 +50,15 @@
 }
 
 .dark {
-  --background: 222 47% 7%;
+  --background: 225 40% 7%;
   --foreground: 210 40% 96%;
-  --card: 222 47% 9%;
+  --card: 224 40% 9%;
   --card-foreground: 210 40% 96%;
-  --popover: 222 47% 9%;
+  --popover: 224 40% 9%;
   --popover-foreground: 210 40% 96%;
   --primary: 217 91% 60%;
   --primary-foreground: 0 0% 100%;
+  --primary-soft: 217 45% 14%;
   --secondary: 217 33% 15%;
   --secondary-foreground: 210 40% 96%;
   --muted: 217 33% 15%;
@@ -59,10 +71,20 @@
   --input: 217 33% 17%;
   --ring: 217 91% 60%;
 
+  --primary-soft: 217 45% 14%;
+  --institutional-900: 226 64% 10%;
+  --institutional-800: 225 58% 15%;
+  --institutional-700: 223 55% 22%;
+  --surface-gradient-end: 225 45% 8%;
+
   --confidence-low: 0 70% 50%;
   --confidence-mid: 38 90% 45%;
   --confidence-high: 142 60% 40%;
   --glow-insight: 45 90% 45%;
+
+  --shadow-card: 0 1px 2px hsl(225 40% 0% / 0.4), 0 10px 30px -12px hsl(225 40% 0% / 0.5);
+  --shadow-lift: 0 16px 40px -16px hsl(225 40% 0% / 0.6);
+  --shadow-primary: 0 10px 28px -10px hsl(217 91% 60% / 0.35);
 }
 
 @layer base {
@@ -73,6 +95,10 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+    background-image:
+      radial-gradient(1000px 520px at 50% -12%, hsl(var(--institutional-700) / 0.07), transparent 60%),
+      radial-gradient(800px 420px at 100% 100%, hsl(var(--primary) / 0.05), transparent 60%);
+    background-attachment: fixed;
   }
 
   ::-webkit-scrollbar {
@@ -144,6 +170,37 @@
   }
   .animate-overlay-out {
     animation: overlayOut 250ms ease-in forwards;
+  }
+
+  /* P54 — Etapa 5/6: identidade visual premium */
+  .card-premium {
+    background: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--surface-gradient-end)) 100%);
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--shadow-card);
+  }
+  .card-premium-hover {
+    transition: box-shadow 0.3s var(--ease-out-expo), transform 0.3s var(--ease-out-expo);
+  }
+  .card-premium-hover:hover {
+    box-shadow: var(--shadow-lift);
+  }
+  .bg-ponte-gradient {
+    background-image: linear-gradient(135deg, hsl(var(--institutional-900)) 0%, hsl(var(--institutional-700)) 45%, hsl(var(--primary)) 100%);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-lift {
+    box-shadow: var(--shadow-lift);
+  }
+  .shadow-primary {
+    box-shadow: var(--shadow-primary);
+  }
+  .font-display {
+    letter-spacing: -0.02em;
+  }
+  .text-balance {
+    text-wrap: balance;
   }
 }
 

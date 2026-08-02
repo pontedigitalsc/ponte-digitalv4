@@ -11,10 +11,13 @@ import { NotFoundError, BusinessRuleError } from '@/lib/app-errors'
 
 // P52 — cada pergunta da primeira conversa pertence a um estágio do conselheiro.
 const ESTAGIO_POR_ETAPA: Record<string, EstagioConselheiro> = {
+  'empresa.nome': 'contexto',
+  'empresa.oque': 'contexto',
+  'empresa.haquanto': 'contexto',
+  'empresa.momento': 'contexto',
+  'empresario.quem': 'contexto',
   'historia.nascer': 'contexto',
-  'historia.comecar': 'contexto',
   'historia.momento': 'contexto',
-  'rotina.dia': 'contexto',
   'rotina.pressao': 'realidade',
   'rotina.energia': 'realidade',
   'rotina.cabeca': 'realidade',
@@ -22,6 +25,7 @@ const ESTAGIO_POR_ETAPA: Record<string, EstagioConselheiro> = {
   'empresa.clientes': 'realidade',
   'empresa.crescer': 'tensao',
   'empresa.decisao': 'tensao',
+  'empresa.preocupacao': 'tensao',
   'historia.mudanca': 'tensao',
   'frente.diferente': 'tensao',
   'historia.orgulho': 'evolucao',

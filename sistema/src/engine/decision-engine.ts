@@ -139,8 +139,8 @@ const REGRAS: RegraDecisao[] = [
     id: 'cli-followup-leads',
     categoria: 'CLIENTES',
     tipoAcao: 'contatar',
-    titulo: 'Fazer follow-up com leads quentes',
-    descricao: 'Leads em estágio avançado aguardam contato — uma oportunidade pode esfriar',
+    titulo: 'Retomar o contato com negociações quentes',
+    descricao: 'Negociações avançadas aguardam contato — uma oportunidade pode esfriar',
     prioridade: 5,
     impacto: 'alto',
     urgencia: 'alta',
@@ -149,8 +149,8 @@ const REGRAS: RegraDecisao[] = [
       if (ctx.temLeadsQuentes) {
         return {
           atende: true,
-          motivo: 'Existem leads em estágio avançado que podem esfriar sem follow-up. O momento de agir é agora.',
-          evidencias: ['Leads em negociação ou proposta identificados'],
+          motivo: 'Existem negociações em estágio avançado que podem esfriar sem contato. O momento de agir é agora.',
+          evidencias: ['Negociações em andamento ou proposta enviada identificadas'],
           confianca: 0.85,
         }
       }
@@ -161,8 +161,8 @@ const REGRAS: RegraDecisao[] = [
     id: 'cli-revisar-pipeline',
     categoria: 'CLIENTES',
     tipoAcao: 'revisar',
-    titulo: 'Revisar o pipeline de vendas',
-    descricao: 'Analisar o funil de vendas para identificar gargalos e oportunidades',
+    titulo: 'Revisar as negociações de vendas',
+    descricao: 'Analisar as negociações em andamento para identificar onde as oportunidades se perdem',
     prioridade: 3,
     impacto: 'medio',
     urgencia: 'media',
@@ -172,7 +172,7 @@ const REGRAS: RegraDecisao[] = [
       if (sinalClientes || ctx.evidencias.some(e => e.categoria === 'CLIENTES' && e.confianca === 'ALTA')) {
         return {
           atende: true,
-          motivo: 'Há evidências recentes de movimentação na área de clientes. Revisar o pipeline ajuda a não perder oportunidades.',
+          motivo: 'Há evidências recentes de movimentação na área de clientes. Revisar as negociações ajuda a não perder oportunidades.',
           evidencias: ['Atividades recentes na área de clientes'],
           confianca: 0.7,
         }
@@ -369,7 +369,7 @@ export async function registrarExecucaoDecisao(
 function gerarRiscosPadrao(categoria: string, tipoAcao: string): string[] {
   const mapa: Record<string, string[]> = {
     FINANCEIRO: ['Decisão baseada em dados financeiros parciais', 'Mudanças no mercado podem alterar o cenário'],
-    CLIENTES: ['Cliente pode não responder ao contato', 'Priorização pode deixar outros leads sem atenção'],
+    CLIENTES: ['Cliente pode não responder ao contato', 'Priorização pode deixar outras negociações sem atenção'],
     GESTAO: ['Mudanças na gestão podem encontrar resistência interna', 'Resultados podem levar tempo para aparecer'],
     OPERACAO: ['Intervenções operacionais podem causar curto prazo instável', 'Gargalos podem ter causas não mapeadas'],
     ESTRATEGIA: ['Decisão estratégica requer validação com dados adicionais', 'Cenário econômico pode mudar'],

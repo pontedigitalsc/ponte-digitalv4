@@ -14,6 +14,7 @@ interface Pergunta {
   opcoes?: { valor: string; rotulo: string }[]
   categoria?: string
   estagio?: string
+  permiteDetalhe?: boolean
 }
 
 interface Progresso {
@@ -223,7 +224,9 @@ export default function ConversaPage() {
             </p>
           )}
           {!memoria && !concluida && (
-            <p className="text-sm text-muted-foreground">Oi! Antes da gente começar, me conta com suas palavras: o que você faz todos os dias?</p>
+            <p className="text-sm text-muted-foreground">
+              Oi! Vamos começar entendendo a sua empresa — ela primeiro. Depois, a sua história.
+            </p>
           )}
         </div>
 
@@ -251,7 +254,7 @@ export default function ConversaPage() {
         )}
 
         {/* Área da conversa */}
-        <div className="rounded-xl border bg-card p-6 shadow-sm min-h-[200px] flex flex-col justify-center">
+        <div className="card-premium rounded-xl p-6 min-h-[200px] flex flex-col justify-center">
           {concluida && interpretacoes ? (
             <RevelacaoCard interpretacoes={interpretacoes} resumoNatural={resumoNatural} />
           ) : mostrandoReacao && reacao ? (
@@ -266,6 +269,7 @@ export default function ConversaPage() {
                 </p>
               )}
               <QuestionCard
+                key={perguntaAtual.id}
                 pergunta={perguntaAtual.pergunta}
                 tipo={perguntaAtual.tipo}
                 opcoes={perguntaAtual.opcoes}
@@ -273,6 +277,7 @@ export default function ConversaPage() {
                 onChange={setResposta}
                 onEnviar={enviarResposta}
                 enviando={enviando}
+                permiteDetalhe={perguntaAtual.permiteDetalhe}
               />
             </div>
           ) : (
@@ -291,7 +296,7 @@ export default function ConversaPage() {
 
             {/* P52 — Pergunta Aberta: inserção natural, nunca pesquisa */}
             {perguntaAberta && !respostaAbertaEnviada && (
-              <div className="rounded-xl border border-primary/20 bg-card p-6 space-y-3 text-left">
+              <div className="card-premium rounded-xl p-6 space-y-3 text-left">
                 <p className="text-sm text-muted-foreground leading-relaxed italic">
                   Enquanto conversávamos, fiquei pensando em uma situação comum entre empresas parecidas com a sua.
                 </p>

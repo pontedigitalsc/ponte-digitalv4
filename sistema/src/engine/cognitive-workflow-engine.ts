@@ -58,14 +58,14 @@ const TEMPLATES: Record<string, {
     ],
   },
   MOVIMENTAR_LEAD: {
-    titulo: 'Converter lead parado',
-    descricao: 'Mover lead no pipeline',
+    titulo: 'Retomar negociação parada',
+    descricao: 'Fazer a negociação voltar a andar',
     categoria: 'crm',
     etapas: [
-      { titulo: 'Abrir lead', descricao: 'Identificar lead sem avanço', href: '/crm' },
+      { titulo: 'Abrir negociação', descricao: 'Identificar negociação sem avanço', href: '/crm' },
       { titulo: 'Atualizar contato', descricao: 'Registrar nova interação' },
-      { titulo: 'Definir próximo passo', descricao: 'Alinhar expectativa do lead' },
-      { titulo: 'Mover no pipeline', descricao: 'Avançar estágio comercial' },
+      { titulo: 'Definir próximo passo', descricao: 'Alinhar a expectativa do cliente' },
+      { titulo: 'Avançar negociação', descricao: 'Aproximar do próximo estágio comercial' },
     ],
   },
   REVISAR_TAREFAS: {

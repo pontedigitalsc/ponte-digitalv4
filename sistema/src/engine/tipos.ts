@@ -68,6 +68,8 @@ export interface Etapa {
   opcoes?: Opcao[]
   categoria?: string
   estagio?: EstagioConselheiro
+  // P54 — resposta rápida com campo opcional: "Se quiser, conte mais."
+  permiteDetalhe?: boolean
 }
 
 export interface Opcao {
