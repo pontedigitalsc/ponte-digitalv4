@@ -56,6 +56,17 @@ export default async function CentroDecisaoPage() {
   const decisoesComTrust = await enriquecerDecisoesComTrust(decisoes, usuario.empresaId)
   const decisoesFiltradas = filtrarDecisoesPorRelevancia(decisoesComTrust, estado.contexto ?? undefined)
 
+  // P52 — recomendações contam história: para cada categoria, juntamos os
+  // resultados reais que já vieram (outcomes), para mostrar "de onde veio
+  // e o que já aconteceu" em vez de uma sugestão solta.
+  const outcomesPorCategoria = new Map<string, string[]>()
+  for (const o of estado.topOutcomes ?? []) {
+    const cat = o.categoria ?? 'GERAL'
+    const arr = outcomesPorCategoria.get(cat) ?? []
+    arr.push(o.descricao)
+    outcomesPorCategoria.set(cat, arr)
+  }
+
   const MAX_POR_GRUPO = 5
 
 const grupos = {
@@ -92,7 +103,9 @@ const grupos = {
           lista.length > 0 ? (
             <div key={nivel} className="space-y-3">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{NIVEL_LABEL[nivel] ?? nivel} ({lista.length})</h3>
-              {lista.map((d) => (
+              {lista.map((d) => {
+                const outcomesDaCategoria = outcomesPorCategoria.get(d.categoria) ?? []
+                return (
                 <Card key={d.id}>
                   <CardHeader className="pb-2">
                     <div className="flex items-start justify-between">
@@ -117,6 +130,21 @@ const grupos = {
                       <Badge variant="outline" className="text-xs">{DIFICULDADE_LABEL[d.dificuldade] ?? d.dificuldade}</Badge>
                     </div>
                     <p className="text-sm text-muted-foreground">{d.motivo}</p>
+                    {(d.evidenciasChave.length > 0 || outcomesDaCategoria.length > 0) && (
+                      <div className="rounded-lg border border-primary/15 bg-primary/5 px-3 py-2 space-y-1">
+                        <p className="text-xs font-medium text-primary">A história dessa recomendação</p>
+                        {d.evidenciasChave.length > 0 && (
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            Nasceu de: {d.evidenciasChave.join('; ')}.
+                          </p>
+                        )}
+                        {outcomesDaCategoria.length > 0 && (
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            O que já veio disso: {outcomesDaCategoria[0]}
+                          </p>
+                        )}
+                      </div>
+                    )}
                     {d.riscos.length > 0 && (
                       <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2">
                         <p className="text-xs font-medium text-amber-700 dark:text-amber-400">O que pode dar errado</p>
@@ -136,7 +164,8 @@ const grupos = {
                     )}
                   </CardContent>
                 </Card>
-              ))}
+                )
+              })}
             </div>
           ) : null
         )}

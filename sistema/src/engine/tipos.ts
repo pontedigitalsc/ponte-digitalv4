@@ -31,12 +31,43 @@ export function compactarSinais(sinais: (Sinal | null)[]): Sinal[] {
 
 // ─── FLUXO DE CONVERSA ────────────────────────────────────────────────────────
 
+// P52 — Estrutura de conselheiro em 5 estágios. A conversa não é uma lista de
+// perguntas: é uma caminhada. Cada estágio tem um papel:
+//   1. contexto         — movimento: quem é a empresa, como ela vive
+//   2. realidade        — percepção vs fato: como a empresa funciona de verdade
+//   3. tensao           — pontos cegos: o que trava, o que dói
+//   4. evolucao         — aprendizado como patrimônio: o que já funciona
+//   5. proximo_movimento— direção: para onde vamos a seguir
+export type EstagioConselheiro =
+  | 'contexto'
+  | 'realidade'
+  | 'tensao'
+  | 'evolucao'
+  | 'proximo_movimento'
+
+export const ESTAGIOS_ORDEM: EstagioConselheiro[] = [
+  'contexto',
+  'realidade',
+  'tensao',
+  'evolucao',
+  'proximo_movimento',
+]
+
+export const ESTAGIO_LABEL: Record<EstagioConselheiro, string> = {
+  contexto: 'O contexto',
+  realidade: 'A realidade',
+  tensao: 'A tensão',
+  evolucao: 'A evolução',
+  proximo_movimento: 'O próximo movimento',
+}
+
 export interface Etapa {
   id: string
   pergunta: string
   tipo: 'texto' | 'selecao' | 'faixa'
   opcoes?: Opcao[]
   categoria?: string
+  estagio?: EstagioConselheiro
 }
 
 export interface Opcao {

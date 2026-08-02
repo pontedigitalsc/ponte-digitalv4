@@ -4,8 +4,29 @@ import { consultarMemoria, listarHipoteses } from './cognitive-memory-engine'
 import { listarRespostasPorEmpresa } from './question-answer-engine'
 import { createLogger } from '@/lib/logger'
 import type { CategoriaEvidencia } from './evidence-engine'
+import type { EstagioConselheiro } from './tipos'
 
 const log = createLogger('engine', 'adaptive-question')
+
+// ─── P52 — MOTOR DE QUALIDADE DE PERGUNTAS ───────────────────────────────────
+// Cada pergunta da Ponte nasce com um propósito estratégico explícito:
+//   estagio       — a qual etapa do conselheiro ela pertence (dos 5 estágios)
+//   objetivo      — o que ela precisa descobrir, com a resposta honesta na mão
+//   capacidade    — a capacidade empresarial que a pergunta desenvolve
+//                   (nomes reais do adaptive-capacity-engine)
+//   patrimonio    — o que essa resposta acrescenta ao patrimônio da empresa
+//   tipoResposta  — que tipo de resposta ela espera (fato, percepção, reflexão...)
+//   impacto       — o que essa informação muda na relação/evolução
+// Nenhuma pergunta entra na conversa sem responder a essas 6 questões.
+
+export interface QualidadePergunta {
+  estagio: EstagioConselheiro
+  objetivo: string
+  capacidade: string
+  patrimonio: string
+  tipoResposta: 'fato' | 'percepcao' | 'reflexao' | 'decisao' | 'planejamento' | 'padrao'
+  impacto: string
+}
 
 export interface AdaptiveQuestion {
   id: string
@@ -15,6 +36,12 @@ export interface AdaptiveQuestion {
   categoria: CategoriaEvidencia
   lacuna: string
   urgencia: number
+  estagio: EstagioConselheiro
+  objetivo: string
+  capacidade: string
+  patrimonio: string
+  tipoResposta: QualidadePergunta['tipoResposta']
+  impacto: string
 }
 
 const CATEGORIAS: CategoriaEvidencia[] = [
@@ -63,6 +90,40 @@ const PERGUNTAS_POR_LACUNA: Record<string, { pergunta: string; tipo: 'texto' | '
   'capacitacao': { pergunta: 'Sua equipe dá conta do que vem pela frente?', tipo: 'selecao', opcoes: [{ valor: 'sim', rotulo: 'Sim, dá conta' }, { valor: 'nao', rotulo: 'Não, não dá' }, { valor: 'parcial', rotulo: 'Mais ou menos' }] },
 }
 
+// Qualidade de cada pergunta — nenhuma lacuna entra na conversa sem propósito.
+const QUALIDADE_POR_LACUNA: Record<string, QualidadePergunta> = {
+  'segmento': { estagio: 'contexto', objetivo: 'Entender o ramo e o vocabulário do negócio', capacidade: 'Observar', patrimonio: 'Dados', tipoResposta: 'fato', impacto: 'Permite falar a língua da empresa desde o início' },
+  'tempo_operacao': { estagio: 'contexto', objetivo: 'Situar a maturidade da operação', capacidade: 'Observar', patrimonio: 'Dados', tipoResposta: 'fato', impacto: 'Ajusta o tom e a profundidade das próximas perguntas' },
+  'funcionarios': { estagio: 'contexto', objetivo: 'Saber o tamanho real da operação', capacidade: 'Observar', patrimonio: 'Dados', tipoResposta: 'fato', impacto: 'Revela se a dependência do fundador é estrutural' },
+  'faturamento': { estagio: 'realidade', objetivo: 'Ter uma base real do tamanho financeiro', capacidade: 'Compreender', patrimonio: 'Contexto financeiro', tipoResposta: 'fato', impacto: 'Fundamenta recomendações financeiras sem chute' },
+  'aquisicao': { estagio: 'contexto', objetivo: 'Entender como os clientes chegam', capacidade: 'Observar', patrimonio: 'Dados de clientes', tipoResposta: 'percepcao', impacto: 'Revela se a captação depende só de indicação' },
+  'produto_principal': { estagio: 'realidade', objetivo: 'Identificar o que sustenta a receita', capacidade: 'Compreender', patrimonio: 'Contexto financeiro', tipoResposta: 'fato', impacto: 'Aponta onde concentrar atenção e esforço' },
+  'lucro': { estagio: 'realidade', objetivo: 'Descobrir o que realmente dá retorno', capacidade: 'Compreender', patrimonio: 'Contexto financeiro', tipoResposta: 'percepcao', impacto: 'Mostra se a margem é percebida ou medida' },
+  'trabalhoso': { estagio: 'tensao', objetivo: 'Encontrar onde o esforço não vira retorno', capacidade: 'Compreender', patrimonio: 'Aprendizado', tipoResposta: 'percepcao', impacto: 'Revela gargalo operacional escondido' },
+  'horas_trabalho': { estagio: 'contexto', objetivo: 'Medir o custo de tempo do fundador', capacidade: 'Observar', patrimonio: 'Autonomia', tipoResposta: 'fato', impacto: 'Sustenta conversas honestas sobre delegação' },
+  'contratacao': { estagio: 'proximo_movimento', objetivo: 'Entender o critério real de decisão de equipe', capacidade: 'Compreender', patrimonio: 'Decisões', tipoResposta: 'decisao', impacto: 'Revela se a contratação é planejada ou reativa' },
+  'promocao': { estagio: 'proximo_movimento', objetivo: 'Entender como precifica promoções', capacidade: 'Decidir', patrimonio: 'Decisões', tipoResposta: 'decisao', impacto: 'Expõe se promoção é estratégia ou desespero' },
+  'caixa': { estagio: 'realidade', objetivo: 'Saber como o caixa é acompanhado', capacidade: 'Compreender', patrimonio: 'Contexto financeiro', tipoResposta: 'fato', impacto: 'Base para trabalhar previsibilidade financeira' },
+  'decisao_dificil': { estagio: 'tensao', objetivo: 'Mapear onde a decisão trava', capacidade: 'Esclarecer', patrimonio: 'Decisões', tipoResposta: 'percepcao', impacto: 'Localiza o ponto de maior tensão atual' },
+  'insonia': { estagio: 'tensao', objetivo: 'Revelar a preocupação que move o fundador', capacidade: 'Observar', patrimonio: 'Contexto', tipoResposta: 'percepcao', impacto: 'Ajuda a priorizar o próximo tema da relação' },
+  'repeticao': { estagio: 'tensao', objetivo: 'Encontrar padrões que se repetem', capacidade: 'Aprender', patrimonio: 'Aprendizado', tipoResposta: 'padrao', impacto: 'Converte problema recorrente em aprendizado' },
+  'perda_dinheiro': { estagio: 'tensao', objetivo: 'Localizar onde o dinheiro escapa', capacidade: 'Compreender', patrimonio: 'Contexto financeiro', tipoResposta: 'percepcao', impacto: 'Revela vazamentos que passam despercebidos' },
+  'meta': { estagio: 'proximo_movimento', objetivo: 'Ter um horizonte claro para orientar decisões', capacidade: 'Priorizar', patrimonio: 'Decisões', tipoResposta: 'planejamento', impacto: 'Define a direção das recomendações futuras' },
+  'automatizar': { estagio: 'proximo_movimento', objetivo: 'Descobrir o que o fundador quer tirar das mãos', capacidade: 'Priorizar', patrimonio: 'Autonomia', tipoResposta: 'planejamento', impacto: 'Base para recomendações de operação' },
+  'delegar': { estagio: 'proximo_movimento', objetivo: 'Mapear o que pode sair das costas do fundador', capacidade: 'Decidir', patrimonio: 'Autonomia', tipoResposta: 'planejamento', impacto: 'Reduz a dependência do dono' },
+  'receita_mensal': { estagio: 'realidade', objetivo: 'Cruzar a percepção de faturamento com os dados', capacidade: 'Compreender', patrimonio: 'Contexto financeiro', tipoResposta: 'fato', impacto: 'Valida se o número percebido bate com o real' },
+  'despesas_principais': { estagio: 'realidade', objetivo: 'Entender para onde o dinheiro vai', capacidade: 'Compreender', patrimonio: 'Contexto financeiro', tipoResposta: 'fato', impacto: 'Fundamenta controle de custos sem achismo' },
+  'margem': { estagio: 'realidade', objetivo: 'Saber se a margem é conhecida por venda', capacidade: 'Compreender', patrimonio: 'Contexto financeiro', tipoResposta: 'fato', impacto: 'Revela se a lucratividade é medida de verdade' },
+  'clientes_top': { estagio: 'evolucao', objetivo: 'Identificar os clientes que sustentam o negócio', capacidade: 'Compreender', patrimonio: 'Dados de clientes', tipoResposta: 'percepcao', impacto: 'Base para estratégia de retenção' },
+  'clientes_problema': { estagio: 'tensao', objetivo: 'Reconhecer clientes que drenam energia', capacidade: 'Esclarecer', patrimonio: 'Dados de clientes', tipoResposta: 'padrao', impacto: 'Ajuda a escolher quem merece atenção' },
+  'concorrencia': { estagio: 'proximo_movimento', objetivo: 'Entender o campo onde a empresa disputa', capacidade: 'Compreender', patrimonio: 'Contexto', tipoResposta: 'percepcao', impacto: 'Posiciona o diferencial da empresa' },
+  'diferencial': { estagio: 'evolucao', objetivo: 'Capturar o motivo real de escolha', capacidade: 'Compreender', patrimonio: 'Aprendizado', tipoResposta: 'percepcao', impacto: 'Alimenta a identidade da empresa' },
+  'crescimento': { estagio: 'tensao', objetivo: 'Revelar o que bloqueia o crescimento', capacidade: 'Esclarecer', patrimonio: 'Contexto', tipoResposta: 'padrao', impacto: 'Prioriza a barreira mais importante' },
+  'tecnologia': { estagio: 'proximo_movimento', objetivo: 'Entender a base de gestão atual', capacidade: 'Observar', patrimonio: 'Contexto', tipoResposta: 'fato', impacto: 'Orienta se o próximo passo é organização' },
+  'equipe': { estagio: 'realidade', objetivo: 'Entender a composição da equipe', capacidade: 'Observar', patrimonio: 'Dados', tipoResposta: 'fato', impacto: 'Base para falar de delegação e treinamento' },
+  'capacitacao': { estagio: 'evolucao', objetivo: 'Saber se a equipe acompanha o crescimento', capacidade: 'Aprender', patrimonio: 'Aprendizado', tipoResposta: 'percepcao', impacto: 'Revela o limite de crescimento pela equipe' },
+}
+
 const GAPS_POR_CATEGORIA: Record<CategoriaEvidencia, string[]> = {
   FINANCEIRO: ['faturamento', 'receita_mensal', 'despesas_principais', 'margem', 'caixa', 'perda_dinheiro'],
   CLIENTES: ['clientes_top', 'clientes_problema', 'aquisicao', 'concorrencia', 'diferencial'],
@@ -78,6 +139,7 @@ interface LacunaConhecimento {
   categoria: string
   urgencia: number
   bloqueia: string[]
+  estagio: EstagioConselheiro
 }
 
 async function identificarLacunas(
@@ -121,12 +183,87 @@ async function identificarLacunas(
           categoria,
           urgencia,
           bloqueia: hipotesesDaCategoria.length === 0 ? [categoria] : [],
+          estagio: QUALIDADE_POR_LACUNA[gap]?.estagio ?? 'contexto',
         })
       }
     }
   }
 
   return lacunas.sort((a, b) => b.urgencia - a.urgencia)
+}
+
+// ─── P52 — FOCO CONTEXTUAL ───────────────────────────────────────────────────
+// As perguntas se adaptam ao contexto real da empresa. Detectamos o arquétipo
+// a partir dos dados (nunca da intuição):
+//   sem movimento no caixa          → previsibilidade → FINANCEIRO
+//   receita crescendo rápido        → crescimento     → GESTAO (organização)
+//   receita caindo                  → retenção        → CLIENTES
+//   clientes inadimplentes          → retenção        → CLIENTES
+//   tarefas atrasadas acumulando    → sobrecarga      → GESTAO/PESSOAS
+// O arquétipo re-pondera quais lacunas merecem a próxima pergunta.
+
+export interface FocoContextual {
+  foco: CategoriaEvidencia | null
+  razao: string | null
+  estagioPrioritario: EstagioConselheiro
+}
+
+export async function detectarFocoContextual(empresaId: string): Promise<FocoContextual> {
+  try {
+    const situacao = await buscarSituacaoEmpresa(empresaId)
+    const v = situacao.variacaoReceita
+
+    if (!situacao.temTransacoesRecentes || situacao.diasSemRegistroFinanceiro >= 7) {
+      return { foco: 'FINANCEIRO', razao: 'O caixa está sem movimento recente — quero entender a previsibilidade financeira.', estagioPrioritario: 'tensao' }
+    }
+    if (v !== null && v >= 20) {
+      return { foco: 'GESTAO', razao: 'A receita cresceu rápido — quero entender se a organização acompanhou.', estagioPrioritario: 'proximo_movimento' }
+    }
+    if (v !== null && v <= -15) {
+      return { foco: 'CLIENTES', razao: 'A receita caiu — quero entender o que mudou no comportamento dos clientes.', estagioPrioritario: 'realidade' }
+    }
+    if (situacao.temClientesInadimplentes) {
+      return { foco: 'CLIENTES', razao: 'Há clientes inadimplentes — quero olhar a retenção e o recebimento.', estagioPrioritario: 'tensao' }
+    }
+    if (situacao.temTarefasAtrasadas) {
+      return { foco: 'GESTAO', razao: 'Há tarefas atrasadas — quero entender a organização do dia a dia.', estagioPrioritario: 'realidade' }
+    }
+
+    return { foco: null, razao: null, estagioPrioritario: 'contexto' }
+  } catch (err) {
+    log.error('Erro ao detectar foco contextual', { empresaId, error: err instanceof Error ? err : undefined })
+    return { foco: null, razao: null, estagioPrioritario: 'contexto' }
+  }
+}
+
+function pontuarLacuna(lacuna: LacunaConhecimento, foco: FocoContextual): number {
+  let pontos = lacuna.urgencia
+  if (foco.foco && lacuna.categoria === foco.foco) pontos += 4
+  if (lacuna.estagio === foco.estagioPrioritario) pontos += 3
+  if (foco.foco && lacuna.categoria !== foco.foco && lacuna.estagio !== foco.estagioPrioritario) pontos -= 1
+  return pontos
+}
+
+function montarAdaptiveQuestion(lacuna: LacunaConhecimento): AdaptiveQuestion | null {
+  const perguntaData = PERGUNTAS_POR_LACUNA[lacuna.chave]
+  const qualidade = QUALIDADE_POR_LACUNA[lacuna.chave]
+  if (!perguntaData || !qualidade) return null
+
+  return {
+    id: `${lacuna.categoria.toLowerCase()}.${lacuna.chave}`,
+    pergunta: perguntaData.pergunta,
+    tipo: perguntaData.tipo,
+    opcoes: perguntaData.opcoes,
+    categoria: lacuna.categoria as CategoriaEvidencia,
+    lacuna: lacuna.chave,
+    urgencia: lacuna.urgencia,
+    estagio: qualidade.estagio,
+    objetivo: qualidade.objetivo,
+    capacidade: qualidade.capacidade,
+    patrimonio: qualidade.patrimonio,
+    tipoResposta: qualidade.tipoResposta,
+    impacto: qualidade.impacto,
+  }
 }
 
 export async function obterProximaPergunta(
@@ -141,20 +278,10 @@ export async function obterProximaPergunta(
 
     if (lacunas.length === 0) return null
 
-    const topLacuna = lacunas[0]
-    const perguntaData = PERGUNTAS_POR_LACUNA[topLacuna.chave]
+    const foco = await detectarFocoContextual(empresaId)
+    const ordenadas = [...lacunas].sort((a, b) => pontuarLacuna(b, foco) - pontuarLacuna(a, foco))
 
-    if (!perguntaData) return null
-
-    return {
-      id: `${topLacuna.categoria.toLowerCase()}.${topLacuna.chave}`,
-      pergunta: perguntaData.pergunta,
-      tipo: perguntaData.tipo,
-      opcoes: perguntaData.opcoes,
-      categoria: topLacuna.categoria as CategoriaEvidencia,
-      lacuna: topLacuna.chave,
-      urgencia: topLacuna.urgencia,
-    }
+    return montarAdaptiveQuestion(ordenadas[0])
   } catch (err) {
     log.error('Erro ao obter próxima pergunta adaptativa', { empresaId, error: err instanceof Error ? err : undefined })
     return null
@@ -170,21 +297,13 @@ export async function obterMultiplasPerguntas(
     const idsRespondidos = new Set(respostasExistentes.map(r => r.perguntaId.split('.').pop() ?? r.perguntaId))
 
     const lacunas = await identificarLacunas(empresaId, [...idsRespondidos])
+    const foco = await detectarFocoContextual(empresaId)
+    const ordenadas = [...lacunas].sort((a, b) => pontuarLacuna(b, foco) - pontuarLacuna(a, foco))
 
     const perguntas: AdaptiveQuestion[] = []
-    for (const lacuna of lacunas.slice(0, quantidade)) {
-      const perguntaData = PERGUNTAS_POR_LACUNA[lacuna.chave]
-      if (perguntaData) {
-        perguntas.push({
-          id: `${lacuna.categoria.toLowerCase()}.${lacuna.chave}`,
-          pergunta: perguntaData.pergunta,
-          tipo: perguntaData.tipo,
-          opcoes: perguntaData.opcoes,
-          categoria: lacuna.categoria as CategoriaEvidencia,
-          lacuna: lacuna.chave,
-          urgencia: lacuna.urgencia,
-        })
-      }
+    for (const lacuna of ordenadas.slice(0, quantidade)) {
+      const pergunta = montarAdaptiveQuestion(lacuna)
+      if (pergunta) perguntas.push(pergunta)
     }
 
     return perguntas
@@ -193,3 +312,83 @@ export async function obterMultiplasPerguntas(
     return []
   }
 }
+
+// ─── P52 — ETAPA 1: BIBLIOTECA DAS GRANDES PERGUNTAS ─────────────────────────
+// Catálogo permanente de perguntas de alto valor, curadas pelo fundador.
+// Cada pergunta declara: objetivo, momento ideal, segmentos recomendados,
+// capacidade fortalecida e benefício esperado para o empresário.
+// Serve de fonte para a criação da Pergunta Aberta da semana.
+
+export interface GrandePergunta {
+  id: string
+  titulo: string
+  pergunta: string
+  objetivo: string
+  momentoIdeal: string
+  segmentos: string[]
+  capacidade: string
+  beneficio: string
+}
+
+export const BIBLIOTECA_GRANDES_PERGUNTAS: GrandePergunta[] = [
+  {
+    id: 'lideranca.dependencia',
+    titulo: 'Liderança',
+    pergunta: 'O que hoje depende mais de você do que deveria?',
+    objetivo: 'Identificar dependência do fundador e gargalos de delegação.',
+    momentoIdeal: 'Empresas que cresceram sem processos formais de gestão.',
+    segmentos: ['servicos', 'varejo', 'tecnologia', 'producao'],
+    capacidade: 'Adaptação',
+    beneficio: 'Fazer o empresário perceber onde ele é o gargalo sem enxergar.',
+  },
+  {
+    id: 'clientes.ideal',
+    titulo: 'Clientes',
+    pergunta: 'Qual tipo de cliente você gostaria de ter mais?',
+    objetivo: 'Entender o posicionamento desejado e o cliente ideal da empresa.',
+    momentoIdeal: 'Quando a empresa atende qualquer um que aparece, sem foco.',
+    segmentos: [],
+    capacidade: 'Clareza estratégica',
+    beneficio: 'Gerar clareza sobre para quem a empresa realmente quer vender.',
+  },
+  {
+    id: 'financeiro.tensao',
+    titulo: 'Financeiro',
+    pergunta: 'Quando você olha para o caixa, qual é a sua maior preocupação?',
+    objetivo: 'Descobrir a tensão financeira real, além dos números.',
+    momentoIdeal: 'Empresas com fluxo de caixa instável ou sem previsibilidade.',
+    segmentos: ['varejo', 'servicos', 'producao', 'alimentacao'],
+    capacidade: 'Previsibilidade',
+    beneficio: 'Preparar recomendações futuras ancoradas na dor financeira real.',
+  },
+  {
+    id: 'crescimento.gargalos',
+    titulo: 'Crescimento',
+    pergunta: 'Se sua empresa dobrasse de tamanho amanhã, o que quebraria primeiro?',
+    objetivo: 'Encontrar gargalos invisíveis antes de o crescimento revelá-los.',
+    momentoIdeal: 'Empresas crescendo ou prestes a escalar operação.',
+    segmentos: [],
+    capacidade: 'Visão sistêmica',
+    beneficio: 'Estimular o empresário a pensar no sistema, não só no dia a dia.',
+  },
+  {
+    id: 'evolucao.aprendizado',
+    titulo: 'Evolução',
+    pergunta: 'O que sua empresa sabe hoje que não sabia há seis meses?',
+    objetivo: 'Transformar experiência acumulada em patrimônio explícito.',
+    momentoIdeal: 'Empresas com histórico de conversas e decisões registradas.',
+    segmentos: [],
+    capacidade: 'Memória empresarial',
+    beneficio: 'Fazer o empresário perceber a evolução que ele já construiu.',
+  },
+  {
+    id: 'operacao.ritual',
+    titulo: 'Operação',
+    pergunta: 'O que você começou a fazer com regularidade e fez diferença?',
+    objetivo: 'Identificar rituais que funcionam para virar padrão da empresa.',
+    momentoIdeal: 'Após mudanças positivas observadas no período.',
+    segmentos: [],
+    capacidade: 'Rotina',
+    beneficio: 'Transformar boas práticas acidentais em processos conscientes.',
+  },
+]

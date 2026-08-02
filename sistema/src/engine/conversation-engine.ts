@@ -5,52 +5,51 @@ import { registrarEvidencia } from '@/engine/evidence-engine'
 import { registrarEventoAtivacao } from '@/engine/founder-activation-engine'
 import { registrarResposta } from '@/engine/question-answer-engine'
 import { obterProximaPergunta } from '@/engine/adaptive-question-engine'
-import type { EstadoConversa, RespostaConversa, Progresso, Fluxo } from '@/engine/tipos'
+import { ESTAGIOS_ORDEM } from '@/engine/tipos'
+import type { EstadoConversa, RespostaConversa, Progresso, Fluxo, EstagioConselheiro } from '@/engine/tipos'
 import { NotFoundError, BusinessRuleError } from '@/lib/app-errors'
 
-const BLOCO_POR_ETAPA: Record<string, string> = {
-  'historia.nascer': 'historia',
-  'historia.comecar': 'historia',
-  'historia.momento': 'historia',
-  'historia.orgulho': 'historia',
-  'historia.mudanca': 'historia',
-  'rotina.dia': 'rotina',
-  'rotina.pressao': 'rotina',
-  'rotina.cabeca': 'rotina',
-  'rotina.tranquilo': 'rotina',
-  'rotina.energia': 'rotina',
-  'empresa.clientes': 'empresa',
-  'empresa.multiplicar': 'empresa',
-  'empresa.crescer': 'empresa',
-  'empresa.horalivre': 'empresa',
-  'empresa.decisao': 'empresa',
-  'frente.surpresa': 'frente',
-  'frente.funcionou': 'frente',
-  'frente.diferente': 'frente',
-  'frente.proximo': 'frente',
+// P52 — cada pergunta da primeira conversa pertence a um estágio do conselheiro.
+const ESTAGIO_POR_ETAPA: Record<string, EstagioConselheiro> = {
+  'historia.nascer': 'contexto',
+  'historia.comecar': 'contexto',
+  'historia.momento': 'contexto',
+  'rotina.dia': 'contexto',
+  'rotina.pressao': 'realidade',
+  'rotina.energia': 'realidade',
+  'rotina.cabeca': 'realidade',
+  'rotina.tranquilo': 'realidade',
+  'empresa.clientes': 'realidade',
+  'empresa.crescer': 'tensao',
+  'empresa.decisao': 'tensao',
+  'historia.mudanca': 'tensao',
+  'frente.diferente': 'tensao',
+  'historia.orgulho': 'evolucao',
+  'frente.funcionou': 'evolucao',
+  'frente.surpresa': 'evolucao',
+  'frente.proximo': 'proximo_movimento',
+  'empresa.multiplicar': 'proximo_movimento',
+  'empresa.horalivre': 'proximo_movimento',
 }
 
-const BLOCO_ORDEM = ['historia', 'rotina', 'empresa', 'frente']
-
-function calcularProgresso(etapaIndex: number, total: number): Progresso {
-  if (etapaIndex < 0 || total === 0) {
-    return { blocoAtual: 1, totalBlocos: 5, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 }
+function calcularProgresso(etapaIndex: number, fluxo: Fluxo): Progresso {
+  if (etapaIndex < 0 || fluxo.etapas.length === 0) {
+    return { blocoAtual: 1, totalBlocos: ESTAGIOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 }
   }
 
-  const idsEtapas = Object.keys(BLOCO_POR_ETAPA)
-  const etapaId = idsEtapas[Math.min(etapaIndex, idsEtapas.length - 1)]
-  const blocoAtual = BLOCO_POR_ETAPA[etapaId]
-  const blocoIdx = BLOCO_ORDEM.indexOf(blocoAtual)
+  const etapaAtual = fluxo.etapas[etapaIndex]
+  const estagioAtual = etapaAtual.estagio ?? ESTAGIOS_ORDEM[0]
+  const estagioIdx = ESTAGIOS_ORDEM.indexOf(estagioAtual)
 
-  const etapasNoBloco = idsEtapas.filter((id) => BLOCO_POR_ETAPA[id] === blocoAtual)
-  const etapaNoBloco = etapasNoBloco.indexOf(etapaId)
+  const etapasNoEstagio = fluxo.etapas.filter((e) => (e.estagio ?? ESTAGIOS_ORDEM[0]) === estagioAtual)
+  const posNoEstagio = etapasNoEstagio.findIndex((e) => e.id === etapaAtual.id)
 
   return {
-    blocoAtual: blocoIdx + 1,
-    totalBlocos: BLOCO_ORDEM.length,
-    etapaNoBloco: etapaNoBloco + 1,
-    totalEtapasNoBloco: etapasNoBloco.length,
-    percentual: Math.round(((etapaIndex + 1) / idsEtapas.length) * 100),
+    blocoAtual: estagioIdx + 1,
+    totalBlocos: ESTAGIOS_ORDEM.length,
+    etapaNoBloco: Math.max(posNoEstagio + 1, 1),
+    totalEtapasNoBloco: etapasNoEstagio.length,
+    percentual: Math.round(((etapaIndex + 1) / fluxo.etapas.length) * 100),
   }
 }
 
@@ -126,6 +125,7 @@ export async function responder(
         tipo: adaptativa.tipo,
         opcoes: adaptativa.opcoes,
         categoria: adaptativa.categoria,
+        estagio: adaptativa.estagio,
       }
     } else {
       foiConcluida = true
@@ -146,16 +146,18 @@ export async function responder(
     },
   })
 
-  // Reação
-  const reacao = obterReacao(perguntaId)
-
-  const reacaoFinal = reacao
-
-  let reacaoExtra = reacaoFinal
+  // Reação — quando muda de estágio, a Ponte marca a transição; dentro do
+  // mesmo estágio, mantém a reação individual da pergunta.
+  let reacao = obterReacao(perguntaId)
+  const estagioAtual = ESTAGIO_POR_ETAPA[perguntaId]
+  const proximoEstagio = proximaEtapa?.estagio
+  if (proximoEstagio && estagioAtual && proximoEstagio !== estagioAtual) {
+    reacao = REACOES_BLOCO[proximoEstagio] ?? reacao
+  }
 
   // Registra evidência + Q&A individual (apenas se vinculada a uma empresa)
   if (conversa.empresaId) {
-    const blocoAtual = BLOCO_POR_ETAPA[perguntaId] ?? 'gestao'
+    const blocoAtual = ESTAGIO_POR_ETAPA[perguntaId] ?? categoriaDePerguntaId(perguntaId) ?? 'gestao'
     const categoriaEvidencia = mapearBlocoParaCategoria(blocoAtual)
     void registrarEvidencia(conversa.empresaId, {
       categoria: categoriaEvidencia,
@@ -184,19 +186,35 @@ export async function responder(
   }
 
   return {
-    reacao: reacaoExtra,
+    reacao,
     proximaPergunta: proximaEtapa,
-    progresso: calcularProgresso(etapaIndex, fluxo.etapas.length),
+    progresso: calcularProgresso(etapaIndex, fluxo),
     concluida: foiConcluida,
   }
 }
 
+function categoriaDePerguntaId(perguntaId: string): string | null {
+  const prefixo = perguntaId.split('.')[0]?.toUpperCase()
+  if (['FINANCEIRO', 'CLIENTES', 'OPERACAO', 'GESTAO', 'PESSOAS', 'PRODUTO', 'ESTRATEGIA'].includes(prefixo)) {
+    return prefixo
+  }
+  return null
+}
+
 function mapearBlocoParaCategoria(bloco: string) {
   const mapa: Record<string, 'FINANCEIRO' | 'CLIENTES' | 'OPERACAO' | 'GESTAO' | 'PESSOAS' | 'PRODUTO' | 'ESTRATEGIA'> = {
-    historia: 'GESTAO',
-    rotina: 'OPERACAO',
-    empresa: 'GESTAO',
-    frente: 'ESTRATEGIA',
+    contexto: 'GESTAO',
+    realidade: 'OPERACAO',
+    tensao: 'GESTAO',
+    evolucao: 'ESTRATEGIA',
+    proximo_movimento: 'ESTRATEGIA',
+    FINANCEIRO: 'FINANCEIRO',
+    CLIENTES: 'CLIENTES',
+    OPERACAO: 'OPERACAO',
+    GESTAO: 'GESTAO',
+    PESSOAS: 'PESSOAS',
+    PRODUTO: 'PRODUTO',
+    ESTRATEGIA: 'ESTRATEGIA',
   }
   return mapa[bloco] ?? 'GESTAO'
 }
@@ -221,8 +239,15 @@ export async function obterEstado(token: string): Promise<{
     const adaptativa = await obterProximaPergunta(conversa.empresaId, token)
     if (adaptativa) {
       return {
-        perguntaAtual: { id: adaptativa.id, pergunta: adaptativa.pergunta, tipo: adaptativa.tipo, opcoes: adaptativa.opcoes, categoria: adaptativa.categoria },
-        progresso: { blocoAtual: 1, totalBlocos: 5, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 50 },
+        perguntaAtual: {
+          id: adaptativa.id,
+          pergunta: adaptativa.pergunta,
+          tipo: adaptativa.tipo,
+          opcoes: adaptativa.opcoes,
+          categoria: adaptativa.categoria,
+          estagio: adaptativa.estagio,
+        },
+        progresso: { blocoAtual: 1, totalBlocos: ESTAGIOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 50 },
         concluida: false,
         respostas: estado.respostas,
       }
@@ -236,7 +261,7 @@ export async function obterEstado(token: string): Promise<{
 
   return {
     perguntaAtual: estado.etapa ? (fluxo.etapas.find((e) => e.id === estado.etapa) ?? null) : null,
-    progresso: calcularProgresso(etapaIndex, fluxo.etapas.length),
+    progresso: calcularProgresso(etapaIndex, fluxo),
     concluida: estado.concluida,
     respostas: estado.respostas,
   }

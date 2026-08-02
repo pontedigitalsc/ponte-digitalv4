@@ -61,6 +61,7 @@ model Empresa {
   perguntasVivas          PerguntaViva[]
   reflexoesSemanais       ReflexaoSemanal[]
   memoriasEmocionais      MemoriaEmocional[]
+  respostasPerguntasAbertas RespostaPerguntaAberta[]
  
   @@index([ativa])
   @@index([criadaEm])
@@ -1482,4 +1483,56 @@ model CasoReal {
   @@index([criadoEm])
   @@index([deletedAt])
   @@map("casos_reais")
+}
+
+// ─── PROGRAMA 52 — PERGUNTAS QUE CONSTROEM EMPRESAS ───────────────────────────
+// ETAPA 1 e 2 — Pergunta Aberta: apenas UMA pergunta ativa por vez, escolhida
+// pelo fundador, inserida naturalmente no fim de conversas compatíveis.
+// A pergunta é do nível da plataforma (não tem empresaId): é uma ferramenta
+// interna do fundador para aprender com os clientes — nunca parece pesquisa.
+
+model PerguntaAberta {
+  id                   String   @id @default(cuid())
+  pergunta             String
+  objetivo             String   // "Por que queremos entender isso?"
+  capacidade           String   // capacidade empresarial fortalecida
+  beneficio            String   // benefício esperado para o empresário
+  segmentosRecomendados String[] // segmentos compatíveis (vazio = todos)
+  ativa                Boolean  @default(false) // apenas uma ativa por vez
+  dataInicio           DateTime
+  dataRevisao          DateTime // próxima revisão semanal
+  criadaEm             DateTime @default(now())
+  atualizadaEm         DateTime @updatedAt
+  deletedAt            DateTime?
+
+  respostas            RespostaPerguntaAberta[]
+
+  @@index([ativa])
+  @@index([dataRevisao])
+  @@index([deletedAt])
+  @@map("perguntas_abertas")
+}
+
+// ETAPA 4 — Registro automático: pergunta, empresa, segmento, resumo da
+// resposta e data. Nada mais. Sem classificações complexas.
+model RespostaPerguntaAberta {
+  id          String   @id @default(cuid())
+  perguntaId  String
+  empresaId   String
+  segmento    String?  // segmento da empresa no momento da resposta
+  resumo      String   // a resposta em linguagem natural
+  contexto    String?  // de onde veio (ex.: conversa finalizada)
+  criadaEm    DateTime @default(now())
+  atualizadaEm DateTime @updatedAt
+  deletedAt   DateTime?
+
+  pergunta    PerguntaAberta @relation(fields: [perguntaId], references: [id], onDelete: Cascade)
+  empresa     Empresa        @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@unique([perguntaId, empresaId])
+  @@index([perguntaId, empresaId])
+  @@index([perguntaId, criadaEm])
+  @@index([empresaId])
+  @@index([empresaId, deletedAt])
+  @@map("respostas_perguntas_abertas")
 }

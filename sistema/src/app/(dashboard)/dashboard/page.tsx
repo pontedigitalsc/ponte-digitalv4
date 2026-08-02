@@ -1,7 +1,17 @@
 import { requireUser } from '@/lib/auth'
-import { obterPerguntaVivaAtiva, obterReflexaoDaSemana, listarMemoriasEmocionais } from '@/engine/relacao-engine'
+import {
+  obterPerguntaVivaAtiva,
+  obterReflexaoDaSemana,
+  listarMemoriasEmocionais,
+  montarLinhaDaHistoria,
+} from '@/engine/relacao-engine'
+import { decidirContexto, buscarSituacaoEmpresa } from '@/engine/cognitive-context-engine'
+import { listarAprendizados } from '@/engine/aprendizado-service'
+import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { AvatarPonte } from '@/components/ui/avatar'
 import { ComoEstaHoje } from '@/components/dashboard/como-esta-hoje'
+import { CentroDiario, type CentroDiarioData } from '@/components/dashboard/centro-diario'
+import { RevisaoEvolucao, type RevisaoEvolucaoData } from '@/components/dashboard/revisao-evolucao'
 import Link from 'next/link'
 
 export const metadata = { title: 'Ponte Digital' }
@@ -10,11 +20,53 @@ export default async function DashboardPage() {
   const usuario = await requireUser()
   const nome = usuario.nome.split(' ')[0]
 
-  const [perguntaViva, reflexao, memorias] = await Promise.all([
+  const [perguntaViva, reflexao, memorias, contexto, situacao, aprendizados, ultimaConversa] = await Promise.all([
     obterPerguntaVivaAtiva(usuario.empresaId).catch(() => null),
     obterReflexaoDaSemana(usuario.empresaId).catch(() => null),
     listarMemoriasEmocionais(usuario.empresaId, 3).catch(() => []),
+    decidirContexto(usuario.empresaId).catch(() => null),
+    buscarSituacaoEmpresa(usuario.empresaId).catch(() => null),
+    listarAprendizados(usuario.empresaId, { ativo: true, limite: 3 }).catch(() => []),
+    prisma.conversa
+      .findFirst({
+        where: { empresaId: usuario.empresaId, deletedAt: null },
+        orderBy: { criadaEm: 'desc' },
+        select: { criadaEm: true },
+      })
+      .catch(() => null),
   ])
+
+  const diasDesdeUltimaConversa = ultimaConversa
+    ? Math.floor((Date.now() - new Date(ultimaConversa.criadaEm).getTime()) / (24 * 60 * 60 * 1000))
+    : null
+
+  const centroDiario: CentroDiarioData = {
+    mudancas: contexto?.mudancasRecentes ?? [],
+    aprendizados: aprendizados.map((a) => ({ id: a.id, descricao: a.descricao, categoria: a.categoria })),
+    memoriasEmocionais: memorias.map((m) => m.sentimento),
+    atencao: (situacao?.sinais ?? []).slice(0, 3).map((s) => ({ titulo: s.titulo, descricao: s.descricao ?? '' })),
+    oportunidade: situacao?.temLeadsQuentes
+      ? 'Você tem leads em negociação no pipeline — o momento de retomá-los é agora.'
+      : situacao?.variacaoReceita && situacao.variacaoReceita > 0
+        ? `Seu faturamento subiu ${situacao.variacaoReceita}% neste mês — entender o que funcionou vale virar padrão.`
+        : null,
+    proximoMovimento: contexto?.acaoSugerida ?? null,
+  }
+
+  let revisao: RevisaoEvolucaoData | null = null
+  if (diasDesdeUltimaConversa !== null && diasDesdeUltimaConversa >= 30) {
+    const linha = await montarLinhaDaHistoria(usuario.empresaId).catch(() => null)
+    revisao = {
+      diasDesdeUltimaConversa,
+      antes: linha?.capitulos[0]?.paragrafos[0] ?? null,
+      durante: linha?.capitulos[4]?.paragrafos ?? [],
+      depois: [
+        ...(linha?.capitulos[2]?.paragrafos ?? []),
+        ...(linha?.capitulos[5]?.paragrafos ?? []),
+      ],
+      proximo: perguntaViva?.pergunta ?? contexto?.acaoSugerida ?? null,
+    }
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">

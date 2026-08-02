@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { criarConversa, carregarConversa, responder, obterEstado } from '@/engine/conversation-engine'
+import { ESTAGIOS_ORDEM } from '@/engine/tipos'
 import { handleApiError } from '@/lib/api-error'
 import { conversaRespostaSchema } from '@/lib/validations'
 import { assertRateLimit } from '@/lib/rate-limit'
 import { requireUserApi } from '@/lib/authorize'
 import { AuthenticationError } from '@/lib/app-errors'
-import { listarMemoriasEmocionais } from '@/engine/relacao-engine'
+import { montarContinuidadeConversa } from '@/engine/relacao-engine'
 
 function obterToken(request: NextRequest): string | null {
   return request.cookies.get('conv_token')?.value ?? null
@@ -42,13 +43,11 @@ export async function GET(request: NextRequest) {
     await validarAcessoConversa(token, usuario)
     const estado = await obterEstado(token)
 
-    // Memória Emocional — a conversa retoma de onde a última ficou no sentimento
-    let memoria = undefined
+    // Memória de conversa (P52) — a conversa retoma de onde a última ficou,
+    // referenciando o que o empresário contou com as próprias palavras dele.
+    let memoria: string | null = null
     if (usuario) {
-      const memorias = await listarMemoriasEmocionais(usuario.empresaId, 1).catch(() => [])
-      if (memorias.length > 0) {
-        memoria = `${memorias[0].sentimento} Fiquei pensando nisso desde então — quero saber como está agora.`
-      }
+      memoria = await montarContinuidadeConversa(usuario.empresaId).catch(() => null)
     }
 
     let jsonResponse: NextResponse
@@ -61,7 +60,7 @@ export async function GET(request: NextRequest) {
       jsonResponse = NextResponse.json({
         token,
         perguntaAtual: primeira,
-        progresso: { blocoAtual: 1, totalBlocos: 4, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 },
+        progresso: { blocoAtual: 1, totalBlocos: ESTAGIOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 },
         concluida: false,
         respostas: {},
         memoria,

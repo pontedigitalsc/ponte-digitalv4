@@ -192,8 +192,27 @@ import { inicializarPipelines as _initPipes } from './pipelines/pipeline-registr
 export { _initPipes as inicializarPipelines }
 
 export { registrarResposta, listarRespostasPorEmpresa, listarRespostasPorToken } from './question-answer-engine'
-export { obterProximaPergunta, obterMultiplasPerguntas } from './adaptive-question-engine'
-export type { AdaptiveQuestion } from './adaptive-question-engine'
+export { obterProximaPergunta, obterMultiplasPerguntas, detectarFocoContextual, BIBLIOTECA_GRANDES_PERGUNTAS } from './adaptive-question-engine'
+export type { AdaptiveQuestion, FocoContextual, QualidadePergunta, GrandePergunta } from './adaptive-question-engine'
+
+export {
+  criarPerguntaAberta,
+  obterPerguntaAbertaAtiva,
+  listarPerguntasAbertas,
+  obterPerguntaAberta,
+  empresaJaRespondeu,
+  estaCompativelComSegmento,
+  registrarRespostaPerguntaAberta,
+  listarRespostas,
+  obterPainelFundador,
+  revisarPergunta,
+  promoverPerguntaParaConhecimento,
+} from './pergunta-aberta-service'
+export type {
+  PerguntaAbertaItem,
+  RespostaAbertaItem,
+  PainelFundador,
+} from './pergunta-aberta-service'
 
 export {
   obterPerguntaVivaAtiva,

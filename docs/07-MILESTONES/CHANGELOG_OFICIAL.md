@@ -1,6 +1,24 @@
 # Changelog Oficial — Ponte Digital
 
-*Histórico completo da evolução da empresa, do Programa 0 ao 47.*
+*Histórico completo da evolução da empresa, do Programa 0 ao 52.*
+
+---
+
+## Programa 52 — Inteligência Conversacional Estratégica + Perguntas que Constroem Empresas
+
+**1 de agosto de 2026**
+
+Transformação da conversa em aconselhamento empresarial contínuo e criação do aprendizado estruturado do fundador. Primeiro pilar (Inteligência Conversacional Estratégica): primeira conversa reestruturada nos 5 estágios do conselheiro (contexto → realidade → tensão → evolução → próximo movimento), motor de qualidade das perguntas (objetivo, capacidade, patrimônio, tipo de resposta, impacto), perguntas adaptativas com foco contextual (sem transações, crescimento, queda, inadimplência, tarefas atrasadas), memória de conversa que cita o empresário com as palavras dele, recomendações que contam história no centro de decisão, Centro Diário respondendo as 5 perguntas essenciais e ritual mensal "Revisão da Evolução" (Antes/Durante/Depois/Próximo). Segundo pilar (Perguntas que Constroem Empresas): Biblioteca das Grandes Perguntas, Pergunta Aberta da Semana (apenas uma ativa por vez), inserção natural no fim de conversas compatíveis, registro automático das respostas, Painel do Fundador (`/painel-do-fundador`, exclusivo, sem IA inventando conclusões), revisão semanal e promoção para conhecimento (ConhecimentoColetivo). Schema: migration `005_p52_perguntas_que_constroem_empresas`.
+
+**Build: TypeScript 0 erros. Status: CONVERSA INTELIGENTE ATIVA.**
+
+---
+
+## Programas 48–51 — Diagnóstico Refinado, Relação Contínua, Fluxo Founder e Regulamentação
+
+**Julho 2026**
+
+Diagnóstico refinado (P48), nascimento da Relação Contínua com Pergunta Viva, Reflexão da Semana, Memória Emocional, Minha Jornada e memória viva (P49), fluxo completo do Founder com dashboard de presença e linha da história (P50/P51). 51 rotas, build e typecheck limpos.
 
 ---
 

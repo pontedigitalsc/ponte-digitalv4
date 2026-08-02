@@ -1,0 +1,25 @@
+import { requireUser, temPermissao } from '@/lib/auth'
+import { redirect } from 'next/navigation'
+import { obterPainelFundador, listarPerguntasAbertas } from '@/engine/pergunta-aberta-service'
+import { BIBLIOTECA_GRANDES_PERGUNTAS } from '@/engine/adaptive-question-engine'
+import { PainelDoFundador } from './painel'
+
+// ETAPA 5 — Painel interno exclusivo do fundador. Não aparece para clientes.
+// Apenas organiza o que as conversas revelaram. Nenhuma IA inventando conclusões.
+export default async function PainelDoFundadorPage() {
+  const usuario = await requireUser()
+  if (!temPermissao(usuario.role, 'ADMIN')) redirect('/dashboard')
+
+  const [painel, perguntas] = await Promise.all([
+    obterPainelFundador().catch(() => null),
+    listarPerguntasAbertas().catch(() => []),
+  ])
+
+  return (
+    <PainelDoFundador
+      painel={painel}
+      perguntas={perguntas}
+      biblioteca={BIBLIOTECA_GRANDES_PERGUNTAS}
+    />
+  )
+}

@@ -4,6 +4,7 @@ import { interpretarRespostas } from '@/engine/identity-engine'
 import { gerarResumoNatural } from '@/engine/interpretacoes'
 import { processarConversa } from '@/engine/cognitive-orchestrator'
 import { criarPerguntaVivaSeNecessario, registrarMemoriasEmocionais } from '@/engine/relacao-engine'
+import { obterPerguntaAbertaAtiva, empresaJaRespondeu, estaCompativelComSegmento } from '@/engine/pergunta-aberta-service'
 import { prismaSeguro } from '@/lib/prisma-tenant-safe'
 import { handleApiError } from '@/lib/api-error'
 import { assertRateLimit } from '@/lib/rate-limit'
@@ -75,11 +76,30 @@ export async function POST(request: NextRequest) {
       })
     }
 
+    // P52 — ETAPA 3: a Pergunta Aberta aparece quando a conversa termina
+    // naturalmente, se o segmento é compatível, se a empresa ainda não
+    // respondeu e se existe contexto (empresa identificada).
+    let perguntaAberta: { id: string; pergunta: string; beneficio: string } | null = null
+    if (empresaId) {
+      try {
+        const ativa = await obterPerguntaAbertaAtiva()
+        if (ativa && !(await empresaJaRespondeu(ativa.id, empresaId))) {
+          const compativel = await estaCompativelComSegmento(ativa.segmentosRecomendados, empresaId)
+          if (compativel) {
+            perguntaAberta = { id: ativa.id, pergunta: ativa.pergunta, beneficio: ativa.beneficio }
+          }
+        }
+      } catch {
+        // Pergunta Aberta é opcional — falha não interrompe a finalização
+      }
+    }
+
     return NextResponse.json({
       data: {
         interpretacoes,
         resumoNatural,
         respostas,
+        perguntaAberta,
       },
     })
   } catch (err) {

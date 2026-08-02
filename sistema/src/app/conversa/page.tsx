@@ -13,12 +13,21 @@ interface Pergunta {
   tipo: 'texto' | 'selecao' | 'faixa'
   opcoes?: { valor: string; rotulo: string }[]
   categoria?: string
+  estagio?: string
 }
 
 interface Progresso {
   blocoAtual: number
   totalBlocos: number
   percentual: number
+}
+
+const ESTAGIO_LABEL: Record<string, string> = {
+  contexto: 'O contexto',
+  realidade: 'A realidade',
+  tensao: 'A tensão',
+  evolucao: 'A evolução',
+  proximo_movimento: 'O próximo movimento',
 }
 
 interface Interpretacoes {
@@ -38,7 +47,7 @@ interface ResumoNaturalData {
 export default function ConversaPage() {
   const [carregando, setCarregando] = useState(true)
   const [perguntaAtual, setPerguntaAtual] = useState<Pergunta | null>(null)
-  const [progresso, setProgresso] = useState<Progresso>({ blocoAtual: 1, totalBlocos: 4, percentual: 0 })
+  const [progresso, setProgresso] = useState<Progresso>({ blocoAtual: 1, totalBlocos: 5, percentual: 0 })
   const [resposta, setResposta] = useState('')
   const [reacao, setReacao] = useState<string | null>(null)
   const [mostrandoReacao, setMostrandoReacao] = useState(false)
@@ -48,6 +57,10 @@ export default function ConversaPage() {
   const [enviando, setEnviando] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
   const [memoria, setMemoria] = useState<string | null>(null)
+  const [perguntaAberta, setPerguntaAberta] = useState<{ id: string; pergunta: string; beneficio: string } | null>(null)
+  const [respostaAberta, setRespostaAberta] = useState('')
+  const [enviandoAberta, setEnviandoAberta] = useState(false)
+  const [respostaAbertaEnviada, setRespostaAbertaEnviada] = useState(false)
 
   const recuperarInterpretacoes = useCallback(async () => {
     setInterpretacoes(null)
@@ -157,9 +170,29 @@ export default function ConversaPage() {
       const { data } = await res.json()
       setInterpretacoes(data.interpretacoes)
       if (data.resumoNatural) setResumoNatural(data.resumoNatural)
+      if (data.perguntaAberta) setPerguntaAberta(data.perguntaAberta)
       setConcluida(true)
     } catch {
       setErro('Não consegui guardar essa conversa agora. Pode tentar de novo?')
+    }
+  }
+
+  const enviarPerguntaAberta = async () => {
+    if (!respostaAberta.trim() || enviandoAberta || !perguntaAberta) return
+    setEnviandoAberta(true)
+    setErro(null)
+    try {
+      const res = await fetch('/api/conversa/pergunta-aberta', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ perguntaId: perguntaAberta.id, resposta: respostaAberta }),
+      })
+      if (!res.ok) throw new Error()
+      setRespostaAbertaEnviada(true)
+    } catch {
+      setErro('Não consegui guardar sua resposta agora. Pode tentar de novo?')
+    } finally {
+      setEnviandoAberta(false)
     }
   }
 
@@ -226,15 +259,22 @@ export default function ConversaPage() {
               <p className="text-sm text-muted-foreground italic">{reacao}</p>
             </div>
           ) : perguntaAtual ? (
-            <QuestionCard
-              pergunta={perguntaAtual.pergunta}
-              tipo={perguntaAtual.tipo}
-              opcoes={perguntaAtual.opcoes}
-              valor={resposta}
-              onChange={setResposta}
-              onEnviar={enviarResposta}
-              enviando={enviando}
-            />
+            <div className="space-y-3">
+              {perguntaAtual.estagio && (
+                <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-primary/70">
+                  {ESTAGIO_LABEL[perguntaAtual.estagio] ?? ''}
+                </p>
+              )}
+              <QuestionCard
+                pergunta={perguntaAtual.pergunta}
+                tipo={perguntaAtual.tipo}
+                opcoes={perguntaAtual.opcoes}
+                valor={resposta}
+                onChange={setResposta}
+                onEnviar={enviarResposta}
+                enviando={enviando}
+              />
+            </div>
           ) : (
             <p className="text-center text-muted-foreground">Só um instante...</p>
           )}
@@ -248,6 +288,46 @@ export default function ConversaPage() {
                 ? `Existe um padrão que quero continuar observando com você.`
                 : `Essa conversa faz parte de uma história maior.`}
             </p>
+
+            {/* P52 — Pergunta Aberta: inserção natural, nunca pesquisa */}
+            {perguntaAberta && !respostaAbertaEnviada && (
+              <div className="rounded-xl border border-primary/20 bg-card p-6 space-y-3 text-left">
+                <p className="text-sm text-muted-foreground leading-relaxed italic">
+                  Enquanto conversávamos, fiquei pensando em uma situação comum entre empresas parecidas com a sua.
+                </p>
+                <p className="text-base font-medium leading-relaxed">
+                  {perguntaAberta.pergunta}
+                </p>
+                {perguntaAberta.beneficio && (
+                  <p className="text-xs text-muted-foreground italic">
+                    {perguntaAberta.beneficio}
+                  </p>
+                )}
+                <div className="space-y-2">
+                  <textarea
+                    value={respostaAberta}
+                    onChange={(e) => setRespostaAberta(e.target.value)}
+                    rows={3}
+                    placeholder="Escreva com suas palavras..."
+                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={enviarPerguntaAberta}
+                    disabled={enviandoAberta || !respostaAberta.trim()}
+                    className="w-full rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
+                  >
+                    {enviandoAberta ? 'Guardando...' : 'Quero compartilhar'}
+                  </button>
+                </div>
+              </div>
+            )}
+            {perguntaAberta && respostaAbertaEnviada && (
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Guardei o que você compartilhou. Cada resposta sua nos ajuda a entender melhor empresas como a sua.
+              </p>
+            )}
+
             <div className="space-y-2">
               <Link
                 href="/dashboard"

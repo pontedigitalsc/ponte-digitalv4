@@ -254,6 +254,7 @@ export interface SituacaoEmpresa {
   temLeadsQuentes: boolean
   temClientesInadimplentes: boolean
   diasSemRegistroFinanceiro: number
+  variacaoReceita: number | null
 }
 
 export async function buscarSituacaoEmpresa(empresaId: string): Promise<SituacaoEmpresa> {
@@ -337,6 +338,7 @@ export async function buscarSituacaoEmpresa(empresaId: string): Promise<Situacao
     diasSemRegistroFinanceiro: transacao
       ? Math.floor((agora.getTime() - transacao.criadaEm.getTime()) / (24 * 60 * 60 * 1000))
       : 30,
+    variacaoReceita,
   }
 }
 

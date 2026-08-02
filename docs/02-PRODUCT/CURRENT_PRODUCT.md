@@ -48,6 +48,16 @@
 > 
 > Ver `docs/06-CONSTITUTION/P32/` para a Constituição completa.
 
+> **MARCO: P52 — Inteligência Conversacional Estratégica + Perguntas que Constroem Empresas — 1 de agosto de 2026**
+>
+> Após P52, a Ponte Digital deixa de apenas acompanhar empresas. Ela passa a desenvolver uma relação contínua de evolução através de conversas inteligentes.
+>
+> Após o Programa 52, a Ponte Digital passa a aprender continuamente através de conversas que ajudam empresários a refletirem melhor sobre seus negócios. Cada conversa fortalece simultaneamente o empresário e o patrimônio de conhecimento da plataforma.
+>
+> **Conteúdo:** conversa reestruturada nos 5 estágios do conselheiro (contexto → realidade → tensão → evolução → próximo movimento), motor de qualidade das perguntas, perguntas adaptativas por contexto real, memória de conversa, recomendações com história, Centro Diário com as 5 perguntas essenciais, ritual mensal "Revisão da Evolução", Biblioteca das Grandes Perguntas, Pergunta Aberta da Semana (única ativa) com registro automático e Painel do Fundador interno.
+>
+> Ver `docs/07-MILESTONES/P52_INTELIGENCIA_CONVERSACIONAL.md` e `docs/07-MILESTONES/P52_PERGUNTAS_QUE_CONSTROEM_EMPRESAS.md`.
+
 *Documento operacional, complementar ao FOUNDATION.md e à Tese de Valor (Nível 1). É a referência principal para qualquer agente de código — Roo Code, Gemini CLI, Claude ou outro — antes de qualquer tarefa de implementação. Atualizar a cada sprint concluída. Máximo duas páginas: se crescer além disso, o excesso vira Playbook (Nível 3), não fica aqui.*
 
 **Objetivo desta fase:** validar as **8 Capacidades Fundamentais** com 100 fundadores — não apenas acumular evidências, mas testar se a materialização da Teoria da Evolução Empresarial produz empresários mais conscientes, adaptáveis e tranquilos. Os 100 primeiros são co-autores da tese: cada interação fortalece ou questiona uma capacidade, gera Capital Cognitivo e alimenta a Curva Evolutiva.

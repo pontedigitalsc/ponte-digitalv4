@@ -46,9 +46,11 @@ export function obterReacao(etapaId: string): string {
   return SILENCIO_INTELIGENTE[hashEtapa(etapaId) % SILENCIO_INTELIGENTE.length]
 }
 
+// P52 — reações de transição entre os 5 estágios do conselheiro.
 export const REACOES_BLOCO: Record<string, string> = {
-  'historia': 'Obrigado por compartilhar a história. Ela agora faz parte de quem acompanho.',
-  'rotina':   'Já imagino como é seu dia. Agora quero entender a empresa por trás dele.',
-  'empresa':  'Estou começando a enxergar padrões. Vou juntá-los com calma antes de falar.',
-  'frente':   'Com isso já consigo escrever sobre sua empresa — mas ainda quero observar mais.',
+  'contexto': 'Uma empresa nasce de um momento — o seu já me conta muita coisa. Agora quero entender como esse começo virou o dia a dia.',
+  'realidade': 'Já imagino como é seu dia. Agora quero enxergar a empresa por trás dele, como ela funciona de verdade.',
+  'tensao': 'Estou começando a sentir onde a corda aperta. Vamos olhar isso com calma — é assim que encontramos o que trava.',
+  'evolucao': 'Você carrega mais conquistas do que imagina. Deixa eu registrar o que já está funcionando.',
+  'proximo_movimento': 'Com o que você me contou, já consigo pensar em direção. Vamos definir o próximo movimento.',
 }

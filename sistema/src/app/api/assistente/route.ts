@@ -8,6 +8,7 @@ import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { assistenteRequisicaoSchema } from '@/lib/validations'
 import { getAIProvider } from '@/lib/ai-provider'
 import { registrarResposta } from '@/engine/question-answer-engine'
+import { montarContinuidadeConversa, obterPerguntaVivaAtiva, listarMemoriasEmocionais } from '@/engine/relacao-engine'
 
 // ─── CONTEXTO DO BANCO ────────────────────────────────────────────────────────
 // Busca um snapshot compacto dos dados reais para fundamentar as respostas da IA.
@@ -27,6 +28,9 @@ interface ContextoEstruturado {
   receitaMes: number
   despesaMes: number
   ultimosHistoricos: { tipo: string; titulo: string; cliente?: string }[]
+  memoriaConversa: string | null
+  perguntaViva: string | null
+  memoriasEmocionais: string[]
 }
 
 async function buscarContexto(empresaId: string): Promise<ContextoEstruturado> {
@@ -44,8 +48,10 @@ async function buscarContexto(empresaId: string): Promise<ContextoEstruturado> {
     despesaMes,
     clientesInadimplentes,
     ultimosHistoricos,
-  ] = await Promise.all([
-    prisma.empresa.findUnique({ where: { id: empresaId }, select: { nome: true, plano: true } }),
+    memoriaConversa,
+    perguntaViva,
+    memoriasEmocionais,
+  ] = await Promise.all([    prisma.empresa.findUnique({ where: { id: empresaId }, select: { nome: true, plano: true } }),
 
     prisma.cliente.groupBy({
       by: ['status'],
@@ -116,6 +122,10 @@ async function buscarContexto(empresaId: string): Promise<ContextoEstruturado> {
       orderBy: { criadoEm: 'desc' },
       take: 5,
     }),
+
+    montarContinuidadeConversa(empresaId).catch(() => null),
+    obterPerguntaVivaAtiva(empresaId).catch(() => null),
+    listarMemoriasEmocionais(empresaId, 3).catch(() => []),
   ])
 
   const totalClientes = statsClientes.reduce((a, c) => a + c._count.id, 0)
@@ -145,6 +155,9 @@ async function buscarContexto(empresaId: string): Promise<ContextoEstruturado> {
     receitaMes: Number(receitaMes._sum.valor ?? 0),
     despesaMes: Number(despesaMes._sum.valor ?? 0),
     ultimosHistoricos: ultimosHistoricos.map((h) => ({ tipo: h.tipo, titulo: h.titulo, cliente: h.cliente?.nome })),
+    memoriaConversa: memoriaConversa,
+    perguntaViva: perguntaViva?.pergunta ?? null,
+    memoriasEmocionais: memoriasEmocionais.map((m) => m.sentimento),
   }
 }
 
@@ -174,6 +187,15 @@ FINANCEIRO (mês atual):
 
 ÚLTIMAS ATIVIDADES:
 ${c.ultimosHistoricos.map((h) => `- ${h.tipo}: "${h.titulo}"${h.cliente ? ` (${h.cliente})` : ''}`).join('\n')}
+
+MEMÓRIA DA RELAÇÃO (o que o empresário já nos contou):
+${c.memoriaConversa ?? '- Ainda não temos uma conversa registrada com esta empresa.'}
+${c.perguntaViva ? `- Pergunta que o acompanha: "${c.perguntaViva}"` : ''}
+${c.memoriasEmocionais.length > 0 ? `- Como ele se sentiu recentemente: ${c.memoriasEmocionais.join(' | ')}` : ''}
+
+Use a memória acima para retomar a conversa como um parceiro que lembra —
+referencie o que ele já contou antes de sugerir algo novo. Nunca invente
+lembranças: use apenas o que está listado aqui.
 `.trim()
 }
 

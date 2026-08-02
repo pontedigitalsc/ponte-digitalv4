@@ -17,6 +17,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
+import { listarRespostasPorEmpresa } from './question-answer-engine'
 
 // ─── 1. PERGUNTA VIVA ──────────────────────────────────────────────────────
 
@@ -160,8 +161,48 @@ export async function criarPerguntaVivaSeNecessario(empresaId: string, respostas
   }
 }
 
-// ─── 2. REFLEXÃO DA SEMANA ─────────────────────────────────────────────────
+// ─── P52 — CONTINUIDADE DA CONVERSA ────────────────────────────────────────
+// A Ponte não recomeça do zero. Quando o empresário volta, ela retoma de onde
+// ficou: referenciando o que ele contou na última conversa, com as próprias
+// palavras dele. É memória real, não cortesia.
 
+export async function montarContinuidadeConversa(empresaId: string): Promise<string | null> {
+  const [ultimasRespostas, memorias, perguntasVivas] = await Promise.all([
+    listarRespostasPorEmpresa(empresaId, { limite: 1 }),
+    prisma.memoriaEmocional.findMany({
+      where: { empresaId, deletedAt: null },
+      orderBy: { criadaEm: 'desc' },
+      take: 1,
+    }),
+    prisma.perguntaViva.findMany({
+      where: { empresaId, deletedAt: null, estado: 'RESPONDIDA', resposta: { not: null } },
+      orderBy: { criadaEm: 'desc' },
+      take: 1,
+    }),
+  ])
+
+  const partes: string[] = []
+
+  if (ultimasRespostas.length > 0) {
+    const valor = ultimasRespostas[0].valor.trim().slice(0, 160)
+    if (valor) partes.push(`Na última conversa, você me contou que: "${valor}".`)
+  }
+
+  if (perguntasVivas.length > 0 && perguntasVivas[0].resposta) {
+    const resposta = perguntasVivas[0].resposta.trim().slice(0, 160)
+    if (resposta) partes.push(`Também respondeu à pergunta "${perguntasVivas[0].pergunta}" com: "${resposta}".`)
+  }
+
+  const sentimento = memorias.length > 0
+    ? `${memorias[0].sentimento} `
+    : ''
+  partes.push(`${sentimento}Quero saber como está isso agora.`)
+
+  if (partes.length === 0) return null
+  return partes.join(' ')
+}
+
+// ─── 2. REFLEXÃO DA SEMANA ─────────────────────────────────────────────────
 export interface ReflexaoSemanal {
   id: string
   semana: string
