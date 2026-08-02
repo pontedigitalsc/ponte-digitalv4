@@ -94,7 +94,8 @@ Testado na URL de produção (`https://ponte-digital.vercel.app`):
 
 ## 7. Checklist operacional (Etapa 11) — estado
 
-- [x] **Domínio público ativo** — `ponte-digital.vercel.app` (domínio a configurar: `pontedigital.com.br` — registrado como evolução futura)
+- [x] **Domínio público ativo** — `ponte-digital.vercel.app` (URL oficial neste marco)
+- [ ] **Domínio personalizado `pontedigital.com.br`** — **PENDÊNCIA REGISTRADA**: o domínio está sob outra conta Vercel (`domain_already_exists`) e o DNS aponta para um hosting antigo (`186.202.135.240`, nameservers `ns1/ns2.pontedigital.com.br`). Exige: (1) transferir/aliar o domínio para a equipe `ponte-digital1`, e (2) direcionar DNS para a Vercel (`@` → A `76.76.21.21`, `www` → CNAME `cname.vercel-dns.com`). Decidido adiar para a fase operacional.
 - [ ] **E-mail profissional** — a definir (fora do repo)
 - [ ] **CNPJ / pessoa jurídica** — a definir
 - [ ] **Política de privacidade / Termos de uso / LGPD** — a criar/publicar (tem meu conhecimento; fora do repo)

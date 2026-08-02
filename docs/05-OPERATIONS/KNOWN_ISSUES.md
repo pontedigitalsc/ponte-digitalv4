@@ -72,10 +72,17 @@
 
 ## Conflito de URL de produção (documentação)
 
-**Status:** Reconciliado em 2026-08-02 (P56)
+**Status:** Reconciliado em 2026-08-02 (P56) — URL oficial é `http://ponte-digital.vercel.app`
 **Prioridade:** Média (documental)
-**Descrição:** `OPS-INFRASTRUCTURE.md` e outros docs citam `https://pontedigital.com.br` como produção, mas o domínio personalizado não responde ao health check; a URL de produção real e ativa é `https://ponte-digital.vercel.app` (projeto `ponte-digital`, equipe `ponte-digital1`). `staging.pontedigital.com.br` e o custom domain `pontedigital.com.br` precisam ser conectados/configurados no Vercel quando desejado.
-**Ação:** registrado na certidão P56; configurar o domínio personalizado no Vercel como evolução futura.
+**Descrição:** `OPS-INFRASTRUCTURE.md` e outros docs citam `https://pontedigital.com.br` como produção, mas o domínio personalizado não responde ao health check; a URL de produção real e ativa é `https://ponte-digital.vercel.app` (projeto `ponte-digital`, equipe `ponte-digital1`).
+**Ação:** concluído — URL oficial registrada. Vincular `pontedigital.com.br` fica como pendência operacional (ver abaixo).
+
+## Domínio personalizado `pontedigital.com.br` — pendência operacional
+
+**Status:** Pendente (adiado para a fase operacional — decisão do usuário 2026-08-02)
+**Prioridade:** Baixa na fase atual (URL da Vercel é oficial)
+**Descrição:** `vercel domains add pontedigital.com.br` → `domain_already_exists` (o domínio está sob outra conta Vercel) e o DNS atual aponta para um hosting antigo (`186.202.135.240`, nameservers `ns1/ns2.pontedigital.com.br`).
+**Ação:** quando desejado: (1) transferir/aliar o domínio para a equipe `ponte-digital1` na conta Vercel que o possui; (2) no provedor DNS atual, apontar `@` → A `76.76.21.21` e `www` → CNAME `cname.vercel-dns.com`; (3) vincular o domínio ao projeto `ponte-digital`. Registrar também o e-mail profissional (ex.: `contato@ponte-digital.com.br` ou equivalente) após a configuração.
 
 ## P51 — ETAPAS que exigem validação com usuário real (ETAPAS 6 e 12)
 
