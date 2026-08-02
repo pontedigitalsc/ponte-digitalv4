@@ -7,9 +7,14 @@ import {
 } from '@/engine/relacao-engine'
 import { decidirContexto, buscarSituacaoEmpresa } from '@/engine/cognitive-context-engine'
 import { listarAprendizados } from '@/engine/aprendizado-service'
+import { obterRitualDiario } from '@/engine/ritual-engine'
+import { obterConquistas } from '@/engine/celebracao-service'
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { AvatarPonte } from '@/components/ui/avatar'
 import { ComoEstaHoje } from '@/components/dashboard/como-esta-hoje'
+import { RitualDiario } from '@/components/dashboard/ritual-diario'
+import type { RitualDiario as RitualDiarioData } from '@/engine/ritual-engine'
+import { Celebracoes } from '@/components/dashboard/celebracao'
 import { CentroDiario, type CentroDiarioData } from '@/components/dashboard/centro-diario'
 import { RevisaoEvolucao, type RevisaoEvolucaoData } from '@/components/dashboard/revisao-evolucao'
 import Link from 'next/link'
@@ -20,7 +25,7 @@ export default async function DashboardPage() {
   const usuario = await requireUser()
   const nome = usuario.nome.split(' ')[0]
 
-  const [perguntaViva, reflexao, memorias, contexto, situacao, aprendizados, ultimaConversa] = await Promise.all([
+  const [perguntaViva, reflexao, memorias, contexto, situacao, aprendizados, ultimaConversa, ritualData, conquistas] = await Promise.all([
     obterPerguntaVivaAtiva(usuario.empresaId).catch(() => null),
     obterReflexaoDaSemana(usuario.empresaId).catch(() => null),
     listarMemoriasEmocionais(usuario.empresaId, 3).catch(() => []),
@@ -34,7 +39,29 @@ export default async function DashboardPage() {
         select: { criadaEm: true },
       })
       .catch(() => null),
+    obterRitualDiario(usuario.empresaId, nome).catch(() => null),
+    obterConquistas(usuario.empresaId).catch(() => []),
   ])
+
+  const ritual: RitualDiarioData = ritualData ?? {
+    saudacao: `${nome}, sua empresa está sendo escrita.`,
+    focoDoDia: {
+      rotulo: 'Um dia para observar',
+      orientacao: 'Continue a conversa — cada registro constrói a sua biografia.',
+    },
+    momento: {
+      momento: 'ESTAGNADA',
+      rotulo: 'Ainda estamos nos conhecendo',
+      postura: 'Vamos continuar a conversa para eu entender melhor o momento da sua empresa.',
+      razao: 'Ainda estamos juntando os primeiros registros',
+    },
+    percepcao: {
+      tipo: 'silencio',
+      texto: 'Hoje não encontrei nenhuma mudança importante. Continue exatamente como está — isso também gera confiança.',
+    },
+    proximoMovimento: 'Continuar nossa conversa é o melhor movimento de hoje.',
+    perguntaQueFica: 'O que a sua empresa precisa para você dormir tranquilo?',
+  }
 
   const diasDesdeUltimaConversa = ultimaConversa
     ? Math.floor((Date.now() - new Date(ultimaConversa.criadaEm).getTime()) / (24 * 60 * 60 * 1000))
@@ -74,12 +101,15 @@ export default async function DashboardPage() {
       <div className="text-center space-y-3">
         <AvatarPonte state="breathing" size="lg" />
         <h1 className="text-2xl font-semibold tracking-tight">
-          {nome}, sua empresa está sendo escrita
+          {ritual.saudacao}
         </h1>
         <p className="text-sm text-muted-foreground leading-relaxed max-w-md mx-auto">
           Não é um painel com números. É uma conversa que continua — com uma pergunta que acompanha você.
         </p>
       </div>
+
+      {/* Ritual Diário — a abertura que acolhe */}
+      <RitualDiario data={ritual} />
 
       {/* Pergunta Viva — UMA pergunta */}
       {perguntaViva && (
@@ -137,6 +167,9 @@ export default async function DashboardPage() {
 
       {/* Como está hoje — sentimento, não status */}
       <ComoEstaHoje />
+
+      {/* Celebrações de evolução — conquistas, não apenas dinheiro */}
+      {conquistas.length > 0 && <Celebracoes conquistas={conquistas} />}
 
       {/* Linha da História */}
       <div className="text-center pt-2">

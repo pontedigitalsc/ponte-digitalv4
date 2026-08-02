@@ -1,5 +1,6 @@
 import { requireUser } from '@/lib/auth'
 import { montarLinhaDaHistoria } from '@/engine/relacao-engine'
+import { obterLinhaDaVida } from '@/engine/linha-da-vida-engine'
 import { AvatarPonte } from '@/components/ui/avatar'
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import Link from 'next/link'
@@ -17,13 +18,20 @@ export default async function MinhaHistoriaPage() {
   })
   const respostas = (ultimaConversa?.respostas as Record<string, string | null>) ?? {}
 
-  const [historia, perguntasVivas] = await Promise.all([
+  const [historia, perguntasVivas, linhaDaVida] = await Promise.all([
     montarLinhaDaHistoria(usuario.empresaId, respostas),
     prisma.perguntaViva.findMany({
       where: { empresaId: usuario.empresaId, deletedAt: null },
       orderBy: { criadaEm: 'desc' },
     }),
+    obterLinhaDaVida(usuario.empresaId).catch(() => null),
   ])
+
+  const NIVEL_ROTULO: Record<string, string> = {
+    observando: 'observando',
+    crescendo: 'crescendo',
+    consolidada: 'consolidada',
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
@@ -67,6 +75,84 @@ export default async function MinhaHistoriaPage() {
           </div>
         ))}
       </div>
+
+      {/* Linha da Vida — marcos reais, mês a mês */}
+      {linhaDaVida && (
+        <div className="rounded-xl border bg-card p-6 space-y-4">
+          <div>
+            <h2 className="text-base font-semibold tracking-tight">A linha da vida da sua empresa</h2>
+            <p className="text-xs text-muted-foreground">{linhaDaVida.empresa.resumo}</p>
+          </div>
+
+          {linhaDaVida.empresa.marcos.length > 0 ? (
+            <div className="relative space-y-4 before:absolute before:left-[13px] before:top-1 before:bottom-1 before:w-px before:bg-border">
+              {linhaDaVida.empresa.marcos.map((m, i) => (
+                <div key={i} className="relative pl-9">
+                  <span className="absolute left-0 top-0 flex h-7 w-7 items-center justify-center rounded-full bg-muted text-sm">
+                    {m.icone}
+                  </span>
+                  <div className="space-y-0.5">
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">{m.mes}</p>
+                    <p className="text-sm font-medium">{m.titulo}</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{m.descricao}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground italic">
+              Sua linha da vida começa a ser desenhada na primeira conversa.
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Evolução do empresário — clareza, confiança, maturidade, decisão */}
+      {linhaDaVida && (
+        <div className="rounded-xl border border-primary/15 bg-card p-6 space-y-5">
+          <div>
+            <h2 className="text-base font-semibold tracking-tight">A evolução de {nome}</h2>
+            <p className="text-xs text-muted-foreground">
+              A Ponte acompanha a sua evolução — não para medir você, mas para mostrar crescimento.
+            </p>
+          </div>
+
+          {linhaDaVida.fundador.comparacao && (
+            <p className="text-sm text-muted-foreground leading-relaxed border-l-2 border-primary/20 pl-3">
+              {linhaDaVida.fundador.comparacao}
+            </p>
+          )}
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            {linhaDaVida.fundador.dimensoes.map((d) => (
+              <div key={d.dimensao} className="space-y-1.5 rounded-lg bg-muted/40 p-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium">{d.dimensao}</p>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-primary/70">
+                    {NIVEL_ROTULO[d.nivel] ?? d.nivel}
+                  </span>
+                </div>
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-border">
+                  <div
+                    className="h-full rounded-full bg-primary/70 transition-all"
+                    style={{ width: `${d.progresso}%` }}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">{d.descricao}</p>
+              </div>
+            ))}
+          </div>
+
+          {linhaDaVida.fundador.indiceClareza !== null && (
+            <div className="rounded-lg bg-muted/50 p-4 space-y-1.5">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                Índice de clareza — {linhaDaVida.fundador.indiceClareza}%
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{linhaDaVida.fundador.clarezaTexto}</p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Perguntas Vivas — a história das perguntas */}
       <div className="rounded-xl border bg-card p-6 space-y-3">

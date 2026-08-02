@@ -58,6 +58,14 @@
 >
 > Ver `docs/07-MILESTONES/P52_INTELIGENCIA_CONVERSACIONAL.md` e `docs/07-MILESTONES/P52_PERGUNTAS_QUE_CONSTROEM_EMPRESAS.md`.
 
+> **MARCO: P53 — Experiência Ponte: Da Conversa ao Relacionamento — 1 de agosto de 2026**
+>
+> Após P53, a Ponte Digital deixa de ser um lugar onde o empresário administra e passa a ser o lugar onde ele é acolhido, reconhecido e lembrado — uma presença constante que reduz ansiedade, aumenta clareza e cria vontade de voltar amanhã.
+>
+> **Conteúdo:** os 16 pilares materializados — ritual diário (saudação, foco do dia, leitura do momento), reconhecimento de momentos da empresa, foco variável por semana/fase do mês, Linha da Vida da empresa com marcos reais, evolução do fundador em 4 dimensões, percepções espontâneas, silêncio inteligente, conquistas de evolução, memória afetiva, índice de clareza, próximo melhor movimento único, pergunta que fica, personalidade permanente do assistente e retorno natural. Nenhum schema novo, nenhuma tela ERP nova, nenhum módulo administrativo — tudo reutilizou o patrimônio existente.
+>
+> Ver `docs/07-MILESTONES/P53_EXPERIENCIA_PONTE.md`.
+
 *Documento operacional, complementar ao FOUNDATION.md e à Tese de Valor (Nível 1). É a referência principal para qualquer agente de código — Roo Code, Gemini CLI, Claude ou outro — antes de qualquer tarefa de implementação. Atualizar a cada sprint concluída. Máximo duas páginas: se crescer além disso, o excesso vira Playbook (Nível 3), não fica aqui.*
 
 **Objetivo desta fase:** validar as **8 Capacidades Fundamentais** com 100 fundadores — não apenas acumular evidências, mas testar se a materialização da Teoria da Evolução Empresarial produz empresários mais conscientes, adaptáveis e tranquilos. Os 100 primeiros são co-autores da tese: cada interação fortalece ou questiona uma capacidade, gera Capital Cognitivo e alimenta a Curva Evolutiva.

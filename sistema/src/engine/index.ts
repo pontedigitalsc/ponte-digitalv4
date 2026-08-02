@@ -345,3 +345,16 @@ export {
   calcularMetricasPlataforma,
   gerarSnapshotPlataforma,
 } from './p36/platform-capital-engine'
+
+// ─── P53 — Experiência Ponte: Da Conversa ao Relacionamento ────────────────
+export type { MomentoEmpresa, MomentoDetectado } from './momento-engine'
+export { detectarMomentoEmpresa } from './momento-engine'
+
+export type { FocoDoDia, PercepcaoPonte, RitualDiario } from './ritual-engine'
+export { obterRitualDiario } from './ritual-engine'
+
+export type { MarcoVida, DimensaoFundador, EvolucaoFundador, LinhaDaVida } from './linha-da-vida-engine'
+export { obterLinhaDaVida } from './linha-da-vida-engine'
+
+export type { Conquista } from './celebracao-service'
+export { obterConquistas } from './celebracao-service'
