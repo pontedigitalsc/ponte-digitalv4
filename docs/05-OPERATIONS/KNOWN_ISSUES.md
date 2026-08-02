@@ -63,12 +63,19 @@
 
 *(Adicionar uma entrada por problema identificado, com status, prioridade e ação.)*
 
-## P51 — produção ainda sem o P50/P51 (deploy manual pendente)
+## P51/P55/P56 — produção sincronizada (deploy resolvido)
 
-**Status:** Pendente — ação do usuário
-**Prioridade:** Alta (bloqueia ETAPA 12 do P51 e a validação com Founder real)
-**Descrição:** o token da CLI Vercel está inválido; deploy precisa ser feito manualmente pelo usuário. Produção (`https://ponte-digital.vercel.app`) ainda roda a versão P47.1/`1242564`; P50 (linguagem) e P51 (atendimento/caixa/conversa/auth/recomendações/retorno diário) estão commitados em `main` (`7f99070` → `2ce62bc`) mas não publicados.
-**Ação:** usuário autenticar na Vercel (ou configurar `VERCEL_TOKEN`) e fazer deploy de `main`; rodar `prisma migrate deploy` se houver migrações novas (P51 não alterou schema).
+**Status:** Resolvido em 2026-08-02 (P56) — produção == `main`
+**Prioridade:** ~ (era Altox, bloqueava validação com Founder real)
+**Descrição:** produção (`https://ponte-digital.vercel.app`) estava presa em P47.1/`1242564`. No P56 foi executado o deploy de produção via CLI Vercel (conta `pontedigitalsc-1314`, equipe `ponte-digital1`, projeto `ponte-digital`), publicando `main`/`ca4a099` (contém P50–P55). Migrations verificadas como "up to date" (5/5). A partir deste marco, `main` é a fonte da verdade em produção.
+**Ação:** encerrado. Para futuros deploys: `npx vercel deploy --prod --yes --scope ponte-digital1` (na raiz do repo) ou Git-integration da Vercel.
+
+## Conflito de URL de produção (documentação)
+
+**Status:** Reconciliado em 2026-08-02 (P56)
+**Prioridade:** Média (documental)
+**Descrição:** `OPS-INFRASTRUCTURE.md` e outros docs citam `https://pontedigital.com.br` como produção, mas o domínio personalizado não responde ao health check; a URL de produção real e ativa é `https://ponte-digital.vercel.app` (projeto `ponte-digital`, equipe `ponte-digital1`). `staging.pontedigital.com.br` e o custom domain `pontedigital.com.br` precisam ser conectados/configurados no Vercel quando desejado.
+**Ação:** registrado na certidão P56; configurar o domínio personalizado no Vercel como evolução futura.
 
 ## P51 — ETAPAS que exigem validação com usuário real (ETAPAS 6 e 12)
 

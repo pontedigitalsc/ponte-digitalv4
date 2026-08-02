@@ -93,6 +93,20 @@
 >
 > Ver `docs/05-OPERATIONS/P55/FOUNDER_READY_V1.md` e `docs/07-MILESTONES/P55_FOUNDER_READY_V1.md`.
 
+> **MARCO: P56 — PRODUÇÃO CERTIFICADA E OPERAÇÃO FOUNDER V1 — STATUS OFICIAL — 2 de agosto de 2026**
+>
+> **A Ponte Digital encontra-se oficialmente publicada, certificada e sincronizada entre desenvolvimento e produção.** O deploy de produção (`https://ponte-digital.vercel.app`, commit `ca4a099` de `main`) foi executado em 2/8/2026 e validado (sincronização produção == main, migrations 5/5, build/TypeScript limpos, smoke de rotas públicas 200). Isto encerra a fase de construção.
+>
+> **Nenhuma evolução futura será iniciada por hipótese interna.** Toda melhoria nascerá exclusivamente da utilização da plataforma por empresas reais (Fase Founder). A Ponte Digital deixa de ser um software em desenvolvimento e passa a ser uma empresa de tecnologia em operação.
+>
+> **Regras vigentes a partir de P56:**
+> - Produção == `main` (`ca4a099`) é a fonte da verdade.
+> - Futuros deploys: `npx vercel deploy --prod --yes --scope ponte-digital1` ou Git-integration.
+> - Toda evolução exige evidência de utilização real por um Founder (Árvore de Decisões de Produto + Critérios de Novos Desenvolvimentos).
+> - Continua valendo o congelamento Founder Ready V1 (P55): IA resiliente, tenant guard ativo, código morto removido.
+>
+> Ver `docs/07-MILESTONES/PRODUCTION_CERTIFIED_V1.md`, `docs/07-MILESTONES/INICIO_DA_OPERACAO.md` e `docs/05-OPERATIONS/KNOWN_ISSUES.md`.
+
 *Documento operacional, complementar ao FOUNDATION.md e à Tese de Valor (Nível 1). É a referência principal para qualquer agente de código — Roo Code, Gemini CLI, Claude ou outro — antes de qualquer tarefa de implementação. Atualizar a cada sprint concluída. Máximo duas páginas: se crescer além disso, o excesso vira Playbook (Nível 3), não fica aqui.*
 
 **Objetivo desta fase:** validar as **8 Capacidades Fundamentais** com 100 fundadores — não apenas acumular evidências, mas testar se a materialização da Teoria da Evolução Empresarial produz empresários mais conscientes, adaptáveis e tranquilos. Os 100 primeiros são co-autores da tese: cada interação fortalece ou questiona uma capacidade, gera Capital Cognitivo e alimenta a Curva Evolutiva.
