@@ -80,7 +80,7 @@ export async function excluirHistorico(id: string, empresaId: string) {
   if (!existe) throw new NotFoundError('Registro não encontrado')
   // Só permite excluir registros manuais (não SISTEMA)
   if (existe.tipo === 'SISTEMA') throw new BusinessRuleError('Registros automáticos não podem ser excluídos')
-  await prisma.historico.delete({ where: { id } })
+  await prisma.historico.deleteMany({ where: { id, empresaId } })
   return true
 }
 

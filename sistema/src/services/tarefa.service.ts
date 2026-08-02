@@ -103,6 +103,19 @@ export async function criarTarefa(empresaId: string, criadorId: string, dados: T
 
 // ─── ATUALIZAR TAREFA ─────────────────────────────────────────────────────────
 
+const INCLUDE_TAREFA = {
+  responsavel: { select: { id: true, nome: true, avatar: true } },
+  cliente:     { select: { id: true, nome: true } },
+  lead:        { select: { id: true, nome: true } },
+} as const
+
+async function obterTarefa(empresaId: string, id: string) {
+  return prisma.tarefa.findFirst({
+    where: { id, empresaId, deletedAt: null },
+    include: INCLUDE_TAREFA,
+  })
+}
+
 export async function atualizarTarefa(id: string, empresaId: string, dados: Partial<TarefaInput>) {
   const existe = await prisma.tarefa.findFirst({ where: { id, empresaId, deletedAt: null } })
   if (!existe) throw new NotFoundError('Tarefa não encontrada')
@@ -116,15 +129,13 @@ export async function atualizarTarefa(id: string, empresaId: string, dados: Part
     extra.concluidaEm = null
   }
 
-  return prisma.tarefa.update({
-    where: { id },
+  await prisma.tarefa.updateMany({
+    where: { id, empresaId, deletedAt: null },
     data: { ...dados, ...extra },
-    include: {
-      responsavel: { select: { id: true, nome: true, avatar: true } },
-      cliente:     { select: { id: true, nome: true } },
-      lead:        { select: { id: true, nome: true } },
-    },
   })
+  const tarefa = await obterTarefa(empresaId, id)
+  if (!tarefa) throw new NotFoundError('Tarefa não encontrada')
+  return tarefa
 }
 
 // ─── CONCLUIR / REABRIR (toggle) ──────────────────────────────────────────────
@@ -134,17 +145,16 @@ export async function toggleConcluida(id: string, empresaId: string) {
   if (!tarefa) throw new NotFoundError('Tarefa não encontrada')
 
   const novoConcluida = tarefa.status !== 'CONCLUIDA'
-  return prisma.tarefa.update({
-    where: { id },
+  await prisma.tarefa.updateMany({
+    where: { id, empresaId, deletedAt: null },
     data: {
       status:      novoConcluida ? 'CONCLUIDA' : 'PENDENTE',
       concluidaEm: novoConcluida ? new Date() : null,
     },
-    include: {
-      responsavel: { select: { id: true, nome: true, avatar: true } },
-      cliente:     { select: { id: true, nome: true } },
-    },
   })
+  const atualizada = await obterTarefa(empresaId, id)
+  if (!atualizada) throw new NotFoundError('Tarefa não encontrada')
+  return atualizada
 }
 
 // ─── EXCLUIR TAREFA (soft delete) ─────────────────────────────────────────────
@@ -162,8 +172,8 @@ export async function excluirTarefa(id: string, empresaId: string) {
   const existe = await prisma.tarefa.findFirst({ where: { id, empresaId, deletedAt: null } })
   if (!existe) throw new NotFoundError('Tarefa não encontrada')
 
-  await prisma.tarefa.update({
-    where: { id },
+  await prisma.tarefa.updateMany({
+    where: { id, empresaId, deletedAt: null },
     data: { deletedAt: new Date() },
   })
   return true
@@ -188,8 +198,9 @@ export async function restaurarTarefa(id: string, empresaId: string) {
   const existe = await prisma.tarefa.findFirst({ where: { id, empresaId, deletedAt: { not: null } } })
   if (!existe) throw new NotFoundError('Tarefa excluída não encontrada')
 
-  return prisma.tarefa.update({
-    where: { id },
+  await prisma.tarefa.updateMany({
+    where: { id, empresaId, deletedAt: { not: null } },
     data: { deletedAt: null },
   })
+  return true
 }

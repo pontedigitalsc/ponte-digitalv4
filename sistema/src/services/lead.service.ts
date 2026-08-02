@@ -104,13 +104,15 @@ export async function atualizarLead(id: string, empresaId: string, usuarioId: st
   const leadAnterior = await prisma.lead.findFirst({ where: { id, empresaId, deletedAt: null } })
   if (!leadAnterior) throw new NotFoundError('Lead não encontrado')
 
-  const lead = await prisma.lead.update({
-    where: { id },
+  await prisma.lead.updateMany({
+    where: { id, empresaId, deletedAt: null },
     data: { ...dados, valor: dados.valor ?? null },
-    include: {
-      responsavel: { select: { id: true, nome: true, avatar: true } },
-    },
   })
+  const lead = await prisma.lead.findFirst({
+    where: { id, empresaId, deletedAt: null },
+    include: { responsavel: { select: { id: true, nome: true, avatar: true } } },
+  })
+  if (!lead) throw new NotFoundError('Lead não encontrado')
 
   // Registrar mudança de estágio no histórico
   if (dados.estagio && dados.estagio !== leadAnterior.estagio) {
@@ -144,8 +146,8 @@ export async function excluirLead(id: string, empresaId: string) {
   const lead = await prisma.lead.findFirst({ where: { id, empresaId, deletedAt: null } })
   if (!lead) throw new NotFoundError('Lead não encontrado')
 
-  await prisma.lead.update({
-    where: { id },
+  await prisma.lead.updateMany({
+    where: { id, empresaId, deletedAt: null },
     data: { deletedAt: new Date() },
   })
   return true
@@ -170,10 +172,11 @@ export async function restaurarLead(id: string, empresaId: string) {
   const existe = await prisma.lead.findFirst({ where: { id, empresaId, deletedAt: { not: null } } })
   if (!existe) throw new NotFoundError('Lead excluído não encontrado')
 
-  return prisma.lead.update({
-    where: { id },
+  await prisma.lead.updateMany({
+    where: { id, empresaId, deletedAt: { not: null } },
     data: { deletedAt: null },
   })
+  return true
 }
 
 // ─── STATS DO PIPELINE ────────────────────────────────────────────────────────

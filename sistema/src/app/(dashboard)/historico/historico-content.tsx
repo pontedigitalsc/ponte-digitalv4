@@ -191,8 +191,8 @@ export default function HistoricoContent({ experience }: Props) {
                     </div>
                     {h.usuario && (
                       <div className="flex items-center gap-1.5 mt-2.5 pt-2.5 border-t">
-                        <Avatar src={(h.usuario as { avatar?: string }).avatar} nome={(h.usuario as { nome: string }).nome} size="sm" />
-                        <span className="text-xs text-muted-foreground">{(h.usuario as { nome: string }).nome}</span>
+                        <Avatar src={h.usuario.avatar} nome={h.usuario.nome} size="sm" />
+                        <span className="text-xs text-muted-foreground">{h.usuario.nome}</span>
                       </div>
                     )}
                   </div>

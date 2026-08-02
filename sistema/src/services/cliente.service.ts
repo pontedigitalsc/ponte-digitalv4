@@ -182,8 +182,8 @@ export async function converterLeadEmCliente(
       },
     }),
     // Marca o lead como ganho
-    prisma.lead.update({
-      where: { id: leadId },
+    prisma.lead.updateMany({
+      where: { id: leadId, empresaId, deletedAt: null },
       data: { estagio: 'FECHADO_GANHO' },
     }),
   ])
@@ -230,13 +230,16 @@ export async function atualizarCliente(
   const existe = await prisma.cliente.findFirst({ where: { id, empresaId, deletedAt: null } })
   if (!existe) throw new NotFoundError('Cliente não encontrado')
 
-  return prisma.cliente.update({
-    where: { id },
+  await prisma.cliente.updateMany({
+    where: { id, empresaId, deletedAt: null },
     data: dados,
-    include: {
-      _count: { select: { tarefas: true, historicos: true, implantacoes: true } },
-    },
   })
+  const cliente = await prisma.cliente.findFirst({
+    where: { id, empresaId, deletedAt: null },
+    include: { _count: { select: { tarefas: true, historicos: true, implantacoes: true } } },
+  })
+  if (!cliente) throw new NotFoundError('Cliente não encontrado')
+  return cliente
 }
 
 // ─── EXCLUIR CLIENTE (soft delete) ────────────────────────────────────────────
@@ -257,8 +260,8 @@ export async function excluirCliente(id: string, empresaId: string) {
   const existe = await prisma.cliente.findFirst({ where: { id, empresaId, deletedAt: null } })
   if (!existe) throw new NotFoundError('Cliente não encontrado')
 
-  await prisma.cliente.update({
-    where: { id },
+  await prisma.cliente.updateMany({
+    where: { id, empresaId, deletedAt: null },
     data: { deletedAt: new Date() },
   })
   return true
@@ -286,10 +289,11 @@ export async function restaurarCliente(id: string, empresaId: string) {
   const existe = await prisma.cliente.findFirst({ where: { id, empresaId, deletedAt: { not: null } } })
   if (!existe) throw new NotFoundError('Cliente excluído não encontrado')
 
-  return prisma.cliente.update({
-    where: { id },
+  await prisma.cliente.updateMany({
+    where: { id, empresaId, deletedAt: { not: null } },
     data: { deletedAt: null },
   })
+  return true
 }
 
 // ─── ADICIONAR HISTÓRICO ──────────────────────────────────────────────────────

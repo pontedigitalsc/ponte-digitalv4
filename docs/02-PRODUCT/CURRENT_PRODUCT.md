@@ -74,6 +74,25 @@
 >
 > Ver `docs/07-MILESTONES/P54_EXPERIENCIA_FOUNDER_V2.md`.
 
+> **MARCO: P55 — CERTIFICAÇÃO FOUNDER READY V1 — STATUS OFICIAL — 1 de agosto de 2026**
+>
+> **A Ponte Digital V4 Founder está oficialmente certificada e congelada como **Founder Ready V1**.** Este marco encerra a fase de fundação e valida o produto para receber os primeiros 100 Founders reais. A partir daqui o produto evolui exclusivamente por evidência coletada destes Founders — nenhuma funcionalidade nova fora desta regra.
+>
+> **O que P55 entregou:**
+> - **Auditoria total (4 frentes paralelas):** código morto/bugs, sistema de IA, segurança multi-tenant e experiência/identidade visual.
+> - **IA resiliente ("a IA nunca pode simplesmente parar"):** `NoopProvider` agora lança erro explícito (em vez de stream vazio silencioso); chamada ao modelo protegida por timeout de 30s; em falha/timeout/stream vazio a conversa responde com uma mensagem humana de continuidade (`FALHA_GENTIL`) em vez de quebrar com 500.
+> - **Bug crítico de produção corrigido:** o `prismaSeguro` (tenant isolation guard) era lançado quando um service fazia `update`/`updateMany`/`delete` por `id` sem `empresaId` — derrubaria a aplicação em produção. Todos os services de escrita foram escopados por `where: { id, empresaId }` + re-fetch preservando o shape de retorno (`transacao`, `tarefa`, `lead`, `cliente`, `implantacao`, `configuracao`, `historico`). Modelos-filho sem coluna `empresaId` (`contato`, `etapaImplantacao`) foram formalmente isentos do guard, isolados indiretamente pelo pai.
+> - **Código morto removido:** `centro-cognitivo/`, `micro-reaction.tsx`, `confidence-ring.tsx`. Fricção eliminada: CTA "Continuar" da Jornada agora leva a rota real por categoria; casts desnecessários em `historico-content.tsx` removidos.
+> - **Critérios de produção validados:** `npx tsc --noEmit` limpo, `npm run build` limpo (56 páginas, 54 rotas, proxy/middleware ativo).
+>
+> **Estado oficial a partir de P55:**
+> - Produto congelado em **Founder Ready V1** — pronto para receber empresas reais.
+> - Nenhuma funcionalidade fora da Árvore de Decisões de Produto.
+> - Segurança multi-tenant estrutural com bloqueio em produção.
+> - IA sempre continua a conversa (nunca trava a jornada do empresário).
+>
+> Ver `docs/05-OPERATIONS/P55/FOUNDER_READY_V1.md` e `docs/07-MILESTONES/P55_FOUNDER_READY_V1.md`.
+
 *Documento operacional, complementar ao FOUNDATION.md e à Tese de Valor (Nível 1). É a referência principal para qualquer agente de código — Roo Code, Gemini CLI, Claude ou outro — antes de qualquer tarefa de implementação. Atualizar a cada sprint concluída. Máximo duas páginas: se crescer além disso, o excesso vira Playbook (Nível 3), não fica aqui.*
 
 **Objetivo desta fase:** validar as **8 Capacidades Fundamentais** com 100 fundadores — não apenas acumular evidências, mas testar se a materialização da Teoria da Evolução Empresarial produz empresários mais conscientes, adaptáveis e tranquilos. Os 100 primeiros são co-autores da tese: cada interação fortalece ou questiona uma capacidade, gera Capital Cognitivo e alimenta a Curva Evolutiva.

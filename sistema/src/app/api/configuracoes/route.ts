@@ -78,7 +78,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (secao === 'perfil') {
-      const usuarioAtualizado = await atualizarPerfil(usuario.id, {
+      const usuarioAtualizado = await atualizarPerfil(usuario.id, usuario.empresaId, {
         nome: dados.nome as string,
         cargo: dados.cargo as string | undefined,
       })

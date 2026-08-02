@@ -207,6 +207,10 @@ export async function criarTransacao(empresaId: string, dados: TransacaoInput) {
 
 // ─── ATUALIZAR TRANSAÇÃO ──────────────────────────────────────────────────────
 
+const SELECT_COM_CLIENTE = {
+  include: { cliente: { select: { id: true, nome: true } } },
+} as const
+
 export async function atualizarTransacao(id: string, empresaId: string, dados: Partial<TransacaoInput>) {
   const existe = await prisma.transacao.findFirst({ where: { id, empresaId, deletedAt: null } })
   if (!existe) throw new NotFoundError('Transação não encontrada')
@@ -217,11 +221,19 @@ export async function atualizarTransacao(id: string, empresaId: string, dados: P
     extra.dataPagamento = new Date()
   }
 
-  return prisma.transacao.update({
-    where: { id },
+  // Escrita delimitada por empresaId (requisito do guard de tenant) e por id.
+  // O shape de retorno é preservado via uma leitura explícita logo a seguir.
+  await prisma.transacao.updateMany({
+    where: { id, empresaId: existe.empresaId, deletedAt: null },
     data: { ...dados, ...extra },
-    include: { cliente: { select: { id: true, nome: true } } },
   })
+
+  const atualizada = await prisma.transacao.findFirst({
+    where: { id, empresaId, deletedAt: null },
+    include: SELECT_COM_CLIENTE.include,
+  })
+  if (!atualizada) throw new NotFoundError('Transação não encontrada')
+  return atualizada
 }
 
 // ─── MARCAR COMO PAGO (atalho) ────────────────────────────────────────────────
@@ -230,11 +242,17 @@ export async function marcarComoPago(id: string, empresaId: string) {
   const existe = await prisma.transacao.findFirst({ where: { id, empresaId, deletedAt: null } })
   if (!existe) throw new NotFoundError('Transação não encontrada')
 
-  return prisma.transacao.update({
-    where: { id },
+  await prisma.transacao.updateMany({
+    where: { id, empresaId, deletedAt: null },
     data: { status: 'PAGO', dataPagamento: new Date() },
-    include: { cliente: { select: { id: true, nome: true } } },
   })
+
+  const atualizada = await prisma.transacao.findFirst({
+    where: { id, empresaId, deletedAt: null },
+    ...SELECT_COM_CLIENTE.include,
+  })
+  if (!atualizada) throw new NotFoundError('Transação não encontrada')
+  return atualizada
 }
 
 // ─── EXCLUIR TRANSAÇÃO (soft delete) ──────────────────────────────────────────
@@ -247,8 +265,8 @@ export async function excluirTransacao(id: string, empresaId: string) {
   const existe = await prisma.transacao.findFirst({ where: { id, empresaId, deletedAt: null } })
   if (!existe) throw new NotFoundError('Transação não encontrada')
 
-  await prisma.transacao.update({
-    where: { id },
+  await prisma.transacao.updateMany({
+    where: { id, empresaId, deletedAt: null },
     data: { deletedAt: new Date() },
   })
   return true
@@ -273,10 +291,11 @@ export async function restaurarTransacao(id: string, empresaId: string) {
   const existe = await prisma.transacao.findFirst({ where: { id, empresaId, deletedAt: { not: null } } })
   if (!existe) throw new NotFoundError('Transação excluída não encontrada')
 
-  return prisma.transacao.update({
-    where: { id },
+  await prisma.transacao.updateMany({
+    where: { id, empresaId, deletedAt: { not: null } },
     data: { deletedAt: null },
   })
+  return true
 }
 
 // ─── AUTO-VENCER (cron job / chamada manual) ──────────────────────────────────

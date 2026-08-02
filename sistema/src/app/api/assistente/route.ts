@@ -262,6 +262,37 @@ function tentarResponderPorFormula(pergunta: string, contexto: ContextoEstrutura
 
 // ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
 
+// ─── HELPERS DE RESILIÊNCIA ──────────────────────────────────────────────────
+// Garantem o princípio "a IA nunca simplesmente para": timeout no handshake e
+// resposta humana de continuidade quando o provedor falha ou fica em silêncio.
+
+const FALHA_GENTIL =
+  'Deixa eu me recompor rapidinho — por um instante me perdi aqui. Me conta em uma frase, com as suas palavras, o que mais está pesando no seu negócio neste momento, que a gente retoma juntos daí.'
+
+function comTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`timeout:${ms}`)), ms)
+    promise.then(
+      (v) => { clearTimeout(timer); resolve(v) },
+      (e) => { clearTimeout(timer); reject(e) }
+    )
+  })
+}
+
+function enfileirarTexto(
+  controller: ReadableStreamDefaultController<Uint8Array>,
+  texto: string
+): void {
+  const enc = new TextEncoder()
+  controller.enqueue(enc.encode(`0:${JSON.stringify(texto)}\n`))
+}
+
+function encerrarStream(controller: ReadableStreamDefaultController<Uint8Array>): void {
+  const enc = new TextEncoder()
+  controller.enqueue(enc.encode('d:{"finishReason":"stop"}\n'))
+  controller.close()
+}
+
 function systemPrompt(contexto: string): string {
   return `Você é a Ponte, um empresário experiente que acompanha donos de pequenos negócios por dentro. Você não é um sistema, nem um consultor, nem um professor — é um sócio atento e direto.
 
@@ -345,10 +376,6 @@ export async function POST(request: NextRequest) {
 
     // ── Pergunta exige interpretação: vai para o modelo ──
     const provider = getAIProvider()
-    const aiStream = await provider.streamChat(mensagens, {
-      system: systemPrompt(formatarContextoParaPrompt(contexto)),
-      maxTokens: 1024,
-    })
 
     void registrarResposta({
       empresaId: usuario.empresaId,
@@ -358,19 +385,45 @@ export async function POST(request: NextRequest) {
       origem: 'ASSISTENTE_IA',
     })
 
-    const encoder = new TextEncoder()
-    const readable = new ReadableStream({
+    // A IA nunca simplesmente para. Mesmo que o provedor fique lento, falhe ou
+    // devolva um stream vazio, a conversa continua de forma natural. O stream é
+    // aberto ANTES de chamar o modelo — assim uma falha nunca devolve 500 e derruba
+    // o diálogo; ela produz uma resposta humana de continuidade.
+    const readable = new ReadableStream<Uint8Array>({
       async start(controller) {
+        let aiStream: Awaited<ReturnType<typeof provider.streamChat>>
+
         try {
+          aiStream = await comTimeout(
+            provider.streamChat(mensagens, {
+              system: systemPrompt(formatarContextoParaPrompt(contexto)),
+              maxTokens: 1024,
+            }),
+            30_000
+          )
+        } catch {
+          enfileirarTexto(controller, FALHA_GENTIL)
+          encerrarStream(controller)
+          return
+        }
+
+        try {
+          let recebeuAlgo = false
           for await (const chunk of aiStream) {
             if (chunk.type === 'text' && chunk.text) {
-              controller.enqueue(encoder.encode(`0:${JSON.stringify(chunk.text)}\n`))
+              recebeuAlgo = true
+              enfileirarTexto(controller, chunk.text)
             }
           }
-          controller.enqueue(encoder.encode('d:{"finishReason":"stop"}\n'))
-          controller.close()
-        } catch (e) {
-          controller.error(e)
+          if (!recebeuAlgo) {
+            enfileirarTexto(controller, FALHA_GENTIL)
+          }
+          encerrarStream(controller)
+        } catch {
+          try {
+            enfileirarTexto(controller, FALHA_GENTIL)
+            encerrarStream(controller)
+          } catch { /* stream já interrompido */ }
         }
       },
     })

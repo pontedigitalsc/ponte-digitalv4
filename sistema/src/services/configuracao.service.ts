@@ -35,12 +35,17 @@ export async function atualizarConfiguracao(empresaId: string, dados: Record<str
   })
 }
 
-export async function atualizarPerfil(usuarioId: string, dados: { nome?: string; cargo?: string }) {
-  return prisma.usuario.update({
-    where: { id: usuarioId },
+export async function atualizarPerfil(usuarioId: string, empresaId: string, dados: { nome?: string; cargo?: string }) {
+  await prisma.usuario.updateMany({
+    where: { id: usuarioId, empresaId },
     data: {
       nome: dados.nome,
       cargo: dados.cargo,
     },
   })
+  const usuario = await prisma.usuario.findUnique({
+    where: { id: usuarioId },
+    select: { id: true, nome: true, cargo: true, email: true },
+  })
+  return usuario ?? undefined
 }

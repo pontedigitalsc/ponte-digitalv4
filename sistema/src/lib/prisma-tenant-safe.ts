@@ -24,7 +24,9 @@ const log = createLogger('db', 'prisma-tenant-safe')
  *
  * Modelos cobertos: todos os que têm empresaId como campo direto.
  * Modelos como Contato e EtapaImplantacao são protegidos indiretamente
- * pelo filtro na entidade pai (Cliente/Implantacao).
+ * pelo filtro na entidade pai (Cliente/Implantacao) e por isso NÃO são
+ * listados abaixo — eles não possuem coluna empresaId própria, então o
+ * guard os deixaria-lo bloquearia de forma falsa (aviso de risco sempre).
  */
 
 const MODELOS_MULTI_TENANT = [
@@ -34,8 +36,6 @@ const MODELOS_MULTI_TENANT = [
   'implantacao',
   'transacao',
   'usuario',
-  'contato',
-  'etapaImplantacao',
   'historico', // empresaId é opcional neste modelo (ver nota abaixo)
   'historicoSinal',
   'configuracaoEmpresa',

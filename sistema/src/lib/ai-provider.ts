@@ -131,16 +131,11 @@ class AnthropicProvider implements AIProvider {
 // ─── No-op Provider (fallback quando não há API key) ─────────
 
 class NoopProvider implements AIProvider {
-  async streamChat() {
-    return {
-      [Symbol.asyncIterator](): AsyncIterator<StreamChunk> {
-        return {
-          next() {
-            return Promise.resolve({ value: { type: 'text' as const, text: '' }, done: true })
-          },
-        }
-      },
-    }
+  async streamChat(): Promise<AIStream> {
+    // Sem chave de provedor configurada, a IA não deve simplesmente parar
+    // nem devolver um stream vazio. Lançar faz o handler seguir o caminho de
+    // degradação graciosa (resposta humana que mantém a conversa viva).
+    throw new Error('Sem provedor de IA configurado (chave de API ausente)')
   }
 }
 

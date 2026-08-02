@@ -3,6 +3,18 @@ import type { Journey } from '@/engine'
 import { cn } from '@/lib/utils'
 import { PRIORIDADE_AMIGAVEL } from '@/constants'
 
+const ROTA_POR_CATEGORIA: Record<string, string> = {
+  financeiro: '/financeiro',
+  clientes: '/clientes',
+  crm: '/crm',
+  tarefas: '/tarefas',
+  implantacoes: '/implantacoes',
+}
+
+function rotaDaCategoria(categoria: string): string | null {
+  return ROTA_POR_CATEGORIA[categoria] ?? null
+}
+
 function renderStepIcon(tipo: Journey['etapas'][number]['tipo'], concluido: boolean) {
   if (concluido) return <CheckSquare className="h-4 w-4 text-emerald-500 shrink-0" />
   if (tipo === 'resultado') return <Eye className="h-4 w-4 text-blue-500 shrink-0" />
@@ -67,9 +79,9 @@ export function JourneyCard({ journey }: { journey: Journey }) {
         </div>
       )}
 
-      {journey.etapas.find(e => !e.concluido && e.etapaWorkflowId) && (
+      {journey.etapas.some(e => !e.concluido) && rotaDaCategoria(journey.categoria) && (
         <a
-          href={journey.etapas.find(e => !e.concluido && e.etapaWorkflowId)?.etapaWorkflowId ? '#' : '#'}
+          href={rotaDaCategoria(journey.categoria)!}
           className="mt-3 inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
         >
           Continuar

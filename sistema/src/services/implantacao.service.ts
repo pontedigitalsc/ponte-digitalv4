@@ -73,14 +73,19 @@ export async function atualizarImplantacao(
   const existe = await prisma.implantacao.findFirst({ where: { id, empresaId, deletedAt: null } })
   if (!existe) throw new NotFoundError('Implantação não encontrada')
 
-  return prisma.implantacao.update({
-    where: { id },
+  await prisma.implantacao.updateMany({
+    where: { id, empresaId, deletedAt: null },
     data: dados,
+  })
+  const implantacao = await prisma.implantacao.findFirst({
+    where: { id, empresaId, deletedAt: null },
     include: {
       cliente: { select: { id: true, nome: true } },
       etapas:  { orderBy: { ordem: 'asc' } },
     },
   })
+  if (!implantacao) throw new NotFoundError('Implantação não encontrada')
+  return implantacao
 }
 
 // ─── TOGGLE ETAPA (concluída / pendente) ─────────────────────────────────────
@@ -112,8 +117,8 @@ export async function toggleEtapa(etapaId: string, empresaId: string) {
       (e) => e.id === etapaId ? true : e.concluida
     )
     if (todasConcluidas && implantacao.status !== 'CONCLUIDA') {
-      await prisma.implantacao.update({
-        where: { id: etapa.implantacaoId },
+      await prisma.implantacao.updateMany({
+        where: { id: etapa.implantacaoId, empresaId },
         data: { status: 'CONCLUIDA', dataConclusao: new Date() },
       })
     }
@@ -132,8 +137,8 @@ export async function excluirImplantacao(id: string, empresaId: string) {
   const existe = await prisma.implantacao.findFirst({ where: { id, empresaId, deletedAt: null } })
   if (!existe) throw new NotFoundError('Implantação não encontrada')
 
-  await prisma.implantacao.update({
-    where: { id },
+  await prisma.implantacao.updateMany({
+    where: { id, empresaId, deletedAt: null },
     data: { deletedAt: new Date() },
   })
   return true
@@ -161,8 +166,9 @@ export async function restaurarImplantacao(id: string, empresaId: string) {
   const existe = await prisma.implantacao.findFirst({ where: { id, empresaId, deletedAt: { not: null } } })
   if (!existe) throw new NotFoundError('Implantação excluída não encontrada')
 
-  return prisma.implantacao.update({
-    where: { id },
+  await prisma.implantacao.updateMany({
+    where: { id, empresaId, deletedAt: { not: null } },
     data: { deletedAt: null },
   })
+  return true
 }
