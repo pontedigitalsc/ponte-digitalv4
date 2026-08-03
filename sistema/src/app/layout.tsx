@@ -16,11 +16,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: { default: 'Ponte Digital', template: '%s | Ponte Digital' },
-  description: 'A inteligência da sua empresa — diagnóstico gratuito em 5 minutos',
+  description: 'A inteligência da sua empresa — Primeira Sessão Estratégica gratuita em poucos minutos',
   metadataBase: new URL(appUrl),
   openGraph: {
     title: 'Ponte Digital',
-    description: 'A inteligência da sua empresa — diagnóstico gratuito em 5 minutos',
+    description: 'A inteligência da sua empresa — Primeira Sessão Estratégica gratuita em poucos minutos',
     url: appUrl,
     siteName: 'Ponte Digital',
     locale: 'pt_BR',
