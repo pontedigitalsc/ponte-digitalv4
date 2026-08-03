@@ -40,7 +40,7 @@ export function RetratoEstrategicoCard({ retrato }: RetratoEstrategicoCardProps)
 
       <div className="rounded-xl border border-dashed border-primary/30 bg-card/50 p-5 space-y-2">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-primary">
-          Próxima reflexão
+          Pergunta que continuaremos acompanhando
         </p>
         <p className="text-sm text-foreground leading-relaxed italic">
           {retrato.proximaReflexao}

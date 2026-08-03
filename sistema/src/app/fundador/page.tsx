@@ -166,7 +166,7 @@ export default async function FundadorPage() {
               href="/diagnostico"
               className="block w-full rounded-xl border border-border bg-card px-6 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
             >
-              Voltar ao diagnóstico
+              Voltar à Primeira Sessão Estratégica
             </Link>
           </div>
         </div>

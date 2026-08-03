@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import { QuestionCard } from '@/components/conversa/question-card'
 import { RevelacaoCard } from '@/components/conversa/revelacao-card'
 import { ProgressBar } from '@/components/conversa/progress-bar'
+import { ClarezaCheckin } from '@/components/conversa/clareza-checkin'
 import { AvatarPonte } from '@/components/ui/avatar'
 import Link from 'next/link'
 
@@ -306,6 +307,9 @@ export default function ConversaPage() {
                 ? `Existe um padrão que quero continuar observando com você.`
                 : `Essa conversa faz parte de uma história maior.`}
             </p>
+
+            {/* P59 — Clareza Gerada como evidência: pergunta de valor real */}
+            <ClarezaCheckin />
 
             {/* P52 — Pergunta Aberta: inserção natural, nunca pesquisa */}
             {perguntaAberta && !respostaAbertaEnviada && (

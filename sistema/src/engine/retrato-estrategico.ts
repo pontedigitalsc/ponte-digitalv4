@@ -116,7 +116,25 @@ function gerarDecisao(respostas: Respostas): string {
   return 'O próximo movimento mais importante parece ser escolher uma única coisa para observar com atenção nesta semana — só o registro já mostra padrões que passavam despercebidos.'
 }
 
-// ─── 5. Próxima reflexão (pergunta aberta, para continuidade) ─────────────────
+// ─── 5. Primeiro movimento recomendado ───────────────────────────────────────
+function gerarPrimeiroMovimento(respostas: Respostas): string {
+  const proximo = r(respostas, 'frente.proximo')
+  const crescer = r(respostas, 'empresa.crescer')
+  const multiplicar = r(respostas, 'empresa.multiplicar')
+
+  if (proximo) {
+    return `O primeiro movimento recomendado é dar um passo pequeno e observável em direção a "${proximo}" ainda esta semana — e registrar o que acontece.`
+  }
+  if (multiplicar) {
+    return `O primeiro movimento recomendado é escolher um único processo que só você sabe fazer e descrevê-lo por escrito, para poder dividi-lo depois.`
+  }
+  if (crescer) {
+    return `O primeiro movimento recomendado é observar "${crescer}" durante uma semana — registrar quando aparece e o que vem antes. Só o registro já revela o que trava.`
+  }
+  return 'O primeiro movimento recomendado é escolher uma única coisa para observar com atenção nesta semana — e voltar na próxima conversa com o que percebeu.'
+}
+
+// ─── Próxima reflexão (pergunta aberta, para continuidade) ───────────────────
 function gerarProximaReflexao(respostas: Respostas): string {
   const horaLivre = r(respostas, 'empresa.horalivre')
   if (horaLivre) {
@@ -131,25 +149,30 @@ export function gerarRetratoEstrategico(respostas: Respostas, interpretacoes: In
     secoes: [
       {
         numero: 1,
-        titulo: 'O que entendemos sobre sua empresa',
+        titulo: 'Onde sua empresa está hoje',
         corpo: gerarEntendimento(respostas, interpretacoes),
       },
       {
         numero: 2,
-        titulo: 'Forças identificadas',
+        titulo: 'O que sua empresa já construiu',
         corpo: 'Patrimônios que já existem e sustentam qualquer próximo movimento:',
         itens: gerarForcas(respostas),
       },
       {
         numero: 3,
-        titulo: 'O que merece atenção',
-        corpo: 'Pontos de evolução — não defeitos. A empresa está pedindo estrutura nova:',
+        titulo: 'Onde existe risco de continuar igual',
+        corpo: 'Pontos cegos — não defeitos. Continuar exatamente como está hoje tem um custo silencioso:',
         itens: gerarPontosDeEvolucao(respostas),
       },
       {
         numero: 4,
-        titulo: 'A decisão mais importante agora',
+        titulo: 'Qual decisão merece atenção agora',
         corpo: gerarDecisao(respostas),
+      },
+      {
+        numero: 5,
+        titulo: 'Primeiro movimento recomendado',
+        corpo: gerarPrimeiroMovimento(respostas),
       },
     ],
     proximaReflexao: gerarProximaReflexao(respostas),

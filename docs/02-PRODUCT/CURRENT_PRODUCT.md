@@ -1,5 +1,11 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P59 — PRIMEIRO VALOR E RETENÇÃO FOUNDER V1 — STATUS OFICIAL — 2 de agosto de 2026**
+>
+> A Ponte passa a medir e provar utilidade, não impressionar. **Protocolo Founder 1–10** criado para acompanhar os primeiros 10 empresários (antes da Ponte / depois da primeira conversa / depois de 7 dias). **Clareza Gerada agora é evidência**: check-in pós-conversa com categorias (Nova percepção / Confirmação / Mudança de decisão / Nenhum impacto), gravado no SinalValor via `/api/conversa/clareza`. **Retrato Estratégico evoluído para 6 partes** (contexto, o que já construiu, risco de continuar igual, decisão a priorizar, primeiro movimento, pergunta que continuaremos acompanhando). **Linguagem externa**: "Primeira Sessão Estratégica" no funil gratuito. Critérios finais (10 empresários, depoimentos, evidências de retorno) dependem de humanos — pendência operacional.
+>
+> Ver `docs/07-MILESTONES/P59_PRIMEIRO_VALOR_RETENCAO.md` e `docs/05-OPERATIONS/PROTOCOLO_FOUNDER_1-10.md`.
+
 > **MARCO: P57A+B — EXPERIÊNCIA DE VALOR + PERTENCIMENTO V1 — STATUS OFICIAL — 2 de agosto de 2026**
 >
 > A primeira interação entrega valor percebido imediato e pertencimento real.

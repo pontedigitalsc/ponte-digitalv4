@@ -4,6 +4,16 @@
 
 ---
 
+## Programa 59 — Primeiro Valor e Retenção Founder V1
+
+**2 de agosto de 2026**
+
+Foco em provar utilidade, não em impressionar. **Protocolo Founder 1–10** (`05-OPERATIONS/PROTOCOLO_FOUNDER_1-10.md`): acompanhamento por empresário em 3 momentos (antes da Ponte, depois da primeira conversa, depois de 7 dias). **Clareza Gerada como evidência** (não score): check-in pós-conversa "qual a principal coisa que você percebeu?" com categorias (Nova percepção / Confirmação / Mudança de decisão / Nenhum impacto), gravado no `SinalValor` via `POST /api/conversa/clareza`. **Retrato Estratégico evoluído para 6 partes** (onde está hoje / o que já construiu / risco de continuar igual / decisão merece atenção / primeiro movimento recomendado / pergunta que continuaremos acompanhando). **Linguagem externa** renomeada para "Primeira Sessão Estratégica" (landing + links). `tsc` e `npm run build` limpos. Critérios finais (10 empresários, depoimentos) dependem de humanos — pendência registrada.
+
+**Documentos criados:** `P59_PRIMEIRO_VALOR_RETENCAO.md`, `PROTOCOLO_FOUNDER_1-10.md`. **STATUS: VALOR MENSURÁVEL V1.**
+
+---
+
 ## Programa 57A — Primeira Experiência de Valor e Diagnóstico Estratégico V1
 
 **2 de agosto de 2026**

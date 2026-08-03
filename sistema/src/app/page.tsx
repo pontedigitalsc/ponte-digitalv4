@@ -26,13 +26,13 @@ export default function LandingPage() {
           </p>
         </div>
 
-        {/* CTA único — diagnóstico sem cadastro */}
+        {/* CTA único — Primeira Sessão Estratégica, sem cadastro */}
         <div className="space-y-3">
           <Link
             href="/diagnostico"
             className="block w-full rounded-xl bg-primary px-6 py-4 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 transition-colors"
           >
-            Entender minha empresa
+            Iniciar minha Primeira Sessão Estratégica
           </Link>
           <Link
             href="/login"
@@ -42,8 +42,8 @@ export default function LandingPage() {
           </Link>
         </div>
 
-        <p className="text-xs text-muted-foreground leading-relaxed max-w-xs mx-auto">
-          Gratuito. Confidencial. Sem cadastro. Leva menos de 3 minutos.
+        <p className="text-xs text-muted-foreground leading-relaxed max-w-sm mx-auto">
+          Em alguns minutos vamos entender sua empresa e mostrar o que merece atenção. Gratuito. Confidencial. Sem cadastro.
         </p>
       </div>
     </div>
