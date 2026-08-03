@@ -31,6 +31,7 @@ export async function proxy(request: NextRequest) {
                         request.nextUrl.pathname.startsWith('/criar-conta') ||
                         request.nextUrl.pathname.startsWith('/diagnostico') ||
                         request.nextUrl.pathname.startsWith('/fundador') ||
+                        request.nextUrl.pathname.startsWith('/tornar-se-fundador') ||
                         request.nextUrl.pathname === '/'
 
   if (!session && !isPublicRoute) {

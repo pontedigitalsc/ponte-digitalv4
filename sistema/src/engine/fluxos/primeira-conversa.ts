@@ -51,6 +51,7 @@ export const PRIMEIRA_CONVERSA: Fluxo = {
       { valor: 'tempo',        rotulo: 'Tempo' },
       { valor: 'outro',        rotulo: 'Outro' },
     ] },
+    { id: 'empresa.dependencia', pergunta: 'Se você precisasse se afastar por 30 dias, o que aconteceria com a empresa?', tipo: 'texto', estagio: 'tensao' },
     { id: 'historia.mudanca', pergunta: 'Se pudesse voltar no início, o que faria diferente?', tipo: 'texto', estagio: 'tensao' },
     { id: 'frente.diferente', pergunta: 'O que você faria diferente se pudesse voltar ao início da semana?', tipo: 'texto', estagio: 'tensao' },
 

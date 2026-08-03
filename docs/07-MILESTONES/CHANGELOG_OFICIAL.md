@@ -4,6 +4,16 @@
 
 ---
 
+## Programa 59–63 — Refinamento Founder V2
+
+**3 de agosto de 2026**
+
+Refinamento definitivo da experiência Founder, preservando a regra da V4 Founder (evidência real > funcionalidade; nada artificial). **P59 V2 — Sessão mais profunda:** nova pergunta de tensão "Se você precisasse se afastar por 30 dias, o que aconteceria com a empresa?" (`empresa.dependencia`) no fluxo e no `ESTAGIO_POR_ETAPA`; retrato 6 partes não-genérico (subtítulo e primeiro movimento ancorados na resposta real); landing com CTA direto para `/conversa`; **Área Founder completa** em `/fundador` (tese, como aprende, patrimônio, evidências reais, Inteligência Coletiva com gates, roadmap, "o que acreditamos" como hipóteses, WhatsApp); rota `/tornar-se-fundador` pública. **P60 — Memória Empresarial Viva:** página `/memoria` no menu (patrimônio: decisões com status/resultado/feedback, aprendizados, clarezas com categoria, evoluções, sessões; CTA para continuar conversa aberta); módulo `'memoria'` liberado. **P61 — Conselheiro de Decisões:** componente **"Pensar antes de decidir"** integrado em `/centro-decisao` — registro da decisão com 5 perguntas (o que/por quê/resultado esperado/riscos/condição de sucesso), categoria, e fechamento com "o que aconteceu/o que aprendemos" + feedback (`FeedbackAcao`); APIs `POST/GET /api/centro-decisao/decisoes` e `PATCH /.../[id]` com marcos de experiência (`PRIMEIRA_ACAO_CRIADA`, `PRIMEIRA_ACAO_CONCLUIDA`, `PRIMEIRO_FEEDBACK`). **P62 — Conhecimento Coletivo:** engine `inteligencia-coletiva.ts` com gates de maturidade (10/50/100/500/1000) e padrões coletivos apenas `VALIDADO+` — agregações, nunca dados de uma empresa; seção no Painel do Fundador (ADMIN). **P63 — Métricas de Transformação:** `operacao-founder.ts` (sessões, clarezas por categoria, retorno espontâneo, primeiras decisões/evoluções, apoiadores/founders) exibido como "Transformação, não funcionalidades". Painéis usam `prisma` cru apenas em agregados de plataforma; tenant guard preservado no restante. `tsc` e `npm run build` limpos.
+
+**Documentos atualizados:** `P59_PRIMEIRO_VALOR_RETENCAO.md`, `P60_MEMORIA_EMPRESARIAL_VIVA.md`, `P61_CONSELHEIRO_DE_DECISOES.md`, `P62_CONHECIMENTO_COLETIVO.md`, `P63_ESCALA_COMERCIAL.md`. **STATUS: EXPERIÊNCIA FOUNDER V2.**
+
+---
+
 ## Programa 59 — Primeiro Valor e Retenção Founder V1
 
 **2 de agosto de 2026**

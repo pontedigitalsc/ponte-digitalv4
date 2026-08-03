@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, UserCheck, Users,
   DollarSign, Settings, Bot, ChevronLeft, Building2,
-  Clock, Sparkles, RefreshCw, Compass,
+  Clock, Sparkles, RefreshCw, Compass, BookOpen,
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -24,6 +24,7 @@ const navItems = [
     group: 'Consultar',
     items: [
       { href: '/historico',      label: 'Nossa caminhada', icon: Clock },
+      { href: '/memoria',        label: 'Memória da empresa', icon: BookOpen },
       { href: '/explorar',       label: 'Explorar cenários', icon: Compass },
       { href: '/centro-decisao', label: 'O que merece atenção', icon: Sparkles },
       { href: '/conhecimento',   label: 'O que entendemos', icon: RefreshCw },
@@ -53,6 +54,7 @@ const MODULO_MAP: Record<string, string> = {
   '/conversa': 'conversa',
   '/minha-jornada': 'minha-jornada',
   '/historico': 'historico',
+  '/memoria': 'memoria',
   '/explorar': 'explorar',
   '/centro-decisao': 'centro-decisao',
   '/conhecimento': 'conhecimento',

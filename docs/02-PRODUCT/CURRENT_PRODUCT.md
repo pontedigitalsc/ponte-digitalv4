@@ -1,5 +1,21 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P59–P63 — EXPERIÊNCIA FOUNDER V2 — STATUS OFICIAL — 3 de agosto de 2026**
+>
+> Refinamento definitivo da experiência Founder, sempre por evidência real (regra V4 Founder — nada artificial).
+>
+> **P59 V2:** nova pergunta de tensão "Se você precisasse se afastar por 30 dias, o que aconteceria com a empresa?" (`empresa.dependencia`) no fluxo de conversa e no mapeamento de estágios. **Retrato Estratégico 6 partes não-genérico** (subtítulo e primeiro movimento ancorados na resposta real — nada de texto que sirva para qualquer empresa). Landing com CTA direto para `/conversa`. **Área Founder completa** em `/fundador` (tese, como a Ponte aprende, patrimônio, evidências reais, Inteligência Coletiva com gates, roadmap, "o que acreditamos" como hipóteses, WhatsApp). Rota `/tornar-se-fundador` pública.
+>
+> **P60 (Memória Empresarial Viva):** página `/memoria` no menu — o patrimônio da empresa (decisões com status/resultado/feedback, aprendizados, clarezas com categoria, evoluções, sessões) com CTA para continuar conversa em aberto. Módulo `'memoria'` liberado na experiência cognitiva.
+>
+> **P61 (Conselheiro de Decisões):** **"Pensar antes de decidir"** em `/centro-decisao` — o empresário registra a decisão com 5 perguntas (o que / por quê / resultado esperado / riscos / condição de sucesso) e a fecha com "o que aconteceu / o que aprendemos" + feedback (`FeedbackAcao`). APIs `POST`/`GET` `/api/centro-decisao/decisoes` e `PATCH` `/.../[id]` com marcos de experiência.
+>
+> **P62 (Conhecimento Coletivo):** engine `inteligencia-coletiva.ts` com gates de maturidade (10 coleta / 50 comparação / 100 hipóteses / 500 conhecimento / 1000 recomendações maduras) e padrões coletivos apenas `VALIDADO+` — sempre agregações, jamais dados de uma empresa. Seção no Painel do Fundador (ADMIN).
+>
+> **P63 (Métricas de Transformação):** `operacao-founder.ts` mede transformação (sessões, clarezas por categoria, retorno espontâneo, primeiras decisões/evoluções, apoiadores/founders) no Painel do Fundador como "Transformação, não funcionalidades".
+>
+> Ver `docs/07-MILESTONES/P59_PRIMEIRO_VALOR_RETENCAO.md`, `P60_MEMORIA_EMPRESARIAL_VIVA.md`, `P61_CONSELHEIRO_DE_DECISOES.md`, `P62_CONHECIMENTO_COLETIVO.md`, `P63_ESCALA_COMERCIAL.md`.
+
 > **MARCO: P59 — PRIMEIRO VALOR E RETENÇÃO FOUNDER V1 — STATUS OFICIAL — 2 de agosto de 2026**
 >
 > A Ponte passa a medir e provar utilidade, não impressionar. **Protocolo Founder 1–10** criado para acompanhar os primeiros 10 empresários (antes da Ponte / depois da primeira conversa / depois de 7 dias). **Clareza Gerada agora é evidência**: check-in pós-conversa com categorias (Nova percepção / Confirmação / Mudança de decisão / Nenhum impacto), gravado no SinalValor via `/api/conversa/clareza`. **Retrato Estratégico evoluído para 6 partes** (contexto, o que já construiu, risco de continuar igual, decisão a priorizar, primeiro movimento, pergunta que continuaremos acompanhando). **Linguagem externa**: "Primeira Sessão Estratégica" no funil gratuito. Critérios finais (10 empresários, depoimentos, evidências de retorno) dependem de humanos — pendência operacional.

@@ -8,11 +8,16 @@ import type {
   RespostaAbertaItem,
 } from '@/engine/pergunta-aberta-service'
 import type { GrandePergunta } from '@/engine/adaptive-question-engine'
+import type { MetricasTransformacao } from '@/engine/operacao-founder'
+import type { MaturidadeColetiva, PadraoColetivo } from '@/engine/inteligencia-coletiva'
 
 interface PainelProps {
   painel: PainelFundador | null
   perguntas: PerguntaAbertaItem[]
   biblioteca: GrandePergunta[]
+  metricas: MetricasTransformacao | null
+  maturidadeColetiva: MaturidadeColetiva | null
+  padroesColetivos: PadraoColetivo[]
 }
 
 function formatarData(iso: string | null): string {
@@ -20,7 +25,7 @@ function formatarData(iso: string | null): string {
   return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
 }
 
-export function PainelDoFundador({ painel, perguntas, biblioteca }: PainelProps) {
+export function PainelDoFundador({ painel, perguntas, biblioteca, metricas, maturidadeColetiva, padroesColetivos }: PainelProps) {
   const router = useRouter()
   const [mensagem, setMensagem] = useState<string | null>(null)
   const [erro, setErro] = useState<string | null>(null)
@@ -119,6 +124,106 @@ export function PainelDoFundador({ painel, perguntas, biblioteca }: PainelProps)
 
         {mensagem && <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-4 py-2 text-sm text-emerald-700 dark:text-emerald-400">{mensagem}</div>}
         {erro && <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-2 text-sm text-destructive">{erro}</div>}
+
+        {/* Métricas de transformação — P63. Mede transformação, não quantidade de telas. */}
+        {metricas && (
+          <section className="rounded-xl border bg-card p-6 space-y-4">
+            <div>
+              <h2 className="text-base font-semibold">Transformação, não funcionalidades</h2>
+              <p className="text-xs text-muted-foreground">
+                O que importa é o empresário voltando, percebendo clareza, decidindo e evoluindo.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              {[
+                { valor: metricas.sessoesIniciadas, rotulo: 'sessões iniciadas' },
+                { valor: metricas.sessoesConcluidas, rotulo: 'sessões concluídas' },
+                { valor: metricas.clarezasRegistradas, rotulo: 'clarezas percebidas' },
+                { valor: metricas.empresasComRetorno, rotulo: 'empresas que voltaram' },
+                { valor: metricas.primeirasDecisoes, rotulo: 'decisões registradas' },
+                { valor: metricas.primeirasEvolucoes, rotulo: 'evoluções registradas' },
+                { valor: metricas.apoiadores, rotulo: 'apoiadores' },
+                { valor: metricas.founders, rotulo: 'founders' },
+              ].map((m) => (
+                <div key={m.rotulo} className="rounded-lg bg-muted/40 p-3 space-y-1">
+                  <p className="text-xl font-bold">{m.valor}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider leading-tight">{m.rotulo}</p>
+                </div>
+              ))}
+            </div>
+            {metricas.clarezasPorCategoria.length > 0 && (
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Clareza percebida por categoria</p>
+                <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                  {metricas.clarezasPorCategoria.map((c) => (
+                    <span key={c.categoria} className="rounded-full border border-border px-2.5 py-1">
+                      {c.categoria}: {c.total}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            <p className="text-[10px] text-muted-foreground italic">
+              Recomendações consolidadas na plataforma: {metricas.recomendacoes}. Nenhum dado individual exposto — apenas agregados.
+            </p>
+          </section>
+        )}
+
+        {/* Inteligência Coletiva — P62. A Ponte compartilha apenas padrões agregados e anônimos, jamais dados de uma empresa. */}
+        <section className="rounded-xl border bg-card p-6 space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-base font-semibold">Inteligência Coletiva</h2>
+              <p className="text-xs text-muted-foreground">
+                Padrões que aparecem porque se repetem em empresas reais — nunca o dado de uma empresa específica.
+              </p>
+            </div>
+            {maturidadeColetiva && (
+              <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary shrink-0">
+                Fase: {maturidadeColetiva.rotulo}
+              </span>
+            )}
+          </div>
+
+          {maturidadeColetiva && (
+            <>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground leading-relaxed">{maturidadeColetiva.descricao}</p>
+              </div>
+              <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                {maturidadeColetiva.gates.map((g) => (
+                  <span
+                    key={g.rotulo}
+                    className={`rounded-full border px-2.5 py-1 ${g.ativo ? 'border-primary/40 bg-primary/5 text-primary' : 'border-border'}`}
+                  >
+                    {g.rotulo} · {g.limite}+
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
+
+          {padroesColetivos.length > 0 ? (
+            <div className="space-y-2">
+              {padroesColetivos.map((p) => (
+                <div key={`${p.titulo}-${p.repeticoes}`} className="flex items-start justify-between gap-3 rounded-lg bg-muted/40 p-3">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium leading-snug">{p.titulo}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{p.categoria ?? 'sem categoria'}</p>
+                  </div>
+                  <div className="shrink-0 text-right text-xs text-muted-foreground">
+                    <p className="font-semibold">{p.repeticoes} repetição(ões)</p>
+                    <p>confiança {p.scoreConfianca}%</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-muted-foreground italic">
+              Ainda não há padrões validados. Eles só aparecem quando um mesmo padrão se repete em empresas diferentes — sem volume, não há padrão.
+            </p>
+          )}
+        </section>
 
         {/* Pergunta atual */}
         <section className="rounded-xl border bg-card p-6 space-y-4">

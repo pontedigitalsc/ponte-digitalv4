@@ -9,10 +9,13 @@ declare module 'lucide-react' {
   export const AlertTriangle: LucideIcon
   export const ArrowDownCircle: LucideIcon
   export const ArrowLeft: LucideIcon
+  export const ArrowRight: LucideIcon
   export const ArrowUpCircle: LucideIcon
   export const BarChart3: LucideIcon
   export const Bell: LucideIcon
+  export const BookOpen: LucideIcon
   export const Bot: LucideIcon
+  export const Brain: LucideIcon
   export const Building2: LucideIcon
   export const Calendar: LucideIcon
   export const Check: LucideIcon
@@ -23,8 +26,10 @@ declare module 'lucide-react' {
   export const ChevronDown: LucideIcon
   export const ChevronLeft: LucideIcon
   export const ChevronRight: LucideIcon
+  export const ChevronUp: LucideIcon
   export const Circle: LucideIcon
   export const Clock: LucideIcon
+  export const Compass: LucideIcon
   export const DollarSign: LucideIcon
   export const ExternalLink: LucideIcon
   export const Eye: LucideIcon
@@ -35,11 +40,13 @@ declare module 'lucide-react' {
   export const Inbox: LucideIcon
   export const LayoutDashboard: LucideIcon
   export const Layers: LucideIcon
+  export const Lightbulb: LucideIcon
   export const Loader2: LucideIcon
   export const LogOut: LucideIcon
   export const Mail: LucideIcon
   export const MailCheck: LucideIcon
   export const MapPin: LucideIcon
+  export const MessageCircle: LucideIcon
   export const MessageSquare: LucideIcon
   export const Moon: LucideIcon
   export const MoreHorizontal: LucideIcon
@@ -50,6 +57,7 @@ declare module 'lucide-react' {
   export const RefreshCw: LucideIcon
   export const RotateCcw: LucideIcon
   export const Save: LucideIcon
+  export const Scale: LucideIcon
   export const Search: LucideIcon
   export const SearchX: LucideIcon
   export const Send: LucideIcon
@@ -57,6 +65,7 @@ declare module 'lucide-react' {
   export const Shield: LucideIcon
   export const Sparkles: LucideIcon
   export const Sun: LucideIcon
+  export const Target: LucideIcon
   export const Trash2: LucideIcon
   export const TrendingDown: LucideIcon
   export const TrendingUp: LucideIcon

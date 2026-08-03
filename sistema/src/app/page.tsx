@@ -29,7 +29,7 @@ export default function LandingPage() {
         {/* CTA único — Primeira Sessão Estratégica, sem cadastro */}
         <div className="space-y-3">
           <Link
-            href="/diagnostico"
+            href="/conversa"
             className="block w-full rounded-xl bg-primary px-6 py-4 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 transition-colors"
           >
             Iniciar minha Primeira Sessão Estratégica

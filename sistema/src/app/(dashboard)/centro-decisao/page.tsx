@@ -1,6 +1,7 @@
 import { requireUser } from '@/lib/auth'
 import { gerarDecisoes, classificarDecisoesPorPrioridade, enriquecerDecisoesComTrust, filtrarDecisoesPorRelevancia, obterEstadoCognitivoCompleto } from '@/engine'
 import { Card, CardContent, CardHeader, CardTitle, Badge } from '@/components/ui/card'
+import { PensarAntesDeDecidir } from '@/components/decisao/pensar-antes-de-decidir'
 
 const COR_PRIORIDADE: Record<string, string> = {
   URGENTE: 'destructive',
@@ -181,6 +182,11 @@ const grupos = {
             </CardContent>
           </Card>
         )}
+      </div>
+
+      <div className="border-t border-border/60 pt-8">
+        {/* P61 — Pensar antes de decidir: o próprio empresário registra a decisão */}
+        <PensarAntesDeDecidir />
       </div>
     </div>
   )

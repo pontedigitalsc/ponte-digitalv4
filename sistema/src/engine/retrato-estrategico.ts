@@ -85,13 +85,15 @@ function gerarPontosDeEvolucao(respostas: Respostas): string[] {
   const crescer = r(respostas, 'empresa.crescer')
   const pressao = r(respostas, 'rotina.pressao')
   const multiplicar = r(respostas, 'empresa.multiplicar')
+  const dependencia = r(respostas, 'empresa.dependencia')
 
   if (preocupacao) itens.push(`Sua maior preocupação hoje é "${preocupacao}". Ela tem raiz — encontrá-la é o primeiro passo.`)
   if (crescer) itens.push(`O que hoje trava o crescimento é "${crescer}". É um ponto de evolução, não um defeito: a empresa está pedindo estrutura nova.`)
   if (pressao) itens.push(`O momento de maior pressão é "${pressao}". Se ele se repete, há um padrão valendo a pena observar.`)
+  if (dependencia) itens.push(`Sobre o quanto a empresa depende de você, você disse: "${dependencia}". Quanto mais a empresa precisa de uma só pessoa para funcionar, maior o risco de um dia comum virar crise.`)
   if (multiplicar) itens.push(`Sobre crescer sem depender só de você, você disse: "${multiplicar}". Distribuir conhecimento é o caminho natural.`)
   if (itens.length === 0) itens.push('Muitas decisões ainda passam diretamente por você. Conforme a empresa cresce, distribuir esse conhecimento aumenta a capacidade de evolução.')
-  return itens.slice(0, 3)
+  return itens.slice(0, 4)
 }
 
 // ─── 4. A decisão mais importante agora ───────────────────────────────────────
@@ -100,12 +102,16 @@ function gerarDecisao(respostas: Respostas): string {
   const proximo = r(respostas, 'frente.proximo')
   const clientes = r(respostas, 'empresa.clientes')
   const multiplicar = r(respostas, 'empresa.multiplicar')
+  const dependencia = r(respostas, 'empresa.dependencia')
 
   if (clientes && crescer) {
     return `O próximo movimento mais importante parece ser criar maior previsibilidade sobre "${clientes}" antes de buscar crescimento acelerado. Quando a recorrência é previsível, "${crescer}" deixa de ser um risco e vira uma escolha.`
   }
   if (multiplicar) {
     return `O próximo movimento mais importante parece ser distribuir o que só você sabe fazer — sobre crescer sem depender de você, você disse "${multiplicar}". Começar por um único processo transferível é o passo mais seguro.`
+  }
+  if (dependencia && !proximo) {
+    return `O próximo movimento mais importante parece ser reduzir a dependência que você descreveu: "${dependencia}". Escolha uma única tarefa que só você faz e descreva o passo a passo dela — isso vira o começo de uma empresa que funciona sem você em cada detalhe.`
   }
   if (proximo) {
     return `O próximo movimento mais importante parece ser avançar em direção a "${proximo}" — mas em um único passo pequeno e observável primeiro.`
@@ -121,12 +127,16 @@ function gerarPrimeiroMovimento(respostas: Respostas): string {
   const proximo = r(respostas, 'frente.proximo')
   const crescer = r(respostas, 'empresa.crescer')
   const multiplicar = r(respostas, 'empresa.multiplicar')
+  const dependencia = r(respostas, 'empresa.dependencia')
 
   if (proximo) {
     return `O primeiro movimento recomendado é dar um passo pequeno e observável em direção a "${proximo}" ainda esta semana — e registrar o que acontece.`
   }
   if (multiplicar) {
     return `O primeiro movimento recomendado é escolher um único processo que só você sabe fazer e descrevê-lo por escrito, para poder dividi-lo depois.`
+  }
+  if (dependencia) {
+    return `O primeiro movimento recomendado é escrever, em um parágrafo, o passo a passo de uma tarefa que só você sabe fazer — você disse que, se sumisse, "${dependencia}". Esse parágrafo é o começo de menos dependência.`
   }
   if (crescer) {
     return `O primeiro movimento recomendado é observar "${crescer}" durante uma semana — registrar quando aparece e o que vem antes. Só o registro já revela o que trava.`

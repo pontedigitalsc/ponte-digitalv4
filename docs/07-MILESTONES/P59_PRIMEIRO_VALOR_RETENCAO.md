@@ -1,7 +1,7 @@
-# P59 — Primeiro Valor e Retenção Founder V1
+# P59 — Primeiro Valor e Retenção Founder V2
 
 **Data:** 2 de agosto de 2026
-**STATUS:** OFICIAL — experiência de valor registrável e repetível.
+**STATUS:** OFICIAL — V2 implementada (a V1 foi entregue no commit `ff511b1`).
 
 > A Ponte não tenta impressionar. Ela **prova utilidade**.
 > Pergunta central: _"Se a Ponte desaparecesse amanhã, o empresário sentiria falta?"_
@@ -13,6 +13,23 @@
 Transformar a primeira experiência em algo memorável e repetível — **sem adicionar funcionalidades**.
 Descobrir com os primeiros usuários: o que faz o empresário pensar "isso me ajudou", o que o faz
 voltar, o que o faz confiar e o que o faz querer virar Founder.
+
+## 1.1 V2 — profundidade da sessão e pertencimento
+
+A V2 reforçou a tese "compreender profundamente a história da empresa para decidir melhor":
+
+- **Nova pergunta no fluxo** (`empresa.dependencia`, estágio Tensão): *"Se você precisasse se afastar
+  por 30 dias, o que aconteceria com a empresa?"* — expõe dependência do dono e pontos cegos
+  (fluxo em `src/engine/fluxos/primeira-conversa.ts` + `ESTAGIO_POR_ETAPA` em `conversation-engine.ts`).
+- **Retrato 6 partes não-genérico**: o subtítulo e o "primeiro movimento" usam a resposta sobre
+  dependência (análogo ao multiplicador), em `src/engine/retrato-estrategico.ts` +
+  `retrato-estrategico-card.tsx`. Nada de texto que sirva para qualquer empresa.
+- **Landing** com CTA direto para a sessão (`/conversa`), sem fricção.
+- **Área Founder completa** (`/fundador`): tese, como a Ponte aprende, patrimônio, evidências reais
+  (apoiadores/founders/sessões), Inteligência Coletiva com gates, roadmap, "o que acreditamos"
+  apresentado como hipóteses, CTA WhatsApp e caminho Apoiador → Founder.
+- **Rota `/tornar-se-fundador` pública** (antes protegida por sessão) — o pertencimento passa a ser
+  alcançável por qualquer pessoa no funil gratuito.
 
 ## 2. Etapa 1 — Protocolo Founder 1–10
 
@@ -66,6 +83,7 @@ A linguagem externa deixou de chamar "diagnóstico" e passou a chamar **Primeira
 - [x] Clareza Gerada registrável como evidência pós-conversa (categorias + reação).
 - [x] Retrato Estratégico em 6 partes (evolução da entrega).
 - [x] Linguagem "Primeira Sessão Estratégica" no funil gratuito.
+- [x] V2: pergunta de dependência (30 dias) + retrato não-genérico + Área Founder + rota pública de pertencimento.
 - [ ] **10 empresários passaram pela experiência** (depende de humanos — pendência operacional).
 - [ ] Sabemos qual parte gera mais valor / dúvida (depende dos registros do protocolo).
 - [ ] Temos depoimentos reais e primeiras evidências de retorno (depende de humanos).

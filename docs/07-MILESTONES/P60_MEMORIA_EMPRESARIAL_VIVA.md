@@ -1,7 +1,8 @@
 # P60 — Memória Empresarial Viva V1
 
 **Data:** 2 de agosto de 2026
-**STATUS:** PLANEJADO — aguarda evidência do P59 (dependência: dados de retorno dos primeiros 10 empresários).
+**STATUS:** IMPLEMENTADO (V1) — página `/memoria` entrega o patrimônio da empresa; a leitura
+coletiva ("o que mudou entre conversas") permanece planejada, dependente de evidência.
 
 > A empresa do empresário não nasce na Ponte: ela já tem história. A Ponte deve
 > devolver essa história como algo vivo — que ajuda a decidir — e não como um arquivo morto.
@@ -12,6 +13,18 @@
 
 Depois da primeira conversa, o empresário recebe um retrato, mas a conversa parece um evento
 isolado. Ele não sente que a empresa dele "continua existindo" dentro da Ponte entre uma sessão e outra.
+
+## 1.1 Implementação (V1)
+
+- **Página `/memoria`** ("A memória da sua empresa") no menu lateral (grupo "Aprender", ícone `BookOpen`).
+- Reúne o patrimônio real da empresa, sem nada inventado:
+  - decisões registradas (`AcaoCognitiva` com status, resultado e feedback);
+  - aprendizados (`Aprendizado`);
+  - clarezas percebidas (`SinalValor` de `CLAREZA_GERADA` com categoria e decisão sugerida);
+  - evoluções (`Outcome` / `MemoriaEmocional`);
+  - histórico de sessões estratégicas com CTA para continuar a conversa em aberto.
+- Módulo `'memoria'` liberado na experiência cognitiva (`cognitive-experience-engine.ts`).
+- Sem novas tabelas: reuso do schema existente.
 
 ## 2. Hipótese central
 
@@ -28,9 +41,10 @@ volta porque sente que a Ponte o conhece — e conhecer gera confiança.
 
 ## 4. Critérios de aceite (quando iniciar)
 
+- [x] Página `/memoria` entregue mostrando o patrimônio real da empresa (decidir/evoluir/lembrar).
 - [ ] P59 concluído: sabemos que a memória gera valor (evidência do protocolo 1–10).
+- [ ] Contraste "o que mudou entre conversas" (leitura coletiva) — planejado, aguarda evidência.
 - [ ] Nenhuma migração de banco planejada (reuso de `RespostasConversa` / `SinalValor`).
-- [ ] Não implementar motor de memória automática; apenas re-apresentação do que foi dito.
 
 ## 5. Não fazer
 

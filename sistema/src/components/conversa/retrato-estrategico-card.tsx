@@ -12,6 +12,9 @@ export function RetratoEstrategicoCard({ retrato }: RetratoEstrategicoCardProps)
           Primeira Sessão Estratégica da sua empresa
         </p>
         <h3 className="text-lg font-semibold tracking-tight">{retrato.titulo}</h3>
+        <p className="text-xs text-muted-foreground leading-relaxed max-w-md mx-auto">
+          Cada parte diz o que percebemos, por que percebemos — e o que eu faria. Nada aqui é genérico: foi escrito a partir do que você contou.
+        </p>
       </div>
 
       <div className="space-y-4">

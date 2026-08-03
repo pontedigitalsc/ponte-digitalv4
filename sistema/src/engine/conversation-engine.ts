@@ -26,6 +26,7 @@ const ESTAGIO_POR_ETAPA: Record<string, EstagioConselheiro> = {
   'empresa.crescer': 'tensao',
   'empresa.decisao': 'tensao',
   'empresa.preocupacao': 'tensao',
+  'empresa.dependencia': 'tensao',
   'historia.mudanca': 'tensao',
   'frente.diferente': 'tensao',
   'historia.orgulho': 'evolucao',
