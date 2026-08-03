@@ -105,3 +105,38 @@
 **Descrição:** a partir do P58 nenhuma funcionalidade é criada por ideia interna; toda evolução nasce de comportamento, pedidos, dificuldades e decisões dos Founders. Estabilidade, segurança, qualidade de experiência e segurança da IA congeladas como baseline (regra _"Com base no que entendemos..."_).
 **Ação:** ver `07-MILESTONES/P58_OPERATION_FREEZE_V1.md`. A entrada "Sistema não modela usuário Apoiador" (acima) é endereçada pelo P57B (números Apoiador/Fundador).
 
+## Auditoria P59–P63 — Retrato nunca chegava ao empresário (P0, corrigido)
+
+**Status:** Resolvido em 2026-08-03 (auditoria P59–P63)
+**Prioridade:** Alta (crítica — bloqueava a entrega de valor central de P59)
+**Descrição:** confirmado ao vivo em produção: a última resposta da primeira conversa marcava `concluida=true` em `responder()` (`conversation-engine.ts`); o frontend então chamava `POST /api/conversa/finalizar`, que exige `concluida: false` e lançava `BUSINESS_RULE_ERROR "Conversa já finalizada"` — o Retrato Estratégico (e a revelação pós-conversa) nunca era exibido e o usuário ficava preso na última pergunta. Comportamento existia desde P57A (`e2eb8f9`), não era regressão da V2.
+**Ação:** `responder()` não marca mais `concluida=true` (a finalização é responsabilidade exclusiva de `/finalizar`); `obterEstado` reporta `concluida` quando não há mais pergunta (etapa nula); GET `/api/conversa` reapresenta o Retrato regerado das respostas para quem retorna (`retomando: true`) com botão "Iniciar nova sessão" (`?nova=1` gera novo token). Ajustado também o cliente `conversa/page.tsx`, que ficava preso em loading quando `concluida=true`.
+
+## Auditoria P59–P63 — Clareza Gerada descartada no funil anônimo (corrigido)
+
+**Status:** Resolvido em 2026-08-03
+**Prioridade:** Alta
+**Descrição:** o check-in de clareza (P59) mostrava sucesso ao anônimo mas descartava a evidência (`gravado:false, motivo:sem-conta`), e o componente afirmava "Sua percepção fica guardada" mesmo sem gravar. O funil principal é anônimo → a percepção mais importante do ciclo se perdia.
+**Ação:** novo `engine/clareza-engine.ts` — a resposta fica pendente na conversa (`respostas.__clareza`) e é registrada como `SinalValor CLAREZA_GERADA` assim que a conta existe (em `/api/auth/criar-conta` e em `/api/conversa/finalizar`). O componente `clareza-checkin.tsx` agora informa honestamente quando a percepção ficará pendente.
+
+## Auditoria P59–P63 — P61 feedback bypassava o ciclo de aprendizado (corrigido)
+
+**Status:** Resolvido em 2026-08-03
+**Prioridade:** Alta
+**Descrição:** o feedback de uma decisão registrada em `/centro-decisao` criava `FeedbackAcao` diretamente, sem passar por `processarFeedback`/`registrarFeedback` — não gerava evidência, memória cognitiva nem fortalecimento/enfraquecimento de hipóteses. O Motor Cognitivo não aprendia com as decisões do empresário.
+**Ação:** `PATCH /api/centro-decisao/decisoes/[id]` agora chama `processarFeedback` (ciclo completo: feedback → evidência → memória → hipótese → evento).
+
+## Auditoria P59–P63 — P62 sem caminho CANDIDATO→VALIDADO (corrigido)
+
+**Status:** Resolvido em 2026-08-03
+**Prioridade:** Média
+**Descrição:** a promoção de Pergunta Aberta criava `ConhecimentoColetivo` apenas como `CANDIDATO` e não existia nenhum `conhecimentoColetivo.update` no código — nada jamais virava `VALIDADO` e `obterPadroesColetivos` retornava vazio para sempre. A Inteligência Coletiva era só estrutura.
+**Ação:** `engine/inteligencia-coletiva.ts` ganhou `listarConhecimentoColetivo`, `atualizarStatusConhecimento` e `descartarConhecimento`; nova rota `PATCH|DELETE /api/painel-do-fundador/conhecimento/[id]` (ADMIN) e seção "Descobertas aguardando validação" no Painel do Fundador.
+
+## Auditoria P59–P63 — P63 métricas divergentes do doc (corrigido)
+
+**Status:** Resolvido em 2026-08-03
+**Prioridade:** Média
+**Descrição:** "empresas com retorno" contava empresas com ≥2 conversas em qualquer período, não "retorno em 7 dias" como o doc P63 prometia. Faltavam taxa de conclusão de sessão e taxa de conversão Apoiador→Fundador.
+**Ação:** `engine/operacao-founder.ts` agora calcula retorno real dentro de janela de 7 dias a partir da primeira sessão e expõe `taxaConclusaoSessao` e `taxaConversaoApoiadorParaFundador` no painel.
+

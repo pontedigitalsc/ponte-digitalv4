@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { obterRespostas } from '@/engine/conversation-engine'
 import { processarCadastro } from '@/engine'
+import { registrarClarezaDaConversa } from '@/engine/clareza-engine'
 import { registerSchema } from '@/lib/validations'
 import { handleApiError } from '@/lib/api-error'
 import { createLogger } from '@/lib/logger'
@@ -112,6 +113,11 @@ export async function POST(request: NextRequest) {
     if (!resultado.sucesso) {
       log.warn('Orchestrator acionado com erros', { details: { erros: resultado.erros } })
     }
+
+    // P59 — registra a clareza que ficou pendente durante a conversa anônima.
+    registrarClarezaDaConversa(token, empresa.id).catch(() => {
+      // registro é opcional — não interrompe a criação da conta
+    })
 
     // 5. Retorna sucesso — o frontend redireciona
     return NextResponse.json({ data: { empresaId: empresa.id, usuarioId: usuario.id, numeroApoiador } })

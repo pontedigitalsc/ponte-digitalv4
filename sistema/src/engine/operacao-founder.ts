@@ -12,6 +12,7 @@ import { prisma } from '@/lib/prisma'
 export interface MetricasTransformacao {
   sessoesIniciadas: number
   sessoesConcluidas: number
+  taxaConclusaoSessao: number
   clarezasRegistradas: number
   clarezasPorCategoria: { categoria: string; total: number }[]
   empresasComRetorno: number
@@ -19,8 +20,11 @@ export interface MetricasTransformacao {
   primeirasEvolucoes: number
   apoiadores: number
   founders: number
+  taxaConversaoApoiadorParaFundador: number
   recomendacoes: number
 }
+
+const JANELA_RETORNO_DIAS = 7
 
 export async function obterMetricasTransformacao(): Promise<MetricasTransformacao> {
   const [
@@ -28,7 +32,7 @@ export async function obterMetricasTransformacao(): Promise<MetricasTransformaca
     sessoesConcluidas,
     clarezasRegistradas,
     clarezas,
-    empresasComRetorno,
+    conversas,
     primeirasDecisoes,
     primeirasEvolucoes,
     apoiadores,
@@ -42,11 +46,11 @@ export async function obterMetricasTransformacao(): Promise<MetricasTransformaca
       where: { tipo: 'CLAREZA_GERADA', deletedAt: null },
       select: { metadata: true },
     }),
-    prisma.conversa.groupBy({
-      by: ['empresaId'],
+    prisma.conversa.findMany({
       where: { deletedAt: null, empresaId: { not: null } },
-      _count: { _all: true },
-    }).then((g) => g.filter((x) => x._count._all >= 2).length),
+      select: { empresaId: true, criadaEm: true },
+      orderBy: { criadaEm: 'asc' },
+    }),
     prisma.acaoCognitiva.count({ where: { deletedAt: null, origem: 'USUARIO' } }),
     prisma.$queryRaw`SELECT COUNT(*)::int AS total FROM (
       SELECT empresaId FROM aprendizados WHERE deletedAt IS NULL
@@ -67,16 +71,38 @@ export async function obterMetricasTransformacao(): Promise<MetricasTransformaca
     .map(([categoria, total]) => ({ categoria, total }))
     .sort((a, b) => b.total - a.total)
 
+  // Retorno real: a segunda sessão da empresa começou dentro de 7 dias
+  // da primeira. Não é proxy de "2 conversas em qualquer período".
+  const primeiraPorEmpresa = new Map<string, Date>()
+  const empresasQueRetornaram = new Set<string>()
+  for (const c of conversas) {
+    if (!c.empresaId) continue
+    const primeira = primeiraPorEmpresa.get(c.empresaId)
+    if (!primeira) {
+      primeiraPorEmpresa.set(c.empresaId, c.criadaEm)
+      continue
+    }
+    const janela = JANELA_RETORNO_DIAS * 24 * 60 * 60 * 1000
+    if (c.criadaEm.getTime() - primeira.getTime() <= janela) {
+      empresasQueRetornaram.add(c.empresaId)
+    }
+  }
+
+  const taxaConclusaoSessao = sessoesIniciadas > 0 ? Math.round((sessoesConcluidas / sessoesIniciadas) * 100) : 0
+  const taxaConversaoApoiadorParaFundador = apoiadores > 0 ? Math.round((founders / apoiadores) * 100) : 0
+
   return {
     sessoesIniciadas,
     sessoesConcluidas,
+    taxaConclusaoSessao,
     clarezasRegistradas,
     clarezasPorCategoria,
-    empresasComRetorno,
+    empresasComRetorno: empresasQueRetornaram.size,
     primeirasDecisoes,
     primeirasEvolucoes,
     apoiadores,
     founders,
+    taxaConversaoApoiadorParaFundador,
     recomendacoes,
   }
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { requireUserApi } from '@/lib/authorize'
 import { handleApiError } from '@/lib/api-error'
+import { processarFeedback } from '@/engine/cognitive-orchestrator'
 import { registrarEventoAtivacao } from '@/engine/founder-activation-engine'
 import { z } from 'zod'
 import type { Prisma } from '@prisma/client'
@@ -64,16 +65,11 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       },
     })
 
+    // P61 — o feedback entra no ciclo de aprendizado completo (evidência →
+    // memória cognitiva → fortalecimento/enfraquecimento de hipóteses), em vez
+    // de criar uma linha órfã de FeedbackAcao que só alimentava contadores.
     if (ajudou) {
-      await prisma.feedbackAcao.create({
-        data: {
-          empresaId: usuario.empresaId,
-          acaoId: id,
-          tipo: ajudou,
-          comentario: aprendemos || null,
-        },
-      })
-      await registrarEventoAtivacao(usuario.empresaId, 'PRIMEIRO_FEEDBACK', { decisaoId: id })
+      await processarFeedback(usuario.empresaId, id, ajudou, aprendemos || undefined)
     }
 
     if (status === 'CONCLUIDA') {

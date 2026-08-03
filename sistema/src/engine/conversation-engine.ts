@@ -142,12 +142,16 @@ export async function responder(
 
   const etapaSalvar = proximaEtapa?.id ?? null
 
+  // A conversa só é marcada como concluída no `finalizar` — não aqui.
+  // Se a última resposta marcasse `concluida=true`, o POST finalizar
+  // (que exige `concluida: false`) falharia com "Conversa já finalizada"
+  // e o Retrato nunca chegaria ao empresário. O `foiConcluida` abaixo
+  // apenas informa o cliente de que é hora de chamar `/finalizar`.
   await prisma.conversa.update({
     where: { id: conversa.id },
     data: {
       respostas: respostasAtuais,
       etapa: etapaSalvar,
-      concluida: foiConcluida,
     },
   })
 
@@ -264,10 +268,14 @@ export async function obterEstado(token: string): Promise<{
 
   const etapaIndex = fluxo.etapas.findIndex((e) => e.id === estado.etapa)
 
+  // `concluida` também é verdade quando não há mais pergunta a fazer
+  // (etapa nula) — o cliente então chama `/finalizar` para gerar o Retrato.
+  const concluida = estado.concluida || !estado.etapa
+
   return {
     perguntaAtual: estado.etapa ? (fluxo.etapas.find((e) => e.id === estado.etapa) ?? null) : null,
     progresso: calcularProgresso(etapaIndex, fluxo),
-    concluida: estado.concluida,
+    concluida,
     respostas: estado.respostas,
   }
 }
@@ -289,7 +297,14 @@ export async function obterRespostas(token: string): Promise<Record<string, stri
     orderBy: { criadaEm: 'desc' },
   })
   if (!conversa) throw new NotFoundError('Conversa não encontrada')
-  return (conversa.respostas as Record<string, string | null>) ?? {}
+
+  const respostas = (conversa.respostas as Record<string, string | null>) ?? {}
+
+  // `__clareza` é mecanismo interno (clareza pendente de conta anônima),
+  // nunca uma resposta de pergunta — não deve chegar aos consumidores.
+  delete (respostas as Record<string, unknown>)['__clareza']
+
+  return respostas
 }
 
 export function getFluxoSteps(fluxoId: string) {

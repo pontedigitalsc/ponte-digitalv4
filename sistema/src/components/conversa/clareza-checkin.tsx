@@ -14,6 +14,7 @@ export function ClarezaCheckin() {
   const [categoria, setCategoria] = useState<string | null>(null)
   const [enviando, setEnviando] = useState(false)
   const [enviado, setEnviado] = useState(false)
+  const [pendente, setPendente] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
 
   const podeEnviar = !enviando && texto.trim().length > 0 && categoria !== null
@@ -29,6 +30,8 @@ export function ClarezaCheckin() {
         body: JSON.stringify({ categoria, texto: texto.trim() }),
       })
       if (!res.ok) throw new Error()
+      const json = await res.json().catch(() => null)
+      setPendente(json?.data?.pendente === true)
       setEnviado(true)
     } catch {
       setErro('Não consegui guardar isso agora. Pode tentar de novo?')
@@ -40,8 +43,19 @@ export function ClarezaCheckin() {
   if (enviado) {
     return (
       <div className="rounded-xl border border-emerald-400/30 bg-card p-5 text-center space-y-2 animate-fade-in">
-        <p className="text-sm font-medium text-foreground">Obrigado. Isso ajuda a Ponte a melhorar.</p>
-        <p className="text-xs text-muted-foreground">Sua percepção fica guardada junto com o retrato da sua empresa.</p>
+        {pendente ? (
+          <>
+            <p className="text-sm font-medium text-foreground">Guardo isso junto da sua conversa.</p>
+            <p className="text-xs text-muted-foreground">
+              Quando você criar sua conta, essa percepção passa a integrar o retrato da sua empresa.
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="text-sm font-medium text-foreground">Obrigado. Isso ajuda a Ponte a melhorar.</p>
+            <p className="text-xs text-muted-foreground">Sua percepção fica guardada junto com o retrato da sua empresa.</p>
+          </>
+        )}
       </div>
     )
   }

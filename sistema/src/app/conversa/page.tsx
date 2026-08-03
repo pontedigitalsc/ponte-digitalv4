@@ -71,6 +71,7 @@ export default function ConversaPage() {
   const [respostaAberta, setRespostaAberta] = useState('')
   const [enviandoAberta, setEnviandoAberta] = useState(false)
   const [respostaAbertaEnviada, setRespostaAbertaEnviada] = useState(false)
+  const [retomando, setRetomando] = useState(false)
 
   const recuperarInterpretacoes = useCallback(async () => {
     setInterpretacoes(null)
@@ -88,7 +89,22 @@ export default function ConversaPage() {
 
       if (data.concluida) {
         setConcluida(true)
-        recuperarInterpretacoes()
+        setCarregando(false)
+
+        // Retorno de uma conversa já concluída: reapresenta o Retrato
+        // que foi gerado na última sessão (regerado no servidor).
+        if (data.retomando && data.interpretacoes) {
+          setRetomando(true)
+          setInterpretacoes(data.interpretacoes)
+          if (data.resumoNatural) setResumoNatural(data.resumoNatural)
+          if (data.retratoEstrategico) setRetratoEstrategico(data.retratoEstrategico)
+          return
+        }
+
+        // Todas as perguntas respondidas mas ainda não finalizada
+        // (ex.: aba fechada antes do finalizar): finaliza agora.
+        setRetomando(false)
+        finalizarConversa()
         return
       }
 
@@ -351,6 +367,14 @@ export default function ConversaPage() {
             )}
 
             <div className="space-y-2">
+              {retomando && (
+                <Link
+                  href="/conversa?nova=1"
+                  className="block rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground text-center hover:bg-primary/90 transition-colors"
+                >
+                  Iniciar nova sessão
+                </Link>
+              )}
               <Link
                 href="/dashboard"
                 className="block rounded-lg border border-border bg-card px-6 py-3 text-sm text-foreground hover:bg-muted/50 transition-colors"

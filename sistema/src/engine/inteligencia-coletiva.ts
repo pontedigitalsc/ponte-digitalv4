@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import type { StatusConhecimentoColetivo } from '@prisma/client'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // INTELIGÊNCIA COLETIVA — P62
@@ -79,4 +80,60 @@ export async function obterPadroesColetivos(limite = 5): Promise<PadraoColetivo[
   })
 
   return registros
+}
+
+export interface ConhecimentoCandidato {
+  id: string
+  titulo: string
+  descricao: string
+  categoria: string | null
+  repeticoes: number
+  scoreConfianca: number
+  status: StatusConhecimentoColetivo
+  criadoEm: string
+}
+
+// Lista conhecimento coletivo (CANDIDATO e demais status) para o painel do
+// founder validar ou descartar. Sempre agregado — nunca expõe empresa de origem.
+export async function listarConhecimentoColetivo(status?: StatusConhecimentoColetivo[], limite = 30): Promise<ConhecimentoCandidato[]> {
+  const registros = await prisma.conhecimentoColetivo.findMany({
+    where: {
+      deletedAt: null,
+      ...(status && status.length > 0 ? { status: { in: status } } : {}),
+    },
+    orderBy: [{ repeticoes: 'desc' }, { criadoEm: 'desc' }],
+    select: {
+      id: true,
+      titulo: true,
+      descricao: true,
+      categoria: true,
+      repeticoes: true,
+      scoreConfianca: true,
+      status: true,
+      criadoEm: true,
+    },
+    take: limite,
+  })
+
+  return registros.map((r) => ({ ...r, criadoEm: r.criadoEm.toISOString() }))
+}
+
+// P62 — transição de status promovida pelo founder: CANDIDATO → VALIDADO →
+// REPLICADO → CONSOLIDADO. É o único ponto do código que avança um padrão
+// coletivo — antes, nada promovia CANDIDATO e o painel ficava sempre vazio.
+export async function atualizarStatusConhecimento(id: string, status: StatusConhecimentoColetivo) {
+  return prisma.conhecimentoColetivo.update({
+    where: { id },
+    data: { status },
+    select: { id: true, titulo: true, status: true },
+  })
+}
+
+// Descarta um candidato (soft delete) — nunca expõe nem reutiliza.
+export async function descartarConhecimento(id: string) {
+  return prisma.conhecimentoColetivo.update({
+    where: { id },
+    data: { deletedAt: new Date() },
+    select: { id: true, titulo: true },
+  })
 }

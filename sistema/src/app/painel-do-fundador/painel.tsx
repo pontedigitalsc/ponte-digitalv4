@@ -9,7 +9,7 @@ import type {
 } from '@/engine/pergunta-aberta-service'
 import type { GrandePergunta } from '@/engine/adaptive-question-engine'
 import type { MetricasTransformacao } from '@/engine/operacao-founder'
-import type { MaturidadeColetiva, PadraoColetivo } from '@/engine/inteligencia-coletiva'
+import type { MaturidadeColetiva, PadraoColetivo, ConhecimentoCandidato } from '@/engine/inteligencia-coletiva'
 
 interface PainelProps {
   painel: PainelFundador | null
@@ -18,6 +18,7 @@ interface PainelProps {
   metricas: MetricasTransformacao | null
   maturidadeColetiva: MaturidadeColetiva | null
   padroesColetivos: PadraoColetivo[]
+  candidatos: ConhecimentoCandidato[]
 }
 
 function formatarData(iso: string | null): string {
@@ -25,7 +26,7 @@ function formatarData(iso: string | null): string {
   return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
 }
 
-export function PainelDoFundador({ painel, perguntas, biblioteca, metricas, maturidadeColetiva, padroesColetivos }: PainelProps) {
+export function PainelDoFundador({ painel, perguntas, biblioteca, metricas, maturidadeColetiva, padroesColetivos, candidatos }: PainelProps) {
   const router = useRouter()
   const [mensagem, setMensagem] = useState<string | null>(null)
   const [erro, setErro] = useState<string | null>(null)
@@ -111,6 +112,32 @@ export function PainelDoFundador({ painel, perguntas, biblioteca, metricas, matu
 
   const atual = painel?.perguntaAtual ?? null
 
+  const validar = async (id: string, status: 'VALIDADO' | 'REPLICADO' | 'CONSOLIDADO') => {
+    try {
+      const res = await fetch(`/api/painel-do-fundador/conhecimento/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      })
+      if (!res.ok) throw new Error('Falha na ação')
+      notificar(`Padrão marcado como ${status}. Ele agora aparece em Inteligência Coletiva.`)
+      router.refresh()
+    } catch {
+      notificar('Não consegui validar agora.', true)
+    }
+  }
+
+  const descartar = async (id: string) => {
+    try {
+      const res = await fetch(`/api/painel-do-fundador/conhecimento/${id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Falha na ação')
+      notificar('Candidato descartado.')
+      router.refresh()
+    } catch {
+      notificar('Não consegui descartar agora.', true)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
       <main className="max-w-4xl mx-auto px-4 py-10 space-y-8">
@@ -138,12 +165,14 @@ export function PainelDoFundador({ painel, perguntas, biblioteca, metricas, matu
               {[
                 { valor: metricas.sessoesIniciadas, rotulo: 'sessões iniciadas' },
                 { valor: metricas.sessoesConcluidas, rotulo: 'sessões concluídas' },
+                { valor: `${metricas.taxaConclusaoSessao}%`, rotulo: 'conclusão de sessão' },
                 { valor: metricas.clarezasRegistradas, rotulo: 'clarezas percebidas' },
-                { valor: metricas.empresasComRetorno, rotulo: 'empresas que voltaram' },
+                { valor: metricas.empresasComRetorno, rotulo: 'retornaram em 7 dias' },
                 { valor: metricas.primeirasDecisoes, rotulo: 'decisões registradas' },
                 { valor: metricas.primeirasEvolucoes, rotulo: 'evoluções registradas' },
                 { valor: metricas.apoiadores, rotulo: 'apoiadores' },
                 { valor: metricas.founders, rotulo: 'founders' },
+                { valor: `${metricas.taxaConversaoApoiadorParaFundador}%`, rotulo: 'apoiador→founder' },
               ].map((m) => (
                 <div key={m.rotulo} className="rounded-lg bg-muted/40 p-3 space-y-1">
                   <p className="text-xl font-bold">{m.valor}</p>
@@ -224,6 +253,51 @@ export function PainelDoFundador({ painel, perguntas, biblioteca, metricas, matu
             </p>
           )}
         </section>
+
+        {/* Candidatos a conhecimento — P62: o founder valida o que vira padrão coletivo */}
+        {candidatos.length > 0 && (
+          <section className="rounded-xl border bg-card p-6 space-y-4">
+            <div>
+              <h2 className="text-base font-semibold">Descobertas aguardando validação</h2>
+              <p className="text-xs text-muted-foreground">
+                Promovidas da Pergunta Aberta como candidatas. Validar transforma o padrão em conhecimento coletivo visível; descartar arquiva sem expor nada.
+              </p>
+            </div>
+            <div className="space-y-2">
+              {candidatos.map((c) => (
+                <div key={c.id} className="rounded-lg border border-border bg-background p-4 space-y-2">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium leading-snug">{c.titulo}</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{c.descricao}</p>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{c.categoria ?? 'sem categoria'}</p>
+                    </div>
+                    <div className="shrink-0 text-right text-xs text-muted-foreground">
+                      <p className="font-semibold">{c.repeticoes} resposta(s)</p>
+                      <p>{Math.round(c.scoreConfianca * 100)}% confiança</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => validar(c.id, 'VALIDADO')}
+                      className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+                    >
+                      Validar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => descartar(c.id)}
+                      className="rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:bg-muted/50 transition-colors"
+                    >
+                      Descartar
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Pergunta atual */}
         <section className="rounded-xl border bg-card p-6 space-y-4">

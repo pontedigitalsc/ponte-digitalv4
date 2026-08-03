@@ -3,6 +3,7 @@ import { obterRespostas, vincularConversa } from '@/engine/conversation-engine'
 import { interpretarRespostas } from '@/engine/identity-engine'
 import { gerarResumoNatural } from '@/engine/interpretacoes'
 import { gerarRetratoEstrategico, registrarClarezaGerada } from '@/engine/retrato-estrategico'
+import { registrarClarezaDaConversa } from '@/engine/clareza-engine'
 import { processarConversa } from '@/engine/cognitive-orchestrator'
 import { criarPerguntaVivaSeNecessario, registrarMemoriasEmocionais } from '@/engine/relacao-engine'
 import { obterPerguntaAbertaAtiva, empresaJaRespondeu, estaCompativelComSegmento } from '@/engine/pergunta-aberta-service'
@@ -80,6 +81,12 @@ export async function POST(request: NextRequest) {
       // P57A — Retrato Estratégico nasce da primeira conversa; a Clareza Gerada
       // é registrada como sinal de valor percebido (sem score artificial).
       registrarClarezaGerada(empresaId, retratoEstrategico, respostas).catch(() => {
+        // registro é opcional — não interrompe a finalização
+      })
+
+      // P59 — se a clareza foi respondida antes da finalização (conversa
+      // anônima com conta recém-criada), garante o registro agora.
+      registrarClarezaDaConversa(token, empresaId).catch(() => {
         // registro é opcional — não interrompe a finalização
       })
     }
