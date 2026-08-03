@@ -1,6 +1,16 @@
 # Changelog Oficial — Ponte Digital
 
-*Histórico completo da evolução da empresa, do Programa 0 ao 56.*
+*Histórico completo da evolução da empresa, do Programa 0 em diante.*
+
+---
+
+## Programa 58 — Foundation Freeze Operacional V1
+
+**2 de agosto de 2026**
+
+Congelamento operacional: a Ponte Digital deixa oficialmente de ser "um sistema em construção" e passa a ser **"uma empresa de tecnologia aprendendo com seus primeiros usuários."** A partir deste programa, nenhuma funcionalidade é criada por ideia interna — toda evolução nasce de comportamento, pedidos, dificuldades e decisões dos Founders. Auditoria e reafirmação do baseline de estabilidade, segurança (multi-tenant), qualidade da experiência e segurança da IA (regra _"Com base no que entendemos..."_). Estrutura pronta para Founder 1, 10 e 50 sem alteração estrutural.
+
+**Documento criado:** `P58_OPERATION_FREEZE_V1.md`. **STATUS: OPERAÇÃO OFICIAL.**
 
 ---
 

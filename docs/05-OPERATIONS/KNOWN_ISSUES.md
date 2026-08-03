@@ -98,3 +98,10 @@
 **Descrição:** `/dashboard`, `/crm`, `/tarefas` e `/implantacoes` seguem acessíveis por URL mas não aparecem na sidebar Founder (grupos "Sua empresa / Consultar / Aprender / Ajustes"). Não são links quebrados; são telas fora do escopo Founder V1. O checklist "rotas órfãs" (Seção E) pode exigir decisão de desligá-las ou mantê-las com gate de módulo.
 **Ação:** decidir em próxima revisão se essas rotas são removidas, bloqueadas por módulo ou deixadas como estão.
 
+## P58 — Foundation Freeze Operacional em vigor
+
+**Status:** Resolvido em 2026-08-02 (P58) — formalizado como contrato operacional
+**Prioridade:** ~
+**Descrição:** a partir do P58 nenhuma funcionalidade é criada por ideia interna; toda evolução nasce de comportamento, pedidos, dificuldades e decisões dos Founders. Estabilidade, segurança, qualidade de experiência e segurança da IA congeladas como baseline (regra _"Com base no que entendemos..."_).
+**Ação:** ver `07-MILESTONES/P58_OPERATION_FREEZE_V1.md`. A entrada "Sistema não modela usuário Apoiador" (acima) é endereçada pelo P57B (números Apoiador/Fundador).
+

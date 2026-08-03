@@ -1,5 +1,11 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P58 — FOUNDATION FREEZE OPERACIONAL V1 — STATUS OFICIAL — 2 de agosto de 2026**
+>
+> **A Ponte Digital passa a ser uma empresa operacional.** Deixa de ser "um sistema que está sendo construído" e passa a ser **"uma empresa de tecnologia aprendendo com seus primeiros usuários."** A partir de P58, nenhuma funcionalidade é criada por ideia interna — toda evolução nasce de comportamento, pedidos, dificuldades e decisões dos Founders (Árvore de Decisões de Produto + critérios de novos desenvolvimentos). Estabilidade, segurança multi-tenant, qualidade da experiência e segurança da IA (regra _"Com base no que entendemos..."_) congeladas como contrato operacional. Produção live em `https://ponte-digital.vercel.app` (produção == `main`), estrutura pronta para Founder 1, 10 e 50.
+>
+> Ver `docs/07-MILESTONES/P58_OPERATION_FREEZE_V1.md`, `docs/07-MILESTONES/P57A_DIAGNOSTICO_VALOR.md` e `docs/07-MILESTONES/P57B_FOUNDER_E_PERTENCIMENTO.md`.
+
 > **MARCO: Stable Release V3 — Preparação Definitiva para Produção — 29 de julho de 2026**
 > 
 > Programas 21 a 47 concluídos. Fundação completa, congelada e liberada. Sistema científico implementado. Todas as auditorias de produção aprovadas.
