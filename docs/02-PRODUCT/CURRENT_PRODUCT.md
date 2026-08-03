@@ -1,5 +1,15 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P57A+B — EXPERIÊNCIA DE VALOR + PERTENCIMENTO V1 — STATUS OFICIAL — 2 de agosto de 2026**
+>
+> A primeira interação entrega valor percebido imediato e pertencimento real.
+>
+> **P57A (Diagnóstico Estratégico):** nova entrega **Retrato Estratégico da Empresa** em 5 partes (entendimento → forças → pontos de evolução → decisão mais importante → próxima reflexão), gerado ao finalizar a primeira conversa de forma determinística (sem IA). Métrica **Clareza Gerada** registrada via SinalValor (pergunta inicial, descoberta, decisão sugerida — sem score artificial). **Raio-X Inicial** entregue gratuitamente antes do cadastro. **Exploração de cenários** (`/explorar`): "Como seria se..." sempre "Com base no que sabemos hoje..." — nunca prevê futuro.
+>
+> **P57B (Pertencimento):** toda conta criada recebe número único e permanente (`Apoiador #0001`...), gravado na `Empresa` (`numeroApoiador`/`numeroFundador`, migração 006). Página **"Tornar-se Fundador"** (`/tornar-se-fundador`) — evolução, não venda — com benefícios de participação simbólica e botão **"Quero ser Fundador"** → WhatsApp `48991133397`. Promoção Apoiador→Fundador manual inicialmente.
+>
+> Ver `docs/07-MILESTONES/P57A_DIAGNOSTICO_VALOR.md` e `docs/07-MILESTONES/P57B_FOUNDER_E_PERTENCIMENTO.md`.
+
 > **MARCO: P58 — FOUNDATION FREEZE OPERACIONAL V1 — STATUS OFICIAL — 2 de agosto de 2026**
 >
 > **A Ponte Digital passa a ser uma empresa operacional.** Deixa de ser "um sistema que está sendo construído" e passa a ser **"uma empresa de tecnologia aprendendo com seus primeiros usuários."** A partir de P58, nenhuma funcionalidade é criada por ideia interna — toda evolução nasce de comportamento, pedidos, dificuldades e decisões dos Founders (Árvore de Decisões de Produto + critérios de novos desenvolvimentos). Estabilidade, segurança multi-tenant, qualidade da experiência e segurança da IA (regra _"Com base no que entendemos..."_) congeladas como contrato operacional. Produção live em `https://ponte-digital.vercel.app` (produção == `main`), estrutura pronta para Founder 1, 10 e 50.

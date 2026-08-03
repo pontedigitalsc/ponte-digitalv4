@@ -160,6 +160,20 @@ export default async function MinhaEmpresaHojePage() {
             <p className="text-sm font-medium">Como está hoje?</p>
             <p className="text-xs text-muted-foreground">Compartilhe como se sente agora</p>
           </Link>
+          <Link
+            href="/explorar"
+            className="rounded-xl border bg-card p-4 space-y-1 hover:bg-muted/30 transition-colors"
+          >
+            <p className="text-sm font-medium">Explorar cenários</p>
+            <p className="text-xs text-muted-foreground">Pense antes de decidir</p>
+          </Link>
+          <Link
+            href="/tornar-se-fundador"
+            className="rounded-xl border bg-card p-4 space-y-1 hover:bg-muted/30 transition-colors"
+          >
+            <p className="text-sm font-medium">Tornar-se Fundador</p>
+            <p className="text-xs text-muted-foreground">Participe da construção</p>
+          </Link>
         </div>
       </div>
     </div>

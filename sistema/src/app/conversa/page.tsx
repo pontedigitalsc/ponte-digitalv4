@@ -45,6 +45,13 @@ interface ResumoNaturalData {
   secao5: { titulo: string; acao: string }
 }
 
+interface RetratoEstrategicoData {
+  titulo: string
+  secoes: { numero: number; titulo: string; corpo: string; itens?: string[] }[]
+  proximaReflexao: string
+  aviso: string
+}
+
 export default function ConversaPage() {
   const [carregando, setCarregando] = useState(true)
   const [perguntaAtual, setPerguntaAtual] = useState<Pergunta | null>(null)
@@ -55,6 +62,7 @@ export default function ConversaPage() {
   const [concluida, setConcluida] = useState(false)
   const [interpretacoes, setInterpretacoes] = useState<Interpretacoes | null>(null)
   const [resumoNatural, setResumoNatural] = useState<ResumoNaturalData | null>(null)
+  const [retratoEstrategico, setRetratoEstrategico] = useState<RetratoEstrategicoData | null>(null)
   const [enviando, setEnviando] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
   const [memoria, setMemoria] = useState<string | null>(null)
@@ -171,6 +179,7 @@ export default function ConversaPage() {
       const { data } = await res.json()
       setInterpretacoes(data.interpretacoes)
       if (data.resumoNatural) setResumoNatural(data.resumoNatural)
+      if (data.retratoEstrategico) setRetratoEstrategico(data.retratoEstrategico)
       if (data.perguntaAberta) setPerguntaAberta(data.perguntaAberta)
       setConcluida(true)
     } catch {
@@ -256,7 +265,11 @@ export default function ConversaPage() {
         {/* Área da conversa */}
         <div className="card-premium rounded-xl p-6 min-h-[200px] flex flex-col justify-center">
           {concluida && interpretacoes ? (
-            <RevelacaoCard interpretacoes={interpretacoes} resumoNatural={resumoNatural} />
+            <RevelacaoCard
+              interpretacoes={interpretacoes}
+              resumoNatural={resumoNatural}
+              retratoEstrategico={retratoEstrategico}
+            />
           ) : mostrandoReacao && reacao ? (
             <div className="space-y-4 text-center">
               <p className="text-sm text-muted-foreground italic">{reacao}</p>

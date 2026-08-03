@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import type { ResumoNatural } from '@/engine/tipos'
+import type { RetratoEstrategico } from '@/engine/retrato-estrategico'
 import { AvatarPonte } from '@/components/ui/avatar'
+import { RetratoEstrategicoCard } from '@/components/conversa/retrato-estrategico-card'
 
 interface RevelacaoCardProps {
   interpretacoes: {
@@ -9,6 +11,7 @@ interface RevelacaoCardProps {
     alinhamento: string
   }
   resumoNatural?: ResumoNatural | null
+  retratoEstrategico?: RetratoEstrategico | null
 }
 
 function CartaContent({ interpretacoes, resumoNatural }: RevelacaoCardProps) {
@@ -111,6 +114,7 @@ function CartaContent({ interpretacoes, resumoNatural }: RevelacaoCardProps) {
 }
 
 export function RevelacaoCard(props: RevelacaoCardProps) {
+  const { retratoEstrategico, ...cartaProps } = props
   return (
     <div className="relative space-y-6">
       <div className="space-y-5 animate-fade-in relative">
@@ -125,7 +129,13 @@ export function RevelacaoCard(props: RevelacaoCardProps) {
             Olhando para sua empresa
           </h2>
         </div>
-        <CartaContent {...props} />
+        <CartaContent {...cartaProps} />
+        {retratoEstrategico && (
+          <>
+            <div className="border-t border-border pt-6" />
+            <RetratoEstrategicoCard retrato={retratoEstrategico} />
+          </>
+        )}
       </div>
     </div>
   )

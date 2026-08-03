@@ -106,6 +106,27 @@ function gerarRetrato(situacao: string): { titulo: string; texto: string }[] {
   ]
 }
 
+function gerarRaioX(
+  situacao: string,
+  revelacao: { forca: string; atencao: string; oportunidade: string },
+  carta: { observacao: string; padrao: string; movimento: string; continuidade: string },
+): { titulo: string; texto: string }[] {
+  const momentos: Record<string, string> = {
+    ideias: 'Sua empresa está em um momento de muitas ideias — a atenção está dividida em várias direções ao mesmo tempo.',
+    trabalho: 'Sua empresa está em um momento de muito trabalho — a dedicação existe, mas o retorno não cresce na mesma proporção.',
+    dependente: 'Sua empresa está em um momento em que quase tudo depende de você — e isso limita o tamanho que ela pode alcançar.',
+    decisao: 'Sua empresa está em um momento de decisões importantes — e a dificuldade não é decidir, é saber o que priorizar.',
+    clareza: 'Sua empresa está em um momento em que falta clareza sobre o próximo passo — mais direcionamento do que informação.',
+  }
+  return [
+    { titulo: 'Momento atual', texto: momentos[situacao] ?? 'Sua empresa está em um momento importante da sua trajetória.' },
+    { titulo: 'Forças', texto: revelacao.forca },
+    { titulo: 'Pontos de atenção', texto: revelacao.atencao },
+    { titulo: 'Primeira oportunidade', texto: revelacao.oportunidade },
+    { titulo: 'Próximo movimento', texto: carta.movimento },
+  ]
+}
+
 type Etapa = 'situacao' | 'perguntas' | 'revelacao' | 'retrato' | 'carta'
 
 export default function DiagnosticoPage() {
@@ -117,7 +138,7 @@ export default function DiagnosticoPage() {
 
   const revelacao = gerarRevelacao(respostas)
   const carta = gerarCarta(respostas, revelacao)
-  const retrato = gerarRetrato(respostas.situacao ?? '')
+  const raioX = gerarRaioX(respostas.situacao ?? '', revelacao, carta)
 
   // ETAPA CARTA — valor entregue, cadastro só depois
   if (etapa === 'carta') {
@@ -190,30 +211,33 @@ export default function DiagnosticoPage() {
     )
   }
 
-  // ETAPA RETRATO — fotografia inicial
+  // ETAPA RETRATO — Raio-X Inicial da Empresa
   if (etapa === 'retrato') {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 p-4">
         <div className="max-w-lg mx-auto space-y-8 py-8 animate-fade-in">
           <div className="text-center space-y-3">
             <AvatarPonte state="success" size="lg" />
-            <p className="text-xs text-muted-foreground italic">— Retrato Inicial da Sua Empresa —</p>
-            <h1 className="text-xl font-semibold tracking-tight">O primeiro retrato da sua empresa</h1>
+            <p className="text-xs text-muted-foreground italic">— Raio-X Inicial da Sua Empresa —</p>
+            <h1 className="text-xl font-semibold tracking-tight">O primeiro raio-X da sua empresa</h1>
           </div>
 
           <div className="rounded-xl border bg-card p-6 space-y-4">
             <div className="text-center space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Retrato inicial</p>
-              <p className="text-[10px] text-muted-foreground/60">Como sua empresa pensa hoje, onde existe força, onde existe peso.</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Fotografia inicial</p>
+              <p className="text-[10px] text-muted-foreground/60">Onde a empresa está, onde existe força, onde existe ponto de evolução.</p>
             </div>
             <div className="space-y-3">
-              {retrato.map((r) => (
+              {raioX.map((r) => (
                 <div key={r.titulo} className="rounded-lg border-l-2 border-primary/30 bg-secondary/30 pl-4 py-3">
                   <p className="text-xs font-medium text-foreground">{r.titulo}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{r.texto}</p>
                 </div>
               ))}
             </div>
+            <p className="text-[10px] text-muted-foreground italic leading-relaxed text-center">
+              Esta é uma fotografia inicial. A Ponte fica mais inteligente conforme acompanha sua empresa.
+            </p>
           </div>
 
           <div className="text-center border-2 border-dashed border-primary/20 rounded-xl bg-card p-4 space-y-1">

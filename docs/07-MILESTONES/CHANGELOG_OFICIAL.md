@@ -4,6 +4,16 @@
 
 ---
 
+## Programa 57A — Primeira Experiência de Valor e Diagnóstico Estratégico V1
+
+**2 de agosto de 2026**
+
+A primeira interação passa a entregar valor percebido imediato. Novo posicionamento: a Ponte não vende diagnóstico — entrega a **Primeira Sessão Estratégica da Empresa** ("o lugar onde empresários pensam antes de decidir"). **Retrato Estratégico da Empresa** em 5 partes (entendimento → forças → pontos de evolução → decisão mais importante → próxima reflexão) gerado ao finalizar a conversa (`gerarRetratoEstrategico`, determinístico, sem IA) e exibido na revelação. Métrica **Clareza Gerada** registrada via `SinalValor` (pergunta inicial, descoberta, decisão sugerida; sem score artificial). **Raio-X Inicial da Empresa** entregue gratuitamente antes do cadastro (5 partes + "fotografia inicial"). **Exploração de cenários** (`/explorar`): "Como seria se eu aumentasse preços / contratasse alguém / criasse uma nova oferta?" — determinística, sempre "Com base no que sabemos hoje...", nunca prevendo futuro. `tsc` e `npm run build` limpos.
+
+**Documento criado:** `P57A_DIAGNOSTICO_VALOR.md`. **STATUS: VALOR PERCEBIDO V1.**
+
+---
+
 ## Programa 57B — Fundação Founder e Pertencimento V1
 
 **2 de agosto de 2026**

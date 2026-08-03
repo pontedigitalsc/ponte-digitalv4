@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { obterRespostas, vincularConversa } from '@/engine/conversation-engine'
 import { interpretarRespostas } from '@/engine/identity-engine'
 import { gerarResumoNatural } from '@/engine/interpretacoes'
+import { gerarRetratoEstrategico, registrarClarezaGerada } from '@/engine/retrato-estrategico'
 import { processarConversa } from '@/engine/cognitive-orchestrator'
 import { criarPerguntaVivaSeNecessario, registrarMemoriasEmocionais } from '@/engine/relacao-engine'
 import { obterPerguntaAbertaAtiva, empresaJaRespondeu, estaCompativelComSegmento } from '@/engine/pergunta-aberta-service'
@@ -55,6 +56,7 @@ export async function POST(request: NextRequest) {
 
     const interpretacoes = await interpretarRespostas(respostas)
     const resumoNatural = gerarResumoNatural(respostas, interpretacoes)
+    const retratoEstrategico = gerarRetratoEstrategico(respostas, interpretacoes)
 
     let empresaId = conversa.empresaId
     if (!empresaId && usuario) {
@@ -73,6 +75,12 @@ export async function POST(request: NextRequest) {
       })
       registrarMemoriasEmocionais(empresaId, respostas).catch(() => {
         // não interrompe a resposta
+      })
+
+      // P57A — Retrato Estratégico nasce da primeira conversa; a Clareza Gerada
+      // é registrada como sinal de valor percebido (sem score artificial).
+      registrarClarezaGerada(empresaId, retratoEstrategico, respostas).catch(() => {
+        // registro é opcional — não interrompe a finalização
       })
     }
 
@@ -98,6 +106,7 @@ export async function POST(request: NextRequest) {
       data: {
         interpretacoes,
         resumoNatural,
+        retratoEstrategico,
         respostas,
         perguntaAberta,
       },
