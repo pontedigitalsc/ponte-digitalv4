@@ -35,3 +35,7 @@ A versão operacional destes mesmos princípios, incluindo o que isso significa 
 ## Relação com os outros documentos de visão
 
 `THESIS.md` descreve o que a Ponte é e por que existe em termos de proposta de valor para o empresário. Este documento (`FOUNDATION.md`) descreve os princípios que restringem como qualquer versão dessa tese pode ser construída, em qualquer fase. Nenhum dos dois é checklist de sprint — isso é papel de `05-OPERATIONS/SPRINTS/SPRINT-001-DIAGNOSTICO.md`.
+
+---
+
+> **STATUS (P56 — 2/8/2026): produção ao vivo e Founder V1 congelado.** A Ponte entrou em operação (`https://ponte-digital.vercel.app`). A partir deste marco vale o princípio **evidência antes de opinião**: nenhuma funcionalidade nova entra por opinião interna, apenas por uso real observado. Estes princípios acima permanecem inegociáveis em qualquer fase. Ver `docs/07-MILESTONES/FOUNDER_V1_FREEZE.md`.
