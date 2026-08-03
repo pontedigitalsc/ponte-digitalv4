@@ -6,9 +6,26 @@ import Link from 'next/link'
 
 export const metadata = { title: 'Fundador' }
 
+const WHATSAPP_URL = 'https://wa.me/5548991133397'
+
 export default async function FundadorPage() {
   const usuario = await getCurrentUser().catch(() => null)
   const nome = usuario?.nome?.split(' ')[0]
+
+  let pertencimento: { numero: number; titulo: string } | null = null
+  if (usuario) {
+    const empresa = await prisma.empresa
+      .findUnique({
+        where: { id: usuario.empresaId },
+        select: { numeroApoiador: true, numeroFundador: true },
+      })
+      .catch(() => null)
+    if (empresa?.numeroFundador) {
+      pertencimento = { numero: empresa.numeroFundador, titulo: 'Fundador' }
+    } else if (empresa?.numeroApoiador) {
+      pertencimento = { numero: empresa.numeroApoiador, titulo: 'Apoiador' }
+    }
+  }
 
   let evolucao: {
     capitulos: number
@@ -59,6 +76,13 @@ export default async function FundadorPage() {
               ? `${nome}, você já faz parte da história da Ponte.`
               : 'Você já faz parte da história da Ponte.'}
           </p>
+          {pertencimento && (
+            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-50 px-4 py-2 text-sm dark:bg-amber-950/30">
+              <span className="text-amber-700 dark:text-amber-400">
+                {pertencimento.titulo} #{String(pertencimento.numero).padStart(4, '0')}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Founder Invisível — mostra evolução, não vende plano (ETAPA 9) */}
@@ -124,6 +148,20 @@ export default async function FundadorPage() {
             >
               Quero continuar essa conversa
             </Link>
+            <Link
+              href="/tornar-se-fundador"
+              className="block w-full rounded-xl border border-amber-400/40 bg-amber-50 px-6 py-3 text-sm font-medium text-amber-800 hover:bg-amber-100 transition-colors dark:bg-amber-950/40 dark:text-amber-300 dark:hover:bg-amber-950/70"
+            >
+              Tornar-se Fundador →
+            </Link>
+            <a
+              href={`${WHATSAPP_URL}?text=${encodeURIComponent('Olá, quero participar como Founder da Ponte Digital.')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full rounded-xl border border-border bg-card px-6 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              Falar com a equipe (WhatsApp)
+            </a>
             <Link
               href="/diagnostico"
               className="block w-full rounded-xl border border-border bg-card px-6 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"

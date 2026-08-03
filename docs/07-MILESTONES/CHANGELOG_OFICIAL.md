@@ -4,6 +4,16 @@
 
 ---
 
+## Programa 57B — Fundação Founder e Pertencimento V1
+
+**2 de agosto de 2026**
+
+Pertencimento materializado. A Ponte não tem planos — tem níveis de relacionamento. Cada conta criada recebe automaticamente um número único de pertencimento (`Apoiador #0001`, `Apoiador #0002`...), **nunca reutilizado e nunca alterado**, gravado na `Empresa` (`numeroApoiador`/`numeroFundador`, migração 006 aplicada em produção). Alocação atômica no `POST /api/auth/criar-conta` (transação + retry em colisão de índice único). Exibição: card de pertencimento em `/minha-empresa-hoje` e selos em `/fundador` e `/tornar-se-fundador`. Nova página **"Tornar-se Fundador"** (`/tornar-se-fundador`) — evolução, não venda — com os benefícios de participação simbólica e o botão **"Quero ser Fundador"** que abre o WhatsApp `48991133397` com a mensagem automática "Olá, quero participar como Founder da Ponte Digital." A promoção Apoiador→Fundador é manual inicialmente (a equipe registra data, empresa, número e conversa inicial). Marco histórico: primeiros 1000 usuários. `tsc` e `npm run build` limpos; produção redeployada.
+
+**Documentos criados:** `P57B_FOUNDER_E_PERTENCIMENTO.md`. **STATUS: PERTENCIMENTO V1.**
+
+---
+
 ## Programa 58 — Foundation Freeze Operacional V1
 
 **2 de agosto de 2026**

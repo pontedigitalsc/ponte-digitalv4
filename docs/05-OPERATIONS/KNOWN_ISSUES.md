@@ -55,10 +55,10 @@
 
 ## Sistema não modela um usuário "Apoiador" fora do conceito de empresa/tenant
 
-**Status:** Pendente
-**Prioridade:** Média — não bloqueia a sprint ativa, mas bloqueia operar a Escada Comunitária de ponta a ponta
-**Descrição:** desde `ADR-003` (2026-07-14), a jornada do usuário prevê um estágio "Apoiador" — alguém que completou o Diagnóstico mas ainda não é Fundador, sem necessariamente ter uma "Empresa" cadastrada no sentido atual do schema (multiempresa, papéis ADMIN/GESTOR/MEMBRO). Hoje o sistema só reconhece usuários dentro de uma empresa já criada.
-**Ação:** decisão de engenharia pendente — se um Apoiador precisa de um registro leve próprio (não uma Empresa completa), ou se a Empresa é criada de forma simplificada já no Diagnóstico. Não decidir sozinho; ver `07-BUSINESS/JORNADA_APOIADOR.md`.
+**Status:** Parcialmente resolvido em 2026-08-02 (P57B) — números de pertencimento criados
+**Prioridade:** Média
+**Descrição:** desde `ADR-003` (2026-07-14), a jornada do usuário prevê um estágio "Apoiador" — alguém que completou o Diagnóstico mas ainda não é Fundador, sem necessariamente ter uma "Empresa" cadastrada no sentido atual do schema (multiempresa, papéis ADMIN/GESTOR/MEMBRO). Hoje o sistema só reconhece usuários dentro de uma empresa já criada. O P57B materializou o **número de pertencimento** (`numeroApoiador`/`numeroFundador` na `Empresa`, alocação na criação de conta, exibição em `/minha-empresa-hoje`, `/fundador` e `/tornar-se-fundador`). Ainda não existe um registro "Apoiador" leve independente de Empresa para quem faz o diagnóstico sem criar conta.
+**Ação:** evoluir quando houver evidência de que o registro leve é necessário (fase operacional). Ver `07-BUSINESS/JORNADA_APOIADOR.md` e `P57B_FOUNDER_E_PERTENCIMENTO.md`.
 **Detalhe estratégico completo:** `04-DECISIONS/ADR/ADR-003-ecossistema-publico-vs-plataforma-cognitiva.md`.
 
 *(Adicionar uma entrada por problema identificado, com status, prioridade e ação.)*
