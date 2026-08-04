@@ -844,6 +844,11 @@ model Conversa {
   respostas Json     @default("{}")
   empresaId String?
   concluida Boolean  @default(false)
+  // P64 — O Retorno: a conversa finalizada agenda um retorno (7 dias depois).
+  // `retornoDisponivelEm` abre a janela do check-in; `retornoConcluidoEm`
+  // marca quando o empresário registrou "o que aconteceu depois da conversa".
+  retornoDisponivelEm DateTime?
+  retornoConcluidoEm DateTime?
   criadaEm  DateTime @default(now())
   atualizadaEm DateTime @updatedAt
   deletedAt DateTime?
@@ -855,6 +860,7 @@ model Conversa {
   @@index([empresaId])
   @@index([empresaId, criadaEm])
   @@index([empresaId, deletedAt])
+  @@index([empresaId, retornoDisponivelEm])
   @@map("conversas")
 }
 

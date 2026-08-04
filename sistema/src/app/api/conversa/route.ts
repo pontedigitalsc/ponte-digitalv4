@@ -11,6 +11,7 @@ import { assertRateLimit } from '@/lib/rate-limit'
 import { requireUserApi } from '@/lib/authorize'
 import { AuthenticationError } from '@/lib/app-errors'
 import { montarContinuidadeConversa } from '@/engine/relacao-engine'
+import { obterRetornoDisponivel } from '@/engine/retorno-engine'
 
 function obterToken(request: NextRequest): string | null {
   return request.cookies.get('conv_token')?.value ?? null
@@ -75,6 +76,10 @@ export async function GET(request: NextRequest) {
         const resumoNatural = gerarResumoNatural(respostas, interpretacoes)
         const retratoEstrategico = gerarRetratoEstrategico(respostas, interpretacoes)
 
+        // P64 — O Retorno: junto do Retrato, informa se o check-in de 7 dias
+        // está disponível (agendado, janela aberta e ainda não respondido).
+        const retorno = await obterRetornoDisponivel(token).catch(() => null)
+
         jsonResponse = NextResponse.json({
           token,
           concluida: true,
@@ -84,6 +89,7 @@ export async function GET(request: NextRequest) {
           retratoEstrategico,
           respostas,
           memoria,
+          retorno,
         })
       } else {
         const nova = await criarConversa(token)

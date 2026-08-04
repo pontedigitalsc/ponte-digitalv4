@@ -140,3 +140,10 @@
 **Descrição:** "empresas com retorno" contava empresas com ≥2 conversas em qualquer período, não "retorno em 7 dias" como o doc P63 prometia. Faltavam taxa de conclusão de sessão e taxa de conversão Apoiador→Fundador.
 **Ação:** `engine/operacao-founder.ts` agora calcula retorno real dentro de janela de 7 dias a partir da primeira sessão e expõe `taxaConclusaoSessao` e `taxaConversaoApoiadorParaFundador` no painel.
 
+## Auditoria P59–P63 — Bloqueador nº 1: não existe mecanismo de retorno (resolvido por P64)
+
+**Status:** Resolvido em 2026-08-03 (P64)
+**Prioridade:** Alta (bloqueador nº 1 da auditoria — a primeira sessão não virava relação)
+**Descrição:** a auditoria concluiu "não existe mecanismo de retorno/evolução": a primeira sessão entregava o Retrato, mas nada no produto criava ou capturava o retorno; o "Depois de 7 dias" do Protocolo Founder 1–10 era só manual (WhatsApp); `EventoAtivacao.PRIMEIRO_RETORNO` existia no enum e nunca era gravado.
+**Ação:** P64 (O Retorno) — finalizar a conversa agenda o retorno (7 dias, `Conversa.retornoDisponivelEm`); ao voltar, `/conversa` mostra o check-in de 1 minuto _"O que aconteceu depois da nossa conversa?"_ junto do Retrato (sem bloquear); a resposta vira `SinalValor RETORNO_7_DIAS` + `EventoAtivacao.PRIMEIRO_RETORNO`; funil anônimo preservado (pendência `__retorno` → conta); Painel do Fundador ganha `retornosRegistrados`. Ver `docs/07-MILESTONES/P64_O_RETORNO.md`.
+

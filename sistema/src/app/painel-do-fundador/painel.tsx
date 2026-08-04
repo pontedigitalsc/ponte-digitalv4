@@ -168,6 +168,7 @@ export function PainelDoFundador({ painel, perguntas, biblioteca, metricas, matu
                 { valor: `${metricas.taxaConclusaoSessao}%`, rotulo: 'conclusão de sessão' },
                 { valor: metricas.clarezasRegistradas, rotulo: 'clarezas percebidas' },
                 { valor: metricas.empresasComRetorno, rotulo: 'retornaram em 7 dias' },
+                { valor: metricas.retornosRegistrados, rotulo: 'retornos registrados' },
                 { valor: metricas.primeirasDecisoes, rotulo: 'decisões registradas' },
                 { valor: metricas.primeirasEvolucoes, rotulo: 'evoluções registradas' },
                 { valor: metricas.apoiadores, rotulo: 'apoiadores' },

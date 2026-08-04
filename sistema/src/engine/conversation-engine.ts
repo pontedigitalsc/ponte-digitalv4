@@ -300,9 +300,10 @@ export async function obterRespostas(token: string): Promise<Record<string, stri
 
   const respostas = (conversa.respostas as Record<string, string | null>) ?? {}
 
-  // `__clareza` é mecanismo interno (clareza pendente de conta anônima),
-  // nunca uma resposta de pergunta — não deve chegar aos consumidores.
+  // `__clareza` e `__retorno` são mecanismos internos (pendências de conta
+  // anônima), nunca respostas de pergunta — não devem chegar aos consumidores.
   delete (respostas as Record<string, unknown>)['__clareza']
+  delete (respostas as Record<string, unknown>)['__retorno']
 
   return respostas
 }

@@ -4,6 +4,7 @@ import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { obterRespostas } from '@/engine/conversation-engine'
 import { processarCadastro } from '@/engine'
 import { registrarClarezaDaConversa } from '@/engine/clareza-engine'
+import { registrarRetornoDaConversa } from '@/engine/retorno-engine'
 import { registerSchema } from '@/lib/validations'
 import { handleApiError } from '@/lib/api-error'
 import { createLogger } from '@/lib/logger'
@@ -116,6 +117,11 @@ export async function POST(request: NextRequest) {
 
     // P59 — registra a clareza que ficou pendente durante a conversa anônima.
     registrarClarezaDaConversa(token, empresa.id).catch(() => {
+      // registro é opcional — não interrompe a criação da conta
+    })
+
+    // P64 — registra o retorno (7 dias) que ficou pendente na conversa anônima.
+    registrarRetornoDaConversa(token, empresa.id).catch(() => {
       // registro é opcional — não interrompe a criação da conta
     })
 

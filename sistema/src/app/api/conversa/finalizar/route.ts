@@ -4,6 +4,7 @@ import { interpretarRespostas } from '@/engine/identity-engine'
 import { gerarResumoNatural } from '@/engine/interpretacoes'
 import { gerarRetratoEstrategico, registrarClarezaGerada } from '@/engine/retrato-estrategico'
 import { registrarClarezaDaConversa } from '@/engine/clareza-engine'
+import { agendarRetorno, registrarRetornoDaConversa } from '@/engine/retorno-engine'
 import { processarConversa } from '@/engine/cognitive-orchestrator'
 import { criarPerguntaVivaSeNecessario, registrarMemoriasEmocionais } from '@/engine/relacao-engine'
 import { obterPerguntaAbertaAtiva, empresaJaRespondeu, estaCompativelComSegmento } from '@/engine/pergunta-aberta-service'
@@ -59,6 +60,12 @@ export async function POST(request: NextRequest) {
     const resumoNatural = gerarResumoNatural(respostas, interpretacoes)
     const retratoEstrategico = gerarRetratoEstrategico(respostas, interpretacoes)
 
+    // P64 — O Retorno: ao finalizar, a conversa agenda o retorno (7 dias).
+    // A Ponte não cobra: apenas lembra que quer saber o que aconteceu depois.
+    await agendarRetorno(conversa.id).catch(() => {
+      // agendamento é opcional — não interrompe a finalização
+    })
+
     let empresaId = conversa.empresaId
     if (!empresaId && usuario) {
       empresaId = usuario.empresaId
@@ -87,6 +94,11 @@ export async function POST(request: NextRequest) {
       // P59 — se a clareza foi respondida antes da finalização (conversa
       // anônima com conta recém-criada), garante o registro agora.
       registrarClarezaDaConversa(token, empresaId).catch(() => {
+        // registro é opcional — não interrompe a finalização
+      })
+
+      // P64 — se o retorno foi respondido antes da finalização, registra agora.
+      registrarRetornoDaConversa(token, empresaId).catch(() => {
         // registro é opcional — não interrompe a finalização
       })
     }

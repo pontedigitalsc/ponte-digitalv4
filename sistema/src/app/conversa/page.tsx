@@ -5,6 +5,7 @@ import { QuestionCard } from '@/components/conversa/question-card'
 import { RevelacaoCard } from '@/components/conversa/revelacao-card'
 import { ProgressBar } from '@/components/conversa/progress-bar'
 import { ClarezaCheckin } from '@/components/conversa/clareza-checkin'
+import { RetornoCheckin } from '@/components/conversa/retorno-checkin'
 import { AvatarPonte } from '@/components/ui/avatar'
 import Link from 'next/link'
 
@@ -72,6 +73,7 @@ export default function ConversaPage() {
   const [enviandoAberta, setEnviandoAberta] = useState(false)
   const [respostaAbertaEnviada, setRespostaAbertaEnviada] = useState(false)
   const [retomando, setRetomando] = useState(false)
+  const [retornoDisponivel, setRetornoDisponivel] = useState(false)
 
   const recuperarInterpretacoes = useCallback(async () => {
     setInterpretacoes(null)
@@ -98,6 +100,8 @@ export default function ConversaPage() {
           setInterpretacoes(data.interpretacoes)
           if (data.resumoNatural) setResumoNatural(data.resumoNatural)
           if (data.retratoEstrategico) setRetratoEstrategico(data.retratoEstrategico)
+          // P64 — O Retorno: check-in de 7 dias aparece junto, sem bloquear.
+          setRetornoDisponivel(data.retorno?.disponivel === true)
           return
         }
 
@@ -318,6 +322,10 @@ export default function ConversaPage() {
         {/* Pós-diagnóstico — Continuidade (ETAPA 1 + ETAPA 8) */}
         {concluida && interpretacoes && (
           <div className="text-center space-y-4 animate-fade-in">
+            {/* P64 — O Retorno: quando a janela de 7 dias abre, o check-in
+                aparece primeiro — a Ponte quer saber como a história continuou. */}
+            {retornoDisponivel && <RetornoCheckin />}
+
             <p className="text-sm text-muted-foreground leading-relaxed">
               {resumoNatural
                 ? `Existe um padrão que quero continuar observando com você.`

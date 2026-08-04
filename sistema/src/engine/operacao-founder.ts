@@ -16,6 +16,7 @@ export interface MetricasTransformacao {
   clarezasRegistradas: number
   clarezasPorCategoria: { categoria: string; total: number }[]
   empresasComRetorno: number
+  retornosRegistrados: number
   primeirasDecisoes: number
   primeirasEvolucoes: number
   apoiadores: number
@@ -31,6 +32,7 @@ export async function obterMetricasTransformacao(): Promise<MetricasTransformaca
     sessoesIniciadas,
     sessoesConcluidas,
     clarezasRegistradas,
+    retornosRegistrados,
     clarezas,
     conversas,
     primeirasDecisoes,
@@ -42,6 +44,7 @@ export async function obterMetricasTransformacao(): Promise<MetricasTransformaca
     prisma.conversa.count({ where: { deletedAt: null } }),
     prisma.conversa.count({ where: { deletedAt: null, concluida: true } }),
     prisma.sinalValor.count({ where: { tipo: 'CLAREZA_GERADA', deletedAt: null } }),
+    prisma.sinalValor.count({ where: { tipo: 'RETORNO_7_DIAS', deletedAt: null } }),
     prisma.sinalValor.findMany({
       where: { tipo: 'CLAREZA_GERADA', deletedAt: null },
       select: { metadata: true },
@@ -98,6 +101,7 @@ export async function obterMetricasTransformacao(): Promise<MetricasTransformaca
     clarezasRegistradas,
     clarezasPorCategoria,
     empresasComRetorno: empresasQueRetornaram.size,
+    retornosRegistrados,
     primeirasDecisoes,
     primeirasEvolucoes,
     apoiadores,

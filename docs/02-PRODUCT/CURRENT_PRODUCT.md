@@ -1,5 +1,16 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P64 — O RETORNO — STATUS OFICIAL — 3 de agosto de 2026**
+>
+> **A primeira sessão agora vira relação.** A auditoria P59–P63 apontou que a primeira sessão entregava o Retrato, mas não existia mecanismo de retorno/evolução no produto (o Protocolo Founder 1–10 era manual). **P64 fechou o loop de retorno:**
+>
+> - **Agendamento:** finalizar a primeira conversa agenda um retorno para **7 dias depois** (`Conversa.retornoDisponivelEm`) — a Ponte não cobra, apenas lembra que quer saber o que aconteceu.
+> - **Check-in de 1 minuto:** quando o empresário volta e a janela está aberta, `/conversa` mostra, junto do Retrato (nunca o bloqueando), _"O que aconteceu depois da nossa conversa?"_ (Voltei a olhar a empresa / Comecei algo que a conversa apontou / Mudou minha visão / Ainda não fiz nada) + texto livre.
+> - **Evidência real:** a resposta vira `SinalValor RETORNO_7_DIAS` e grava `EventoAtivacao.PRIMEIRO_RETORNO` (que alimenta o nível Fundador Validado). Funil anônimo preservado (pendência → conta, mesmo padrão da Clareza).
+> - **Painel do Fundador:** nova métrica `retornosRegistrados` em "Transformação, não funcionalidades" (P63).
+>
+> Ver `docs/07-MILESTONES/P64_O_RETORNO.md`.
+
 > **MARCO: P59–P63 — EXPERIÊNCIA FOUNDER V2 — STATUS OFICIAL — 3 de agosto de 2026**
 >
 > Refinamento definitivo da experiência Founder, sempre por evidência real (regra V4 Founder — nada artificial).
