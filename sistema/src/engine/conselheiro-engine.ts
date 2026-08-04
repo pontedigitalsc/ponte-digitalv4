@@ -31,18 +31,18 @@ interface RegraDecisao {
 
 const REGRAS_DECISAO: RegraDecisao[] = [
   {
+    categoria: 'DEMISSAO',
+    palavras: [
+      'demitir', 'demissão', 'demissao', 'mandar embora', 'dispensar',
+      'desligar', 'desligar o funcionario',
+    ],
+  },
+  {
     categoria: 'CONTRATACAO',
     palavras: [
       'contratar', 'contratação', 'contrata', 'funcionario', 'funcionários',
       'empregado', 'admitir', 'pessoa para', 'pessoa pra', 'montar equipe',
       'ajudante', 'equipe',
-    ],
-  },
-  {
-    categoria: 'DEMISSAO',
-    palavras: [
-      'demitir', 'demissão', 'demissao', 'mandar embora', 'dispensar',
-      'desligar', 'desligar o funcionario',
     ],
   },
   {
