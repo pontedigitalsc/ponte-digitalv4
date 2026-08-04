@@ -61,6 +61,16 @@ export const ESTAGIO_LABEL: Record<EstagioConselheiro, string> = {
   proximo_movimento: 'O próximo movimento',
 }
 
+export interface CondicaoEtapa {
+  // P65 — a conversa muda conforme o empresário responde.
+  // `apenasSe`: só pergunta se a resposta à pergunta indicada contiver
+  //   alguma das palavras (ex.: "crescer" abre "Crescer costuma significar...").
+  // `pularSe`: pula se a resposta contiver alguma das palavras (ex.: quem
+  //   mostra delegação não recebe pergunta básica sobre organização).
+  apenasSe?: { perguntaId: string; palavras: string[] }
+  pularSe?: { perguntaId: string; palavras: string[] }
+}
+
 export interface Etapa {
   id: string
   pergunta: string
@@ -74,6 +84,8 @@ export interface Etapa {
   bloco?: BlocoConversa
   // P54 — resposta rápida com campo opcional: "Se quiser, conte mais."
   permiteDetalhe?: boolean
+  // P65 — adaptação: a etapa só aparece (ou é pulada) conforme respostas reais.
+  condicao?: CondicaoEtapa
 }
 
 // ─── P70 — BLOCOS DA PRIMEIRA SESSÃO ESTRATÉGICA ─────────────────────────────

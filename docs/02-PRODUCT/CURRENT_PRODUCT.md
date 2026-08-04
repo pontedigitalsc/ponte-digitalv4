@@ -1,5 +1,17 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P65 — MEMÓRIA EMPRESARIAL VIVA — STATUS OFICIAL — 4 de agosto de 2026**
+>
+> **"A Ponte não guarda dados. A Ponte guarda a evolução da empresa."** P65 refinou em profundidade o que já existia — sem funcionalidades novas:
+>
+> - **Primeira sessão adaptativa:** o fluxo deixou de ser obrigatório. `CondicaoEtapa` (`apenasSe`/`pularSe`) faz a conversa responder ao empresário: quem tem equipe/delegação pula a pergunta básica sobre a própria hora; quem fala em crescer recebe "Crescer costuma significar coisas diferentes..." (vender mais / ganhar mais / trabalhar menos / abrir novas unidades). Micro devolutivas de percepção durante a conversa, sempre como hipótese.
+> - **Retrato V3 em 6 partes** — inclui a nova seção "O que talvez você ainda não esteja percebendo" (ponto cego por hipótese).
+> - **Cerimônia em 4 passos** (Organizando... Conectando padrões... Analisando sua empresa... Preparando seu Retrato...) e **Retrato compartilhável** ("Copiar meu Retrato", sem PDF).
+> - **Memória Viva em painéis:** a timeline morreu. `/minha-jornada` agora mostra **5 painéis de evolução** (Empresa, Fundador, Decisões, Clientes, Operação), cada um respondendo "Estamos evoluindo?" com ANTES (1ª sessão) → HOJE (última sessão) → interpretação. Selos de confiança em cada painel (sabemos / acreditamos / investigando). Narrativa primeiro, gráficos nunca.
+> - `/historico` sai da sidebar e redireciona para `/minha-jornada`; timeline morta removida. Sem migrations.
+>
+> Ver `docs/07-MILESTONES/P65_MEMORIA_EMPRESARIAL_VIVA.md`.
+
 > **MARCO: P70 — PRIMEIRA SESSÃO ESTRATÉGICA V3 — STATUS OFICIAL — 3 de agosto de 2026**
 >
 > **A primeira conversa deixou de ser um questionário e virou uma descoberta.** A auditoria P59–P63 apontou que a primeira sessão começava com 4 perguntas de cadastro, as perguntas não evoluíam e o valor só aparecia no final. **P70 reconstruiu a primeira sessão:**
@@ -187,7 +199,7 @@
 **Fluxo Cognitivo Operacional (P34B):**
 - **Página Única de Atendimento** (`/atendimento`) — busca + reconhecimento automático + confirmação em ≤5s. Caixa Inteligente integrada (faturamento, ticket médio, clientes do dia)
 - **Centro Diário** (`/dashboard`) — substitui o dashboard antigo. Responde exatamente 5 perguntas: onde estamos, o que mudou, o que merece atenção, quem precisa de você, próximo melhor movimento. Inclui Ciclo Cognitivo Visual (8 capacidades)
-- **Timeline Viva** (`/historico`) — memória unificada da empresa: mescla eventos operacionais + cognitivos
+- **Memória Viva** (`/minha-jornada`) — 5 painéis de evolução (Empresa, Fundador, Decisões, Clientes, Operação), ANTES → HOJE → interpretação, com selos de confiança. A timeline morreu (P65); `/historico` redireciona.
 - **Sidebar simplificada** — navegação por fluxo: Trabalho / Consultar / Aprender / Sistema
 
 **Núcleo cognitivo (40+ engines, mantidos):**

@@ -4,6 +4,20 @@
 
 ---
 
+## Programa 65 — Memória Empresarial Viva + Refinamento Definitivo da Primeira Sessão
+
+**4 de agosto de 2026**
+
+**"A Ponte não guarda dados. A Ponte guarda a evolução da empresa."** Dois refinamentos profundos sobre o que já existia (sem funcionalidades novas).
+
+**Primeira sessão adaptativa (Parte 1):** o fluxo v6 deixa de ser obrigatório e passa a responder ao empresário. `tipos.ts` ganhou `CondicaoEtapa` (`apenasSe`/`pularSe`) e `conversation-engine.ts` passou a escolher a próxima etapa **elegível** (`proximaEtapaElegivel`). Resultado real: quem respondeu que tem equipe/delegação **pula** a pergunta básica sobre a própria hora (`empresa.horalivre`); quem fala em crescer recebe a nova pergunta que questiona *"Crescer costuma significar coisas diferentes... vender mais / ganhar mais / trabalhar menos / abrir novas unidades"* (`exploracao.crescer`). Novas `REGRAS_PERCEPCAO` geram micro devolutivas **durante** a conversa, sempre como hipótese ("Posso compartilhar algo que estou percebendo?..."). **Retrato V3 em 6 partes** com nova seção *"O que talvez você ainda não esteja percebendo"* (ponto cego por hipótese, em linguagem de hipótese). **Cerimônia em 4 passos** (Organizando... → Conectando padrões... → Analisando sua empresa... → Preparando seu Retrato...). **Retrato compartilhável** com botão "Copiar meu Retrato" (sem PDF).
+
+**Memória Viva em painéis (Parte 2):** a timeline morreu. Novo `memoria-evolutiva-engine.ts` monta **5 painéis de evolução** — Empresa, Fundador, Decisões, Clientes, Operação — cada um respondendo **"Estamos evoluindo?"**, mostrando **ANTES (1ª sessão) → HOJE (última sessão) → interpretação**, comparando comportamento e não apenas respostas (delegação × centralização na operação; número × intuição na decisão). **Selos de confiança** em cada painel (O que sabemos / O que acreditamos / O que ainda estamos investigando) — hipótese nunca vira verdade. Narrativa primeiro, gráficos nunca; com uma única sessão mostra o estado atual + aviso honesto. `/minha-jornada` reconstruída como Memória Viva; `/historico` sai da sidebar e redireciona; `timeline-viva.tsx` e `historico-content.tsx` removidos. Sem migrations. `tsc` e `npm run build` limpos.
+
+**Documentos criados/atualizados:** `P65_MEMORIA_EMPRESARIAL_VIVA.md`, `CHANGELOG_OFICIAL.md`, `CURRENT_PRODUCT.md`. **STATUS: MEMÓRIA VIVA.**
+
+---
+
 ## Programa 59–63 — Refinamento Founder V2
 
 **3 de agosto de 2026**

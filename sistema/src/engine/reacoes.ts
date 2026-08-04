@@ -22,6 +22,7 @@ export const reacoesIndividuais: Record<string, string> = {
   'rotina.tranquilo': 'Terminar o dia tranquilo é raro. Quando você me conta, eu noto.',
   'visao.funcionando': 'Essa é a imagem que vale a pena carregar. Vou lembrar dela.',
   'frente.proximo': 'Um horizonte claro orienta decisões pequenas. Vou lembrar do seu.',
+  'exploracao.crescer': 'Obrigada por precisar isso. "Crescer" é um horizonte — agora sei melhor para onde ele aponta.',
 }
 
 export const SILENCIO_INTELIGENTE = [
@@ -50,15 +51,81 @@ export function obterReacao(etapaId: string): string {
   return SILENCIO_INTELIGENTE[hashEtapa(etapaId) % SILENCIO_INTELIGENTE.length]
 }
 
-// ─── Devolutivas de fim de bloco — a Ponte conversa citando evidência ────────
-// Chamadas quando o empresário responde a última pergunta de um bloco.
-// Cada devolutiva referencia as palavras reais gravadas em `respostas`.
+// ─── P65 — MICRO DEVOLUTIVAS DURANTE A CONVERSA ──────────────────────────────
+// Pequenos momentos no meio da conversa, sempre como hipótese ("Posso
+// compartilhar algo que estou percebendo?", "Posso estar enganada, mas...",
+// "Isso normalmente acontece quando..."). A Ponte nunca afirma sem evidência:
+// cada percepção cita o que o empresário realmente disse. Determinístico, sem IA.
 
 type Respostas = Record<string, string | null>
 
 function r(respostas: Respostas, id: string): string | null {
   return respostas[id]?.trim() || null
 }
+
+function normalizar(v: string): string {
+  return v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}
+
+function contemAlguma(respostas: Respostas, id: string, palavras: string[]): boolean {
+  const v = r(respostas, id)
+  if (!v) return false
+  const texto = normalizar(v)
+  return palavras.some((p) => texto.includes(normalizar(p)))
+}
+
+interface RegraPercepcao {
+  perguntaId: string
+  condicao: (respostas: Respostas) => boolean
+  mensagem: (respostas: Respostas) => string
+}
+
+const REGRAS_PERCEPCAO: RegraPercepcao[] = [
+  {
+    perguntaId: 'empresa.crescer',
+    condicao: (respostas) => contemAlguma(respostas, 'empresa.crescer', ['cliente', 'venda', 'vender', 'faturamento', 'mercado', 'vender mais']),
+    mensagem: (respostas) =>
+      `Posso compartilhar algo que estou percebendo? Você me contou que o que segura a empresa é "${r(respostas, 'empresa.crescer')}". Isso normalmente acontece não por falta de clientes, mas pela complexidade de organizar o que já existe. Posso estar enganada — mas é essa a leitura que quero observar com você.`,
+  },
+  {
+    perguntaId: 'empresa.dependencia',
+    condicao: (respostas) => contemAlguma(respostas, 'empresa.dependencia', ['para', 'trava', 'ninguém', 'ninguem', 'nada', 'fecha', 'quebra']),
+    mensagem: (respostas) =>
+      `Existe um padrão que estou percebendo: você me disse que, se ficasse 30 dias fora, "${r(respostas, 'empresa.dependencia')}". Quando o conhecimento está só na cabeça do fundador, a empresa cresce até o tamanho dele. Posso estar enganada, mas é isso que vamos observar.`,
+  },
+  {
+    perguntaId: 'rotina.cabeca',
+    condicao: (respostas) => !!r(respostas, 'rotina.energia') && !!r(respostas, 'rotina.cabeca'),
+    mensagem: (respostas) =>
+      `Isso normalmente acontece quando o que consome sua energia é também o que mais ocupa sua cabeça. Você me contou que sua energia vai para "${r(respostas, 'rotina.energia')}" e que sua cabeça está em "${r(respostas, 'rotina.cabeca')}". Não por acaso.`,
+  },
+  {
+    perguntaId: 'financeiro.caixa',
+    condicao: (respostas) => contemAlguma(respostas, 'financeiro.caixa', ['falta', 'faltar', 'buraco', 'apertado', 'vai faltar']),
+    mensagem: (respostas) =>
+      `Posso estar enganada, mas quando você olha o caixa e vê primeiro "${r(respostas, 'financeiro.caixa')}", as decisões financeiras tendem a virar aposta. Quero prestar atenção em como isso se repete.`,
+  },
+  {
+    perguntaId: 'empresa.clientes',
+    condicao: (respostas) => !!r(respostas, 'empresa.clientes'),
+    mensagem: (respostas) =>
+      `Percebi algo: você sabe exatamente o que faz clientes voltarem — "${r(respostas, 'empresa.clientes')}". Esse conhecimento é vivido, não registrado. A diferença entre crescer e girar no lugar está em transformá-lo em previsibilidade.`,
+  },
+]
+
+// Retorna uma percepção durante a conversa (como hipótese) ou null se nenhuma
+// regra se aplica à resposta recém-dada. Não substitui a devolutiva de bloco.
+export function percepcaoDurante(perguntaId: string, respostas: Respostas): string | null {
+  for (const regra of REGRAS_PERCEPCAO) {
+    if (regra.perguntaId !== perguntaId) continue
+    if (regra.condicao(respostas)) return regra.mensagem(respostas)
+  }
+  return null
+}
+
+// ─── Devolutivas de fim de bloco — a Ponte conversa citando evidência ────────
+// Chamadas quando o empresário responde a última pergunta de um bloco.
+// Cada devolutiva referencia as palavras reais gravadas em `respostas`.
 
 export function devolutivaDeBloco(bloco: BlocoConversa, respostas: Respostas): string {
   switch (bloco) {

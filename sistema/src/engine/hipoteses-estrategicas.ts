@@ -20,6 +20,9 @@ export interface HipoteseEstrategica {
   prioridade: string // o que merece atenção primeiro (seção 3 do Retrato)
   decisao: string // a decisão que a Ponte observaria (seção 4)
   pergunta: string // pergunta aberta para a próxima conversa (seção 5)
+  // P65 — ponto cego: o que o empresário provavelmente ainda não percebe
+  // (seção 3 do Retrato V3). Sempre como hipótese — "Posso estar enganada...".
+  pontoCego: string
 }
 
 type Respostas = Record<string, string | null>
@@ -76,6 +79,7 @@ function hipoteseDependencia(respostas: Respostas): HipoteseEstrategica | null {
     prioridade: 'Reduzir a dependência de uma única pessoa — escolher uma tarefa que só você faz e escrever o passo a passo dela é o começo de uma empresa que funciona sem você em cada detalhe.',
     decisao: 'Se eu estivesse no seu lugar, observaria qual tarefa só você sabe fazer e que, se você sumisse, pararia a empresa — e decidiria qual delas merece virar um processo escrito primeiro.',
     pergunta: 'Se você tivesse mais uma pessoa de confiança cuidando da operação por um mês, qual seria a primeira coisa que você pediria que ela assumisse?',
+    pontoCego: 'O que talvez você ainda não esteja percebendo: a empresa cresce até o tamanho do que você consegue carregar sozinho. O que parece "fazer o negócio andar" hoje — você em cada decisão — é o mesmo que limita o próximo passo.',
   }
 }
 
@@ -105,6 +109,7 @@ function hipoteseMaturidade(respostas: Respostas): HipoteseEstrategica | null {
     prioridade: 'Criar um mínimo de registro sobre as decisões e o caixa — não um sistema completo, apenas saber onde a empresa está antes de decidir.',
     decisao: 'Se eu estivesse no seu lugar, observaria a próxima decisão de investir: quanto do que você decidiu na semana veio de número e quanto veio de intuição — e se o registro mudaria a escolha.',
     pergunta: 'Se você anotasse, durante uma semana, as três decisões mais caras que tomou — quanto você acha que enxergaria de padrão nelas?',
+    pontoCego: 'O que talvez você ainda não esteja percebendo: decisões repetidas do mesmo jeito tendem a repetir os mesmos resultados. O que parece "sentir o momento" hoje pode estar escondendo um padrão que um registro simples revelaria.',
   }
 }
 
@@ -132,6 +137,7 @@ function hipoteseCliente(respostas: Respostas): HipoteseEstrategica | null {
     prioridade: 'Transformar o que você já sabe sobre clientes em previsibilidade — nomear o que faz voltarem e proteger isso como prioridade.',
     decisao: 'Se eu estivesse no seu lugar, decidiria qual cliente não quer perder de jeito nenhum e observaria quantas decisões da próxima semana o protegem.',
     pergunta: 'Se você tivesse que explicar a um funcionário novo, em uma frase, o que faz um cliente voltar — qual frase seria?',
+    pontoCego: 'O que talvez você ainda não esteja percebendo: você conhece seus clientes de cor, mas esse conhecimento mora na sua cabeça. Enquanto não virar previsibilidade registrada, cada decisão sobre eles recomeça do zero.',
   }
 }
 
@@ -160,6 +166,7 @@ function hipoteseFinanceira(respostas: Respostas): HipoteseEstrategica | null {
     prioridade: 'Construir previsibilidade — não um controle completo, apenas conseguir estimar o próximo mês com base no que já aconteceu.',
     decisao: 'Se eu estivesse no seu lugar, observaria quantas vezes na próxima semana a empresa decidiu sem saber quanto tinha em caixa — e escolheria uma única decisão para esperar o número antes.',
     pergunta: 'Se você soubesse exatamente quanto vai entrar no próximo mês, qual decisão diferente você tomaria ainda esta semana?',
+    pontoCego: 'O que talvez você ainda não esteja percebendo: sem saber o que vem pela frente, cada decisão vira aposta. A previsibilidade não é sobre controlar — é sobre deixar de decidir no escuro.',
   }
 }
 
@@ -188,6 +195,7 @@ function hipoteseEnergia(respostas: Respostas): HipoteseEstrategica | null {
     prioridade: 'Proteger a energia — o que mais consome sua energia costuma ser também o que mais ocupa sua cabeça; observar isso por uma semana é o primeiro passo.',
     decisao: 'Se eu estivesse no seu lugar, observaria em quais horários a energia some e qual atividade vem antes — para decidir onde colocar um limite primeiro.',
     pergunta: 'Se sua semana tivesse uma hora só sua, sem ligações, e-mail ou urgências — o que você faria dela?',
+    pontoCego: 'O que talvez você ainda não esteja percebendo: o que toma sua energia é o mesmo que ocupa sua cabeça — não por acaso. A energia não está sendo drenada por "falta de tempo", mas por algo que se repete todos os dias.',
   }
 }
 

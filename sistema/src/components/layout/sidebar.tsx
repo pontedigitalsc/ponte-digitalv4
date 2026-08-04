@@ -23,7 +23,6 @@ const navItems = [
   {
     group: 'Consultar',
     items: [
-      { href: '/historico',      label: 'Nossa caminhada', icon: Clock },
       { href: '/memoria',        label: 'Memória da empresa', icon: BookOpen },
       { href: '/explorar',       label: 'Explorar cenários', icon: Compass },
       { href: '/centro-decisao', label: 'O que merece atenção', icon: Sparkles },

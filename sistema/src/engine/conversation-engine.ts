@@ -1,12 +1,12 @@
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { FLUXOS } from '@/engine/fluxos/primeira-conversa'
-import { obterReacao, devolutivaDeBloco } from '@/engine/reacoes'
+import { obterReacao, devolutivaDeBloco, percepcaoDurante } from '@/engine/reacoes'
 import { registrarEvidencia } from '@/engine/evidence-engine'
 import { registrarEventoAtivacao } from '@/engine/founder-activation-engine'
 import { registrarResposta } from '@/engine/question-answer-engine'
 import { obterProximaPergunta } from '@/engine/adaptive-question-engine'
 import { BLOCOS_ORDEM } from '@/engine/tipos'
-import type { EstadoConversa, RespostaConversa, Progresso, Fluxo, EstagioConselheiro } from '@/engine/tipos'
+import type { EstadoConversa, RespostaConversa, Progresso, Fluxo, EstagioConselheiro, Etapa } from '@/engine/tipos'
 import { NotFoundError, BusinessRuleError } from '@/lib/app-errors'
 
 // P52 — cada pergunta da primeira conversa pertence a um estágio do conselheiro.
@@ -37,6 +37,38 @@ const ESTAGIO_POR_ETAPA: Record<string, EstagioConselheiro> = {
   'empresa.horalivre': 'proximo_movimento',
 }
 
+// P65 — a conversa muda conforme o empresário responde. Uma etapa só aparece
+// se `apenasSe` for satisfeita e é pulada se `pularSe` for satisfeita.
+function etapaElegivel(etapa: Etapa, respostas: Record<string, string | null>): boolean {
+  const condicao = etapa.condicao
+  if (!condicao) return true
+
+  const normalizar = (v: string) => v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  const contemAlguma = (id: string, palavras: string[]): boolean => {
+    const valor = respostas[id] ?? ''
+    if (!valor.trim()) return false
+    const texto = normalizar(valor)
+    return palavras.some((p) => texto.includes(normalizar(p)))
+  }
+
+  if (condicao.apenasSe && !contemAlguma(condicao.apenasSe.perguntaId, condicao.apenasSe.palavras)) {
+    return false
+  }
+  if (condicao.pularSe && contemAlguma(condicao.pularSe.perguntaId, condicao.pularSe.palavras)) {
+    return false
+  }
+  return true
+}
+
+// Retorna a primeira etapa elegível a partir de `aPartirDe` (inclusive).
+function proximaEtapaElegivel(fluxo: Fluxo, respostas: Record<string, string | null>, aPartirDe: number): Etapa | null {
+  for (let i = Math.max(aPartirDe, 0); i < fluxo.etapas.length; i++) {
+    const etapa = fluxo.etapas[i]
+    if (etapaElegivel(etapa, respostas)) return etapa
+  }
+  return null
+}
+
 function calcularProgresso(etapaIndex: number, fluxo: Fluxo): Progresso {
   if (etapaIndex < 0 || fluxo.etapas.length === 0) {
     return { blocoAtual: 1, totalBlocos: BLOCOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 }
@@ -62,7 +94,7 @@ export async function criarConversa(token: string, fluxoId = 'primeira-conversa'
   const fluxo = FLUXOS[fluxoId]
   if (!fluxo) throw new NotFoundError(`Fluxo "${fluxoId}" não encontrado`)
 
-  const primeiraEtapa = fluxo.etapas[0]
+  const primeiraEtapa = proximaEtapaElegivel(fluxo, {}, -1) ?? fluxo.etapas[0]
 
   await prisma.conversa.create({
     data: {
@@ -136,7 +168,7 @@ export async function responder(
       foiConcluida = true
     }
   } else {
-    proximaEtapa = fluxo.etapas[etapaIndex + 1] ?? null
+    proximaEtapa = proximaEtapaElegivel(fluxo, respostasAtuais, etapaIndex + 1)
     foiConcluida = !proximaEtapa
   }
 
@@ -158,13 +190,14 @@ export async function responder(
   // Reação — P70: a Ponte conversa entre blocos citando as palavras reais do
   // empresário. Quando a resposta fecha um bloco (próxima etapa de outro bloco,
   // etapa adaptativa ou fim da conversa), a devolutiva referencia a evidência.
-  // Dentro do mesmo bloco, mantém a reação individual da pergunta.
+  // P65: dentro do mesmo bloco, micro devolutivas/percepção durante a conversa
+  // ("Posso compartilhar algo que estou percebendo?") — sempre como hipótese.
   const etapaAtual = fluxo.etapas[etapaIndex]
   const blocoAtual = etapaAtual?.bloco
   const proximoBloco = proximaEtapa?.bloco
   const fechaBloco = !!blocoAtual && (!proximaEtapa || !proximoBloco || proximoBloco !== blocoAtual)
 
-  let reacao = obterReacao(perguntaId)
+  let reacao = percepcaoDurante(perguntaId, respostasAtuais) ?? obterReacao(perguntaId)
   if (fechaBloco) {
     reacao = devolutivaDeBloco(blocoAtual, respostasAtuais)
   }

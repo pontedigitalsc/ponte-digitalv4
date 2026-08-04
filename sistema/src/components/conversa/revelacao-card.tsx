@@ -14,19 +14,33 @@ interface RevelacaoCardProps {
   retratoEstrategico?: RetratoEstrategico | null
 }
 
-// P70 — Cerimônia de entrega. A tela limpa, a Ponte diz que vai organizar o
-// que entendeu (~3s) e o Retrato surge gradualmente, seção por seção, como se
-// estivesse escrevendo. A entrega é um momento — nunca uma tabela que aparece.
+// P65 — Cerimônia de entrega em 4 passos. A tela limpa e a Ponte atravessa
+// os passos como se estivesse de fato pensando na empresa:
+//   Organizando... → Conectando padrões... → Analisando sua empresa...
+//   → Preparando seu Retrato...
+// Cada passo tem uma mensagem própria — nunca um spinner. Depois o Retrato
+// (V3, seis partes) surge gradualmente, seção por seção.
+const PASSOS_CERIMONIA = [
+  { chave: 'organizando', mensagem: 'A conversa terminou. Vou organizar tudo o que consegui entender.' },
+  { chave: 'conectando', mensagem: 'Agora vou conectar o que você me contou em padrões.' },
+  { chave: 'analisando', mensagem: 'Deixa eu analisar sua empresa como um todo.' },
+  { chave: 'preparando', mensagem: 'Estou preparando o seu Retrato Estratégico.' },
+] as const
+
+type FaseCerimonia = 'espera' | (typeof PASSOS_CERIMONIA)[number]['chave'] | 'revelando'
+
 export function RevelacaoCard({ retratoEstrategico }: RevelacaoCardProps) {
-  const [fase, setFase] = useState<'espera' | 'organizando' | 'revelando'>('espera')
+  const [fase, setFase] = useState<FaseCerimonia>('espera')
 
   useEffect(() => {
-    const t1 = setTimeout(() => setFase('organizando'), 500)
-    const t2 = setTimeout(() => setFase('revelando'), 3600)
-    return () => {
-      clearTimeout(t1)
-      clearTimeout(t2)
-    }
+    const timers = [
+      setTimeout(() => setFase('organizando'), 400),
+      setTimeout(() => setFase('conectando'), 1400),
+      setTimeout(() => setFase('analisando'), 2500),
+      setTimeout(() => setFase('preparando'), 3600),
+      setTimeout(() => setFase('revelando'), 4700),
+    ]
+    return () => timers.forEach(clearTimeout)
   }, [])
 
   if (fase === 'espera') {
@@ -39,13 +53,15 @@ export function RevelacaoCard({ retratoEstrategico }: RevelacaoCardProps) {
     )
   }
 
-  if (fase === 'organizando') {
+  const passo = PASSOS_CERIMONIA.find((p) => p.chave === fase)
+
+  if (passo) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <div className="text-center space-y-5 max-w-sm mx-auto animate-fade-in">
+        <div className="text-center space-y-5 max-w-sm mx-auto animate-fade-in" key={passo.chave}>
           <AvatarPonte state="thinking" size="lg" />
           <p className="text-base text-foreground font-medium leading-relaxed">
-            A conversa terminou. Agora quero organizar tudo o que consegui entender.
+            {passo.mensagem}
           </p>
           <div className="flex items-center justify-center gap-1">
             <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:0ms]" />

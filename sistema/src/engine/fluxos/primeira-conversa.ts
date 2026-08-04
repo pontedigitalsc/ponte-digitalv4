@@ -45,7 +45,12 @@ export const PRIMEIRA_CONVERSA: Fluxo = {
 
     // ─── BLOCO 3 — DEPENDÊNCIA: o fundador no centro ────────────────────────
     { id: 'empresa.dependencia', pergunta: 'Se você precisasse se afastar por 30 dias, o que aconteceria com a empresa?', tipo: 'texto', estagio: 'tensao', bloco: 'dependencia' },
-    { id: 'empresa.horalivre', pergunta: 'Se tivesse uma hora livre por dia, onde você a investiria?', tipo: 'texto', estagio: 'proximo_movimento', bloco: 'dependencia' },
+    // P65 — adaptação: quem mostra delegação (equipe, processo, repasse) não
+    // recebe pergunta básica sobre o que faria com a própria hora. A conversa
+    // pula para o próximo bloco.
+    { id: 'empresa.horalivre', pergunta: 'Se tivesse uma hora livre por dia, onde você a investiria?', tipo: 'texto', estagio: 'proximo_movimento', bloco: 'dependencia', condicao: {
+      pularSe: { perguntaId: 'empresa.dependencia', palavras: ['equipe', 'time', 'funcionário', 'funcionario', 'funcionários', 'delego', 'delegar', 'repasso', 'pessoas'] },
+    } },
 
     // ─── BLOCO 4 — CLIENTES: o que faz voltarem ─────────────────────────────
     { id: 'empresa.clientes', pergunta: 'O que mais faz clientes voltarem para a sua empresa hoje?', tipo: 'texto', estagio: 'realidade', bloco: 'clientes' },
@@ -68,6 +73,16 @@ export const PRIMEIRA_CONVERSA: Fluxo = {
     // ─── BLOCO 7 — VISÃO: a empresa funcionando como o fundador quer ────────
     { id: 'visao.funcionando', pergunta: 'Se a sua empresa funcionasse como você gostaria, o que seria diferente?', tipo: 'texto', estagio: 'proximo_movimento', bloco: 'visao' },
     { id: 'frente.proximo', pergunta: 'Qual o objetivo principal para os próximos 6 meses?', tipo: 'texto', estagio: 'proximo_movimento', bloco: 'visao' },
+    // P65 — a Ponte questiona: quando o empresário fala em crescer, ela pede
+    // precisão. "Crescer costuma significar coisas diferentes..."
+    { id: 'exploracao.crescer', pergunta: 'Crescer costuma significar coisas diferentes para empresários diferentes. Quando você fala crescer, pensa mais em:', tipo: 'selecao', estagio: 'proximo_movimento', bloco: 'visao', condicao: {
+      apenasSe: { perguntaId: 'frente.proximo', palavras: ['crescer', 'crescimento', 'expandir', 'aumentar', 'mais vendas', 'ganhar mais', 'abrir', 'evoluir', 'escala', 'faturar'] },
+    }, opcoes: [
+      { valor: 'vender_mais', rotulo: 'Vender mais' },
+      { valor: 'ganhar_mais', rotulo: 'Ganhar mais (mesmo sem vender mais)' },
+      { valor: 'trabalhar_menos', rotulo: 'Trabalhar menos' },
+      { valor: 'abrir_unidades', rotulo: 'Abrir novas unidades ou filiais' },
+    ] },
   ],
 }
 
