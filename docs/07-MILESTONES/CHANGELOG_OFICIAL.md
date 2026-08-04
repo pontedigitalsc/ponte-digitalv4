@@ -4,6 +4,22 @@
 
 ---
 
+## Programa 66 — O Conselheiro Empresarial
+
+**4 de agosto de 2026**
+
+**"A Ponte não responde imediatamente. A Ponte pensa junto."** Mudança de comportamento do Assistente — sem funcionalidades novas, sem tela nova, sem schema novo.
+
+**Comportamento conselheiro:** quando o empresário traz uma **decisão importante** (contratar, dispensar, mexer em preços, comprar equipamento, pegar empréstimo, expandir), o Assistente deixa de responder na hora e passa a seguir uma **ordem obrigatória, nunca invertida**: (1) o que estou percebendo → (2) por que isso chamou minha atenção → (3) o que ainda não sabemos → (4) uma ou duas perguntas que realmente importam → (5) só então, **se houver evidência**, uma reflexão. A regra "nunca responder imediatamente" entra como regra fundamental do system prompt (nº 8).
+
+**Raciocínio determinístico (`conselheiro-engine.ts`)** — a IA é interface, não cérebro: o raciocínio é construído em código antes da chamada ao modelo, sobre dados e memória reais. Detecção da categoria da decisão por regras de palavras-chave (6 categorias), sinais de contexto (caixa apertado, sobrecarga, receio, decisão adiada, impulso — calculados de receita×despesa, inadimplentes e memória), tensões/contradições que comparam o que ele diz hoje com o que já contou, e níveis de confiança em tudo que a Ponte afirma: **SABEMOS** (evidência) / **ACREDITAMOS** (leitura) / **INVESTIGANDO** (lacuna). Reflexão só existe quando há tensão real na história da empresa — sem evidência, a Ponte **não recomenda**, fica nas perguntas.
+
+**Biblioteca Socrática (`perguntas-socraticas.ts`)** — patrimônio intelectual: 30 perguntas curadas (5 por categoria) que constroem decisão; a IA adapta às palavras do empresário mas nunca inventa pergunta socrática nova. A memória participa: respostas de conversas anteriores, pergunta viva, memórias emocionais e hipóteses ativas entram como material ("oito meses atrás você dizia X... hoje você está dizendo Y... o que mudou?"). Cada intervenção gera uma **evidência** (origem `ASSISTENTE`) — aprendizado real sobre a empresa. Fórmulas factuais (quantos clientes, quanto faturei, tarefas) permanecem sem IA. `tsc` e `npm run build` limpos.
+
+**Documentos criados/atualizados:** `P66_CONSELHEIRO_EMPRESARIAL.md`, `CHANGELOG_OFICIAL.md`, `CURRENT_PRODUCT.md`. **STATUS: CONSELHEIRO EMPRESARIAL.**
+
+---
+
 ## Programa 65 — Memória Empresarial Viva + Refinamento Definitivo da Primeira Sessão
 
 **4 de agosto de 2026**

@@ -1,5 +1,16 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P66 — O CONSELHEIRO EMPRESARIAL — STATUS OFICIAL — 4 de agosto de 2026**
+>
+> **"A Ponte não responde imediatamente. A Ponte pensa junto."** Mudança de comportamento do Assistente (sem funcionalidades novas, sem tela, sem schema):
+>
+> - **Nunca responde imediatamente:** quando o empresário traz uma decisão importante (contratar / dispensar / mexer em preços / comprar equipamento / pegar empréstimo / expandir), o Assistente segue uma ordem obrigatória e nunca invertida: o que estou percebendo → por que chamou minha atenção → o que ainda não sabemos → 1–2 perguntas que realmente importam → só então, **se houver evidência**, reflexão.
+> - **Raciocínio determinístico (`conselheiro-engine.ts`):** a IA é interface, não cérebro. O raciocínio é construído em código antes do modelo, com dados e memória reais — detecção da decisão, sinais de contexto (caixa apertado, sobrecarga, receio), tensões que comparam o que ele diz hoje com o que contou meses atrás, e níveis de confiança em tudo: **sabemos / acreditamos / investigando**.
+> - **Biblioteca Socrática (`perguntas-socraticas.ts`):** patrimônio intelectual de 30 perguntas (5 por categoria) que constroem decisão; a IA adapta às palavras dele, nunca inventa pergunta nova.
+> - **Memória participa da decisão:** respostas passadas, pergunta viva, memórias emocionais e hipóteses entram como material ("oito meses atrás você dizia X... hoje você diz Y... o que mudou?"). Sem evidência, a Ponte não recomenda — fica nas perguntas. Cada intervenção gera evidência (origem ASSISTENTE).
+>
+> Ver `docs/07-MILESTONES/P66_CONSELHEIRO_EMPRESARIAL.md`.
+
 > **MARCO: P65 — MEMÓRIA EMPRESARIAL VIVA — STATUS OFICIAL — 4 de agosto de 2026**
 >
 > **"A Ponte não guarda dados. A Ponte guarda a evolução da empresa."** P65 refinou em profundidade o que já existia — sem funcionalidades novas:

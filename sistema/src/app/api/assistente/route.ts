@@ -9,6 +9,7 @@ import { assistenteRequisicaoSchema } from '@/lib/validations'
 import { getAIProvider } from '@/lib/ai-provider'
 import { registrarResposta } from '@/engine/question-answer-engine'
 import { montarContinuidadeConversa, obterPerguntaVivaAtiva, listarMemoriasEmocionais } from '@/engine/relacao-engine'
+import { montarRaciocinioConselheiro, formatarRaciocinioParaPrompt } from '@/engine/conselheiro-engine'
 
 // ─── CONTEXTO DO BANCO ────────────────────────────────────────────────────────
 // Busca um snapshot compacto dos dados reais para fundamentar as respostas da IA.
@@ -293,7 +294,7 @@ function encerrarStream(controller: ReadableStreamDefaultController<Uint8Array>)
   controller.close()
 }
 
-function systemPrompt(contexto: string): string {
+function systemPrompt(contexto: string, raciocinio?: string): string {
   return `Você é a Ponte, um empresário experiente que acompanha donos de pequenos negócios por dentro. Você não é um sistema, nem um consultor, nem um professor — é um sócio atento e direto.
 
 PERSONALIDADE PERMANENTE (nunca muda — é a sua identidade em toda conversa):
@@ -311,9 +312,27 @@ REGRAS FUNDAMENTAIS:
 5. Sempre que notar algo que merece atenção (atraso, valor em aberto, oportunidade), chame como um parceiro faria, em voz de empresa, não de relatório
 6. Respostas curtas e diretas. Uma ideia por vez, com cara de conversa
 7. Quando ele trouxer um momento difícil, primeiro reconheça o peso. Só depois proponha caminho
+8. Você é conselheiro, não motor de resposta. Quando o empresário traz uma decisão importante (contratar, dispensar, mexer em preço, comprar equipamento, pegar empréstimo, expandir), você NUNCA responde imediatamente. Primeiro pensa junto com ele
+
+COMO VOCÊ PENSA JUNTO (ordem obrigatória — nunca inverta):
+1. O que estou percebendo — nomeie a decisão que ele está pensando, sem aconselhar ainda
+2. Por que isso chamou minha atenção — o que essa decisão muda no caixa e na rotina, conectando com o que ele já contou
+3. O que ainda não sabemos — os pontos abertos antes de decidir
+4. Uma ou duas perguntas que realmente importam agora — nunca mais que duas
+5. Só depois, se houver evidência, ofereça uma reflexão — nunca uma recomendação sem base
+
+Ao pensar junto, sinalize sempre o nível de confiança do que diz:
+- SABEMOS — algo que veio do contexto real (números, memória, o que ele contou)
+- ACREDITAMOS — uma leitura sua, apresentada como leitura, nunca como fato
+- INVESTIGANDO — o que ainda não sabemos e queremos descobrir
+Use "eu sei", "eu acredito", "estou investigando" em linguagem de conversa, sem jargão de selo.
+
+A memória participa da decisão: relembre o que ele contou em conversas anteriores quando isso iluminar a decisão de hoje ("oito meses atrás você dizia X... hoje você está dizendo Y... o que mudou?"). Nunca invente lembranças — use só o que está no contexto.
 
 O QUE SABEMOS SOBRE A EMPRESA (atualizado agora):
 ${contexto}
+
+${raciocinio ? `\n${raciocinio}\n` : ''}
 
 Com base nisso, converse com o dono da empresa.`
 }
@@ -377,11 +396,23 @@ export async function POST(request: NextRequest) {
     // ── Pergunta exige interpretação: vai para o modelo ──
     const provider = getAIProvider()
 
+    // ── Conselheiro (P66): se for uma decisão importante, a Ponte pensa junto.
+    // Monta o raciocínio determinístico (percepção → atenção → lacunas →
+    // perguntas → reflexão só com evidência) e injeta no prompt. Sem resposta
+    // imediata: a IA é a interface, o raciocínio é construído aqui.
+    const raciocinio = await montarRaciocinioConselheiro(
+      usuario.empresaId,
+      (ultimaMensagem?.content as string) ?? '',
+      contexto
+    ).catch(() => null)
+
     void registrarResposta({
       empresaId: usuario.empresaId,
       perguntaId: `assistente-ai:${Date.now()}`,
       pergunta: (ultimaMensagem?.content as string)?.slice(0, 300) ?? '',
-      valor: '[resposta gerada por IA]',
+      valor: raciocinio
+        ? `[decisão importante: ${raciocinio.categoria} — conselheiro pensando junto]`
+        : '[resposta gerada por IA]',
       origem: 'ASSISTENTE_IA',
     })
 
@@ -396,7 +427,10 @@ export async function POST(request: NextRequest) {
         try {
           aiStream = await comTimeout(
             provider.streamChat(mensagens, {
-              system: systemPrompt(formatarContextoParaPrompt(contexto)),
+              system: systemPrompt(
+                formatarContextoParaPrompt(contexto),
+                raciocinio ? formatarRaciocinioParaPrompt(raciocinio) : undefined
+              ),
               maxTokens: 1024,
             }),
             30_000
