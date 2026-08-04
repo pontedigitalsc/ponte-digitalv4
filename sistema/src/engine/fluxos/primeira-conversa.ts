@@ -1,69 +1,73 @@
 import type { Fluxo } from '@/engine/tipos'
 
-// P54 — A primeira conversa agora começa pela EMPRESA, não pelo empresário.
-// A ordem é: qual é a empresa, o que ela faz, há quanto tempo existe, como
-// está vivendo este momento — e só então quem é você dentro dessa história.
-// Cada pergunta entrega valor antes de pedir uma resposta (P54 Etapa 2) e
-// perguntas estratégicas ganham respostas rápidas com campo opcional
-// "Se quiser, conte mais" (P54 Etapa 3). A estrutura de conselheiro em 5
-// estágios permanece intacta:
-//   Contexto → Realidade → Tensão → Evolução → Próximo Movimento
+// P70 — PRIMEIRA SESSÃO ESTRATÉGICA (V3)
+//
+// A primeira conversa deixa de ser um questionário de 24 perguntas (que
+// começava com 4 perguntas de cadastro) e vira uma descoberta em 7 blocos.
+// Princípio: cada bloco responde "o que eu consigo concluir agora?".
+// Nenhuma pergunta é só de cadastro; nenhuma devolutiva é genérica — a Ponte
+// conversa entre blocos citando as palavras do empresário. O Retrato final é
+// consequência das hipóteses que os blocos formam, nunca um template.
+//
+// Os blocos:
+//   1. momento      — a frase mais verdadeira sobre a empresa hoje
+//   2. decisao      — como a empresa decide (tempo e dinheiro)
+//   3. dependencia  — o que acontece se o fundador se afasta
+//   4. clientes     — o que faz clientes voltarem
+//   5. dinheiro     — previsibilidade do próximo mês (não faturamento)
+//   6. energia      — o que consome a energia (não o tempo)
+//   7. visao        — como a empresa seria se funcionasse como o fundador quer
 export const PRIMEIRA_CONVERSA: Fluxo = {
   id: 'primeira-conversa',
-  nome: 'Primeira Conversa',
-  versao: 5,
+  nome: 'Primeira Sessão Estratégica',
+  versao: 6,
   etapas: [
-    // ─── ESTÁGIO 1 — CONTEXTO: a empresa primeiro, só depois o empresário ──
-    { id: 'empresa.nome',     pergunta: 'Para começar, me conta: qual é o nome da sua empresa?', tipo: 'texto', estagio: 'contexto' },
-    { id: 'empresa.oque',     pergunta: 'Empresas que sabem explicar o que fazem em uma frase atraem melhor o que precisam. Como você explicaria a sua?', tipo: 'texto', estagio: 'contexto' },
-    { id: 'empresa.haquanto', pergunta: 'Há quanto tempo a sua empresa existe?', tipo: 'selecao', permiteDetalhe: true, estagio: 'contexto', opcoes: [
-      { valor: 'menos_de_1_ano', rotulo: 'Menos de 1 ano' },
-      { valor: 'de_1_a_3_anos',  rotulo: 'De 1 a 3 anos' },
-      { valor: 'de_3_a_5_anos',  rotulo: 'De 3 a 5 anos' },
-      { valor: 'mais_de_5_anos', rotulo: 'Mais de 5 anos' },
+    // ─── BLOCO 1 — MOMENTO: a frase mais verdadeira ────────────────────────
+    { id: 'empresa.momento', pergunta: 'Se você tivesse que escolher a frase mais verdadeira sobre sua empresa hoje, qual seria?', tipo: 'selecao', permiteDetalhe: true, estagio: 'contexto', bloco: 'momento', opcoes: [
+      { valor: 'crescendo_rapido', rotulo: 'Está crescendo mais rápido do que consigo organizar' },
+      { valor: 'depende_de_mim', rotulo: 'Depende muito de mim para funcionar' },
+      { valor: 'estavel_sem_avancar', rotulo: 'Está estável, mas não avança como eu gostaria' },
+      { valor: 'muito_trabalho', rotulo: 'Está me dando mais trabalho do que retorno' },
+      { valor: 'recomecando', rotulo: 'Está recomeçando, depois de um período difícil' },
     ] },
-    { id: 'empresa.momento',  pergunta: 'Como está vivendo este momento?', tipo: 'selecao', permiteDetalhe: true, estagio: 'contexto', opcoes: [
-      { valor: 'crescendo',             rotulo: 'Crescendo' },
-      { valor: 'estavel',               rotulo: 'Estável' },
-      { valor: 'organizando',           rotulo: 'Organizando' },
-      { valor: 'recomecando',           rotulo: 'Recomeçando' },
-      { valor: 'enfrentando_dificuldades', rotulo: 'Enfrentando dificuldades' },
+    { id: 'empresa.crescer', pergunta: 'E o que você sente que segura a empresa hoje?', tipo: 'texto', estagio: 'tensao', bloco: 'momento' },
+
+    // ─── BLOCO 2 — DECISÃO: como a empresa decide ───────────────────────────
+    { id: 'empresa.decisao', pergunta: 'Quando você precisa saber se pode investir — tempo ou dinheiro —, como você descobre?', tipo: 'texto', estagio: 'tensao', bloco: 'decisao' },
+    { id: 'empresa.preocupacao', pergunta: 'Hoje, o que mais ocupa o seu pensamento sobre a empresa?', tipo: 'selecao', permiteDetalhe: true, estagio: 'tensao', bloco: 'decisao', opcoes: [
+      { valor: 'clientes', rotulo: 'Trazer mais clientes' },
+      { valor: 'financeiro', rotulo: 'O dinheiro da empresa' },
+      { valor: 'organizacao', rotulo: 'Organizar o dia a dia' },
+      { valor: 'equipe', rotulo: 'Formar a equipe' },
+      { valor: 'tempo', rotulo: 'Falta de tempo para tudo' },
+      { valor: 'outro', rotulo: 'Outra coisa' },
     ] },
-    { id: 'empresario.quem',  pergunta: 'E você? Quem é você dentro dessa história?',      tipo: 'texto', estagio: 'contexto' },
-    { id: 'historia.nascer',  pergunta: 'Como sua empresa nasceu?',                        tipo: 'texto', estagio: 'contexto' },
-    { id: 'historia.momento', pergunta: 'Qual momento mais marcou essa trajetória até hoje?', tipo: 'texto', estagio: 'contexto' },
 
-    // ─── ESTÁGIO 2 — REALIDADE: como a empresa funciona de verdade ─────────
-    { id: 'empresa.clientes', pergunta: 'Empresas que conhecem o ritmo dos próprios clientes crescem com mais previsibilidade. O que mais faz clientes voltarem para a sua hoje?', tipo: 'texto', estagio: 'realidade' },
-    { id: 'rotina.pressao',   pergunta: 'Em que momento do dia você sente maior pressão?', tipo: 'texto', estagio: 'realidade' },
-    { id: 'rotina.energia',   pergunta: 'O que mais consumiu sua energia esta semana?',    tipo: 'texto', estagio: 'realidade' },
-    { id: 'rotina.cabeca',    pergunta: 'O que mais ocupa sua cabeça hoje?',               tipo: 'texto', estagio: 'realidade' },
-    { id: 'rotina.tranquilo', pergunta: 'Quando foi a última vez que você terminou o dia tranquilo?', tipo: 'texto', estagio: 'realidade' },
+    // ─── BLOCO 3 — DEPENDÊNCIA: o fundador no centro ────────────────────────
+    { id: 'empresa.dependencia', pergunta: 'Se você precisasse se afastar por 30 dias, o que aconteceria com a empresa?', tipo: 'texto', estagio: 'tensao', bloco: 'dependencia' },
+    { id: 'empresa.horalivre', pergunta: 'Se tivesse uma hora livre por dia, onde você a investiria?', tipo: 'texto', estagio: 'proximo_movimento', bloco: 'dependencia' },
 
-    // ─── ESTÁGIO 3 — TENSÃO: o que trava, o que dói, o que pesa ────────────
-    { id: 'empresa.crescer',  pergunta: 'Na maioria das empresas, o que trava o crescimento é quase invisível no dia a dia. O que você sente que segura a sua?', tipo: 'texto', estagio: 'tensao' },
-    { id: 'empresa.decisao',  pergunta: 'Decidir é o trabalho mais caro de um empresário. Quando precisa saber se pode investir, como você descobre?', tipo: 'texto', estagio: 'tensao' },
-    { id: 'empresa.preocupacao', pergunta: 'Hoje, sua maior preocupação é:', tipo: 'selecao', permiteDetalhe: true, estagio: 'tensao', opcoes: [
-      { valor: 'clientes',     rotulo: 'Clientes' },
-      { valor: 'financeiro',   rotulo: 'Financeiro' },
-      { valor: 'organizacao',  rotulo: 'Organização' },
-      { valor: 'equipe',       rotulo: 'Equipe' },
-      { valor: 'tempo',        rotulo: 'Tempo' },
-      { valor: 'outro',        rotulo: 'Outro' },
+    // ─── BLOCO 4 — CLIENTES: o que faz voltarem ─────────────────────────────
+    { id: 'empresa.clientes', pergunta: 'O que mais faz clientes voltarem para a sua empresa hoje?', tipo: 'texto', estagio: 'realidade', bloco: 'clientes' },
+    { id: 'empresa.multiplicar', pergunta: 'Qual tipo de cliente você gostaria de multiplicar?', tipo: 'texto', estagio: 'proximo_movimento', bloco: 'clientes' },
+    { id: 'historia.orgulho', pergunta: 'Do que você mais se orgulha no negócio hoje?', tipo: 'texto', estagio: 'evolucao', bloco: 'clientes' },
+
+    // ─── BLOCO 5 — DINHEIRO: previsibilidade, não faturamento ───────────────
+    { id: 'financeiro.previsao', pergunta: 'Você consegue prever, com segurança, quanto vai entrar no próximo mês?', tipo: 'selecao', permiteDetalhe: true, estagio: 'realidade', bloco: 'dinheiro', opcoes: [
+      { valor: 'sim', rotulo: 'Sim, sei com números' },
+      { valor: 'parcial', rotulo: 'Mais ou menos, no chute' },
+      { valor: 'nao', rotulo: 'Não, nem sei o que vem' },
     ] },
-    { id: 'empresa.dependencia', pergunta: 'Se você precisasse se afastar por 30 dias, o que aconteceria com a empresa?', tipo: 'texto', estagio: 'tensao' },
-    { id: 'historia.mudanca', pergunta: 'Se pudesse voltar no início, o que faria diferente?', tipo: 'texto', estagio: 'tensao' },
-    { id: 'frente.diferente', pergunta: 'O que você faria diferente se pudesse voltar ao início da semana?', tipo: 'texto', estagio: 'tensao' },
+    { id: 'financeiro.caixa', pergunta: 'Quando você olha o caixa, o que você vê primeiro: o que entrou, o que vai entrar, ou o que pode faltar?', tipo: 'texto', estagio: 'realidade', bloco: 'dinheiro' },
 
-    // ─── ESTÁGIO 4 — EVOLUÇÃO: aprendizado como patrimônio ─────────────────
-    { id: 'historia.orgulho', pergunta: 'Do que você mais se orgulha no negócio hoje?',     tipo: 'texto', estagio: 'evolucao' },
-    { id: 'frente.funcionou', pergunta: 'O que funcionou melhor do que esperava ultimamente?', tipo: 'texto', estagio: 'evolucao' },
-    { id: 'frente.surpresa',  pergunta: 'Algum cliente surpreendeu você esta semana?',      tipo: 'texto', estagio: 'evolucao' },
+    // ─── BLOCO 6 — ENERGIA: o que consome, não o que toma tempo ─────────────
+    { id: 'rotina.energia', pergunta: 'O que mais consumiu sua energia esta semana?', tipo: 'texto', estagio: 'realidade', bloco: 'energia' },
+    { id: 'rotina.cabeca', pergunta: 'E o que mais ocupa sua cabeça hoje?', tipo: 'texto', estagio: 'realidade', bloco: 'energia' },
+    { id: 'rotina.tranquilo', pergunta: 'Quando foi a última vez que você terminou o dia tranquilo?', tipo: 'texto', estagio: 'realidade', bloco: 'energia' },
 
-    // ─── ESTÁGIO 5 — PRÓXIMO MOVIMENTO: direção ─────────────────────────────
-    { id: 'frente.proximo',   pergunta: 'Qual o objetivo principal para os próximos 6 meses?', tipo: 'texto', estagio: 'proximo_movimento' },
-    { id: 'empresa.multiplicar', pergunta: 'Qual tipo de cliente você gostaria de multiplicar?', tipo: 'texto', estagio: 'proximo_movimento' },
-    { id: 'empresa.horalivre', pergunta: 'Se tivesse uma hora livre por dia, onde investiria?', tipo: 'texto', estagio: 'proximo_movimento' },
+    // ─── BLOCO 7 — VISÃO: a empresa funcionando como o fundador quer ────────
+    { id: 'visao.funcionando', pergunta: 'Se a sua empresa funcionasse como você gostaria, o que seria diferente?', tipo: 'texto', estagio: 'proximo_movimento', bloco: 'visao' },
+    { id: 'frente.proximo', pergunta: 'Qual o objetivo principal para os próximos 6 meses?', tipo: 'texto', estagio: 'proximo_movimento', bloco: 'visao' },
   ],
 }
 

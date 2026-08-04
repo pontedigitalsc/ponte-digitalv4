@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { criarConversa, carregarConversa, responder, obterEstado } from '@/engine/conversation-engine'
-import { ESTAGIOS_ORDEM } from '@/engine/tipos'
+import { BLOCOS_ORDEM } from '@/engine/tipos'
 import { interpretarRespostas } from '@/engine/identity-engine'
-import { gerarResumoNatural } from '@/engine/interpretacoes'
+import { gerarHipoteses } from '@/engine/hipoteses-estrategicas'
 import { gerarRetratoEstrategico } from '@/engine/retrato-estrategico'
 import { prismaSeguro } from '@/lib/prisma-tenant-safe'
 import { handleApiError } from '@/lib/api-error'
@@ -73,8 +73,9 @@ export async function GET(request: NextRequest) {
       if (concluida) {
         const respostas = (concluida.respostas as Record<string, string | null>) ?? {}
         const interpretacoes = await interpretarRespostas(respostas)
-        const resumoNatural = gerarResumoNatural(respostas, interpretacoes)
-        const retratoEstrategico = gerarRetratoEstrategico(respostas, interpretacoes)
+        // P70 — o Retrato é consequência das hipóteses, nunca um template.
+        const hipoteses = gerarHipoteses(respostas)
+        const retratoEstrategico = gerarRetratoEstrategico(respostas, hipoteses, interpretacoes)
 
         // P64 — O Retorno: junto do Retrato, informa se o check-in de 7 dias
         // está disponível (agendado, janela aberta e ainda não respondido).
@@ -85,7 +86,6 @@ export async function GET(request: NextRequest) {
           concluida: true,
           retomando: true,
           interpretacoes,
-          resumoNatural,
           retratoEstrategico,
           respostas,
           memoria,
@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
         jsonResponse = NextResponse.json({
           token,
           perguntaAtual: primeira,
-          progresso: { blocoAtual: 1, totalBlocos: ESTAGIOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 },
+          progresso: { blocoAtual: 1, totalBlocos: BLOCOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 },
           concluida: false,
           respostas: {},
           memoria,
@@ -120,7 +120,7 @@ export async function GET(request: NextRequest) {
       jsonResponse = NextResponse.json({
         token,
         perguntaAtual: primeira,
-        progresso: { blocoAtual: 1, totalBlocos: ESTAGIOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 },
+        progresso: { blocoAtual: 1, totalBlocos: BLOCOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 },
         concluida: false,
         respostas: {},
         memoria,

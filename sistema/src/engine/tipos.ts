@@ -68,8 +68,45 @@ export interface Etapa {
   opcoes?: Opcao[]
   categoria?: string
   estagio?: EstagioConselheiro
+  // P70 — bloco da Primeira Sessão Estratégica (7 blocos de descoberta).
+  // Cada bloco responde "o que eu consigo concluir agora?" e a Ponte
+  // conversa entre blocos citando as palavras do empresário.
+  bloco?: BlocoConversa
   // P54 — resposta rápida com campo opcional: "Se quiser, conte mais."
   permiteDetalhe?: boolean
+}
+
+// ─── P70 — BLOCOS DA PRIMEIRA SESSÃO ESTRATÉGICA ─────────────────────────────
+// A conversa deixou de ser um questionário em 5 estágios e virou uma
+// descoberta em 7 blocos. Cada bloco constrói uma conclusão sobre a empresa;
+// a soma dos blocos alimenta as hipóteses que originam o Retrato.
+export type BlocoConversa =
+  | 'momento'
+  | 'decisao'
+  | 'dependencia'
+  | 'clientes'
+  | 'dinheiro'
+  | 'energia'
+  | 'visao'
+
+export const BLOCOS_ORDEM: BlocoConversa[] = [
+  'momento',
+  'decisao',
+  'dependencia',
+  'clientes',
+  'dinheiro',
+  'energia',
+  'visao',
+]
+
+export const BLOCO_LABEL: Record<BlocoConversa, string> = {
+  momento: 'O momento da sua empresa',
+  decisao: 'Como você decide',
+  dependencia: 'A dependência',
+  clientes: 'Os clientes',
+  dinheiro: 'O dinheiro',
+  energia: 'A energia',
+  visao: 'A visão',
 }
 
 export interface Opcao {

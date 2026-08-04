@@ -1,5 +1,17 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P70 — PRIMEIRA SESSÃO ESTRATÉGICA V3 — STATUS OFICIAL — 3 de agosto de 2026**
+>
+> **A primeira conversa deixou de ser um questionário e virou uma descoberta.** A auditoria P59–P63 apontou que a primeira sessão começava com 4 perguntas de cadastro, as perguntas não evoluíam e o valor só aparecia no final. **P70 reconstruiu a primeira sessão:**
+>
+> - **7 blocos, 16 perguntas** — cada bloco responde "o que eu consigo concluir agora?" (Momento / Como decide / Dependência / Clientes / Dinheiro / Energia / Visão). As 4 perguntas cadastrais saíram da conversa (criar-conta já coleta nome + nome da empresa).
+> - **A Ponte conversa citando evidência** — devolutiva de fim de bloco com as palavras reais do empresário ("Percebi isso porque você comentou que..."), nunca "acho que".
+> - **Motor de hipóteses estratégicas** (determinístico, sem IA) — dependência do fundador, maturidade operacional, conhecimento do cliente, previsibilidade financeira, sobrecarga. Persistido ao finalizar (memória cognitiva + SinalValor). **Retrato é consequência das hipóteses, nunca template.**
+> - **Retrato novo em 5 partes** — Quem sua empresa parece ser hoje / O que mais chamou minha atenção (3 descobertas, não forças) / O que merece atenção primeiro / A decisão que eu observaria ("Se eu estivesse no seu lugar...") / Uma pergunta para nossa próxima conversa.
+> - **Cerimônia de entrega** — "A conversa terminou. Agora quero organizar tudo o que consegui entender." (~3s) e o Retrato surge seção por seção.
+>
+> Ver `docs/07-MILESTONES/P70_PRIMEIRA_SESSAO_ESTRATEGICA_V3.md`.
+
 > **MARCO: P64 — O RETORNO — STATUS OFICIAL — 3 de agosto de 2026**
 >
 > **A primeira sessão agora vira relação.** A auditoria P59–P63 apontou que a primeira sessão entregava o Retrato, mas não existia mecanismo de retorno/evolução no produto (o Protocolo Founder 1–10 era manual). **P64 fechou o loop de retorno:**

@@ -1,27 +1,27 @@
+import type { BlocoConversa } from './tipos'
+
+// P70 — A Ponte conversa. Cada devolutiva de bloco cita as palavras reais do
+// empresário ("Percebi isso porque você comentou que...") — nunca um texto
+// que sirva para qualquer empresa. As reações individuais reconhecem a
+// resposta sem soar como formulário.
+
 export const reacoesIndividuais: Record<string, string> = {
-  'empresa.nome': 'Agora sei com quem estou conversando. Vou lembrar do nome da sua empresa.',
-  'empresa.oque': 'Isso ajuda bastante. Já consigo enxergar melhor a sua empresa.',
-  'empresa.haquanto': 'O tempo que a sua empresa carrega muda o jeito de ler o momento. Vou levar isso em conta.',
-  'empresa.momento': 'Percebi como você lê o momento da sua empresa. Isso diz muito sobre as próximas escolhas.',
-  'empresario.quem': 'Entendi. Agora a empresa tem nome, história e uma pessoa por trás dela — você.',
-  'historia.nascer':     'Uma empresa nasce de um momento. O seu, agora, faz parte do que eu vou lembrar.',
-  'historia.momento':    'Esse momento importa. Vou guardá-lo com o cuidado que ele merece.',
-  'historia.orgulho':    'Sinto o orgulho nessa resposta. É dos seus.',
-  'historia.mudanca':    'Olhar para trás e enxergar o que mudaria exige honestidade. Você teve.',
-  'empresa.preocupacao': 'Guardei onde o peso está agora. Vamos olhar isso com calma.',
-  'rotina.pressao':      'Percebi onde a pressão aperta. Vou prestar atenção nisso.',
-  'rotina.cabeca':       'O que ocupa sua cabeça quase nunca é o que parece por fora.',
-  'rotina.tranquilo':    'Terminar o dia tranquilo é raro. Quando você me conta, eu noto.',
-  'rotina.energia':      'Onde a energia se vai costuma ser onde a empresa precisa de um descanso.',
-  'empresa.clientes':    'Quando o cliente volta, tem um motivo. Vou tentar enxergá-lo com você.',
+  'empresa.momento': 'Essa frase diz muito. Vou usá-la como régua para ler tudo o que você me contar daqui pra frente.',
+  'empresa.crescer': 'Guardei o que segura a empresa. Vamos olhar isso com calma — sem pressa de resolver.',
+  'empresa.decisao': 'Como você decide é o coração da empresa. Vou prestar atenção nesse padrão.',
+  'empresa.preocupacao': 'Entendi onde o peso está agora. Vamos olhar isso juntos.',
+  'empresa.dependencia': 'Essa resposta é importante. Quando o conhecimento está só na cabeça de uma pessoa, ela precisa ser observada.',
+  'empresa.horalivre': 'Essa resposta quase sempre revela o que a pessoa mais deseja. A sua, sim.',
+  'empresa.clientes': 'Quando o cliente volta, tem um motivo. Vou tentar enxergá-lo com você.',
   'empresa.multiplicar': 'Saber quem você quer ver voltando é uma escolha. Você tem.',
-  'empresa.crescer':     'O que segura uma empresa costuma ser silencioso. Vamos olhar juntos.',
-  'empresa.horalivre':   'Essa resposta quase sempre revela o que a pessoa mais deseja. A sua, sim.',
-  'empresa.decisao':     'Decidir sem certeza é o trabalho mais difícil que existe. Você o faz todos os dias.',
-  'frente.surpresa':     'Surpresas guardam lições. Boas ou ruins, vale prestar atenção.',
-  'frente.funcionou':    'O que funcionou merece ser lembrado. Você raramente tem tempo para isso.',
-  'frente.diferente':    'Refletir sobre a semana é um hábito de quem evolui. Você está nele.',
-  'frente.proximo':      'Um horizonte claro orienta decisões pequenas. Vou lembrar do seu.',
+  'historia.orgulho': 'Sinto o orgulho nessa resposta. É dos seus.',
+  'financeiro.previsao': 'Sem previsão, toda decisão vira aposta. Vou levar isso em conta.',
+  'financeiro.caixa': 'O que você vê primeiro no caixa revela como a empresa lê o próprio dinheiro.',
+  'rotina.energia': 'Onde a energia se vai costuma ser onde a empresa precisa de um descanso.',
+  'rotina.cabeca': 'O que ocupa sua cabeça quase nunca é o que parece por fora.',
+  'rotina.tranquilo': 'Terminar o dia tranquilo é raro. Quando você me conta, eu noto.',
+  'visao.funcionando': 'Essa é a imagem que vale a pena carregar. Vou lembrar dela.',
+  'frente.proximo': 'Um horizonte claro orienta decisões pequenas. Vou lembrar do seu.',
 }
 
 export const SILENCIO_INTELIGENTE = [
@@ -50,12 +50,81 @@ export function obterReacao(etapaId: string): string {
   return SILENCIO_INTELIGENTE[hashEtapa(etapaId) % SILENCIO_INTELIGENTE.length]
 }
 
-// P52 — reações de transição entre os 5 estágios do conselheiro.
-// P54 — transições mais naturais: a conversa respira entre os blocos.
-export const REACOES_BLOCO: Record<string, string> = {
-  'contexto': 'Agora consigo enxergar melhor a sua empresa. Vamos avançar — quero entender como ela funciona no dia a dia.',
-  'realidade': 'Entendi como o dia a dia se desenha. Agora quero olhar a empresa por trás dele — o que a move e o que a segura.',
-  'tensao': 'Vamos avançar. Estou começando a sentir onde a corda aperta — é assim que encontramos o que trava.',
-  'evolucao': 'Você carrega mais conquistas do que imagina. Deixa eu registrar o que já está funcionando.',
-  'proximo_movimento': 'Falta muito pouco. Com o que você me contou, já consigo pensar em direção — vamos definir o próximo movimento.',
+// ─── Devolutivas de fim de bloco — a Ponte conversa citando evidência ────────
+// Chamadas quando o empresário responde a última pergunta de um bloco.
+// Cada devolutiva referencia as palavras reais gravadas em `respostas`.
+
+type Respostas = Record<string, string | null>
+
+function r(respostas: Respostas, id: string): string | null {
+  return respostas[id]?.trim() || null
+}
+
+export function devolutivaDeBloco(bloco: BlocoConversa, respostas: Respostas): string {
+  switch (bloco) {
+    case 'momento': {
+      const momento = r(respostas, 'empresa.momento')
+      const crescer = r(respostas, 'empresa.crescer')
+      const partes: string[] = []
+      if (momento) partes.push(`você lê o momento da empresa como "${momento}"`)
+      if (crescer) partes.push(`e me contou que o que segura o crescimento é "${crescer}"`)
+      const base = partes.length > 0
+        ? `Percebi que ${partes.join(', ')}.`
+        : 'Percebi como você lê o momento da empresa.'
+      return `${base} Empresas geralmente travam pela complexidade, não pela falta de clientes. Essa leitura vai guiar o que vamos conversar daqui pra frente.`
+    }
+    case 'decisao': {
+      const decisao = r(respostas, 'empresa.decisao')
+      if (decisao) {
+        return `Você me contou que descobre se pode investir assim: "${decisao}". Percebi um padrão — decisões que dependem só do momento costumam se repetir do mesmo jeito. Vou prestar atenção nisso.`
+      }
+      return 'Como você decide é o coração da empresa. Vou prestar atenção nesse padrão.'
+    }
+    case 'dependencia': {
+      const dependencia = r(respostas, 'empresa.dependencia')
+      if (dependencia) {
+        return `Você me disse que, se ficasse 30 dias fora, "${dependencia}". Quando o conhecimento está só na cabeça do fundador, a empresa cresce até o tamanho dele — é isso que vamos observar.`
+      }
+      return 'Quando o conhecimento está só na cabeça do fundador, a empresa cresce até o tamanho dele.'
+    }
+    case 'clientes': {
+      const clientes = r(respostas, 'empresa.clientes')
+      if (clientes) {
+        return `Guardei o que faz clientes voltarem: "${clientes}". Você conhece isso de perto — a diferença entre crescer e girar no lugar está em transformar esse conhecimento em previsibilidade.`
+      }
+      return 'Você conhece seus clientes de perto. A diferença entre crescer e girar no lugar está em transformar isso em previsibilidade.'
+    }
+    case 'dinheiro': {
+      const previsao = r(respostas, 'financeiro.previsao')
+      const caixa = r(respostas, 'financeiro.caixa')
+      const partes: string[] = []
+      if (previsao) partes.push(`sobre o próximo mês, você me disse "${previsao}"`)
+      if (caixa) partes.push(`e que, ao olhar o caixa, vê primeiro "${caixa}"`)
+      const base = partes.length > 0
+        ? `Percebi que ${partes.join('; e ')}.`
+        : 'Percebi como a empresa lê o próprio dinheiro.'
+      return `${base} Sem previsão, toda decisão vira aposta. Essa é a parte que mais vale observar com calma.`
+    }
+    case 'energia': {
+      const energia = r(respostas, 'rotina.energia')
+      const cabeca = r(respostas, 'rotina.cabeca')
+      if (energia) {
+        const base = `O que mais consumiu sua energia foi "${energia}".`
+        if (cabeca) {
+          return `${base} E o que mais ocupa sua cabeça é "${cabeca}" — reparei que o que toma sua energia também é o que mais ocupa sua cabeça. Não por acaso.`
+        }
+        return `${base} Reparei que o que toma sua energia quase sempre é também o que mais ocupa sua cabeça. Não por acaso.`
+      }
+      return 'O que consome sua energia quase sempre é também o que ocupa sua cabeça. Não por acaso.'
+    }
+    case 'visao': {
+      const visao = r(respostas, 'visao.funcionando')
+      if (visao) {
+        return `Você me contou que, se sua empresa funcionasse como você gostaria, "${visao}". Essa imagem é a direção — agora quero organizar tudo o que entendi sobre o caminho até lá.`
+      }
+      return 'Essa imagem da empresa funcionando como você gostaria é a direção. Agora quero organizar tudo o que entendi.'
+    }
+    default:
+      return obterReacao('')
+  }
 }

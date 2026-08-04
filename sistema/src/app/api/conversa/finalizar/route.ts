@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { obterRespostas, vincularConversa } from '@/engine/conversation-engine'
 import { interpretarRespostas } from '@/engine/identity-engine'
-import { gerarResumoNatural } from '@/engine/interpretacoes'
+import { gerarHipoteses, persistirHipoteses } from '@/engine/hipoteses-estrategicas'
 import { gerarRetratoEstrategico, registrarClarezaGerada } from '@/engine/retrato-estrategico'
 import { registrarClarezaDaConversa } from '@/engine/clareza-engine'
 import { agendarRetorno, registrarRetornoDaConversa } from '@/engine/retorno-engine'
@@ -57,8 +57,9 @@ export async function POST(request: NextRequest) {
     })
 
     const interpretacoes = await interpretarRespostas(respostas)
-    const resumoNatural = gerarResumoNatural(respostas, interpretacoes)
-    const retratoEstrategico = gerarRetratoEstrategico(respostas, interpretacoes)
+    // P70 — as hipóteses nascem das respostas e o Retrato é consequência delas.
+    const hipoteses = gerarHipoteses(respostas)
+    const retratoEstrategico = gerarRetratoEstrategico(respostas, hipoteses, interpretacoes)
 
     // P64 — O Retorno: ao finalizar, a conversa agenda o retorno (7 dias).
     // A Ponte não cobra: apenas lembra que quer saber o que aconteceu depois.
@@ -88,6 +89,12 @@ export async function POST(request: NextRequest) {
       // P57A — Retrato Estratégico nasce da primeira conversa; a Clareza Gerada
       // é registrada como sinal de valor percebido (sem score artificial).
       registrarClarezaGerada(empresaId, retratoEstrategico, respostas).catch(() => {
+        // registro é opcional — não interrompe a finalização
+      })
+
+      // P70 — hipóteses estratégicas gravadas como memória cognitiva e sinal
+      // de valor (para serem observadas, nunca rotular a empresa).
+      persistirHipoteses(empresaId, hipoteses, 1).catch(() => {
         // registro é opcional — não interrompe a finalização
       })
 
@@ -124,7 +131,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       data: {
         interpretacoes,
-        resumoNatural,
         retratoEstrategico,
         respostas,
         perguntaAberta,

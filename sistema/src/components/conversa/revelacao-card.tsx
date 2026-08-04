@@ -1,142 +1,79 @@
+'use client'
+
 import { useState, useEffect } from 'react'
-import type { ResumoNatural } from '@/engine/tipos'
 import type { RetratoEstrategico } from '@/engine/retrato-estrategico'
 import { AvatarPonte } from '@/components/ui/avatar'
 import { RetratoEstrategicoCard } from '@/components/conversa/retrato-estrategico-card'
 
 interface RevelacaoCardProps {
-  interpretacoes: {
+  interpretacoes?: {
     pontoAtencao: string
     observacao: string
     alinhamento: string
-  }
-  resumoNatural?: ResumoNatural | null
+  } | null
   retratoEstrategico?: RetratoEstrategico | null
 }
 
-function CartaContent({ interpretacoes, resumoNatural }: RevelacaoCardProps) {
-  const [lido, setLido] = useState(false)
+// P70 — Cerimônia de entrega. A tela limpa, a Ponte diz que vai organizar o
+// que entendeu (~3s) e o Retrato surge gradualmente, seção por seção, como se
+// estivesse escrevendo. A entrega é um momento — nunca uma tabela que aparece.
+export function RevelacaoCard({ retratoEstrategico }: RevelacaoCardProps) {
+  const [fase, setFase] = useState<'espera' | 'organizando' | 'revelando'>('espera')
 
   useEffect(() => {
-    if (lido || resumoNatural) return
-    const t = setTimeout(() => setLido(true), 1200)
-    return () => clearTimeout(t)
-  }, [lido, resumoNatural])
+    const t1 = setTimeout(() => setFase('organizando'), 500)
+    const t2 = setTimeout(() => setFase('revelando'), 3600)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
+  }, [])
 
-  if (resumoNatural) {
+  if (fase === 'espera') {
     return (
-      <div className="space-y-5 text-sm leading-relaxed">
-        <div>
-          <p className="font-semibold mb-1">{resumoNatural.secao1.titulo}</p>
-          <p className="text-muted-foreground">{resumoNatural.secao1.paragrafo}</p>
-        </div>
-        <div>
-          <p className="font-semibold mb-1">{resumoNatural.secao2.titulo}</p>
-          {resumoNatural.secao2.pontos.map((p, i) => (
-            <p key={i} className="text-muted-foreground mb-1">{p.evidencia}</p>
-          ))}
-        </div>
-        <div>
-          <p className="font-semibold mb-1">{resumoNatural.secao3.titulo}</p>
-          <p className="text-muted-foreground">{resumoNatural.secao3.paragrafo}</p>
-        </div>
-        <div>
-          <p className="font-semibold mb-1">{resumoNatural.secao4.titulo}</p>
-          {resumoNatural.secao4.lacunas.map((l, i) => (
-            <p key={i} className="text-muted-foreground mb-1">&bull; {l}</p>
-          ))}
-        </div>
-        <div>
-          <p className="font-semibold mb-1">{resumoNatural.secao5.titulo}</p>
-          <p className="text-muted-foreground">{resumoNatural.secao5.acao}</p>
+      <div className="flex min-h-[40vh] items-center justify-center">
+        <div className="text-center space-y-4 animate-fade-in">
+          <AvatarPonte state="breathing" size="lg" />
         </div>
       </div>
     )
   }
 
-  if (!lido) {
+  if (fase === 'organizando') {
     return (
-      <div className="text-center space-y-4 py-8">
-        <AvatarPonte state="thinking" size="lg" />
-        <p className="text-sm text-muted-foreground animate-pulse">
-          Deixa eu organizar o que entendi sobre sua empresa...
-        </p>
-        <div className="flex items-center justify-center gap-1">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:0ms]" />
-          <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:150ms]" />
-          <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:300ms]" />
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="space-y-5 text-sm leading-relaxed">
-      {/* Descoberta obrigatória (ETAPA 4) */}
-      <div className="border-l-2 border-primary/30 pl-4 py-2">
-        <p className="font-semibold text-foreground">O que mais me chamou atenção hoje</p>
-        <p className="mt-1 text-muted-foreground italic">&ldquo;{interpretacoes.observacao}&rdquo;</p>
-      </div>
-
-      {interpretacoes.pontoAtencao && (
-        <div className="border-l-2 border-amber-500/30 pl-4 py-2">
-          <p className="font-semibold text-foreground">Existe um padrão aparecendo</p>
-          <p className="mt-1 text-muted-foreground">{interpretacoes.pontoAtencao}</p>
-        </div>
-      )}
-
-      <div className="border-l-2 border-green-500/30 pl-4 py-2">
-        <p className="font-semibold text-foreground">O que mais admirei</p>
-        <p className="mt-1 text-muted-foreground">
-          Você dedicou tempo para pensar sobre sua empresa. Isso já mostra maturidade. Mesmo que hoje as coisas não estejam como você gostaria, estar aqui é um movimento importante.
-        </p>
-      </div>
-
-      {/* Uma única ação (ETAPA 5) */}
-      <div className="border-l-2 border-primary/30 pl-4 py-2">
-        <p className="font-semibold text-foreground">O menor movimento que pode melhorar sua próxima semana</p>
-        <p className="mt-1 text-muted-foreground">{interpretacoes.alinhamento}</p>
-      </div>
-
-      {/* Continuidade (ETAPA 1 + ETAPA 6 + P49 Carta Nunca Termina) */}
-      <div className="mt-6 pt-4 border-t space-y-3">
-        <p className="text-sm font-medium text-foreground">O que quero descobrir na próxima conversa</p>
-        <p className="text-xs text-muted-foreground italic leading-relaxed">
-          {interpretacoes.observacao ? (
-            <>Na próxima conversa quero descobrir se isso ainda continua acontecendo. Quero entender o que você percebeu quando passou a observar — e se alguma coisa já mudou.</>
-          ) : (
-            'Hoje apareceu um padrão interessante. Quero observar isso junto com você durante esta semana. Na próxima conversa quero descobrir se algo mudou.'
-          )}
-        </p>
-      </div>
-    </div>
-  )
-}
-
-export function RevelacaoCard(props: RevelacaoCardProps) {
-  const { retratoEstrategico, ...cartaProps } = props
-  return (
-    <div className="relative space-y-6">
-      <div className="space-y-5 animate-fade-in relative">
-        <div className="text-center space-y-3">
-          <div className="mx-auto">
-            <AvatarPonte state="success" size="lg" />
-          </div>
-          <p className="text-xs text-muted-foreground italic">
-            — Carta para sua empresa —
+      <div className="flex min-h-[40vh] items-center justify-center">
+        <div className="text-center space-y-5 max-w-sm mx-auto animate-fade-in">
+          <AvatarPonte state="thinking" size="lg" />
+          <p className="text-base text-foreground font-medium leading-relaxed">
+            A conversa terminou. Agora quero organizar tudo o que consegui entender.
           </p>
-          <h2 className="text-xl font-semibold tracking-tight">
-            Olhando para sua empresa
-          </h2>
+          <div className="flex items-center justify-center gap-1">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:0ms]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:150ms]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:300ms]" />
+          </div>
         </div>
-        <CartaContent {...cartaProps} />
-        {retratoEstrategico && (
-          <>
-            <div className="border-t border-border pt-6" />
-            <RetratoEstrategicoCard retrato={retratoEstrategico} />
-          </>
-        )}
       </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+      <div className="text-center space-y-3 animate-slide-up">
+        <div className="mx-auto">
+          <AvatarPonte state="success" size="lg" />
+        </div>
+        <p className="text-xs text-muted-foreground italic">
+          — Sua Primeira Sessão Estratégica —
+        </p>
+        <h2 className="text-xl font-semibold tracking-tight">
+          Olhando para sua empresa
+        </h2>
+      </div>
+
+      {retratoEstrategico && (
+        <RetratoEstrategicoCard retrato={retratoEstrategico} revelar />
+      )}
     </div>
   )
 }

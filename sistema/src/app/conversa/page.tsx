@@ -7,6 +7,7 @@ import { ProgressBar } from '@/components/conversa/progress-bar'
 import { ClarezaCheckin } from '@/components/conversa/clareza-checkin'
 import { RetornoCheckin } from '@/components/conversa/retorno-checkin'
 import { AvatarPonte } from '@/components/ui/avatar'
+import { BLOCO_LABEL, type BlocoConversa } from '@/engine/tipos'
 import Link from 'next/link'
 
 interface Pergunta {
@@ -16,6 +17,7 @@ interface Pergunta {
   opcoes?: { valor: string; rotulo: string }[]
   categoria?: string
   estagio?: string
+  bloco?: BlocoConversa
   permiteDetalhe?: boolean
 }
 
@@ -25,26 +27,10 @@ interface Progresso {
   percentual: number
 }
 
-const ESTAGIO_LABEL: Record<string, string> = {
-  contexto: 'O contexto',
-  realidade: 'A realidade',
-  tensao: 'A tensão',
-  evolucao: 'A evolução',
-  proximo_movimento: 'O próximo movimento',
-}
-
 interface Interpretacoes {
   pontoAtencao: string
   observacao: string
   alinhamento: string
-}
-
-interface ResumoNaturalData {
-  secao1: { titulo: string; paragrafo: string }
-  secao2: { titulo: string; pontos: { evidencia: string; analise: string }[] }
-  secao3: { titulo: string; paragrafo: string }
-  secao4: { titulo: string; lacunas: string[] }
-  secao5: { titulo: string; acao: string }
 }
 
 interface RetratoEstrategicoData {
@@ -63,7 +49,6 @@ export default function ConversaPage() {
   const [mostrandoReacao, setMostrandoReacao] = useState(false)
   const [concluida, setConcluida] = useState(false)
   const [interpretacoes, setInterpretacoes] = useState<Interpretacoes | null>(null)
-  const [resumoNatural, setResumoNatural] = useState<ResumoNaturalData | null>(null)
   const [retratoEstrategico, setRetratoEstrategico] = useState<RetratoEstrategicoData | null>(null)
   const [enviando, setEnviando] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
@@ -98,7 +83,6 @@ export default function ConversaPage() {
         if (data.retomando && data.interpretacoes) {
           setRetomando(true)
           setInterpretacoes(data.interpretacoes)
-          if (data.resumoNatural) setResumoNatural(data.resumoNatural)
           if (data.retratoEstrategico) setRetratoEstrategico(data.retratoEstrategico)
           // P64 — O Retorno: check-in de 7 dias aparece junto, sem bloquear.
           setRetornoDisponivel(data.retorno?.disponivel === true)
@@ -199,7 +183,6 @@ export default function ConversaPage() {
       if (!res.ok) throw new Error()
       const { data } = await res.json()
       setInterpretacoes(data.interpretacoes)
-      if (data.resumoNatural) setResumoNatural(data.resumoNatural)
       if (data.retratoEstrategico) setRetratoEstrategico(data.retratoEstrategico)
       if (data.perguntaAberta) setPerguntaAberta(data.perguntaAberta)
       setConcluida(true)
@@ -255,7 +238,7 @@ export default function ConversaPage() {
           )}
           {!memoria && !concluida && (
             <p className="text-sm text-muted-foreground">
-              Oi! Vamos começar entendendo a sua empresa — ela primeiro. Depois, a sua história.
+              Oi. Vamos olhar a sua empresa — do jeito que ela é hoje, não do jeito que o papel diz que deveria ser.
             </p>
           )}
         </div>
@@ -288,7 +271,6 @@ export default function ConversaPage() {
           {concluida && interpretacoes ? (
             <RevelacaoCard
               interpretacoes={interpretacoes}
-              resumoNatural={resumoNatural}
               retratoEstrategico={retratoEstrategico}
             />
           ) : mostrandoReacao && reacao ? (
@@ -297,9 +279,9 @@ export default function ConversaPage() {
             </div>
           ) : perguntaAtual ? (
             <div className="space-y-3">
-              {perguntaAtual.estagio && (
+              {perguntaAtual.bloco && (
                 <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-primary/70">
-                  {ESTAGIO_LABEL[perguntaAtual.estagio] ?? ''}
+                  {BLOCO_LABEL[perguntaAtual.bloco] ?? ''}
                 </p>
               )}
               <QuestionCard
@@ -327,9 +309,7 @@ export default function ConversaPage() {
             {retornoDisponivel && <RetornoCheckin />}
 
             <p className="text-sm text-muted-foreground leading-relaxed">
-              {resumoNatural
-                ? `Existe um padrão que quero continuar observando com você.`
-                : `Essa conversa faz parte de uma história maior.`}
+              Essa conversa faz parte de uma história maior. Continuamos quando você quiser.
             </p>
 
             {/* P59 — Clareza Gerada como evidência: pergunta de valor real */}

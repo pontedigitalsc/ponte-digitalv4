@@ -1,11 +1,11 @@
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { FLUXOS } from '@/engine/fluxos/primeira-conversa'
-import { obterReacao, REACOES_BLOCO } from '@/engine/reacoes'
+import { obterReacao, devolutivaDeBloco } from '@/engine/reacoes'
 import { registrarEvidencia } from '@/engine/evidence-engine'
 import { registrarEventoAtivacao } from '@/engine/founder-activation-engine'
 import { registrarResposta } from '@/engine/question-answer-engine'
 import { obterProximaPergunta } from '@/engine/adaptive-question-engine'
-import { ESTAGIOS_ORDEM } from '@/engine/tipos'
+import { BLOCOS_ORDEM } from '@/engine/tipos'
 import type { EstadoConversa, RespostaConversa, Progresso, Fluxo, EstagioConselheiro } from '@/engine/tipos'
 import { NotFoundError, BusinessRuleError } from '@/lib/app-errors'
 
@@ -39,21 +39,21 @@ const ESTAGIO_POR_ETAPA: Record<string, EstagioConselheiro> = {
 
 function calcularProgresso(etapaIndex: number, fluxo: Fluxo): Progresso {
   if (etapaIndex < 0 || fluxo.etapas.length === 0) {
-    return { blocoAtual: 1, totalBlocos: ESTAGIOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 }
+    return { blocoAtual: 1, totalBlocos: BLOCOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 }
   }
 
   const etapaAtual = fluxo.etapas[etapaIndex]
-  const estagioAtual = etapaAtual.estagio ?? ESTAGIOS_ORDEM[0]
-  const estagioIdx = ESTAGIOS_ORDEM.indexOf(estagioAtual)
+  const blocoAtual = etapaAtual.bloco ?? BLOCOS_ORDEM[0]
+  const blocoIdx = BLOCOS_ORDEM.indexOf(blocoAtual)
 
-  const etapasNoEstagio = fluxo.etapas.filter((e) => (e.estagio ?? ESTAGIOS_ORDEM[0]) === estagioAtual)
-  const posNoEstagio = etapasNoEstagio.findIndex((e) => e.id === etapaAtual.id)
+  const etapasNoBloco = fluxo.etapas.filter((e) => e.bloco === blocoAtual)
+  const posNoBloco = etapasNoBloco.findIndex((e) => e.id === etapaAtual.id)
 
   return {
-    blocoAtual: estagioIdx + 1,
-    totalBlocos: ESTAGIOS_ORDEM.length,
-    etapaNoBloco: Math.max(posNoEstagio + 1, 1),
-    totalEtapasNoBloco: etapasNoEstagio.length,
+    blocoAtual: blocoIdx + 1,
+    totalBlocos: BLOCOS_ORDEM.length,
+    etapaNoBloco: Math.max(posNoBloco + 1, 1),
+    totalEtapasNoBloco: Math.max(etapasNoBloco.length, 1),
     percentual: Math.round(((etapaIndex + 1) / fluxo.etapas.length) * 100),
   }
 }
@@ -155,25 +155,31 @@ export async function responder(
     },
   })
 
-  // Reação — quando muda de estágio, a Ponte marca a transição; dentro do
-  // mesmo estágio, mantém a reação individual da pergunta.
+  // Reação — P70: a Ponte conversa entre blocos citando as palavras reais do
+  // empresário. Quando a resposta fecha um bloco (próxima etapa de outro bloco,
+  // etapa adaptativa ou fim da conversa), a devolutiva referencia a evidência.
+  // Dentro do mesmo bloco, mantém a reação individual da pergunta.
+  const etapaAtual = fluxo.etapas[etapaIndex]
+  const blocoAtual = etapaAtual?.bloco
+  const proximoBloco = proximaEtapa?.bloco
+  const fechaBloco = !!blocoAtual && (!proximaEtapa || !proximoBloco || proximoBloco !== blocoAtual)
+
   let reacao = obterReacao(perguntaId)
-  const estagioAtual = ESTAGIO_POR_ETAPA[perguntaId]
-  const proximoEstagio = proximaEtapa?.estagio
-  if (proximoEstagio && estagioAtual && proximoEstagio !== estagioAtual) {
-    reacao = REACOES_BLOCO[proximoEstagio] ?? reacao
+  if (fechaBloco) {
+    reacao = devolutivaDeBloco(blocoAtual, respostasAtuais)
   }
 
   // Registra evidência + Q&A individual (apenas se vinculada a uma empresa)
   if (conversa.empresaId) {
-    const blocoAtual = ESTAGIO_POR_ETAPA[perguntaId] ?? categoriaDePerguntaId(perguntaId) ?? 'gestao'
-    const categoriaEvidencia = mapearBlocoParaCategoria(blocoAtual)
+    const blocoDaEtapa = etapaAtual?.bloco
+    const blocoDoRegistro = blocoDaEtapa ?? ESTAGIO_POR_ETAPA[perguntaId] ?? categoriaDePerguntaId(perguntaId) ?? 'gestao'
+    const categoriaEvidencia = mapearBlocoParaCategoria(blocoDoRegistro)
     void registrarEvidencia(conversa.empresaId, {
       categoria: categoriaEvidencia,
       origem: 'PRIMEIRA_CONVERSA',
       descricao: `Resposta: ${valor.slice(0, 120)}`,
       confianca: 'ALTA',
-      dados: { perguntaId, bloco: blocoAtual },
+      dados: { perguntaId, bloco: blocoDoRegistro },
     })
 
     void registrarResposta({
@@ -217,6 +223,14 @@ function mapearBlocoParaCategoria(bloco: string) {
     tensao: 'GESTAO',
     evolucao: 'ESTRATEGIA',
     proximo_movimento: 'ESTRATEGIA',
+    // P70 — blocos da Primeira Sessão Estratégica
+    momento: 'GESTAO',
+    decisao: 'GESTAO',
+    dependencia: 'GESTAO',
+    clientes: 'CLIENTES',
+    dinheiro: 'FINANCEIRO',
+    energia: 'OPERACAO',
+    visao: 'ESTRATEGIA',
     FINANCEIRO: 'FINANCEIRO',
     CLIENTES: 'CLIENTES',
     OPERACAO: 'OPERACAO',
@@ -256,7 +270,7 @@ export async function obterEstado(token: string): Promise<{
           categoria: adaptativa.categoria,
           estagio: adaptativa.estagio,
         },
-        progresso: { blocoAtual: 1, totalBlocos: ESTAGIOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 50 },
+        progresso: { blocoAtual: 1, totalBlocos: BLOCOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 50 },
         concluida: false,
         respostas: estado.respostas,
       }

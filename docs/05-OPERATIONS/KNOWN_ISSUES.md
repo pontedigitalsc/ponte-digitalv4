@@ -147,3 +147,10 @@
 **Descrição:** a auditoria concluiu "não existe mecanismo de retorno/evolução": a primeira sessão entregava o Retrato, mas nada no produto criava ou capturava o retorno; o "Depois de 7 dias" do Protocolo Founder 1–10 era só manual (WhatsApp); `EventoAtivacao.PRIMEIRO_RETORNO` existia no enum e nunca era gravado.
 **Ação:** P64 (O Retorno) — finalizar a conversa agenda o retorno (7 dias, `Conversa.retornoDisponivelEm`); ao voltar, `/conversa` mostra o check-in de 1 minuto _"O que aconteceu depois da nossa conversa?"_ junto do Retrato (sem bloquear); a resposta vira `SinalValor RETORNO_7_DIAS` + `EventoAtivacao.PRIMEIRO_RETORNO`; funil anônimo preservado (pendência `__retorno` → conta); Painel do Fundador ganha `retornosRegistrados`. Ver `docs/07-MILESTONES/P64_O_RETORNO.md`.
 
+## P70 — Primeira Sessão Estratégica V3: perguntas removidas do fluxo (compatibilidade preservada)
+
+**Status:** Monitorar (compatibilidade intencional)
+**Prioridade:** Baixa
+**Descrição:** P70 removeu 10 IDs de pergunta do fluxo (`empresa.nome`, `empresa.oque`, `empresa.haquanto`, `empresario.quem`, `historia.nascer`, `historia.momento`, `rotina.pressao`, `historia.mudanca`, `frente.diferente`, `frente.surpresa`). Conversas anteriores já gravadas continuam sendo regeradas com fallbacks (o Retrato não quebra). `identity-engine.ts` lê `dados['empresa.segmento']`/`empresa.faturamento`/`empresa.funcionarios` que nunca existiram no fluxo atual — queda em null, sem erro.
+**Ação:** nenhuma agora — observar se o novo fluxo (16 perguntas, 7 blocos) gera hipóteses mais sustentadas; decidir limpeza dos IDs órfãos quando houver evidência. Ver `docs/07-MILESTONES/P70_PRIMEIRA_SESSAO_ESTRATEGICA_V3.md`.
+
