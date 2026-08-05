@@ -1,73 +1,110 @@
 import Link from 'next/link'
 import { AvatarPonte } from '@/components/ui/avatar'
-import type { AgendaDoDia } from '@/engine/motor-continuacao'
+import type { AberturaPermanente, PrioridadeAssunto } from '@/engine/motor-continuacao'
 
-const PRIORIDADE_LABEL = { ALTA: 'Atenção hoje', MEDIA: 'Vale observar', BAIXA: 'Quando puder' }
+const MARCA_PRIORIDADE: Record<PrioridadeAssunto, string> = {
+  ALTA: 'algo para pensarmos hoje',
+  MEDIA: 'algo que vale observar',
+  BAIXA: 'uma conversa para quando puder',
+}
 
-// P69 — Conversa Permanente: a abertura da Ponte. Antes de qualquer módulo,
-// o empresário encontra "Hoje vale conversarmos sobre...": uma agenda montada
-// da história da empresa. Toda abertura dura menos de um minuto. Quando não há
-// um motivo legítimo, aparece apenas a mensagem gentil de disponibilidade —
-// nunca um pedido artificial de voltar.
-export function AberturaDoDia({ data }: { data: AgendaDoDia }) {
+// P69.5 — Presença Cognitiva Permanente. A abertura NÃO é um dashboard nem um
+// card. É a CONTINUIDADE DA CONVERSA:
+//
+//   continuidade → observação → conexão → prioridade → convite
+//
+// A Ponte começa mostrando que lembra, interpreta o que viu, liga fatos
+// separados, explica POR QUE vale conversar e convida como um conselheiro —
+// nunca com botões de sistema, listas, KPIs ou "você possui".
+export function AberturaDoDia({ data }: { data: AberturaPermanente }) {
   return (
-    <section className="rounded-xl border border-primary/20 bg-card p-6 animate-fade-in space-y-5">
-      <div className="flex items-center gap-3">
-        <AvatarPonte state={data.vazia ? 'breathing' : 'thinking'} size="md" />
-        <div className="space-y-0.5">
-          <h2 className="text-lg font-semibold tracking-tight">
-            Hoje vale conversarmos sobre...
-          </h2>
-          <p className="text-xs text-muted-foreground">
-            Desde nossa última conversa, algumas coisas podem ter mudado.
+    <section className="rounded-2xl bg-gradient-to-b from-card to-muted/20 p-6 sm:p-8 animate-fade-in space-y-7">
+      {/* Presença — a Ponte lembra */}
+      <div className="flex items-start gap-4">
+        <AvatarPonte
+          state={data.momento.tipo === 'NADA_URGENTE' ? 'breathing' : 'thinking'}
+          size="md"
+        />
+        <div className="space-y-1 pt-1">
+          <p className="text-lg sm:text-xl font-semibold leading-snug tracking-tight">
+            {data.saudacao}
+          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed" data-testid="moment-frase">
+            {data.momento.frase}
           </p>
         </div>
       </div>
 
-      {data.vazia ? (
-        <div className="rounded-lg bg-muted/50 p-4 space-y-2">
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            {data.mensagemVazia}
+      {/* Camada 1 — Continuidade */}
+      <p className="text-sm sm:text-base text-foreground leading-relaxed">
+        {data.continuidade}
+      </p>
+      <p className="text-sm sm:text-base text-foreground leading-relaxed">
+        Enquanto você esteve trabalhando na empresa, algumas coisas continuaram chamando
+        minha atenção.
+      </p>
+
+      {/* Camada 2 — Observação */}
+      <div className="rounded-xl border-l-2 border-primary/40 bg-background/60 p-4">
+        <p className="text-sm sm:text-base text-foreground leading-relaxed">
+          {data.observacao}
+        </p>
+      </div>
+
+      {/* Camada 3 — Conexão */}
+      {data.conexao && (
+        <div className="rounded-xl border border-dashed border-primary/20 bg-background/60 p-4">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-primary/70">
+            Uma conexão que me chamou atenção
+          </p>
+          <p className="mt-1.5 text-sm sm:text-base text-foreground leading-relaxed">
+            {data.conexao}
           </p>
         </div>
-      ) : (
-        <div className="space-y-3">
-          {data.itens.map((item) => (
-            <Link
-              key={item.id}
-              href={item.rota}
-              className="block rounded-lg border border-border bg-background p-4 space-y-2 transition-colors hover:border-primary/40 hover:bg-muted/40"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-primary/70">
-                  {PRIORIDADE_LABEL[item.prioridade]}
-                </p>
-                <span className="text-[10px] text-muted-foreground/60">{item.titulo}</span>
-              </div>
-              <p className="text-sm font-medium leading-relaxed">{item.contexto}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">{item.pergunta}</p>
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {item.opcoes.map((opcao) => (
+      )}
+
+      {/* Camada 4 — Prioridade (por que conversar) */}
+      <p className="text-sm sm:text-base text-foreground leading-relaxed">{data.prioridade}</p>
+
+      {/* Assuntos — pequenas conversas, nunca cards */}
+      <div className="space-y-4">
+        {data.assuntos.map((assunto) => (
+          <Link
+            key={assunto.id}
+            href={assunto.rota}
+            className="block rounded-xl border border-border bg-background p-5 transition-all hover:border-primary/30 hover:bg-muted/30"
+          >
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/70">
+              {MARCA_PRIORIDADE[assunto.prioridade]}
+            </p>
+            <p className="mt-2 text-sm sm:text-base text-foreground leading-relaxed">
+              {assunto.fala}
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <p className="text-sm font-medium text-primary">{assunto.pergunta}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {assunto.opcoes.map((opcao) => (
                   <span
                     key={opcao}
-                    className="rounded-full border border-border bg-card px-3 py-1 text-[11px] text-muted-foreground"
+                    className="rounded-full border border-border px-3 py-1 text-[11px] text-muted-foreground"
                   >
                     {opcao}
                   </span>
                 ))}
               </div>
-            </Link>
-          ))}
-        </div>
-      )}
+            </div>
+          </Link>
+        ))}
+      </div>
 
-      <div className="flex items-center justify-between gap-3 pt-1">
-        <p className="text-xs text-muted-foreground italic">{data.convite}</p>
+      {/* Camada 5 — Convite (parece conversa, não botão) */}
+      <div className="flex items-center justify-between gap-4 pt-1">
+        <p className="text-sm text-muted-foreground italic leading-relaxed">{data.convite}</p>
         <Link
           href="/conversa"
-          className="shrink-0 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+          className="shrink-0 rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
         >
-          Conversar agora
+          Vamos pensar nisso juntos.
         </Link>
       </div>
     </section>

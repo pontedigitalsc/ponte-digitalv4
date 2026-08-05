@@ -189,4 +189,12 @@
 **Descrição:** os limiares da Agenda Inteligente (decisão sem retorno ≥ 3 dias → Alta ≥ 7; hipótese ativa por impacto; evolução ≥ 7 dias) são regras determinísticas escolhidas por bom senso, ainda **sem calibração com uso real**. Podem mostrar assuntos cedo demais (insistência) ou tarde demais (assunto esfriar). As regras "nunca repetir", "nunca perguntar o já respondido" e "nunca insistir em encerrado" são garantidas pela seleção (decisões vivas ≥ 3 dias, hipóteses ativas, evolução só quando há continuidade) — mas o volume/valor percebido ainda não foi medido.
 **Ação:** medir engajamento da abertura (cliques em "Conversar agora", taxa de retorno semanal) antes de ajustar limiares. Ver `docs/07-MILESTONES/P69_CONVERSA_PERMANENTE.md` §6.
 
+## P69.5 — "conectar fatos distantes" limitado aos dados que já existem (decisões + hipóteses)
+
+**Status:** Aceito (versão fundacional — a monitorar)
+**Prioridade:** Baixa
+**Descrição:** o spec ideal descreve a Ponte ligando fatos de conversas separadas (ex.: conversa 1 "quero contratar", conversa 4 "estou sem caixa", conversa 7 "quero abrir outra unidade"). A versão fundacional do P69.5 implementa a **Conexão** de forma determinística sobre os dados que já existem de forma estruturada — decisão em aberto + hipótese ativa, ou decisões empilhadas ("talvez exista uma ordem mais segura para essas decisões"). A correlação por tema entre respostas livres de conversas diferentes ainda não é feita (exigiria análise de texto por tema, fora do escopo "conectar o que já existe" desta fase).
+**Ação:** quando houver volume de conversas reais, avaliar conectar respostas por tema (palavras-chave por categoria, ex.: contratação × caixa × expansão) para reforçar a hipótese de "ordem segura de decisões". Ver `docs/07-MILESTONES/P69_5_PRESENCA_COGNITIVA_PERMANENTE.md` §2.3.
+
+
 

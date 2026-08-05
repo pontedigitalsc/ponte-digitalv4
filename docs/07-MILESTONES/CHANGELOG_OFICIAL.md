@@ -4,6 +4,22 @@
 
 ---
 
+## Programa 69.5 — A Presença Cognitiva Permanente (Versão Fundacional)
+
+**5 de agosto de 2026**
+
+**"Ao abrir a Ponte, o empresário deve sentir: minha empresa continuou sendo compreendida enquanto eu vivia minha rotina."** O P69 cumpriu parcialmente a missão — a agenda existia, mas a abertura ainda parecia um painel de sistema. **P69.5 transformou a entrada na experiência mais valiosa do produto** — sem funcionalidades novas, sem migrations, rotas, telas ou módulos, tudo determinístico (sem IA).
+
+**A primeira tela deixou de ser um dashboard.** A abertura agora diz, com o nome do empresário: *"Bom dia, João. Enquanto você esteve trabalhando na empresa, algumas coisas continuaram chamando minha atenção..."*. **Novo princípio: a Ponte nunca começa perguntando — começa mostrando que lembra.**
+
+**Toda abertura contém cinco camadas:** (1) **Continuidade** — nunca "bem-vindo", sempre "na nossa última conversa..." (via `montarContinuidadeConversa`); (2) **Observação** — interpreta, não repete fato ("o que mais me chamou atenção é que essa decisão está em aberto há alguns dias"); (3) **Conexão** — liga fatos separados (decisão em aberto + hipótese; decisões empilhadas → "talvez exista uma ordem mais segura"); (4) **Prioridade** — POR QUE conversar, nunca lista de tarefas; (5) **Convite** — "Vamos pensar nisso juntos?", parece conversa, não botão.
+
+**Nunca cards.** Os assuntos viram **pequenas conversas** ("Tenho pensado em uma coisa. Há uma decisão em aberto — 'Contratar alguém' — que ainda não sabemos como terminou."). Proibidos: cards genéricos, listas, KPIs protagonistas, "você possui"/"existem"/"foram encontrados", linguagem técnica. **Cada abertura tem um MOMENTO** escolhido pelo sinal mais forte (revisar decisão antiga ≥14 dias, oportunidade, dúvida de hipótese de alto impacto, evolução, ou *"nada urgente — isso é uma boa notícia"*), criando expectativa. **A abertura nunca fica vazia:** sem decisões/hipóteses, a Ponte oferece a pergunta viva ou uma reflexão. **O dashboard vira secundário** — a ordem da home é conversa → agenda → reflexões → módulos. `tsc` e `npm run build` limpos.
+
+**Documentos criados/atualizados:** `P69_5_PRESENCA_COGNITIVA_PERMANENTE.md`, `CHANGELOG_OFICIAL.md`, `CURRENT_PRODUCT.md`, `KNOWN_ISSUES.md`. **STATUS: A PONTE ABRE COMO CONVERSA CONTÍNUA.**
+
+---
+
 ## Programa 69 — Conversa Permanente
 
 **4 de agosto de 2026**

@@ -1,40 +1,55 @@
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { montarContinuidadeConversa } from './relacao-engine'
 
-// P69 — Conversa Permanente: Agenda Inteligente (motor-continuacao.ts).
+// P69.5 — Presença Cognitiva Permanente (versão fundacional).
 //
-// A Ponte não depende do empresário lembrar dela — ela lembra do empresário.
-// Ao abrir a Ponte, antes de qualquer módulo, o empresário encontra
-// "Hoje vale conversarmos sobre...": uma agenda montada da história daquela
-// empresa. NUNCA por data — sempre por contexto.
+// O P69 já montava uma agenda. Mas ainda parecia um painel com cards.
+// Este programa transforma a abertura em CONTINUIDADE DA CONVERSA:
 //
-// Regras absolutas:
-// - Nunca interrompe com notificação vazia.
-// - Nunca cria tarefa artificial.
-// - Nunca mostra mais que 3 assuntos.
-// - Nunca repete pergunta já respondida ou assunto encerrado.
-// - Se não há motivo legítimo, mostra apenas a mensagem gentil.
+//   "Minha empresa continuou sendo compreendida enquanto eu vivia minha rotina."
+//
+// REGRAS DE ORO DA ABERTURA:
+// - A Ponte nunca começa perguntando. Ela começa MOSTRANDO QUE LEMBRA.
+// - Nunca "bem-vindo" — sempre "na nossa última conversa..." ou "desde a última...".
+// - Nunca cards / listas / KPIs / "você possui" / "existem" / "foram encontrados".
+// - Assuntos aparecem como PEQUENAS CONVERSAS, não cards.
+// - A abertura tem 5 camadas: CONTINUIDADE → OBSERVAÇÃO → CONEXÃO → PRIORIDADE → CONVITE.
+// - Cada abertura tem um MOMENTO (oportunidade, risco, evolução, dúvida, revisar decisão...).
+// - A Ponte sempre tem algo inteligente para conversar. Nunca deixa a abertura vazia.
+//
+// Tudo determinístico (sem IA): a conversa nasce de dados e memória reais.
+
+export type MomentoTipo =
+  | 'OPORTUNIDADE'
+  | 'RISCO'
+  | 'EVOLUCAO'
+  | 'DUVIDA'
+  | 'REVISAR_DECISAO'
+  | 'NADA_URGENTE'
 
 export type PrioridadeAssunto = 'ALTA' | 'MEDIA' | 'BAIXA'
-export type TipoAssunto = 'DECISAO' | 'HIPOTESE' | 'EVOLUCAO'
+export type TipoAssunto = 'DECISAO' | 'HIPOTESE' | 'EVOLUCAO' | 'CONEXAO'
 
-export interface ItemAbertura {
+export interface AssuntoConversa {
   id: string
   tipo: TipoAssunto
-  titulo: string
-  contexto: string // a razão legítima, baseada na história — nunca "X dias sem acessar"
+  fala: string // o que a Ponte diz, como convite à conversa — não um card
   pergunta: string
   opcoes: string[]
   prioridade: PrioridadeAssunto
   rota: string
 }
 
-export interface AgendaDoDia {
+export interface AberturaPermanente {
   saudacao: string
-  itens: ItemAbertura[]
-  vazia: boolean
-  mensagemVazia: string
-  convite: string
+  momento: { tipo: MomentoTipo; rotulo: string; frase: string }
+  continuidade: string // camada 1 — a Ponte lembra
+  observacao: string // camada 2 — interpreta, não repete fato
+  conexao: string | null // camada 3 — liga fatos separados
+  prioridade: string // camada 4 — POR QUE conversar
+  convite: string // camada 5 — parece conversa, não botão
+  assuntos: AssuntoConversa[] // pequenas conversas (máx 3)
+  sempreTemOQueDizer: boolean // nunca fica vazio
 }
 
 const ORDEM_PRIORIDADE: Record<PrioridadeAssunto, number> = { ALTA: 0, MEDIA: 1, BAIXA: 2 }
@@ -43,33 +58,74 @@ function diasDesde(data: Date, agora: Date): number {
   return Math.floor((agora.getTime() - data.getTime()) / (24 * 60 * 60 * 1000))
 }
 
-function saudacaoDoDia(agora: Date): string {
+function saudacaoDoDia(nome: string, agora: Date): string {
   const hora = agora.getHours()
-  if (hora >= 5 && hora < 12) return 'Bom dia.'
-  if (hora >= 12 && hora < 18) return 'Boa tarde.'
-  return 'Boa noite.'
+  const primeiroNome = nome.split(' ')[0]
+  if (hora >= 5 && hora < 12) return `Bom dia, ${primeiroNome}.`
+  if (hora >= 12 && hora < 18) return `Boa tarde, ${primeiroNome}.`
+  return `Boa noite, ${primeiroNome}.`
 }
 
-// P69 — escolhe os assuntos da abertura. Nenhuma IA: a decisão é
-// determinística, sobre dados e memória reais. Critérios, em ordem de peso:
-// 1. Decisão acompanhada (P68) sem retorno há alguns dias — "não sabemos como
-//    terminou" é uma razão legítima para abrir conversa.
-// 2. Hipótese importante ainda não validada (impacto alto/médio, ativa).
-// 3. Evolução: passou tempo desde a última conversa e há o que retomar.
-//
-// Nunca há mais que 3 assuntos; cada um com prioridade Alta/Média/Baixa.
-export async function montarAgendaDoDia(empresaId: string): Promise<AgendaDoDia> {
-  const agora = new Date()
-  const itens: ItemAbertura[] = []
+// P69.5 — escolhe o MOMENTO desta abertura. Cada abertura tem uma intenção,
+// o que cria expectativa e surpresa. Determinístico, ancorado no sinal mais forte.
+function escolherMomento(
+  decisoes: { criadaEm: Date }[],
+  hipoteses: { descricao: string; impacto: string; criadaEm: Date }[],
+  temEvolucao: boolean,
+  agora: Date
+): AberturaPermanente['momento'] {
+  const decisaoAntiga = decisoes.some((d) => diasDesde(d.criadaEm, agora) >= 14)
+  const decisaoRecenteAberta = decisoes.some((d) => diasDesde(d.criadaEm, agora) >= 3)
+  const hipoteseAlta = hipoteses.some((h) => h.impacto === 'ALTO')
 
-  const [decisoes, hipoteses, ultimaConversa, continuidade] = await Promise.all([
+  if (decisaoAntiga) {
+    return {
+      tipo: 'REVISAR_DECISAO',
+      rotulo: 'Uma decisão para revisitar',
+      frase: 'Existe uma decisão antiga que talvez valha revisitar.',
+    }
+  }
+  if (decisaoRecenteAberta) {
+    return {
+      tipo: 'OPORTUNIDADE',
+      rotulo: 'Uma decisão em aberto',
+      frase: 'Existe uma decisão importante que ainda não sabemos como terminou.',
+    }
+  }
+  if (hipoteseAlta) {
+    return {
+      tipo: 'DUVIDA',
+      rotulo: 'Uma dúvida que me acompanha',
+      frase: 'Hoje fiquei com uma dúvida que vale conversarmos.',
+    }
+  }
+  if (temEvolucao) {
+    return {
+      tipo: 'EVOLUCAO',
+      rotulo: 'Uma evolução que percebi',
+      frase: 'Acho que você evoluiu em um ponto importante.',
+    }
+  }
+  return {
+    tipo: 'NADA_URGENTE',
+    rotulo: 'Nada urgente hoje',
+    frase: 'Hoje não encontrei nenhum alerta importante. Isso é uma boa notícia.',
+  }
+}
+
+// P69.5 — monta a abertura permanente.
+// Camadas: continuidade → observação → conexão → prioridade → convite.
+// Assuntos viram PEQUENAS CONVERSAS, nunca cards.
+export async function montarAberturaPermanente(
+  empresaId: string,
+  nome: string
+): Promise<AberturaPermanente> {
+  const agora = new Date()
+
+  const [decisoes, hipoteses, ultimaConversa, continuidade, perguntaViva, memorias] = await Promise.all([
     prisma.acaoCognitiva.findMany({
-      where: {
-        empresaId,
-        deletedAt: null,
-        status: { in: ['PENDENTE', 'EM_ANDAMENTO'] },
-      },
-      select: { id: true, titulo: true, criadaEm: true, atualizadaEm: true, origem: true, feedbacks: { where: { deletedAt: null }, select: { id: true }, take: 1 } },
+      where: { empresaId, deletedAt: null, status: { in: ['PENDENTE', 'EM_ANDAMENTO'] } },
+      select: { id: true, titulo: true, criadaEm: true, atualizadaEm: true },
       orderBy: { criadaEm: 'asc' },
     }),
     prisma.hipotese.findMany({
@@ -78,7 +134,7 @@ export async function montarAgendaDoDia(empresaId: string): Promise<AgendaDoDia>
         deletedAt: null,
         estado: { in: ['NOVA', 'EM_OBSERVACAO', 'FORTALECIDA'] },
       },
-      select: { id: true, descricao: true, impacto: true },
+      select: { id: true, descricao: true, impacto: true, criadaEm: true },
       orderBy: [{ impacto: 'desc' }, { criadaEm: 'asc' }],
       take: 6,
     }),
@@ -88,75 +144,125 @@ export async function montarAgendaDoDia(empresaId: string): Promise<AgendaDoDia>
       select: { criadaEm: true },
     }),
     montarContinuidadeConversa(empresaId).catch(() => null),
+    prisma.perguntaViva.findFirst({
+      where: { empresaId, estado: 'ATIVA', deletedAt: null },
+      orderBy: { criadaEm: 'desc' },
+    }),
+    prisma.memoriaEmocional.findMany({
+      where: { empresaId, deletedAt: null },
+      orderBy: { criadaEm: 'desc' },
+      take: 1,
+    }),
   ])
 
-  // 1 — Decisões acompanhadas abertas. Uma decisão viva que não voltou é a
-  // razão mais legítima: ela importa para o futuro da empresa.
-  for (const d of decisoes) {
+  const decisoesAbertas = decisoes.filter((d) => diasDesde(d.criadaEm, agora) >= 3)
+  const temEvolucao = memorias.length > 0
+  const momento = escolherMomento(decisoes, hipoteses, temEvolucao, agora)
+
+  // ─── CAMADA 1 — CONTINUIDADE: a Ponte mostra que lembra, nunca "bem-vindo".
+  const baseContinuidade =
+    continuidade ??
+    (ultimaConversa
+      ? 'Desde nossa última conversa, algumas coisas continuaram chamando minha atenção.'
+      : 'Ainda estamos nos conhecendo — mas já estou começando a entender sua empresa.')
+
+  // ─── CAMADA 4 — PRIORIDADE: POR QUE conversar (nunca listar tarefas).
+  const prioridade =
+    momento.tipo === 'REVISAR_DECISAO'
+      ? 'Acho que vale revisarmos essa decisão porque ela pode influenciar praticamente as próximas escolhas da empresa.'
+      : momento.tipo === 'OPORTUNIDADE'
+        ? 'Hoje eu destacaria isso porque é uma decisão que pode mudar o rumo das próximas semanas.'
+        : momento.tipo === 'EVOLUCAO'
+          ? 'Vale conversarmos porque entender o que mudou ajuda a repetir o que funcionou.'
+          : momento.tipo === 'DUVIDA'
+            ? 'Essa dúvida importa porque ela pode estar atrás de várias outras decisões que você está tomando.'
+            : 'Mesmo sem urgência, vale pensarmos juntos para continuarmos afinando a leitura da sua empresa.'
+
+  // ─── CAMADA 5 — CONVITE: parece conversa, não botão.
+  const convite =
+    momento.tipo === 'NADA_URGENTE'
+      ? 'Podemos analisar isso agora, quando você quiser.'
+      : 'Vamos pensar nisso juntos?'
+
+  // ─── ASSUNTOS — pequenas conversas (máx 3).
+  const assuntos: AssuntoConversa[] = []
+
+  for (const d of decisoesAbertas) {
     const idadeDias = diasDesde(d.criadaEm, agora)
-    // Só entra se já passou algum tempo desde o registro (>= 3 dias) — logo
-    // após nascer, ela está sendo pensada; voltar agora seria insistência.
-    if (idadeDias < 3) continue
-    const prioridade: PrioridadeAssunto = idadeDias >= 7 ? 'ALTA' : 'MEDIA'
-    itens.push({
+    assuntos.push({
       id: `decisao:${d.id}`,
       tipo: 'DECISAO',
-      titulo: d.titulo,
-      contexto: 'Há uma decisão importante que ainda não sabemos como terminou.',
+      fala: `Tenho pensado em uma coisa. Há uma decisão em aberto — "${d.titulo}" — que ainda não sabemos como terminou.`,
       pergunta: 'Essa decisão aconteceu?',
       opcoes: ['Sim', 'Ainda não', 'Mudei de ideia'],
-      prioridade,
+      prioridade: idadeDias >= 7 ? 'ALTA' : 'MEDIA',
       rota: '/centro-decisao',
     })
-    if (itens.length >= 3) break
+    if (assuntos.length >= 3) break
   }
 
-  // 2 — Hipóteses importantes ainda não validadas. A Ponte continua acreditando
-  // em algo sobre a empresa e precisa saber se ainda é verdade.
   for (const h of hipoteses) {
-    const prioridade: PrioridadeAssunto = h.impacto === 'ALTO' ? 'ALTA' : 'MEDIA'
-    itens.push({
+    assuntos.push({
       id: `hipotese:${h.id}`,
       tipo: 'HIPOTESE',
-      titulo: h.descricao.slice(0, 90),
-      contexto: 'Eu continuo acreditando em algo sobre sua empresa e quero saber se ainda faz sentido.',
+      fala: `Eu tenho continuado a acreditar que ${h.descricao.toLowerCase()}.`,
       pergunta: 'Você ainda sente isso?',
       opcoes: ['Sim', 'Parcialmente', 'Não'],
-      prioridade,
+      prioridade: h.impacto === 'ALTO' ? 'ALTA' : 'MEDIA',
       rota: '/conversa',
     })
-    if (itens.length >= 3) break
+    if (assuntos.length >= 3) break
   }
 
-  // 3 — Evolução: faz tempo desde a última conversa e há o que retomar. A
-  // frase usa memória recente ("na última conversa você contou..."), nunca
-  // "você está há X dias sem acessar".
-  if (itens.length < 3 && ultimaConversa) {
-    const diasDesdeConversa = diasDesde(ultimaConversa.criadaEm, agora)
-    if (diasDesdeConversa >= 7 && continuidade) {
-      itens.push({
-        id: `evolucao:${ultimaConversa.criadaEm.toISOString()}`,
-        tipo: 'EVOLUCAO',
-        titulo: continuidade.slice(0, 120),
-        contexto: 'Desde nossa última conversa algumas coisas podem ter mudado.',
-        pergunta: 'Nesta semana isso mudou?',
-        opcoes: ['Melhorou', 'Continua igual', 'Piorou'],
-        prioridade: diasDesdeConversa >= 14 ? 'ALTA' : 'MEDIA',
-        rota: '/conversa',
-      })
-    }
+  // Conexão: ligar fatos separados (decisão + hipótese) — raciocínio real.
+  let conexao: string | null = null
+  if (decisoesAbertas.length > 0 && hipoteses.length > 0) {
+    conexao =
+      'Tenho notado que uma decisão segue em aberto ao mesmo tempo em que continuo acreditando em uma hipótese sobre a sua empresa. Quando essas duas coisas caminham lado a lado, costuma valer a pena olhá-las juntas — uma costuma explicar a outra.'
+  } else if (decisoesAbertas.length > 1) {
+    conexao =
+      'Percebi que há mais de uma decisão em aberto ao mesmo tempo. Decisões empilhadas costumam ter uma ordem mais segura de serem tomadas — talvez exista uma sequência que simplifique tudo.'
   }
 
-  const itensOrdenados = itens
+  // Nunca deixa a abertura vazia: sempre há algo inteligente para conversar.
+  if (assuntos.length === 0) {
+    const questao = perguntaViva?.pergunta
+      ? `Mesmo assim fiquei pensando em uma pergunta que vem me acompanhando: "${perguntaViva.pergunta}"`
+      : 'Mesmo assim fiquei pensando em algo: quando você percebe que a empresa depende de você para quase tudo, isso costuma aparecer primeiro no tempo, e depois no caixa.'
+    assuntos.push({
+      id: `pergunta:${perguntaViva?.id ?? 'sempre'}`,
+      tipo: 'EVOLUCAO',
+      fala: questao,
+      pergunta: 'O que você acha?',
+      opcoes: ['Faz sentido', 'Não é bem assim', 'Deixa eu pensar'],
+      prioridade: 'BAIXA',
+      rota: '/conversa',
+    })
+  }
+
+  const assuntosOrdenados = assuntos
     .sort((a, b) => ORDEM_PRIORIDADE[a.prioridade] - ORDEM_PRIORIDADE[b.prioridade])
     .slice(0, 3)
 
+  // ─── CAMADA 2 — OBSERVAÇÃO: interpreta, nunca repete fato.
+  const top = assuntosOrdenados[0]
+  const observacao = top
+    ? top.tipo === 'DECISAO'
+      ? `O que mais me chamou atenção é que essa decisão está em aberto há alguns dias. Decisões em aberto costumam pesar mais do que parecem — e isso vale conversarmos antes que ela vire um nó.`
+      : top.tipo === 'HIPOTESE'
+        ? `O que mais me chamou atenção é que seguimos acreditando em algo sobre a sua empresa, mas ainda não tivemos a chance de confirmar se continua sendo verdade.`
+        : `O que mais me chamou atenção é que você tem continuado a empresa mesmo com tantas coisas se movendo ao mesmo tempo.`
+    : 'O que mais me chamou atenção, hoje, é o quanto a sua rotina e a empresa seguem caminhando juntas.'
+
   return {
-    saudacao: saudacaoDoDia(agora),
-    itens: itensOrdenados,
-    vazia: itensOrdenados.length === 0,
-    mensagemVazia:
-      'Hoje não encontrei nenhum ponto que mereça sua atenção imediata. Mas, se alguma decisão importante estiver acontecendo, estou aqui.',
-    convite: 'Tem alguma decisão importante acontecendo hoje?',
+    saudacao: saudacaoDoDia(nome, agora),
+    momento,
+    continuidade: baseContinuidade,
+    observacao,
+    conexao,
+    prioridade,
+    convite,
+    assuntos: assuntosOrdenados,
+    sempreTemOQueDizer: true,
   }
 }

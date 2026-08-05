@@ -1,5 +1,18 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P69.5 — A PRESENÇA COGNITIVA PERMANENTE (VERSÃO FUNDACIONAL) — STATUS OFICIAL — 5 de agosto de 2026**
+>
+> **"Ao abrir a Ponte, o empresário deve sentir: minha empresa continuou sendo compreendida enquanto eu vivia minha rotina."** O P69.5 transformou a abertura — ela deixou de parecer um dashboard com cards e virou **continuidade da conversa** (sem migrations, rotas, telas, módulos ou funcionalidades novas; determinístico, sem IA):
+>
+> - **A primeira tela não é um dashboard:** abertura com saudação pelo nome e *"Enquanto você esteve trabalhando na empresa, algumas coisas continuaram chamando minha atenção..."*.
+> - **5 camadas em toda abertura:** **Continuidade** (nunca "bem-vindo", sempre "na nossa última conversa..." via `montarContinuidadeConversa`) → **Observação** (interpreta, não repete fato) → **Conexão** (liga decisão em aberto + hipótese, ou decisões empilhadas — "talvez exista uma ordem mais segura") → **Prioridade** (POR QUE conversar, nunca lista de tarefas) → **Convite** ("Vamos pensar nisso juntos?", parece conversa, não botão).
+> - **Nunca cards:** assuntos viram **pequenas conversas** ("Tenho pensado em uma coisa. Há uma decisão em aberto..."). Proibidos: cards genéricos, listas, KPIs protagonistas, "você possui"/"existem"/"foram encontrados", linguagem técnica.
+> - **Momentos:** cada abertura tem uma intenção por sinal mais forte — revisar decisão antiga (≥14 dias), oportunidade (decisão aberta), dúvida (hipótese de alto impacto), evolução, ou *"nada urgente — isso é uma boa notícia"*.
+> - **Nunca vazia:** sem decisões/hipóteses, a Ponte oferece a pergunta viva ou uma reflexão — sempre tem algo inteligente para conversar.
+> - **Dashboard vira secundário:** ordem da home é conversa → agenda → reflexões → módulos.
+>
+> Ver `docs/07-MILESTONES/P69_5_PRESENCA_COGNITIVA_PERMANENTE.md`.
+
 > **MARCO: P69 — CONVERSA PERMANENTE — STATUS OFICIAL — 4 de agosto de 2026**
 >
 > **"A Ponte Digital não é um lugar onde você entra para responder perguntas. É um lugar que acompanha continuamente a história da sua empresa e sempre mostra o que realmente merece sua atenção antes da próxima decisão."** A Ponte deixa de ser sistema de consultas e conduz a continuidade (sem migrations, rotas, telas ou módulos novos):

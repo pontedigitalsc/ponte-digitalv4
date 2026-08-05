@@ -9,7 +9,7 @@ import { decidirContexto, buscarSituacaoEmpresa } from '@/engine/cognitive-conte
 import { listarAprendizados } from '@/engine/aprendizado-service'
 import { obterRitualDiario } from '@/engine/ritual-engine'
 import { obterConquistas } from '@/engine/celebracao-service'
-import { montarAgendaDoDia } from '@/engine/motor-continuacao'
+import { montarAberturaPermanente } from '@/engine/motor-continuacao'
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { AvatarPonte } from '@/components/ui/avatar'
 import { ComoEstaHoje } from '@/components/dashboard/como-esta-hoje'
@@ -43,7 +43,7 @@ export default async function DashboardPage() {
       .catch(() => null),
     obterRitualDiario(usuario.empresaId, nome).catch(() => null),
     obterConquistas(usuario.empresaId).catch(() => []),
-    montarAgendaDoDia(usuario.empresaId).catch(() => null),
+    montarAberturaPermanente(usuario.empresaId, nome).catch(() => null),
   ])
 
   const ritual: RitualDiarioData = ritualData ?? {
