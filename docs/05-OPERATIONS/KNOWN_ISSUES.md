@@ -154,3 +154,10 @@
 **Descrição:** P70 removeu 10 IDs de pergunta do fluxo (`empresa.nome`, `empresa.oque`, `empresa.haquanto`, `empresario.quem`, `historia.nascer`, `historia.momento`, `rotina.pressao`, `historia.mudanca`, `frente.diferente`, `frente.surpresa`). Conversas anteriores já gravadas continuam sendo regeradas com fallbacks (o Retrato não quebra). `identity-engine.ts` lê `dados['empresa.segmento']`/`empresa.faturamento`/`empresa.funcionarios` que nunca existiram no fluxo atual — queda em null, sem erro.
 **Ação:** nenhuma agora — observar se o novo fluxo (16 perguntas, 7 blocos) gera hipóteses mais sustentadas; decidir limpeza dos IDs órfãos quando houver evidência. Ver `docs/07-MILESTONES/P70_PRIMEIRA_SESSAO_ESTRATEGICA_V3.md`.
 
+## P67 — `historia.orgulho` fora do fluxo V4 (alteração deliberada)
+
+**Status:** Aceito (alteração deliberada, a monitorar para P68)
+**Prioridade:** Baixa
+**Descrição:** o escopo P67 aprovado definiu exatamente 14 perguntas núcleo em 4 blocos (sessão V4). Para honrar os 10–14, `historia.orgulho` saiu do fluxo ativo. O ID permanece vivo e null-safe nas engines (hipóteses, interpretações, relações, memória evolutiva) — o Retrato regea sem ela. Ao transformar perguntas de `texto` em `selecao`, os sinais por palavras-chave foram reconduzidos pelos rótulos (ex.: "quase sozinha" → delegação; "eu mesmo" → sobrecarga; "confio no meu instinto" → intuição). Além disso, as devolutivas de fim de bloco agora esperam blocos V4 (`atual/peso/evolucao/atencao`) e nunca os antigos `momento/decisao/clientes/...` — se uma conversa persistida antiga regerar devolutiva com bloco antigo, cai no fallback `obterReacao('')`.
+**Ação:** reintroduzir `historia.orgulho` (ou equivalente de pertencimento) nas sessões de retorno do P68, quando o empresário já tem história; verificar no deploy se conversas antigas persistidas ainda geram devolutiva coerente. Ver `docs/07-MILESTONES/P67_EXPERIENCIA_COGNITIVA_DE_CONVERSA_V1.md`.
+

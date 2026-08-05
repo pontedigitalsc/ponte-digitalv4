@@ -1,5 +1,18 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P67 — EXPERIÊNCIA COGNITIVA DE CONVERSA V1 — STATUS OFICIAL — 4 de agosto de 2026**
+>
+> **"A Ponte não coleta dados. A Ponte ajuda o empresário a pensar sobre a própria empresa."** A primeira conversa deixou de parecer formulário e virou aconselhamento (sem funcionalidades novas de domínio):
+>
+> - **Novo modelo de pergunta:** toda pergunta estratégica tem 4 elementos — **contexto** (amarra ao que já foi falado), **motivo** (por que importa), **pergunta** e **opções (3–5) + "Minha situação é diferente"** (campo aberto). O empresário nunca sente que está preenchendo dados: vê o contexto como convite e o motivo como nota "Por que pergunto". Nenhuma pergunta estratégica aceita só caixa de texto vazia.
+> - **Toda resposta gera reação:** devolutivas de fim de bloco citam as palavras reais do empresário, como um conselheiro que leu.
+> - **Ritual de 7 segundos:** a percepção fica ~7s com barra de preenchimento (não é spinner, é ritual) e o botão **"Continuar agora"** está sempre disponível.
+> - **Sessão V4 em 4 blocos (`atual`/`peso`/`evolucao`/`atencao`)** — 10–14 interações núcleo (até 16 com condicionais de adaptação P65). IDs de pergunta **preservados**; apenas a agrupação em blocos mudou. Sinais por palavras-chave das hipóteses reconduzidos nos novos rótulos.
+> - **Retrato V4 — "Primeiro diagnóstico cognitivo da empresa":** 6 seções, com a tripartite **O que sabemos / O que acreditamos / O que precisamos observar** na seção de decisão. Sempre consequência de hipóteses sobre respostas reais, nunca template.
+> - **Alteração deliberada a monitorar:** `historia.orgulho` saiu do fluxo ativo (teto de 14 interações); permanece null-safe nas engines, candidata a voltar no P68.
+>
+> Ver `docs/07-MILESTONES/P67_EXPERIENCIA_COGNITIVA_DE_CONVERSA_V1.md`.
+
 > **MARCO: P66 — O CONSELHEIRO EMPRESARIAL — STATUS OFICIAL — 4 de agosto de 2026**
 >
 > **"A Ponte não responde imediatamente. A Ponte pensa junto."** Mudança de comportamento do Assistente (sem funcionalidades novas, sem tela, sem schema):

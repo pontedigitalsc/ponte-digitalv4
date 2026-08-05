@@ -4,6 +4,28 @@
 
 ---
 
+## Programa 67 — Experiência Cognitiva de Conversa V1
+
+**4 de agosto de 2026**
+
+**"A Ponte não coleta dados. A Ponte ajuda o empresário a pensar sobre a própria empresa."** A primeira conversa deixou de parecer formulário e virou aconselhamento — sem funcionalidades novas de domínio, apenas reestruturação da experiência e da entrega.
+
+**Novo modelo de pergunta (Parte 1):** toda pergunta estratégica agora tem os 4 elementos — **contexto** (amarra a pergunta ao que já foi falado), **motivo** (por que importa), **pergunta** e **opções (3–5) + "Minha situação é diferente"** (campo aberto). O empresário nunca sente que está preenchendo dados: ele vê o contexto como convite e o motivo como nota "Por que pergunto". Nenhuma pergunta estratégica aceita mais apenas caixa de texto vazia (Parte 4).
+
+**Toda resposta gera reação (Parte 2):** as devolutivas de fim de bloco passaram a citar as palavras reais do empresário, como um conselheiro que de fato leu.
+
+**Ritual de 7 segundos (Parte 3):** a percepção fica ~7s com barra de preenchimento (não é spinner, é ritual), e o botão **"Continuar agora"** está sempre disponível — ninguém espera 7s à toa.
+
+**Primeira Sessão Estratégica V4 (Parte 6):** 7 blocos/18 etapas viraram **4 blocos-guia** (`atual`/`peso`/`evolucao`/`atencao`) com 10–14 interações núcleo (até 16 com condicionais de adaptação P65). Os IDs de pergunta foram **preservados** — as engines de hipóteses, reações e memória evolutiva continuam funcionando; apenas o agrupamento em blocos mudou. Ao converter `texto`→`selecao`, os sinais por palavras-chave foram reconduzidos nos rótulos (ex.: "quase sozinha"→delegação, "eu mesmo"→sobrecarga, "confio no meu instinto"→intuição).
+
+**Retrato Estratégico V4 (Parte 7):** virou **"Primeiro diagnóstico cognitivo da empresa"**, com 6 seções e a tripartite **O que sabemos / O que acreditamos / O que precisamos observar** na seção de decisão — sempre consequência de hipóteses sobre respostas reais, nunca template, respeitando "IA é interface, não cérebro".
+
+**Alteração deliberada (a monitorar):** `historia.orgulho` saiu do fluxo ativo para honrar o teto de 14 interações; permanece viva e null-safe nas engines, candidata a voltar nas sessões de retorno do P68. Ver `P67_EXPERIENCIA_COGNITIVA_DE_CONVERSA_V1.md` e `KNOWN_ISSUES.md`. Sem migrations. `tsc` e `npm run build` limpos.
+
+**Documentos criados/atualizados:** `P67_EXPERIENCIA_COGNITIVA_DE_CONVERSA_V1.md`, `CHANGELOG_OFICIAL.md`, `CURRENT_PRODUCT.md`, `KNOWN_ISSUES.md`. **STATUS: EXPERIÊNCIA COGNITIVA DE CONVERSA.**
+
+---
+
 ## Programa 66 — O Conselheiro Empresarial
 
 **4 de agosto de 2026**

@@ -19,6 +19,8 @@ interface Pergunta {
   estagio?: string
   bloco?: BlocoConversa
   permiteDetalhe?: boolean
+  contexto?: string
+  motivo?: string
 }
 
 interface Progresso {
@@ -138,6 +140,7 @@ export default function ConversaPage() {
       setReacao(data.reacao)
       setMostrandoReacao(true)
       setEnviando(false)
+      setReacaoSeq((s) => s + 1)
 
       dadosRespostaRef.current = {
         concluida: data.concluida,
@@ -145,9 +148,10 @@ export default function ConversaPage() {
         progresso: data.progresso,
       }
 
-      timerRef.current = setTimeout(() => {
-        avancarDaReacao(data.concluida, data.proximaPergunta, data.progresso)
-      }, 1400)
+      // P67 — a percepção fica ~7 segundos (tempo para o empresário sentir que
+      // a Ponte de fato leu a resposta), mas "Continuar agora" está sempre
+      // disponível — ninguém espera 7s à toa.
+      timerRef.current = setTimeout(avancarAgora, 7000)
     } catch {
       setErro('Não consegui ouvir sua resposta agora. Pode tentar de novo?')
       setEnviando(false)
@@ -156,6 +160,7 @@ export default function ConversaPage() {
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const dadosRespostaRef = useRef<{ concluida: boolean; proximaPergunta: Pergunta | null; progresso: Progresso } | null>(null)
+  const [reacaoSeq, setReacaoSeq] = useState(0)
 
   const avancarDaReacao = useCallback((concluida: boolean, proximaPergunta: Pergunta | null, proximoProgresso: Progresso) => {
     if (timerRef.current) {
@@ -176,6 +181,14 @@ export default function ConversaPage() {
     setProgresso(proximoProgresso)
     setResposta('')
   }, [])
+
+  // P67 — "Continuar agora": avança na hora em que o empresário estiver pronto,
+  // sem esperar os 7 segundos completos.
+  const avancarAgora = useCallback(() => {
+    const d = dadosRespostaRef.current
+    if (!d) return
+    avancarDaReacao(d.concluida, d.proximaPergunta, d.progresso)
+  }, [avancarDaReacao])
 
   const finalizarConversa = async () => {
     try {
@@ -274,8 +287,27 @@ export default function ConversaPage() {
               retratoEstrategico={retratoEstrategico}
             />
           ) : mostrandoReacao && reacao ? (
-            <div className="space-y-4 text-center">
-              <p className="text-sm text-muted-foreground italic">{reacao}</p>
+            <div key={reacaoSeq} className="space-y-4 text-center animate-fade-in">
+              <div className="mx-auto">
+                <AvatarPonte state="thinking" className="mx-auto" />
+              </div>
+              <p className="text-sm text-muted-foreground italic leading-relaxed">{reacao}</p>
+              <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60">
+                Deixa eu digerir o que você disse...
+              </p>
+              <div className="h-1 w-full overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-primary"
+                  style={{ animation: `reacaoPreenchimento 7s linear forwards` }}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={avancarAgora}
+                className="rounded-full border border-primary/40 bg-card px-5 py-2 text-sm font-medium text-primary transition-all hover:bg-primary/10 active:scale-[0.98]"
+              >
+                Continuar agora
+              </button>
             </div>
           ) : perguntaAtual ? (
             <div className="space-y-3">
@@ -294,6 +326,8 @@ export default function ConversaPage() {
                 onEnviar={enviarResposta}
                 enviando={enviando}
                 permiteDetalhe={perguntaAtual.permiteDetalhe}
+                contexto={perguntaAtual.contexto}
+                motivo={perguntaAtual.motivo}
               />
             </div>
           ) : (

@@ -78,47 +78,52 @@ export interface Etapa {
   opcoes?: Opcao[]
   categoria?: string
   estagio?: EstagioConselheiro
-  // P70 — bloco da Primeira Sessão Estratégica (7 blocos de descoberta).
+  // P67 — bloco da Primeira Sessão Estratégica (V4 = 4 blocos de descoberta).
   // Cada bloco responde "o que eu consigo concluir agora?" e a Ponte
   // conversa entre blocos citando as palavras do empresário.
   bloco?: BlocoConversa
+  // P67 — EXPERIÊNCIA COGNITIVA: toda pergunta sabe o seu porquê.
+  // `contexto`: a frase que conecta a pergunta ao que já conversamos (faz a
+  //   pergunta surgir naturalmente, como um conselheiro que conhece a história).
+  // `motivo`: por que essa pergunta importa — o empresário entende que não é
+  //   coleta de dados, e sim leitura estratégica.
+  contexto?: string
+  motivo?: string
   // P54 — resposta rápida com campo opcional: "Se quiser, conte mais."
   permiteDetalhe?: boolean
   // P65 — adaptação: a etapa só aparece (ou é pulada) conforme respostas reais.
   condicao?: CondicaoEtapa
 }
 
-// ─── P70 — BLOCOS DA PRIMEIRA SESSÃO ESTRATÉGICA ─────────────────────────────
-// A conversa deixou de ser um questionário em 5 estágios e virou uma
-// descoberta em 7 blocos. Cada bloco constrói uma conclusão sobre a empresa;
-// a soma dos blocos alimenta as hipóteses que originam o Retrato.
+// ─── P67 — BLOCOS DA PRIMEIRA SESSÃO ESTRATÉGICA (V4) ────────────────────────
+// A conversa (antes 7 blocos / 18 etapas) virou uma descoberta enxuta em 4
+// blocos / 10–14 interações, sem virar cadastro. Cada bloco responde UMA
+// pergunta-guia de aconselhamento:
+//   atual     → "Onde sua empresa está hoje?"
+//   peso      → "Onde o peso está?"
+//   evolucao  → "O que impede a evolução?"
+//   atencao   → "O que merece atenção?"
+// Os IDs de pergunta NÃO mudam (empresa.momento, rotina.energia, ...) — isso
+// preserva as engines de hipóteses, reações e memória evolutiva que dependem
+// deles. Apenas a agrupação em blocos mudou.
 export type BlocoConversa =
-  | 'momento'
-  | 'decisao'
-  | 'dependencia'
-  | 'clientes'
-  | 'dinheiro'
-  | 'energia'
-  | 'visao'
+  | 'atual'
+  | 'peso'
+  | 'evolucao'
+  | 'atencao'
 
 export const BLOCOS_ORDEM: BlocoConversa[] = [
-  'momento',
-  'decisao',
-  'dependencia',
-  'clientes',
-  'dinheiro',
-  'energia',
-  'visao',
+  'atual',
+  'peso',
+  'evolucao',
+  'atencao',
 ]
 
 export const BLOCO_LABEL: Record<BlocoConversa, string> = {
-  momento: 'O momento da sua empresa',
-  decisao: 'Como você decide',
-  dependencia: 'A dependência',
-  clientes: 'Os clientes',
-  dinheiro: 'O dinheiro',
-  energia: 'A energia',
-  visao: 'A visão',
+  atual: 'Onde sua empresa está hoje',
+  peso: 'Onde o peso está',
+  evolucao: 'O que impede a evolução',
+  atencao: 'O que merece atenção',
 }
 
 export interface Opcao {

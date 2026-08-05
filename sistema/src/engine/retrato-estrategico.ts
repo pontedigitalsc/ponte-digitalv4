@@ -4,7 +4,8 @@ import type { HipoteseEstrategica } from '@/engine/hipoteses-estrategicas'
 import type { Prisma } from '@prisma/client'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// RETRATO ESTRATÉGICO DA EMPRESA — P65 (Retrato V3)
+// RETRATO ESTRATÉGICO DA EMPRESA — P67 (Retrato V4 — "Primeiro diagnóstico
+// cognitivo da empresa")
 //
 // A entrega da primeira conversa não é "mostrar dados". É mostrar leitura
 // estratégica. O Retrato tem SEIS partes e é CONSEQUÊNCIA das hipóteses que os
@@ -12,13 +13,16 @@ import type { Prisma } from '@prisma/client'
 // (continuidade, nunca coleta). Nenhuma IA é usada: é regra + hipóteses sobre
 // as respostas reais, fiel ao princípio "IA é interface, não cérebro".
 //
-// A estrutura mudou para parecer uma conversa, não um relatório (P65):
-//   1. Quem sua empresa parece ser hoje
-//   2. O que mais me chamou atenção           (3 descobertas, não forças)
-//   3. O que talvez você ainda não esteja percebendo   (ponto cego, hipótese)
-//   4. A decisão que merece mais atenção
-//   5. Se eu estivesse no seu lugar
-//   6. A pergunta que quero continuar investigando     (sempre aberta)
+// A estrutura (V4) foi reescrita para parecer um DIAGNÓSTICO COGNITIVO — a
+// Ponte não descreve a empresa, ela mostra O QUE leu, O QUE acredita ter
+// percebido e O QUE precisa observar com você. Por isso a seção 4 é tripartida
+// (sabemos / acreditamos / observamos):
+//   1. Quem sua empresa é hoje              (baseado em evidências reais)
+//   2. O que percebemos                     (3 padrões, não forças)
+//   3. Seu maior ponto de atenção           (ponto de evolução)
+//   4. Uma decisão que merece cuidado       (sabemos / acreditamos / observamos)
+//   5. Primeiro passo recomendado           (executável)
+//   6. Pergunta que acompanhará sua evolução (sempre aberta)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface SecaoRetrato {
@@ -41,7 +45,7 @@ function r(respostas: Respostas, id: string): string | null {
   return respostas[id]?.trim() || null
 }
 
-// ─── 1. Quem sua empresa parece ser hoje ──────────────────────────────────────
+// ─── 1. Quem sua empresa é hoje ──────────────────────────────────────────────
 function gerarEntendimento(respostas: Respostas, hipoteses: HipoteseEstrategica[]): string {
   const momento = r(respostas, 'empresa.momento')
   const energia = r(respostas, 'rotina.energia')
@@ -66,7 +70,7 @@ function gerarEntendimento(respostas: Respostas, hipoteses: HipoteseEstrategica[
   return base
 }
 
-// ─── 2. O que mais me chamou atenção (3 descobertas, não forças) ─────────────
+// ─── 2. O que percebemos (3 padrões, não forças) ─────────────────
 function gerarDescobertas(hipoteses: HipoteseEstrategica[]): string[] {
   if (hipoteses.length === 0) {
     return ['Você dedicou tempo para olhar para a própria empresa — isso, sozinho, já é um patrimônio.']
@@ -74,13 +78,48 @@ function gerarDescobertas(hipoteses: HipoteseEstrategica[]): string[] {
   return hipoteses.slice(0, 3).map((h) => `${h.texto} Você disse: "${h.evidencia}".`)
 }
 
-// ─── 3. Ponto cego — o que o empresário provavelmente ainda não percebe ──────
-function gerarPontoCego(hipoteses: HipoteseEstrategica[]): string {
-  const top = hipoteses[0]
-  if (top?.pontoCego) {
-    return `Posso estar enganada, mas há uma coisa que me chamou atenção. ${top.pontoCego}`
+// ─── Constrói a seção tripartida "sabemos / acreditamos / observamos" ───────
+// P67 — a leitura não é opinião sobre a empresa, é um diagnóstico que separa o
+// que foi REGISTRADO do que é ACREDITADO e do que PRECISA de observação.
+function gerarDecisaoCuidadosa(
+  respostas: Respostas,
+  prioridade: HipoteseEstrategica | null,
+): string[] {
+  const sabemos: string[] = []
+  const citacoes: { id: string; rotulo: string }[] = [
+    { id: 'empresa.momento', rotulo: 'o momento' },
+    { id: 'empresa.decisao', rotulo: 'como a empresa decide' },
+    { id: 'financeiro.previsao', rotulo: 'a previsão do próximo mês' },
+    { id: 'financeiro.caixa', rotulo: 'como lê o caixa' },
+    { id: 'empresa.dependencia', rotulo: 'o que aconteceria se você se afastasse' },
+    { id: 'empresa.clientes', rotulo: 'o que faz clientes voltarem' },
+  ]
+  for (const c of citacoes) {
+    const v = r(respostas, c.id)
+    if (v) sabemos.push(`Você me contou sobre ${c.rotulo} que "${v}"`)
   }
-  return 'Posso estar enganada, mas ainda estamos no começo da nossa conversa. Conforme eu te conhecer mais, vou conseguir apontar com mais segurança o que pode estar passando despercebido.'
+  if (sabemos.length === 0) {
+    sabemos.push('Você dedicou tempo para olhar para a própria empresa, e nenhuma resposta foi genérica.')
+  }
+
+  const itemSabemos = `O que sabemos — ${sabemos[0]}${sabemos.length > 1 ? ` E que ${sabemos.slice(1).join('; e que ')}.` : '.'}`
+
+  const acredita = prioridade
+    ? prioridade.pontoCego.replace(
+        /^Posso estar enganada,? ?/i,
+        '',
+      )
+    : 'Ainda não tenho confiança para afirmar um padrão — começamos há poucos minutos juntos.'
+
+  const observamos = prioridade
+    ? `${prioridade.decisao.replace(/^Se eu estivesse no seu lugar, ?/i, '')}`
+    : 'Observar quais decisões da próxima semana vêm de número e quais vêm de intuição.'
+
+  return [
+    itemSabemos,
+    `O que acreditamos — ${acredita}`,
+    `O que precisamos observar — ${observamos}`,
+  ]
 }
 
 // ─── 3 + 4 + 5 + 6 — prioridade, decisão, conselho e pergunta (hipótese mais forte) ──
@@ -95,51 +134,56 @@ export function gerarRetratoEstrategico(
 ): RetratoEstrategico {
   const prioridade = hipotesePrioritaria(hipoteses)
 
+  const pontoAtencao = prioridade
+    ? `${prioridade.rotulo}. ${prioridade.texto}`
+    : 'Escolher uma única coisa para observar com atenção nesta semana — só o registro já revela padrões que passavam despercebidos.'
+
+  const primeiroPasso = prioridade
+    ? prioridade.prioridade
+    : 'Observar quais decisões da próxima semana vêm de número e quais vêm de intuição — e escolher uma única decisão para esperar o número antes.'
+
+  const perguntaAcompanha = prioridade
+    ? prioridade.pergunta
+    : 'Se você tivesse 20% mais tempo livre na sua semana, qual parte da empresa você gostaria de desenvolver?'
+
   return {
-    titulo: 'Retrato Estratégico da Empresa',
+    titulo: 'Primeiro diagnóstico cognitivo da empresa',
     secoes: [
       {
         numero: 1,
-        titulo: 'Quem sua empresa parece ser hoje',
+        titulo: 'Quem sua empresa é hoje',
         corpo: gerarEntendimento(respostas, hipoteses),
       },
       {
         numero: 2,
-        titulo: 'O que mais me chamou atenção',
-        corpo: 'Três descobertas — todas a partir do que você me contou:',
+        titulo: 'O que percebemos',
+        corpo: 'Três padrões — todos a partir do que você me contou:',
         itens: gerarDescobertas(hipoteses),
       },
       {
         numero: 3,
-        titulo: 'O que talvez você ainda não esteja percebendo',
-        corpo: gerarPontoCego(hipoteses),
+        titulo: 'Seu maior ponto de atenção',
+        corpo: `Posso estar enganada, mas é o ponto onde a evolução costuma travar. ${pontoAtencao}`,
       },
       {
         numero: 4,
-        titulo: 'A decisão que merece mais atenção',
-        corpo: prioridade
-          ? prioridade.prioridade
-          : 'Escolher uma única coisa para observar com atenção nesta semana — só o registro já revela padrões que passavam despercebidos.',
+        titulo: 'Uma decisão que merece cuidado',
+        corpo: 'Separei o que já foi registrado do que é hipótese — porque a leitura que vale não é a opinião, é o que conseguimos observar juntos:',
+        itens: gerarDecisaoCuidadosa(respostas, prioridade),
       },
       {
         numero: 5,
-        titulo: 'Se eu estivesse no seu lugar',
-        corpo: prioridade
-          ? prioridade.decisao
-          : 'Se eu estivesse no seu lugar, observaria quais decisões da semana vêm de número e quais vêm de intuição — e escolheria uma única decisão para esperar o número antes.',
+        titulo: 'Primeiro passo recomendado',
+        corpo: primeiroPasso,
       },
       {
         numero: 6,
-        titulo: 'A pergunta que quero continuar investigando',
-        corpo: prioridade
-          ? prioridade.pergunta
-          : 'Se você tivesse 20% mais tempo livre na sua semana, qual parte da empresa você gostaria de desenvolver?',
+        titulo: 'A pergunta que acompanhará sua evolução',
+        corpo: perguntaAcompanha,
       },
     ],
-    proximaReflexao: prioridade
-      ? prioridade.pergunta
-      : 'Se você tivesse 20% mais tempo livre na sua semana, qual parte da empresa você gostaria de desenvolver?',
-    aviso: 'Este é o começo de uma leitura — não uma verdade fechada. O que sabemos hoje muda com cada conversa. Eu volto para ver o que aconteceu.',
+    proximaReflexao: perguntaAcompanha,
+    aviso: 'Este é o começo de um diagnóstico — não uma verdade fechada. O que sabemos hoje muda com cada conversa. Eu volto para ver o que aconteceu.',
   }
 }
 

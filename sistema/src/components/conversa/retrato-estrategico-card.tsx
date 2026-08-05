@@ -37,11 +37,11 @@ export function RetratoEstrategicoCard({ retrato, revelar = false }: RetratoEstr
     <div className="space-y-5">
       <div className="text-center space-y-2 animate-fade-in">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-primary/70">
-          O que entendi sobre sua empresa
+          O que eu li sobre sua empresa
         </p>
         <h3 className="text-lg font-semibold tracking-tight">{retrato.titulo}</h3>
         <p className="text-xs text-muted-foreground leading-relaxed max-w-md mx-auto">
-          Nada aqui é genérico: cada parte foi escrita a partir do que você me contou — e termina com uma pergunta para continuarmos.
+          Este não é um relatório: é a primeira leitura que a Ponte consegue fazer sobre a sua empresa. Cada parte foi escrita a partir do que você me contou — e termina com uma pergunta para continuarmos.
         </p>
       </div>
 

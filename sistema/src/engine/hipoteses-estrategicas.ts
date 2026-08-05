@@ -37,7 +37,7 @@ function tem(respostas: Respostas, id: string, palavras: string[]): boolean {
 }
 
 const palavrasParada = ['para', 'pararia', 'parava', 'trava', 'pára', 'cancela', 'adia', 'ninguém', 'nada', 'paro', 'não funciona', 'nao funciona', 'fecha', 'quebrar']
-const palavrasDelega = ['equipe', 'time', 'funcionário', 'funcionario', 'pessoas', 'delego', 'delegar', 'repasso', 'processo', 'procedimento', 'está em pé', 'anda']
+const palavrasDelega = ['equipe', 'time', 'funcionário', 'funcionario', 'pessoas', 'delego', 'delegar', 'repasso', 'processo', 'procedimento', 'está em pé', 'anda', 'quase sozinha', 'quase sozinho']
 const palavrasIntuicao = ['intuição', 'intuicao', 'sinto', 'no momento', 'quando sobra', 'vou vendo', 'visceral', 'achismo', 'no chute', 'achando', 'instinto']
 const palavrasCaixaOrganizado = ['tabela', 'planilha', 'sistema', 'aplicativo', 'app', 'registro', 'fechamento', 'semanal', 'diário', 'diario', 'fluxo', 'previsão', 'previsao']
 const palavrasCaixaFalta = ['falta', 'faltar', 'buraco', 'não vai dar', 'nao vai dar', 'apertado', 'vai faltar']

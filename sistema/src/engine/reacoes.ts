@@ -129,67 +129,59 @@ export function percepcaoDurante(perguntaId: string, respostas: Respostas): stri
 
 export function devolutivaDeBloco(bloco: BlocoConversa, respostas: Respostas): string {
   switch (bloco) {
-    case 'momento': {
+    case 'atual': {
       const momento = r(respostas, 'empresa.momento')
       const crescer = r(respostas, 'empresa.crescer')
+      const clientes = r(respostas, 'empresa.clientes')
       const partes: string[] = []
       if (momento) partes.push(`você lê o momento da empresa como "${momento}"`)
-      if (crescer) partes.push(`e me contou que o que segura o crescimento é "${crescer}"`)
+      if (crescer) partes.push(`e que o que segura o crescimento é "${crescer}"`)
+      if (clientes) partes.push(`e que o que faz clientes voltarem é "${clientes}"`)
       const base = partes.length > 0
         ? `Percebi que ${partes.join(', ')}.`
         : 'Percebi como você lê o momento da empresa.'
       return `${base} Empresas geralmente travam pela complexidade, não pela falta de clientes. Essa leitura vai guiar o que vamos conversar daqui pra frente.`
     }
-    case 'decisao': {
-      const decisao = r(respostas, 'empresa.decisao')
-      if (decisao) {
-        return `Você me contou que descobre se pode investir assim: "${decisao}". Percebi um padrão — decisões que dependem só do momento costumam se repetir do mesmo jeito. Vou prestar atenção nisso.`
-      }
-      return 'Como você decide é o coração da empresa. Vou prestar atenção nesse padrão.'
-    }
-    case 'dependencia': {
-      const dependencia = r(respostas, 'empresa.dependencia')
-      if (dependencia) {
-        return `Você me disse que, se ficasse 30 dias fora, "${dependencia}". Quando o conhecimento está só na cabeça do fundador, a empresa cresce até o tamanho dele — é isso que vamos observar.`
-      }
-      return 'Quando o conhecimento está só na cabeça do fundador, a empresa cresce até o tamanho dele.'
-    }
-    case 'clientes': {
-      const clientes = r(respostas, 'empresa.clientes')
-      if (clientes) {
-        return `Guardei o que faz clientes voltarem: "${clientes}". Você conhece isso de perto — a diferença entre crescer e girar no lugar está em transformar esse conhecimento em previsibilidade.`
-      }
-      return 'Você conhece seus clientes de perto. A diferença entre crescer e girar no lugar está em transformar isso em previsibilidade.'
-    }
-    case 'dinheiro': {
-      const previsao = r(respostas, 'financeiro.previsao')
-      const caixa = r(respostas, 'financeiro.caixa')
-      const partes: string[] = []
-      if (previsao) partes.push(`sobre o próximo mês, você me disse "${previsao}"`)
-      if (caixa) partes.push(`e que, ao olhar o caixa, vê primeiro "${caixa}"`)
-      const base = partes.length > 0
-        ? `Percebi que ${partes.join('; e ')}.`
-        : 'Percebi como a empresa lê o próprio dinheiro.'
-      return `${base} Sem previsão, toda decisão vira aposta. Essa é a parte que mais vale observar com calma.`
-    }
-    case 'energia': {
+    case 'peso': {
       const energia = r(respostas, 'rotina.energia')
       const cabeca = r(respostas, 'rotina.cabeca')
-      if (energia) {
-        const base = `O que mais consumiu sua energia foi "${energia}".`
-        if (cabeca) {
-          return `${base} E o que mais ocupa sua cabeça é "${cabeca}" — reparei que o que toma sua energia também é o que mais ocupa sua cabeça. Não por acaso.`
-        }
-        return `${base} Reparei que o que toma sua energia quase sempre é também o que mais ocupa sua cabeça. Não por acaso.`
-      }
-      return 'O que consome sua energia quase sempre é também o que ocupa sua cabeça. Não por acaso.'
+      const previsao = r(respostas, 'financeiro.previsao')
+      const dependencia = r(respostas, 'empresa.dependencia')
+      const partes: string[] = []
+      if (energia) partes.push(`o que mais consumiu sua energia foi "${energia}"`)
+      if (cabeca) partes.push(`e o que mais ocupa sua cabeça é "${cabeca}"`)
+      if (previsao) partes.push(`e, sobre o próximo mês, você me disse "${previsao}"`)
+      if (dependencia) partes.push(`e me contou que, se ficasse 30 dias fora, "${dependencia}"`)
+      const base = partes.length > 0
+        ? `Reparei que ${partes.join('; ')}.`
+        : 'Reparei onde o peso está apoiado hoje.'
+      return `${base} O que consome sua energia quase sempre é também o que ocupa sua cabeça — e quando o conhecimento está só na sua cabeça, a empresa cresce até o tamanho dele. Não por acaso.`
     }
-    case 'visao': {
+    case 'evolucao': {
+      const decisao = r(respostas, 'empresa.decisao')
+      const caixa = r(respostas, 'financeiro.caixa')
+      const tranquilo = r(respostas, 'rotina.tranquilo')
+      const partes: string[] = []
+      if (decisao) partes.push(`você descobre se pode investir "${decisao}"`)
+      if (caixa) partes.push(`e que, ao olhar o caixa, vê primeiro "${caixa}"`)
+      if (tranquilo) partes.push(`e que a última vez que terminou o dia tranquilo foi "${tranquilo}"`)
+      const base = partes.length > 0
+        ? `Percebi que ${partes.join('; ')}.`
+        : 'Percebi o padrão das decisões da empresa.'
+      return `${base} Decisões que dependem só do momento costumam se repetir do mesmo jeito — e sem previsão, toda decisão vira aposta. É aí que a evolução costuma travar.`
+    }
+    case 'atencao': {
       const visao = r(respostas, 'visao.funcionando')
-      if (visao) {
-        return `Você me contou que, se sua empresa funcionasse como você gostaria, "${visao}". Essa imagem é a direção — agora quero organizar tudo o que entendi sobre o caminho até lá.`
-      }
-      return 'Essa imagem da empresa funcionando como você gostaria é a direção. Agora quero organizar tudo o que entendi.'
+      const proximo = r(respostas, 'frente.proximo')
+      const multiplicar = r(respostas, 'empresa.multiplicar')
+      const partes: string[] = []
+      if (visao) partes.push(`que, se a empresa funcionasse como você gostaria, "${visao}"`)
+      if (proximo) partes.push(`que o objetivo dos próximos 6 meses é "${proximo}"`)
+      if (multiplicar) partes.push(`e que você gostaria de multiplicar o cliente "${multiplicar}"`)
+      const base = partes.length > 0
+        ? `Entendi a direção: ${partes.join('; ')}.`
+        : 'Entendi a direção que você quer dar para a empresa.'
+      return `${base} Essa imagem é a direção — agora quero organizar tudo o que entendi sobre o caminho até lá.`
     }
     default:
       return obterReacao('')

@@ -264,6 +264,12 @@
   to { width: var(--progress-target, 100%); }
 }
 
+/* P67 — preenchimento de 7s da percepção: mostram que a Ponte está digerindo */
+@keyframes reacaoPreenchimento {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
 @keyframes toastIn {
   from { opacity: 0; transform: translateY(-12px) scale(0.96); }
   to { opacity: 1; transform: translateY(0) scale(1); }

@@ -256,14 +256,11 @@ function mapearBlocoParaCategoria(bloco: string) {
     tensao: 'GESTAO',
     evolucao: 'ESTRATEGIA',
     proximo_movimento: 'ESTRATEGIA',
-    // P70 — blocos da Primeira Sessão Estratégica
-    momento: 'GESTAO',
-    decisao: 'GESTAO',
-    dependencia: 'GESTAO',
-    clientes: 'CLIENTES',
-    dinheiro: 'FINANCEIRO',
-    energia: 'OPERACAO',
-    visao: 'ESTRATEGIA',
+    // P67 — blocos da Primeira Sessão Estratégica (V4). O bloco `evolucao`
+    // já está mapeado acima (mesma regra de classificação do estágio).
+    atual: 'GESTAO',
+    peso: 'OPERACAO',
+    atencao: 'ESTRATEGIA',
     FINANCEIRO: 'FINANCEIRO',
     CLIENTES: 'CLIENTES',
     OPERACAO: 'OPERACAO',
