@@ -238,15 +238,46 @@ function encontrarTensoes(
 
 // ─── MEMÓRIA DO CONSELHEIRO ─────────────────────────────────────────────────
 
+interface DecisaoAnterior {
+  id: string
+  titulo: string
+  status: string
+  categoria: string
+  criadaEm: Date
+  resultado?: Record<string, unknown> | null
+}
+
 interface MemoriaConselheiro {
   respostas: { pergunta: string; valor: string; criadaEm: Date }[]
   perguntaViva: string | null
   memoriasEmocionais: string[]
   hipoteses: string[]
+  // P68 — patrimônio decisório: as decisões que a empresa já tomou/acompanhou.
+  // A Ponte precisa saber "essa empresa já tomou decisões parecidas?".
+  decisoesAnteriores: DecisaoAnterior[]
+}
+
+// P68 — patrimônio decisório. Lê as decisões já travadas nesta empresa (orgem
+// do próprio empresário ou do conselheiro) com o resultado, para que a Ponte
+// possa lembrar: "em janeiro você mexeu nos preços e os clientes ficaram".
+async function carregarDecisoesAnteriores(empresaId: string): Promise<DecisaoAnterior[]> {
+  const decisoes = await prisma.acaoCognitiva.findMany({
+    where: { empresaId, deletedAt: null },
+    orderBy: { criadaEm: 'desc' },
+    take: 12,
+  })
+  return decisoes.map((d) => ({
+    id: d.id,
+    titulo: d.titulo,
+    status: d.status,
+    categoria: d.categoria,
+    criadaEm: d.criadaEm,
+    resultado: d.resultado as Record<string, unknown> | null,
+  }))
 }
 
 async function carregarMemoria(empresaId: string): Promise<MemoriaConselheiro> {
-  const [respostas, perguntaViva, memoriasEmocionais, hipoteses] = await Promise.all([
+  const [respostas, perguntaViva, memoriasEmocionais, hipoteses, decisoesAnteriores] = await Promise.all([
     listarRespostasPorEmpresa(empresaId, { limite: 12 }),
     prisma.perguntaViva.findFirst({
       where: { empresaId, estado: 'ATIVA', deletedAt: null },
@@ -258,6 +289,7 @@ async function carregarMemoria(empresaId: string): Promise<MemoriaConselheiro> {
       take: 3,
     }),
     listarHipoteses(empresaId, true),
+    carregarDecisoesAnteriores(empresaId).catch(() => []),
   ])
 
   return {
@@ -269,6 +301,7 @@ async function carregarMemoria(empresaId: string): Promise<MemoriaConselheiro> {
     perguntaViva: perguntaViva?.pergunta ?? null,
     memoriasEmocionais: memoriasEmocionais.map((m) => m.sentimento),
     hipoteses: hipoteses.map((h) => h.descricao),
+    decisoesAnteriores,
   }
 }
 
@@ -300,6 +333,78 @@ export interface RaciocinioConselheiro {
   investigando: string[]
   tensoes: string[]
   memoriaCitada: string[]
+  // P68 — decisão acompanhada: quando o conselheiro detecta uma decisão, ela
+  // ganha um registro (AcaoCognitiva, origem ASSISTENTE) para ser acompanhada
+  // até o resultado. Se for null, a decisão já estava aberta (dedupe).
+  decisaoAcompanhada: { id: string; titulo: string } | null
+}
+
+// P68 — a decisão vira organismo: título + categoria de evidência + registro.
+const TITULO_DECISAO: Record<CategoriaDecisao, string> = {
+  CONTRATACAO: 'Contratar alguém',
+  DEMISSAO: 'Dispensar alguém',
+  PRECOS: 'Mexer nos preços',
+  EQUIPAMENTO: 'Investir em equipamento',
+  EMPRESTIMO: 'Pegar empréstimo',
+  EXPANSAO: 'Expandir o negócio',
+}
+
+const CATEGORIA_EVIDENCIA_DECISAO: Record<CategoriaDecisao, string> = {
+  CONTRATACAO: 'PESSOAS',
+  DEMISSAO: 'PESSOAS',
+  PRECOS: 'FINANCEIRO',
+  EQUIPAMENTO: 'OPERACAO',
+  EMPRESTIMO: 'FINANCEIRO',
+  EXPANSAO: 'ESTRATEGIA',
+}
+
+// P68 — quando uma decisão é detectada, a Ponte registra uma "decisão
+// acompanhada" (AcaoCognitiva, origem ASSISTENTE) com a origem real (o que o
+// empresário disse), o contexto (sinais), a hipótese (leitura da Ponte) e as
+// lacunas. O registro nasce PENDENTE ("ideia") e evolui no Centro de Decisão.
+// Para não poluir: se já existe uma decisão da MESMA categoria aberta
+// (PENDENTE/EM_ANDAMENTO) criada pelo conselheiro nos últimos 30 dias, não
+// duplica — reaproveita a que está viva.
+async function acompanharDecisao(
+  empresaId: string,
+  categoria: CategoriaDecisao,
+  raciocinio: Pick<RaciocinioConselheiro, 'reflexao' | 'naoSabemos' | 'perguntas'>,
+  mensagem: string,
+  sinais: SinaisContexto,
+): Promise<{ id: string; titulo: string } | null> {
+  const haMenosDe30Dias = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  const aberta = await prisma.acaoCognitiva.findFirst({
+    where: {
+      empresaId,
+      deletedAt: null,
+      origem: 'ASSISTENTE',
+      categoria: CATEGORIA_EVIDENCIA_DECISAO[categoria] as never,
+      status: { in: ['PENDENTE', 'EM_ANDAMENTO'] },
+      criadaEm: { gte: haMenosDe30Dias },
+    },
+    orderBy: { criadaEm: 'desc' },
+  })
+  if (aberta) return { id: aberta.id, titulo: aberta.titulo }
+
+  const titulo = TITULO_DECISAO[categoria]
+  const criada = await prisma.acaoCognitiva.create({
+    data: {
+      empresaId,
+      titulo,
+      descricao: mensagem.slice(0, 600),
+      categoria: CATEGORIA_EVIDENCIA_DECISAO[categoria] as never,
+      status: 'PENDENTE',
+      origem: 'ASSISTENTE',
+      impactoEsperado: {
+        origem: mensagem.slice(0, 500),
+        contexto: sinais,
+        hipotese: raciocinio.reflexao?.slice(0, 400) ?? null,
+        lacunas: raciocinio.naoSabemos,
+        acompanhadaEm: new Date().toISOString(),
+      },
+    },
+  })
+  return { id: criada.id, titulo: criada.titulo }
 }
 
 export async function montarRaciocinioConselheiro(
@@ -315,6 +420,7 @@ export async function montarRaciocinioConselheiro(
     perguntaViva: null,
     memoriasEmocionais: [],
     hipoteses: [],
+    decisoesAnteriores: [] as DecisaoAnterior[],
   }))
 
   const sinais = detectarSinais(mensagem, contexto, memoria)
@@ -322,6 +428,12 @@ export async function montarRaciocinioConselheiro(
   const perguntas = selecionarPerguntas(categoria, sinais)
 
   const temMemoria = memoria.respostas.length > 0
+
+  // P68 — patrimônio decisório: decisões já travadas nesta empresa, com o que
+  // aconteceu depois. A Ponte lembra de verdade — "em janeiro você mexeu nos
+  // preços e o que aconteceu foi...".
+  const decisoesComResultado = memoria.decisoesAnteriores.filter((d) => d.resultado)
+  const decisoesMesmoTipo = memoria.decisoesAnteriores.filter((d) => d.categoria === CATEGORIA_EVIDENCIA_DECISAO[categoria])
 
   // Percepção: o que estou percebendo (ancorado no que ele disse e no que a
   // empresa mostra hoje). NUNCA resposta imediata — percepção primeiro.
@@ -333,6 +445,9 @@ export async function montarRaciocinioConselheiro(
     temMemoria
       ? 'E eu lembro do que você me contou antes.'
       : 'E ainda estamos nos conhecendo.',
+    decisoesMesmoTipo.length > 0
+      ? `E esta não seria a primeira vez que você pensa em ${LABEL_CATEGORIA[categoria]}.`
+      : '',
   ]
     .filter(Boolean)
     .join(' ')
@@ -392,6 +507,13 @@ export async function montarRaciocinioConselheiro(
   if (temMemoria) {
     sabemos.push(`ele já me contou sobre a empresa em conversas anteriores`)
   }
+  // P68 — patrimônio decisório entra como SABEMOS (fato registrado): decisões
+  // anteriores com resultado viram lembrança concreta na conversa.
+  decisoesComResultado.slice(0, 3).forEach((d) => {
+    const r = d.resultado as Record<string, unknown> | null
+    const aconteceu = r?.aconteceu ? ` E o resultado foi: ${String(r.aconteceu).slice(0, 140)}` : ''
+    sabemos.push(`em uma decisão anterior ("${d.titulo}"), esta empresa registrou o que aconteceu${aconteceu}`)
+  })
   if (memoria.perguntaViva) {
     acreditamos.push(`a pergunta que o acompanha é: "${memoria.perguntaViva}"`)
   }
@@ -401,8 +523,19 @@ export async function montarRaciocinioConselheiro(
 
   const memoriaCitada = [
     ...memoria.respostas.slice(0, 3).map((r) => r.valor.slice(0, 140)),
+    ...decisoesMesmoTipo.slice(0, 2).map((d) => `Decisão anterior do mesmo tipo: "${d.titulo}" (${new Date(d.criadaEm).toLocaleDateString('pt-BR')})`),
     ...(memoria.perguntaViva ? [`Pergunta que o acompanha: ${memoria.perguntaViva}`] : []),
   ]
+
+  // P68 — a decisão detectada ganha um registro acompanhado (AcaoCognitiva,
+  // origem ASSISTENTE), materializando "a decisão ganha vida".
+  const decisaoAcompanhada = await acompanharDecisao(
+    empresaId,
+    categoria,
+    { reflexao, naoSabemos, perguntas },
+    mensagem,
+    sinais,
+  ).catch(() => null)
 
   // Registra a intervenção como evidência (memória participa da conversa).
   void registrarEvidencia(empresaId, {
@@ -410,7 +543,12 @@ export async function montarRaciocinioConselheiro(
     origem: 'ASSISTENTE',
     descricao: `Intervenção do conselheiro: empresário trouxe decisão de ${LABEL_CATEGORIA[categoria]}. ${reflexao ?? 'Decisão em avaliação — perguntas socráticas aplicadas.'}`,
     confianca: reflexao ? 'ALTA' : 'MEDIA',
-    dados: { categoria, tensoes: tensoes.length },
+    dados: {
+      categoria,
+      tensoes: tensoes.length,
+      decisaoAcompanhada: decisaoAcompanhada?.id ?? null,
+      decisoesAnteriores: memoria.decisoesAnteriores.length,
+    },
   }).catch(() => null)
 
   return {
@@ -425,6 +563,7 @@ export async function montarRaciocinioConselheiro(
     investigando,
     tensoes,
     memoriaCitada,
+    decisaoAcompanhada,
   }
 }
 
@@ -462,6 +601,15 @@ export function formatarRaciocinioParaPrompt(r: RaciocinioConselheiro): string {
   }
   if (r.reflexao) {
     linhas.push('', `REFLEXÃO (só se ele responder às perguntas primeiro): ${r.reflexao}`)
+  }
+  if (r.decisaoAcompanhada) {
+    linhas.push(
+      '',
+      `DECISÃO ACOMPANHADA — você já registrou "${r.decisaoAcompanhada.titulo}" para acompanhar (fica no Centro de Decisão da empresa).`,
+      '  - Com naturalidade, depois de pensar junto, faça o convite: "posso acompanhar essa decisão com você até o resultado?".',
+      '  - Se ele aceitar, confirme que está acompanhando — sem história de burocracia, como um sócio.',
+      '  - Quando ele decidir e relatar o que aconteceu, lembre que ele pode atualizar a decisão no Centro de Decisão. Cite decisões anteriores da empresa quando isso iluminar a de hoje.',
+    )
   }
 
   return linhas.join('\n')

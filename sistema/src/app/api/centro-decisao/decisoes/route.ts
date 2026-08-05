@@ -24,11 +24,13 @@ const criarSchema = z.object({
 })
 
 // GET /api/centro-decisao/decisoes — decisões registradas pela empresa
+// P68: inclui também as decisões acompanhadas pelo conselheiro (origem
+// ASSISTENTE) — a decisão que "ganhou vida" na conversa aparece aqui.
 export async function GET() {
   try {
     const usuario = await requireUserApi()
     const decisoes = await prisma.acaoCognitiva.findMany({
-      where: { empresaId: usuario.empresaId, deletedAt: null, origem: 'USUARIO' },
+      where: { empresaId: usuario.empresaId, deletedAt: null, origem: { in: ['USUARIO', 'ASSISTENTE'] } },
       orderBy: { criadaEm: 'desc' },
       include: {
         feedbacks: { where: { deletedAt: null }, orderBy: { criadoEm: 'desc' }, take: 1 },

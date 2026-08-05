@@ -161,3 +161,17 @@
 **Descrição:** o escopo P67 aprovado definiu exatamente 14 perguntas núcleo em 4 blocos (sessão V4). Para honrar os 10–14, `historia.orgulho` saiu do fluxo ativo. O ID permanece vivo e null-safe nas engines (hipóteses, interpretações, relações, memória evolutiva) — o Retrato regea sem ela. Ao transformar perguntas de `texto` em `selecao`, os sinais por palavras-chave foram reconduzidos pelos rótulos (ex.: "quase sozinha" → delegação; "eu mesmo" → sobrecarga; "confio no meu instinto" → intuição). Além disso, as devolutivas de fim de bloco agora esperam blocos V4 (`atual/peso/evolucao/atencao`) e nunca os antigos `momento/decisao/clientes/...` — se uma conversa persistida antiga regerar devolutiva com bloco antigo, cai no fallback `obterReacao('')`.
 **Ação:** reintroduzir `historia.orgulho` (ou equivalente de pertencimento) nas sessões de retorno do P68, quando o empresário já tem história; verificar no deploy se conversas antigas persistidas ainda geram devolutiva coerente. Ver `docs/07-MILESTONES/P67_EXPERIENCIA_COGNITIVA_DE_CONVERSA_V1.md`.
 
+## P68 — ciclo rico da decisão representado nos campos `Json`, não em enum de 7 estados (desvio deliberado)
+
+**Status:** Aceito (decisão de implementação, documentada)
+**Prioridade:** Baixa
+**Descrição:** o spec da Parte 2 pedia 7 estados (`IDEIA`, `EM_ANALISE`, `DECIDIDA`, `EM_EXECUCAO`, `RESULTADO_PENDENTE`, `CONCLUIDA`, `APRENDIZADO_GERADO`). Decisão do projeto: **manter os 4 estados existentes** (`PENDENTE`/`EM_ANDAMENTO`/`CONCLUIDA`/`ABANDONADA`) e expressar o ciclo rico (origem, contexto, hipótese, critério de sucesso, aprendizado) nos campos `Json` já existentes (`impactoEsperado`/`resultado`). A decisão acompanhada nasce `PENDENTE` com a Origem/Contexto/Hipótese/Lacunas em `impactoEsperado` e evolui no Centro de Decisão como qualquer outra. Motivo: Fase V4 Founder (prioridade é aprendizado e usuário real sobre arquitetura rara); 7 estados exigiriam migration, replantar o PATCH e migrar dados com zero valor ao empresário nesta fase.
+**Ação:** rever quando houver evidência de que o empresário usa o ciclo de decisão de verdade — pode virar enum formal sem quebrar dados (o `Json` já carrega o conteúdo). Ver `docs/07-MILESTONES/P68_CICLO_DE_DECISAO_EMPRESARIAL.md` §5.
+
+## P68 — Parte 4 (loop automático "você tomou aquela decisão?") adiada
+
+**Status:** Pendente (decisão consciente de adiar — monitorar)
+**Prioridade:** Baixa
+**Descrição:** o spec previa a Ponte perguntar "você tomou aquela decisão?" após X dias (e "o que aconteceu?" / "o que está impedindo?"). Foi adiado porque (a) seria um mecanismo temporal novo, fora do escopo "conectar o que já existe" desta sprint; (b) a hipótese precisa de evidência de que as decisões acompanhadas estão sendo usadas antes de construir o pulso. O estado "acompanhamento" já nasce gravado (origem `ASSISTENTE`), então o dado para o loop futuro já existe.
+**Ação:** medir taxa de decisões acompanhadas que chegam a `resultado` e o valor percebido (PATCH "essa reflexão ajudou você a decidir?") antes de decidir construir o loop. Ver `docs/07-MILESTONES/P68_CICLO_DE_DECISAO_EMPRESARIAL.md` §6.
+

@@ -4,6 +4,22 @@
 
 ---
 
+## Programa 68 — O Ciclo de Decisão Empresarial
+
+**4 de agosto de 2026**
+
+**"A Ponte não apenas lembra o que sua empresa fez. Ela acompanha as decisões que estão construindo o futuro dela."** A Ponte deixa de aconselhar e passa a **acompanhar decisões reais até o resultado** — sem novas telas, sem módulos, conectando o que já existe (P66 ↔ Centro de Decisão + memória decisória).
+
+**Conselheiro → Decisão acompanhada (Parte 1):** quando o conselheiro (P66) detecta uma decisão (contratar, demitir, preço, empréstimo, expansão, compra), um registro `AcaoCognitiva` (origem `ASSISTENTE`) é criado com a **Origem** (o que o empresário disse), o **Contexto** (sinais reais da empresa), a **Hipótese** (a reflexão, sempre como hipótese) e as **Lacunas** — tudo no campo `Json` `impactoEsperado`, sem migration. Dedupe anti-poluição: não duplica decisão aberta da mesma categoria nos últimos 30 dias. O convite *"posso acompanhar essa decisão com você?"* entra no prompt via bloco **DECISÃO ACOMPANHADA**.
+
+**Patrimônio Decisório (Parte 3):** a Ponte agora sabe *"essa empresa já tomou decisões parecidas?"* — o conselheiro carrega as decisões anteriores e as cita no raciocínio (SABEMOS quando há resultado; decisões do mesmo tipo com data na memória), e o Assistente expõe a seção **DECISÕES JÁ TOMADAS OU ACOMPANHADAS** no prompt, com status, data e resultado. O Centro de Decisão passa a listar também as decisões de origem `ASSISTENTE` — a decisão que "ganhou vida" na conversa evolui ali como sempre evoluiu (PATCH: status, o que aconteceu, o que aprendeu, se ajudou).
+
+**Decisão de implementação:** o ciclo rico do spec (7 estados) foi representado nos campos `Json` existentes mantendo os 4 estados atuais — zero migration, zero quebra (desvio documentado). **Parte 4 (loop automático "você tomou aquela decisão?") foi adiada** por falta de evidência de uso e por estar fora do escopo "conectar o que já existe" (ver `KNOWN_ISSUES.md`). Nada de calendário, tarefas genéricas, CRM de decisão ou dashboard. Sem migrations. `tsc` e `npm run build` limpos.
+
+**Documentos criados/atualizados:** `P68_CICLO_DE_DECISAO_EMPRESARIAL.md`, `CHANGELOG_OFICIAL.md`, `CURRENT_PRODUCT.md`, `KNOWN_ISSUES.md`. **STATUS: A PONTE ACOMPANHA DECISÕES.**
+
+---
+
 ## Programa 67 — Experiência Cognitiva de Conversa V1
 
 **4 de agosto de 2026**

@@ -32,6 +32,10 @@ interface ContextoEstruturado {
   memoriaConversa: string | null
   perguntaViva: string | null
   memoriasEmocionais: string[]
+  // P68 — patrimônio decisório: decisões já registradas/acompanhadas nesta
+  // empresa, com o que aconteceu depois. A Ponte lembra que já acompanhou
+  // decisões parecidas antes de pensar junto.
+  decisoesAnteriores: { titulo: string; status: string; criadaEm: Date; resultado: string | null }[]
 }
 
 async function buscarContexto(empresaId: string): Promise<ContextoEstruturado> {
@@ -52,6 +56,7 @@ async function buscarContexto(empresaId: string): Promise<ContextoEstruturado> {
     memoriaConversa,
     perguntaViva,
     memoriasEmocionais,
+    decisoesAnteriores,
   ] = await Promise.all([    prisma.empresa.findUnique({ where: { id: empresaId }, select: { nome: true, plano: true } }),
 
     prisma.cliente.groupBy({
@@ -127,6 +132,14 @@ async function buscarContexto(empresaId: string): Promise<ContextoEstruturado> {
     montarContinuidadeConversa(empresaId).catch(() => null),
     obterPerguntaVivaAtiva(empresaId).catch(() => null),
     listarMemoriasEmocionais(empresaId, 3).catch(() => []),
+    // P68 — patrimônio decisório: as decisões já registradas/acompanhadas
+    // nesta empresa, com o que aconteceu depois (para a Ponte lembrar).
+    prisma.acaoCognitiva.findMany({
+      where: { empresaId, deletedAt: null },
+      select: { titulo: true, status: true, criadaEm: true, resultado: true },
+      orderBy: { criadaEm: 'desc' },
+      take: 8,
+    }).catch(() => []),
   ])
 
   const totalClientes = statsClientes.reduce((a, c) => a + c._count.id, 0)
@@ -159,6 +172,14 @@ async function buscarContexto(empresaId: string): Promise<ContextoEstruturado> {
     memoriaConversa: memoriaConversa,
     perguntaViva: perguntaViva?.pergunta ?? null,
     memoriasEmocionais: memoriasEmocionais.map((m) => m.sentimento),
+    decisoesAnteriores: decisoesAnteriores.map((d) => ({
+      titulo: d.titulo,
+      status: d.status,
+      criadaEm: d.criadaEm,
+      resultado: (d.resultado as Record<string, unknown> | null)?.aconteceu
+        ? String((d.resultado as Record<string, unknown>).aconteceu)
+        : null,
+    })),
   }
 }
 
@@ -193,6 +214,16 @@ MEMÓRIA DA RELAÇÃO (o que o empresário já nos contou):
 ${c.memoriaConversa ?? '- Ainda não temos uma conversa registrada com esta empresa.'}
 ${c.perguntaViva ? `- Pergunta que o acompanha: "${c.perguntaViva}"` : ''}
 ${c.memoriasEmocionais.length > 0 ? `- Como ele se sentiu recentemente: ${c.memoriasEmocionais.join(' | ')}` : ''}
+
+DECISÕES JÁ TOMADAS OU ACOMPANHADAS (Patrimônio Decisório):
+${c.decisoesAnteriores.length > 0
+  ? c.decisoesAnteriores.map((d) => `- "${d.titulo}" — ${d.status}${d.resultado ? ` | o que aconteceu: ${d.resultado.slice(0, 140)}` : ''} (${new Date(d.criadaEm).toLocaleDateString('pt-BR')})`).join('\n')
+  : '- Ainda não há decisões acompanhadas registradas nesta empresa.'}
+
+A Ponte acompanha decisões até o resultado. Quando o empresário trouxer uma
+decisão (contratar, demitir, preço, empréstimo, expansão, compra), aponte para
+as decisões parecidas que esta empresa já tomou e cite o que aconteceu depois.
+Siga sempre o raciocínio do conselheiro (bloco DECISÃO ACOMPANHADA).
 
 Use a memória acima para retomar a conversa como um parceiro que lembra —
 referencie o que ele já contou antes de sugerir algo novo. Nunca invente

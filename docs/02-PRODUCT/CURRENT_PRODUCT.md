@@ -1,5 +1,15 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P68 — O CICLO DE DECISÃO EMPRESARIAL — STATUS OFICIAL — 4 de agosto de 2026**
+>
+> **"A Ponte não apenas lembra o que sua empresa fez. Ela acompanha as decisões que estão construindo o futuro dela."** A Ponte deixa de aconselhar e passa a **acompanhar decisões reais até o resultado** — sem novas telas, sem módulos, conectando o que já existe (P66 ↔ Centro de Decisão + memória decisória):
+>
+> - **Conselheiro → Decisão acompanhada (Parte 1):** quando o conselheiro (P66) detecta uma decisão (contratar, demitir, preço, empréstimo, expansão, compra), um registro `AcaoCognitiva` (origem `ASSISTENTE`) é criado com a **Origem** (o que o empresário disse), o **Contexto** (sinais reais), a **Hipótese** (a reflexão, sempre como hipótese) e as **Lacunas** — tudo no campo `Json` `impactoEsperado`, sem migration. Dedupe anti-poluição: não duplica decisão aberta da mesma categoria em 30 dias. O convite *"posso acompanhar essa decisão com você?"* entra no prompt via bloco **DECISÃO ACOMPANHADA**.
+> - **Patrimônio Decisório (Parte 3):** a Ponte sabe *"essa empresa já tomou decisões parecidas?"* — o conselheiro carrega as decisões anteriores e as cita no raciocínio (SABEMOS quando há resultado; decisões do mesmo tipo com data na memória); o Assistente expõe a seção **DECISÕES JÁ TOMADAS OU ACOMPANHADAS** no prompt. O Centro de Decisão lista também decisões de origem `ASSISTENTE` — a decisão que "ganhou vida" na conversa evolui ali (PATCH: status, o que aconteceu, o que aprendeu, se ajudou).
+> - **Decisão de implementação:** ciclo rico (7 estados) representado nos campos `Json` mantendo os 4 estados atuais (#5 do P68) — zero migration. **Parte 4 (loop automático) adiada** (#6 do P68, `KNOWN_ISSUES.md`). Nada de calendário, tarefas genéricas, CRM de decisão ou dashboard.
+>
+> Ver `docs/07-MILESTONES/P68_CICLO_DE_DECISAO_EMPRESARIAL.md`.
+
 > **MARCO: P67 — EXPERIÊNCIA COGNITIVA DE CONVERSA V1 — STATUS OFICIAL — 4 de agosto de 2026**
 >
 > **"A Ponte não coleta dados. A Ponte ajuda o empresário a pensar sobre a própria empresa."** A primeira conversa deixou de parecer formulário e virou aconselhamento (sem funcionalidades novas de domínio):
