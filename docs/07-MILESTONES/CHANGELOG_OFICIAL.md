@@ -4,6 +4,28 @@
 
 ---
 
+## Programa 70 + 71 — Experiência Cognitiva V1 (Primeira Impressão Memorável + Ritmo Cognitivo)
+
+**5 de agosto de 2026**
+
+**"A Ponte deixa de parecer um software e passa a parecer um conselheiro."** Este programa não adiciona funcionalidades, módulos, IA ou telas — muda exclusivamente a experiência da primeira conversa, para que o empresário esqueça que está respondendo perguntas e sinta que acabou de ter uma conversa útil sobre a própria empresa.
+
+**Ritmo cognitivo imprevisível (determinístico, sem IA).** `montarRitmoCognitivo()` em `reacoes.ts` decide a fala da Ponte após cada resposta em ordem de prioridade: (1) **mudança de direção** — se a resposta menciona fechar/vender a empresa ou demitir, a Ponte abandona o roteiro e explora ("Espera. Isso é grande demais..."); (2) **contrapergunta** — regras por pergunta aprofundam respostas ambíguas ("Quando você diz que a empresa para sem você... fala das decisões ou da operação?"); (3) **conexão** — cita o que foi dito minutos antes e liga com a resposta atual (crescimento × dependência, previsão × caixa); (4) **percepção como hipótese** (P65 preservado); (5) **ritmo imprevisível** — alterna deterministicamente entre recompensa, silêncio inteligente, pensar em voz alta e pequeno mistério (hash estável: mesmo input, mesmo output; respostas diferentes, ritmos diferentes). "Nem toda pergunta gera comentário. Nem todo comentário gera pergunta."
+
+**Pensar em voz alta + pequenos mistérios.** A Ponte diz "Interessante...", "Isso muda um pouco minha percepção", "Espera... isso conecta com outra coisa que você comentou" e cria curiosidade com "Tem uma coisa interessante aparecendo aqui... mas ainda preciso entender mais um ponto."
+
+**Motivo implícito.** O rótulo "Por que pergunto:" foi removido — o motivo de cada pergunta agora é renderizado em tom de quem pensa junto, sem estrutura de formulário (P70).
+
+**Primeira pergunta com abertura emocional.** `empresa.momento` abre com *"Antes de qualquer coisa... quero entender como você enxerga sua empresa neste momento. Não financeiramente. Mas como empresário."* — nunca como cadastro.
+
+**Ritual de digestão variável.** A frase sob a reação passou a variar em sequência estável ("Deixa eu digerir o que você disse...", "Interessante... deixa eu pensar...", "Vou deixar essa resposta falar comigo um instante...", "Isso muda um pouco minha percepção...") — a Ponte não repete a mesma estrutura.
+
+**Decisão documentada:** a contrapergunta vive na camada de reação (provoca reflexão sem bloquear o fluxo) — um campo de resposta interativo seria uma nova interação/feature, fora do escopo deste programa. **STATUS: A PONTE CONVERSA.** Sem migrations, rotas, telas ou módulos. `tsc` e `npm run build` limpos.
+
+**Documentos criados/atualizados:** `P70_P71_EXPERIENCIA_COGNITIVA_V1.md` (novo), `CHANGELOG_OFICIAL.md`, `CURRENT_PRODUCT.md`, `KNOWN_ISSUES.md`.
+
+---
+
 ## Programa 69.5 — A Presença Cognitiva Permanente (Versão Fundacional)
 
 **5 de agosto de 2026**

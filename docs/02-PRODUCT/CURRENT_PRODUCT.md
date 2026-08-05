@@ -1,5 +1,18 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P70 + P71 — EXPERIÊNCIA COGNITIVA V1 (PRIMEIRA IMPRESSÃO + RITMO COGNITIVO) — STATUS OFICIAL — 5 de agosto de 2026**
+>
+> **"A Ponte deixa de parecer um software e passa a parecer um conselheiro."** A primeira conversa muda de experiência — sem funcionalidades, módulos, IA, telas ou migrations; tudo determinístico:
+>
+> - **Ritmo cognitivo imprevisível (`montarRitmoCognitivo`):** após cada resposta a Ponte escolhe a fala em ordem de prioridade — **mudança de direção** se a resposta revela algo grande (fechar/vender a empresa, demitir → "Espera. Isso é grande demais...") → **contrapergunta** (aprofundamento: "Quando você diz que a empresa para sem você... fala das decisões ou da operação?") → **conexão** com o que foi dito minutos antes (crescimento × dependência, previsão × caixa) → **percepção como hipótese** (P65) → **ritmo** que alterna deterministicamente entre recompensa, silêncio inteligente, pensar em voz alta e pequeno mistério (hash estável — mesmo input, mesmo output).
+> - **Pensar em voz alta + pequenos mistérios:** "Interessante...", "Isso muda um pouco minha percepção", "Espera... isso conecta com outra coisa que você comentou", "Tem uma coisa interessante aparecendo aqui..." — a Ponte nunca é previsível e nunca comenta todas as respostas do mesmo jeito.
+> - **Motivo implícito:** removido o rótulo "Por que pergunto:" do QuestionCard — a razão de cada pergunta agora aparece em tom de quem pensa junto, nunca como formulário.
+> - **Primeira pergunta emocional:** `empresa.momento` abre com *"Antes de qualquer coisa... quero entender como você enxerga sua empresa neste momento. Não financeiramente. Mas como empresário."*.
+> - **Ritual de digestão variável:** a frase sob a reação varia em sequência estável ("Deixa eu digerir...", "Interessante... deixa eu pensar...", etc.).
+> - **Decisão documentada:** contrapergunta vive na camada de reação (reflexão sem bloquear) — campo de resposta interativo seria nova feature, fora do escopo.
+>
+> Ver `docs/07-MILESTONES/P70_P71_EXPERIENCIA_COGNITIVA_V1.md`.
+
 > **MARCO: P69.5 — A PRESENÇA COGNITIVA PERMANENTE (VERSÃO FUNDACIONAL) — STATUS OFICIAL — 5 de agosto de 2026**
 >
 > **"Ao abrir a Ponte, o empresário deve sentir: minha empresa continuou sendo compreendida enquanto eu vivia minha rotina."** O P69.5 transformou a abertura — ela deixou de parecer um dashboard com cards e virou **continuidade da conversa** (sem migrations, rotas, telas, módulos ou funcionalidades novas; determinístico, sem IA):

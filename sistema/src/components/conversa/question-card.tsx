@@ -191,10 +191,10 @@ export function QuestionCard({ pergunta, tipo, opcoes, valor, onChange, onEnviar
         </div>
       )}
 
-      {/* P67 — o porquê da pergunta: para que o empresário entenda que não é coleta */}
+      {/* P70 — o motivo é implícito: nunca "Por que pergunto". A Ponte apenas
+          compartilha a razão em tom de quem pensa junto — não de formulário. */}
       {motivo && (
-        <p className="text-[11px] text-muted-foreground/70 leading-relaxed">
-          <span className="font-semibold uppercase tracking-wide">Por que pergunto: </span>
+        <p className="text-[11px] text-muted-foreground/70 italic leading-relaxed">
           {motivo}
         </p>
       )}

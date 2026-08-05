@@ -31,7 +31,7 @@ export const PRIMEIRA_CONVERSA: Fluxo = {
   versao: 7,
   etapas: [
     // ─── BLOCO 1 — ATUAL: onde você está hoje ───────────────────────────────
-    { id: 'empresa.momento', pergunta: 'Se você tivesse que escolher a frase mais verdadeira sobre sua empresa hoje, qual seria?', tipo: 'selecao', permiteDetalhe: true, estagio: 'contexto', bloco: 'atual', contexto: 'Antes de falar qualquer coisa, quero ouvir como você lê o momento da empresa.', motivo: 'A frase que você escolher vira a régua que uso para interpretar tudo o que você me contar daqui pra frente.', opcoes: [
+    { id: 'empresa.momento', pergunta: 'Se você tivesse que escolher a frase mais verdadeira sobre sua empresa hoje, qual seria?', tipo: 'selecao', permiteDetalhe: true, estagio: 'contexto', bloco: 'atual', contexto: 'Antes de qualquer coisa... quero entender como você enxerga sua empresa neste momento. Não financeiramente. Mas como empresário.', motivo: 'A frase que você escolher vira a régua que uso para interpretar tudo o que você me contar daqui pra frente.', opcoes: [
       { valor: 'crescendo_rapido', rotulo: 'Está crescendo mais rápido do que consigo organizar' },
       { valor: 'depende_de_mim', rotulo: 'Depende muito de mim para funcionar' },
       { valor: 'estavel_sem_avancar', rotulo: 'Está estável, mas não avança como eu gostaria' },

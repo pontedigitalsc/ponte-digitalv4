@@ -162,6 +162,15 @@ export default function ConversaPage() {
   const dadosRespostaRef = useRef<{ concluida: boolean; proximaPergunta: Pergunta | null; progresso: Progresso } | null>(null)
   const [reacaoSeq, setReacaoSeq] = useState(0)
 
+// P71 — ritmo cognitivo: a Ponte pensa em voz alta com variação, nunca com a
+// mesma estrutura. Determinístico (sequência estável, sem aleatoriedade).
+const RITUAL_DIGESTAO = [
+  'Deixa eu digerir o que você disse...',
+  'Interessante... deixa eu pensar...',
+  'Vou deixar essa resposta falar comigo um instante...',
+  'Isso muda um pouco minha percepção...',
+]
+
   const avancarDaReacao = useCallback((concluida: boolean, proximaPergunta: Pergunta | null, proximoProgresso: Progresso) => {
     if (timerRef.current) {
       clearTimeout(timerRef.current)
@@ -293,7 +302,7 @@ export default function ConversaPage() {
               </div>
               <p className="text-sm text-muted-foreground italic leading-relaxed">{reacao}</p>
               <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60">
-                Deixa eu digerir o que você disse...
+                {RITUAL_DIGESTAO[reacaoSeq % RITUAL_DIGESTAO.length]}
               </p>
               <div className="h-1 w-full overflow-hidden rounded-full bg-muted">
                 <div

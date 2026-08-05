@@ -36,6 +36,29 @@ export const SILENCIO_INTELIGENTE = [
   'Escuto. Algumas coisas pedem calma antes de qualquer palavra.',
 ]
 
+// ─── P70/P71 — PENSAR EM VOZ ALTA ─────────────────────────────────────────────
+// O sistema deixa o raciocínio aparecer: "Interessante...", "Isso muda um pouco
+// minha percepção." Criar presença sem soar roteirizado. Determinístico (sem IA).
+
+export const PENSAR_EM_VOZ_ALTA = [
+  'Interessante...',
+  'Isso muda um pouco minha percepção.',
+  'Acho que encontrei um padrão.',
+  'Espera... isso conecta com outra coisa que você comentou.',
+  'Deixa eu pensar no que você disse...',
+]
+
+// ─── P70 — PEQUENOS MISTÉRIOS ─────────────────────────────────────────────────
+// O empresário precisa sentir curiosidade: "Tem uma coisa interessante aparecendo
+// aqui... mas ainda preciso entender mais um ponto." Mantém atenção até a próxima
+// pergunta resolver o mistério.
+
+export const CURIOSIDADE = [
+  'Tem uma coisa interessante aparecendo aqui... mas ainda preciso entender mais um ponto antes de te dizer.',
+  'Essa resposta abriu uma porta. Quero olhar o que tem atrás dela na próxima pergunta.',
+  'Estou começando a ver um fio nesta história. Ainda não vou puxar — a próxima parte vai me ajudar.',
+]
+
 function hashEtapa(etapaId: string): number {
   let hash = 0
   for (let i = 0; i < etapaId.length; i++) {
@@ -121,6 +144,185 @@ export function percepcaoDurante(perguntaId: string, respostas: Respostas): stri
     if (regra.condicao(respostas)) return regra.mensagem(respostas)
   }
   return null
+}
+
+// ─── P71 — CONTRAPERGUNTAS ────────────────────────────────────────────────────
+// A Ponte aprofunda a conversa com uma pergunta sobre a própria resposta
+// ("Quando você diz tudo... está falando das decisões, ou da operação?"). A
+// contrapergunta vive na camada de reação: provoca reflexão e mantém o fluxo —
+// não é um campo de resposta novo (seria uma interação/feature fora do escopo).
+// Determinístico: regras por pergunta + palavras-chave.
+
+interface RegraContrapergunta {
+  perguntaId: string
+  palavras: string[]
+  mensagem: (respostas: Respostas) => string
+}
+
+const REGRAS_CONTRAPERGUNTA: RegraContrapergunta[] = [
+  {
+    perguntaId: 'empresa.dependencia',
+    palavras: ['pararia', 'sofreria', 'estancaria', 'depende', 'tudo'],
+    mensagem: (respostas) =>
+      `Quando você diz que a empresa "${r(respostas, 'empresa.dependencia')}"... estou me perguntando: você fala das decisões, ou da operação do dia a dia? Essa distinção muda como eu leio tudo o mais que você me contar.`,
+  },
+  {
+    perguntaId: 'empresa.momento',
+    palavras: ['depende', 'dependo', 'eu mesmo', 'gargalo'],
+    mensagem: (respostas) =>
+      `Você disse que a empresa "${r(respostas, 'empresa.momento')}". Quando você pensa nisso, o que pesa mais: a falta de estrutura, ou a falta de tempo sua? Quero entender qual dos dois é a raiz.`,
+  },
+  {
+    perguntaId: 'financeiro.previsao',
+    palavras: ['nao', 'chute', 'parcial', 'mais ou menos'],
+    mensagem: (respostas) =>
+      `Quando você diz que a previsão é "${r(respostas, 'financeiro.previsao')}"... isso é por falta de número, ou por escolha de não olhar com regularidade? Uma coisa é não ter o dado; outra é não ter o hábito.`,
+  },
+  {
+    perguntaId: 'empresa.crescer',
+    palavras: ['cliente', 'venda', 'vender'],
+    mensagem: (respostas) =>
+      `Você apontou "${r(respostas, 'empresa.crescer')}" como o que segura a empresa. Deixa eu te perguntar: o que mais falta para isso destravar — plano, tempo, ou alguém para executar?`,
+  },
+]
+
+export function contraperguntaDurante(perguntaId: string, respostas: Respostas): string | null {
+  for (const regra of REGRAS_CONTRAPERGUNTA) {
+    if (regra.perguntaId !== perguntaId) continue
+    if (contemAlguma(respostas, perguntaId, regra.palavras)) return regra.mensagem(respostas)
+  }
+  return null
+}
+
+// ─── P71 — MUDANÇA DE DIREÇÃO (SINAL CRÍTICO) ─────────────────────────────────
+// Se a resposta revela algo grande demais (fechar a empresa, demitir, vender),
+// a Ponte abandona momentaneamente o roteiro e explora. Determinístico.
+
+const SINAIS_CRITICOS: { palavras: string[]; mensagem: (resposta: string) => string }[] = [
+  {
+    palavras: ['fechar', 'fechando', 'fechar a empresa', 'encerrar', 'falir', 'falencia'],
+    mensagem: (resposta) =>
+      `Espera. Você disse "${resposta}". Isso é grande demais para eu seguir o roteiro como se nada tivesse acontecido. Antes de qualquer outra coisa, quero entender isso com você — o que está levando a esse ponto?`,
+  },
+  {
+    palavras: ['vender', 'vendendo a empresa', 'vender a empresa'],
+    mensagem: (resposta) =>
+      `Você mencionou "${resposta}". Antes de seguirmos, preciso te dizer: essa é uma decisão grande, e quero pensar com você — não apressar nada.`,
+  },
+  {
+    palavras: ['demitir', 'demissao', 'mandar embora'],
+    mensagem: (resposta) =>
+      `Parei aqui porque você falou em "${resposta}". Decisões assim pesam mais do que parecem. Vamos olhar isso com calma antes de qualquer outra pergunta.`,
+  },
+]
+
+export function sinalCriticoDurante(resposta: string): string | null {
+  const texto = normalizar(resposta)
+  for (const sinal of SINAIS_CRITICOS) {
+    if (sinal.palavras.some((p) => texto.includes(normalizar(p)))) return sinal.mensagem(resposta)
+  }
+  return null
+}
+
+// ─── P71 — CONEXÕES DURANTE A CONVERSA ───────────────────────────────────────
+// A Ponte cita coisas ditas minutos antes e conecta com a resposta atual.
+// Determinístico: combina duas respostas reais.
+
+interface RegraConexao {
+  perguntaId: string
+  condicao: (respostas: Respostas) => boolean
+  mensagem: (respostas: Respostas) => string
+}
+
+const REGRAS_CONEXAO: RegraConexao[] = [
+  {
+    perguntaId: 'rotina.cabeca',
+    condicao: (respostas) => !!r(respostas, 'rotina.energia') && !!r(respostas, 'rotina.cabeca'),
+    mensagem: (respostas) =>
+      `Você me disse que sua energia vai para "${r(respostas, 'rotina.energia')}" e que sua cabeça está em "${r(respostas, 'rotina.cabeca')}". Não por acaso — costuma ser a mesma coisa consumindo os dois.`,
+  },
+  {
+    perguntaId: 'empresa.dependencia',
+    condicao: (respostas) => !!r(respostas, 'empresa.crescer') && contemAlguma(respostas, 'empresa.dependencia', ['pararia', 'sofreria', 'estancaria']),
+    mensagem: (respostas) =>
+      `Você quer crescer — e disse que o que segura é "${r(respostas, 'empresa.crescer')}". Agora conta que, se ficasse 30 dias fora, "${r(respostas, 'empresa.dependencia')}". Talvez as duas coisas estejam ligadas: a empresa só cresce até o tamanho de quem está nela.`,
+  },
+  {
+    perguntaId: 'financeiro.caixa',
+    condicao: (respostas) => !!r(respostas, 'financeiro.previsao') && contemAlguma(respostas, 'financeiro.previsao', ['nao', 'chute', 'parcial']),
+    mensagem: (respostas) =>
+      `Você me disse que não tem uma previsão segura do próximo mês — e que, ao olhar o caixa, vê primeiro "${r(respostas, 'financeiro.caixa')}". Essas duas coisas combinadas costumam transformar decisão em aposta.`,
+  },
+]
+
+export function conexaoDurante(perguntaId: string, respostas: Respostas): string | null {
+  for (const regra of REGRAS_CONEXAO) {
+    if (regra.perguntaId !== perguntaId) continue
+    if (regra.condicao(respostas)) return regra.mensagem(respostas)
+  }
+  return null
+}
+
+// ─── P70/P71 — RITMO COGNITIVO ────────────────────────────────────────────────
+// A Ponte nunca responde todas as respostas do mesmo jeito. O ritmo é
+// imprevisível de forma determinística: às vezes recompensa, às vezes silêncio,
+// às vezes pensa em voz alta, às vezes cria um pequeno mistério. A imprevisibilidade
+// é derivada de um hash estável (etapa + palavra-chave) — o mesmo input produz o
+// mesmo output, mas respostas diferentes produzem ritmos diferentes.
+
+function hashTexto(texto: string): number {
+  let hash = 0
+  for (let i = 0; i < texto.length; i++) {
+    hash = (hash << 5) - hash + texto.charCodeAt(i)
+    hash |= 0
+  }
+  return Math.abs(hash)
+}
+
+export interface RitmoContexto {
+  perguntaId: string
+  resposta: string
+  respostas: Respostas
+  blocoAtual?: BlocoConversa
+  fechaBloco: boolean
+}
+
+// Ordem de prioridade da fala da Ponte dentro de um bloco:
+//   1. sinal crítico (mudança de direção)
+//   2. contrapergunta (aprofundamento)
+//   3. conexão com o que foi dito antes
+//   4. percepção como hipótese
+//   5. ritmo imprevisível (recompensa / silêncio / pensar em voz alta / mistério)
+export function montarRitmoCognitivo(ctx: RitmoContexto): string {
+  if (ctx.fechaBloco) return devolutivaDeBloco(ctx.blocoAtual as BlocoConversa, ctx.respostas)
+
+  const critico = sinalCriticoDurante(ctx.resposta)
+  if (critico) return critico
+
+  const contra = contraperguntaDurante(ctx.perguntaId, ctx.respostas)
+  if (contra) return contra
+
+  const conexao = conexaoDurante(ctx.perguntaId, ctx.respostas)
+  if (conexao) return conexao
+
+  const percepcao = percepcaoDurante(ctx.perguntaId, ctx.respostas)
+  if (percepcao) return percepcao
+
+  // Ritmo imprevisível e determinístico — baseado na pergunta + resposta.
+  const semente = `${ctx.perguntaId}::${normalizar(ctx.resposta)}`
+  const sorteio = hashTexto(semente) % 10
+
+  if (sorteio >= 0 && sorteio <= 1) {
+    return SILENCIO_INTELIGENTE[hashTexto(semente + '::silencio') % SILENCIO_INTELIGENTE.length]
+  }
+  if (sorteio >= 2 && sorteio <= 3) {
+    return CURIOSIDADE[hashTexto(semente + '::curiosidade') % CURIOSIDADE.length]
+  }
+  if (sorteio >= 4 && sorteio <= 5) {
+    const pensar = PENSAR_EM_VOZ_ALTA[hashTexto(semente + '::pensar') % PENSAR_EM_VOZ_ALTA.length]
+    return `${pensar} ${obterReacao(ctx.perguntaId)}`
+  }
+  return obterReacao(ctx.perguntaId)
 }
 
 // ─── Devolutivas de fim de bloco — a Ponte conversa citando evidência ────────

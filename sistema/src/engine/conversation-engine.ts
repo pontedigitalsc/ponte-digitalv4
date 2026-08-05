@@ -1,6 +1,6 @@
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { FLUXOS } from '@/engine/fluxos/primeira-conversa'
-import { obterReacao, devolutivaDeBloco, percepcaoDurante } from '@/engine/reacoes'
+import { montarRitmoCognitivo } from '@/engine/reacoes'
 import { registrarEvidencia } from '@/engine/evidence-engine'
 import { registrarEventoAtivacao } from '@/engine/founder-activation-engine'
 import { registrarResposta } from '@/engine/question-answer-engine'
@@ -197,10 +197,13 @@ export async function responder(
   const proximoBloco = proximaEtapa?.bloco
   const fechaBloco = !!blocoAtual && (!proximaEtapa || !proximoBloco || proximoBloco !== blocoAtual)
 
-  let reacao = percepcaoDurante(perguntaId, respostasAtuais) ?? obterReacao(perguntaId)
-  if (fechaBloco) {
-    reacao = devolutivaDeBloco(blocoAtual, respostasAtuais)
-  }
+  const reacao = montarRitmoCognitivo({
+    perguntaId,
+    resposta: valor,
+    respostas: respostasAtuais,
+    blocoAtual,
+    fechaBloco,
+  })
 
   // Registra evidência + Q&A individual (apenas se vinculada a uma empresa)
   if (conversa.empresaId) {

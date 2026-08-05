@@ -1,5 +1,19 @@
 # Known Issues
 
+## Contrapergunta vive na reação, não como interação (P70+P71)
+
+**Status:** Aceito (decisão de escopo registrada — não é bug)
+**Prioridade:** Baixa
+**Descrição:** a contrapergunta (P71) aparece como parte da fala da Ponte após a resposta ("Quando você diz que a empresa para sem você... fala das decisões ou da operação?"), provocando reflexão sem bloquear o fluxo. Não existe campo de resposta para ela — isso seria uma nova interação/feature, fora do escopo do programa de experiência (que não adiciona funcionalidades).
+**Ação:** observar nos testes com Founders se a contrapergunta gera reflexão como previsto. Se houver evidência de que o empresário quer responder ali, evoluir para uma interação real em programa futuro.
+
+## Ritmo cognitivo usa hash estável, não calibrado (P70+P71)
+
+**Status:** Aceito (não é bug)
+**Prioridade:** Baixa
+**Descrição:** o sorteio de ritmo (recompensa/silêncio/pensar em voz alta/mistério) é determinístico por hash (pergunta + resposta normalizada). A distribuição (silêncio ~20%, mistério ~20%, pensar em voz alta ~20%) não foi calibrada com dados reais.
+**Ação:** calibrar após observar as primeiras conversas reais — ajustar pesos se silêncio parecer excessivo ou insuficiente.
+
 ## Soft Delete incompleto
 
 **Status:** Pendente
