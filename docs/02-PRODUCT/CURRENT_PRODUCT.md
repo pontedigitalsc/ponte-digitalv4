@@ -1,5 +1,15 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P69 — CONVERSA PERMANENTE — STATUS OFICIAL — 4 de agosto de 2026**
+>
+> **"A Ponte Digital não é um lugar onde você entra para responder perguntas. É um lugar que acompanha continuamente a história da sua empresa e sempre mostra o que realmente merece sua atenção antes da próxima decisão."** A Ponte deixa de ser sistema de consultas e conduz a continuidade (sem migrations, rotas, telas ou módulos novos):
+>
+> - **Agenda Inteligente (`motor-continuacao.ts`):** engine determinística (sem IA) que decide o que merece atenção **hoje**, por **contexto** (história da empresa), nunca por data. Critérios em ordem de peso: decisão acompanhada sem retorno (P68, ≥ 3 dias), hipótese importante não validada (P65/P66), evolução após tempo sem conversar via `montarContinuidadeConversa`. Cada item com prioridade Alta/Média/Baixa; **nunca mais que 3**.
+> - **Abertura da Ponte (`abertura-do-dia.tsx`):** ao abrir, **antes de qualquer módulo**, o empresário encontra **"Hoje vale conversarmos sobre..."** — cards clicáveis (motivo legítimo + pergunta + opções) + convite *"Tem alguma decisão acontecendo hoje?"* + CTA **"Conversar agora"**. O Ritual Diário desceu; a abertura vira o primeiro bloco da home.
+> - **Princípios garantidos:** nunca interrompe sem razão legítima; nunca "você está há X dias sem acessar" (substituído por razão baseada na história); agenda vazia mostra só a mensagem gentil; nunca cria tarefa/agenda/calendário/gamificação. A abertura dura menos de um minuto.
+>
+> Ver `docs/07-MILESTONES/P69_CONVERSA_PERMANENTE.md`.
+
 > **MARCO: P68 — O CICLO DE DECISÃO EMPRESARIAL — STATUS OFICIAL — 4 de agosto de 2026**
 >
 > **"A Ponte não apenas lembra o que sua empresa fez. Ela acompanha as decisões que estão construindo o futuro dela."** A Ponte deixa de aconselhar e passa a **acompanhar decisões reais até o resultado** — sem novas telas, sem módulos, conectando o que já existe (P66 ↔ Centro de Decisão + memória decisória):

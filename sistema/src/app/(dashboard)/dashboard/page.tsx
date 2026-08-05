@@ -9,9 +9,11 @@ import { decidirContexto, buscarSituacaoEmpresa } from '@/engine/cognitive-conte
 import { listarAprendizados } from '@/engine/aprendizado-service'
 import { obterRitualDiario } from '@/engine/ritual-engine'
 import { obterConquistas } from '@/engine/celebracao-service'
+import { montarAgendaDoDia } from '@/engine/motor-continuacao'
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { AvatarPonte } from '@/components/ui/avatar'
 import { ComoEstaHoje } from '@/components/dashboard/como-esta-hoje'
+import { AberturaDoDia } from '@/components/dashboard/abertura-do-dia'
 import { RitualDiario } from '@/components/dashboard/ritual-diario'
 import type { RitualDiario as RitualDiarioData } from '@/engine/ritual-engine'
 import { Celebracoes } from '@/components/dashboard/celebracao'
@@ -25,7 +27,7 @@ export default async function DashboardPage() {
   const usuario = await requireUser()
   const nome = usuario.nome.split(' ')[0]
 
-  const [perguntaViva, reflexao, memorias, contexto, situacao, aprendizados, ultimaConversa, ritualData, conquistas] = await Promise.all([
+  const [perguntaViva, reflexao, memorias, contexto, situacao, aprendizados, ultimaConversa, ritualData, conquistas, agenda] = await Promise.all([
     obterPerguntaVivaAtiva(usuario.empresaId).catch(() => null),
     obterReflexaoDaSemana(usuario.empresaId).catch(() => null),
     listarMemoriasEmocionais(usuario.empresaId, 3).catch(() => []),
@@ -41,6 +43,7 @@ export default async function DashboardPage() {
       .catch(() => null),
     obterRitualDiario(usuario.empresaId, nome).catch(() => null),
     obterConquistas(usuario.empresaId).catch(() => []),
+    montarAgendaDoDia(usuario.empresaId).catch(() => null),
   ])
 
   const ritual: RitualDiarioData = ritualData ?? {
@@ -97,6 +100,10 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
+      {/* P69 — Conversa Permanente: antes de qualquer módulo, a abertura
+          montada da memória da empresa — "Hoje vale conversarmos sobre...". */}
+      {agenda && <AberturaDoDia data={agenda} />}
+
       {/* Cabeçalho — presença, não painel */}
       <div className="text-center space-y-3">
         <AvatarPonte state="breathing" size="lg" />

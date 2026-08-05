@@ -4,6 +4,22 @@
 
 ---
 
+## Programa 69 — Conversa Permanente
+
+**4 de agosto de 2026**
+
+**"A Ponte não depende do empresário lembrar dela. Ela lembra do empresário."** A Ponte deixa de ser um sistema de consultas e passa a conduzir a continuidade — sem migrations, sem rotas, telas ou módulos novos, reutilizando P65/P66/P67/P68.
+
+**Agenda Inteligente (`motor-continuacao.ts`):** engine determinística (sem IA) que decide o que merece atenção **hoje**, por **contexto** (a história da empresa), nunca por data. Critérios em ordem de peso: (1) **decisão acompanhada sem retorno** (P68) — decisões vivas sem atualização há ≥ 3 dias viram *"Há uma decisão importante que ainda não sabemos como terminou."*; (2) **hipótese importante não validada** (P65/P66) — *"Você ainda sente isso?"*; (3) **evolução** — tempo sem conversar com retomada via `montarContinuidadeConversa`, usando memória recente e **nunca** "você está há X dias sem acessar". Cada item com prioridade Alta/Média/Baixa e **nunca mais que 3**.
+
+**Abertura da Ponte (`abertura-do-dia.tsx`):** ao abrir, **antes de qualquer módulo**, o empresário encontra **"Hoje vale conversarmos sobre..."** — cards clicáveis (prioridade + motivo legítimo + pergunta + opções) + convite *"Tem alguma decisão acontecendo hoje?"* + CTA **"Conversar agora"** (`/conversa`). O Ritual Diário desceu; a abertura vira o primeiro bloco da home.
+
+**Princípios garantidos:** nunca interrompe sem razão legítima; nunca notificação vazia nem "X dias sem acessar"; agenda vazia mostra apenas a mensagem gentil de disponibilidade; nada de tarefas/agenda/calendário/notificações genéricas/gamificação. A abertura dura menos de um minuto. **STATUS: A PONTE CONDUZ A CONTINUIDADE.** Sem migrations. `tsc` e `npm run build` limpos.
+
+**Documentos criados/atualizados:** `P69_CONVERSA_PERMANENTE.md`, `CHANGELOG_OFICIAL.md`, `CURRENT_PRODUCT.md`, `KNOWN_ISSUES.md`.
+
+---
+
 ## Programa 68 — O Ciclo de Decisão Empresarial
 
 **4 de agosto de 2026**

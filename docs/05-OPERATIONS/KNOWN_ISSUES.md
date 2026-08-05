@@ -175,3 +175,18 @@
 **Descrição:** o spec previa a Ponte perguntar "você tomou aquela decisão?" após X dias (e "o que aconteceu?" / "o que está impedindo?"). Foi adiado porque (a) seria um mecanismo temporal novo, fora do escopo "conectar o que já existe" desta sprint; (b) a hipótese precisa de evidência de que as decisões acompanhadas estão sendo usadas antes de construir o pulso. O estado "acompanhamento" já nasce gravado (origem `ASSISTENTE`), então o dado para o loop futuro já existe.
 **Ação:** medir taxa de decisões acompanhadas que chegam a `resultado` e o valor percebido (PATCH "essa reflexão ajudou você a decidir?") antes de decidir construir o loop. Ver `docs/07-MILESTONES/P68_CICLO_DE_DECISAO_EMPRESARIAL.md` §6.
 
+## P69 — abertura "antes de qualquer módulo" acontece no primeiro bloco da home (escolha de implementação)
+
+**Status:** Aceito (decisão de implementação, documentada)
+**Prioridade:** Baixa
+**Descrição:** o spec pede que, ao abrir a Ponte, "nunca mostrar dashboard primeiro" — o empresário deve encontrar a agenda inteligente antes de qualquer módulo. Implementação: a `AberturaDoDia` é renderizada como o **primeiro bloco da própria home** (que é onde o usuário cai após login), e o Ritual Diário (que era o primeiro bloco) desceu. Isso atende o princípio sem criar uma tela/rota nova (fiel à regra "sem novas telas/módulos" e ao escopo enxuto da fase). A hipótese de uma página de abertura dedicada permanece como alternativa futura se houver evidência de que o primeiro bloco não é suficiente.
+**Ação:** monitorar no deploy se o empresário percebe a abertura antes do painel; se a métrica de retorno semanal não subir, considerar abertura dedicada. Ver `docs/07-MILESTONES/P69_CONVERSA_PERMANENTE.md`.
+
+## P69 — motor de continuidade com limiares determinísticos (sem calibração com dados reais ainda)
+
+**Status:** Aceito (a monitorar)
+**Prioridade:** Baixa
+**Descrição:** os limiares da Agenda Inteligente (decisão sem retorno ≥ 3 dias → Alta ≥ 7; hipótese ativa por impacto; evolução ≥ 7 dias) são regras determinísticas escolhidas por bom senso, ainda **sem calibração com uso real**. Podem mostrar assuntos cedo demais (insistência) ou tarde demais (assunto esfriar). As regras "nunca repetir", "nunca perguntar o já respondido" e "nunca insistir em encerrado" são garantidas pela seleção (decisões vivas ≥ 3 dias, hipóteses ativas, evolução só quando há continuidade) — mas o volume/valor percebido ainda não foi medido.
+**Ação:** medir engajamento da abertura (cliques em "Conversar agora", taxa de retorno semanal) antes de ajustar limiares. Ver `docs/07-MILESTONES/P69_CONVERSA_PERMANENTE.md` §6.
+
+
