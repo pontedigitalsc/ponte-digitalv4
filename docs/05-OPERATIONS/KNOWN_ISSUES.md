@@ -1,5 +1,12 @@
 # Known Issues
 
+## P74 — conversa humana: surpresa e contradições não calibradas com empresários reais
+
+**Status:** Aceito (decisão — não é bug)
+**Prioridade:** Média
+**Descrição:** as novas camadas conversacionais (`ABERTURAS_NATURAIS`, `HIPOTESE_MUDOU`, `SURPRESA_DISCRETA`, `contradicaoDurante`) são determinísticas, mas nunca foram observadas com empresários reais. É possível que: (a) a abertura natural "Tem uma curiosidade minha." ou "Parece simples, mas..." precede uma contrapergunta e soe fora de tom para alguns; (b) `contradicaoDurante` dispare tensões (crescimento × dependência) que não façam sentido para todas as combinações de resposta; (c) "a hipótese mudou" pareça exagerada cedo na conversa, quando ainda há pouca evidência.
+**Ação:** observar os primeiros Founders. Se a fala parecer artificial, repetir o padrão do P72/P73: refinar regras (filtros, palavras) sem generalizar — nunca usar IA para gerar falas.
+
 ## Leitura cognitiva e Retrato V5 (P72+P73): relações determinísticas, não calibradas
 
 **Status:** Aceito (decisão registrada — não é bug)

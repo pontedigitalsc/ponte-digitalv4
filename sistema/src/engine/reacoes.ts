@@ -36,6 +36,69 @@ export const SILENCIO_INTELIGENTE = [
   'Escuto. Algumas coisas pedem calma antes de qualquer palavra.',
 ]
 
+// ─── P74 — PEQUENOS SILÊNCIOS (PARTE 6) ───────────────────────────────────────
+// Nem toda resposta precisa de uma devolutiva elaborada. Às vezes basta uma
+// pausa: a Ponte reconhece e segue. O empresário sente que foi ouvido sem que
+// cada resposta vire um comentário.
+
+export const SILENCIOS_CURTOS = [
+  'Entendi.',
+  'Interessante.',
+  'Hm...',
+  'Certo.',
+  'Faz sentido.',
+  'Isso muda bastante a forma como estou enxergando sua empresa.',
+]
+
+// ─── P74 — HUMILDADE INTELECTUAL (PARTE 7) ────────────────────────────────────
+// A Ponte nunca parece perfeita. Mostra que sabe que está lendo uma empresa
+// pela primeira vez. Humildade aumenta confiança — nunca é frase de efeito.
+
+export const HUMILDADE_INTELECTUAL = [
+  'Posso estar interpretando errado.',
+  'Ainda tenho pouca evidência para afirmar com segurança.',
+  'Vou tratar isso como hipótese, não como conclusão.',
+  'Quero investigar isso melhor antes de dizer qualquer coisa definitiva.',
+  'Essa é apenas a primeira leitura — ela pode mudar.',
+]
+
+// ─── P74 — PENSAR EM VOZ ALTA: A HIPÓTESE MUDOU (PARTE 3) ─────────────────────
+// Grandes conselheiros mostram parte do próprio raciocínio. Quando a resposta
+// muda o que a Ponte vinha pensando, ela fala abertamente sobre isso.
+
+export const HIPOTESE_MUDOU = [
+  'Enquanto você respondia, minha hipótese mudou.',
+  'No começo achei que o seu desafio principal fosse um. Agora não acho mais.',
+  'Essa resposta me fez repensar o que eu vinha considerando até aqui.',
+  'Eu vinha lendo sua empresa de um jeito. Essa resposta mudou o rumo da leitura.',
+]
+
+// ─── P74 — EMOÇÕES DISCRETAS (PARTE 9) ────────────────────────────────────────
+// A Ponte nunca dramatiza. Mas pode demonstrar surpresa — pouco, natural, sem
+// exagero. Surpresa só aparece quando há motivo real na resposta.
+
+export const SURPRESA_DISCRETA = [
+  'Confesso que isso me surpreendeu.',
+  'Não esperava encontrar esse padrão.',
+  'Essa resposta mudou bastante minha percepção.',
+  'Isso me pegou de surpresa — de um jeito bom.',
+]
+
+// ─── P74 — ABERTURAS NATURAIS (PARTE 1) ───────────────────────────────────────
+// A conversa não pode parecer um formulário. As perguntas nunca podem ser
+// introduzidas do mesmo jeito duas vezes seguidas. A Ponte usa aberturas que
+// fazem a pergunta parecer nascer da conversa — nunca de uma lista.
+
+export const ABERTURAS_NATURAIS = [
+  'Tem uma curiosidade minha.',
+  'Posso te perguntar uma coisa?',
+  'Enquanto você falava, fiquei pensando...',
+  'Isso me chamou atenção.',
+  'Parece simples, mas...',
+  'Queria entender melhor uma coisa.',
+  'Fiquei com uma dúvida agora.',
+]
+
 // ─── P70/P71 — PENSAR EM VOZ ALTA ─────────────────────────────────────────────
 // O sistema deixa o raciocínio aparecer: "Interessante...", "Isso muda um pouco
 // minha percepção." Criar presença sem soar roteirizado. Determinístico (sem IA).
@@ -263,6 +326,64 @@ export function conexaoDurante(perguntaId: string, respostas: Respostas): string
   return null
 }
 
+// ─── P74 — PARTE 5: QUANDO HÁ UM CONFLITO, PERGUNTAR ANTES DE EXPLICAR ────────
+// A Ponte nunca explica imediatamente um conflito. Primeiro pergunta e só então
+// continua. A pergunta-viva fica na camada de reação (reflexão sem bloquear o
+// fluxo) — exatamente como a contrapergunta do P70. Determinístico: só dispara
+// quando duas respostas REAIS já foram dadas.
+
+interface RegraContradicao {
+  perguntaAtual: string
+  outraPergunta: string
+  palavrasAtual: string[]
+  palavrasOutra: string[]
+  mensagem: (atual: string, outra: string) => string
+}
+
+const REGRAS_CONFLITO: RegraContradicao[] = [
+  {
+    perguntaAtual: 'empresa.momento',
+    outraPergunta: 'empresa.dependencia',
+    palavrasAtual: ['depende de mim', 'depende muito de mim', 'crescendo'],
+    palavrasOutra: ['pararia', 'estancaria'],
+    mensagem: (atual, outra) =>
+      `Parece existir uma pequena contradição. Você me contou que a empresa hoje "${atual}" — e depois que, se você se afastasse, "${outra}". Posso explorar isso com você?`,
+  },
+  {
+    perguntaAtual: 'empresa.crescer',
+    outraPergunta: 'empresa.dependencia',
+    palavrasAtual: ['crescer', 'crescimento', 'expandir', 'evoluir'],
+    palavrasOutra: ['pararia', 'estancaria', 'sofreria'],
+    mensagem: (atual, outra) =>
+      `Você aponta "${atual}" como o que segura a empresa — e ao mesmo tempo me conta que, sem você, "${outra}". As duas respostas parecem se contradizer. Posso explorar isso juntos?`,
+  },
+  {
+    perguntaAtual: 'visao.funcionando',
+    outraPergunta: 'empresa.dependencia',
+    palavrasAtual: ['sem mim', 'sem eu', 'sozinha', 'sozinho'],
+    palavrasOutra: ['pararia', 'estancaria'],
+    mensagem: (atual, outra) =>
+      `Aqui me chamou atenção: você imagina a empresa "${atual}" — mas também me contou que, se você se afastasse, "${outra}". Há um contraste entre onde você quer chegar e onde ela está hoje. Posso olhar isso com você?`,
+  },
+]
+
+// Retorna a mensagem que pergunta sobre uma contradição detectada ou null.
+// Vem antes da conexão/percepção na prioridade: a Ponte PERGUNTA antes de
+// explicar — o empresário sente que a Ponte está acompanhando o raciocínio.
+export function contradicaoDurante(perguntaAtual: string, respostas: Respostas): string | null {
+  for (const regra of REGRAS_CONFLITO) {
+    if (regra.perguntaAtual !== perguntaAtual) continue
+    const valorAtual = r(respostas, regra.perguntaAtual)
+    const valorOutra = r(respostas, regra.outraPergunta)
+    if (!valorAtual || !valorOutra) continue
+    if (contemAlguma({ [regra.perguntaAtual]: valorAtual }, regra.perguntaAtual, regra.palavrasAtual) &&
+        contemAlguma({ [regra.outraPergunta]: valorOutra }, regra.outraPergunta, regra.palavrasOutra)) {
+      return regra.mensagem(valorAtual, valorOutra)
+    }
+  }
+  return null
+}
+
 // ─── P70/P71 — RITMO COGNITIVO ────────────────────────────────────────────────
 // A Ponte nunca responde todas as respostas do mesmo jeito. O ritmo é
 // imprevisível de forma determinística: às vezes recompensa, às vezes silêncio,
@@ -287,42 +408,99 @@ export interface RitmoContexto {
   fechaBloco: boolean
 }
 
-// Ordem de prioridade da fala da Ponte dentro de um bloco:
-//   1. sinal crítico (mudança de direção)
-//   2. contrapergunta (aprofundamento)
-//   3. conexão com o que foi dito antes
-//   4. percepção como hipótese
-//   5. ritmo imprevisível (recompensa / silêncio / pensar em voz alta / mistério)
+// Ordem de prioridade da fala da Ponte dentro de um bloco (P74 — humano):
+//   1. sinal crítico (mudança de direção — Parte 4)
+//   2. contradição (PERGUNTA antes de explicar — Parte 5)
+//   3. contrapergunta com abertura natural e convite (Partes 1 e 8)
+//   4. conexão — mostrar que OUVIU, não que copiou (Parte 2)
+//   5. humildade intelectual sobre uma percepção (Parte 7)
+//   6. ritmo imprevisível (silêncio curto / pensar em voz alta / mistério /
+//      surpresa discreta / recompensa) (Partes 6, 3, 9, 1)
 export function montarRitmoCognitivo(ctx: RitmoContexto): string {
-  if (ctx.fechaBloco) return devolutivaDeBloco(ctx.blocoAtual as BlocoConversa, ctx.respostas)
+  if (ctx.fechaBloco) return humildizarDevolutiva(devolutivaDeBloco(ctx.blocoAtual as BlocoConversa, ctx.respostas), ctx.perguntaId, ctx.resposta)
 
+  // Parte 4 — mudança de direção quando aparece algo grande.
   const critico = sinalCriticoDurante(ctx.resposta)
   if (critico) return critico
 
-  const contra = contraperguntaDurante(ctx.perguntaId, ctx.respostas)
-  if (contra) return contra
+  // Parte 5 — há um conflito: a Ponte PERGUNTA, não explica na hora.
+  const conflito = contradicaoDurante(ctx.perguntaId, ctx.respostas)
+  if (conflito) return conflito
 
+  // Parte 1 e 8 — contrapergunta nasce da conversa, com abertura natural
+  // e convite para o empresário conduzir ("Vale aprofundarmos?").
+  const contra = contraperguntaDurante(ctx.perguntaId, ctx.respostas)
+  if (contra) return `${aberturaNatural(ctx.perguntaId, ctx.resposta)} ${contra}`
+
+  // Parte 2 — citar a evidência de um jeito que mostra escuta genuína.
   const conexao = conexaoDurante(ctx.perguntaId, ctx.respostas)
   if (conexao) return conexao
 
+  // Parte 7 — percepção SEMPRE como hipótese, com humildade intelectual.
   const percepcao = percepcaoDurante(ctx.perguntaId, ctx.respostas)
-  if (percepcao) return percepcao
+  if (percepcao) return `${humildade(ctx.perguntaId, ctx.resposta)} ${percepcao}`
 
   // Ritmo imprevisível e determinístico — baseado na pergunta + resposta.
   const semente = `${ctx.perguntaId}::${normalizar(ctx.resposta)}`
-  const sorteio = hashTexto(semente) % 10
+  const sorteio = hashTexto(semente) % 12
 
+  // Parte 6 — pequenos silêncios: às vezes basta uma pausa.
   if (sorteio >= 0 && sorteio <= 1) {
-    return SILENCIO_INTELIGENTE[hashTexto(semente + '::silencio') % SILENCIO_INTELIGENTE.length]
+    return SILENCIOS_CURTOS[hashTexto(semente + '::silcurto') % SILENCIOS_CURTOS.length]
   }
+  // Parte 3 — pensar em voz alta: a hipótese mudou.
   if (sorteio >= 2 && sorteio <= 3) {
-    return CURIOSIDADE[hashTexto(semente + '::curiosidade') % CURIOSIDADE.length]
+    return HIPOTESE_MUDOU[hashTexto(semente + '::hipp') % HIPOTESE_MUDOU.length]
   }
+  // Parte 1 — abertura natural que encerra a reação e sustenta a pergunta.
   if (sorteio >= 4 && sorteio <= 5) {
+    return ABERTURAS_NATURAIS[hashTexto(semente + '::abertura') % ABERTURAS_NATURAIS.length]
+  }
+  if (sorteio >= 6 && sorteio <= 7) {
     const pensar = PENSAR_EM_VOZ_ALTA[hashTexto(semente + '::pensar') % PENSAR_EM_VOZ_ALTA.length]
     return `${pensar} ${obterReacao(ctx.perguntaId)}`
   }
+  if (sorteio >= 8 && sorteio <= 9) {
+    // Parte 9 — surpresa discreta, só quando a resposta é marcante.
+    const surpresa = surpresaMarcante(ctx.perguntaId, ctx.resposta)
+    if (surpresa) return surpresa
+    return CURIOSIDADE[hashTexto(semente + '::curiosidade') % CURIOSIDADE.length]
+  }
   return obterReacao(ctx.perguntaId)
+}
+
+// P74 Partes 1 e 8 — abertura natural variada (hash estável) antes de uma
+// contrapergunta, para que o aprofundamento nunca comece do mesmo jeito.
+function aberturaNatural(perguntaId: string, resposta: string): string {
+  const semente = `abertura::${perguntaId}::${normalizar(resposta)}`
+  return ABERTURAS_NATURAIS[hashTexto(semente) % ABERTURAS_NATURAIS.length]
+}
+
+// P74 Parte 7 — humildade sobre uma percepção: a Ponte se corrige ao longo da
+// conversa, nunca se apresenta como certeza.
+function humildade(perguntaId: string, resposta: string): string {
+  const semente = `humildade::${perguntaId}::${normalizar(resposta)}`
+  return HUMILDADE_INTELECTUAL[hashTexto(semente) % HUMILDADE_INTELECTUAL.length]
+}
+
+// P74 Parte 7 — numa devolutiva de fim de bloco a Ponte às vezes abre com
+// humildade, para o resumo nunca parecer um veredito fechado. Determinístico:
+// cerca de 1 a cada 3 devolutivas recebem o aviso de humildade.
+function humildizarDevolutiva(devolutiva: string, perguntaId: string, resposta: string): string {
+  const semente = `humildizar::${perguntaId}::${normalizar(resposta)}`
+  if (hashTexto(semente) % 3 !== 0) return devolutiva
+  return `${humildade(perguntaId, resposta)} ${devolutiva}`
+}
+
+// P74 Parte 9 — surpresa discreta só quando a resposta é realmente marcante.
+// Determinístico: palavras de sinal forte.
+function surpresaMarcante(perguntaId: string, resposta: string): string | null {
+  const texto = normalizar(resposta)
+  const sinais = ['demitir', 'fechar', 'vender', 'quase quebrou', 'quase fechei', 'pedem muito de mim', 'nao aguento mais', 'esgotado', 'sozinho']
+  if (sinais.some((s) => texto.includes(normalizar(s)))) {
+    return `Confesso que isso me surpreendeu. ${humildade(perguntaId, resposta)}`
+  }
+  return null
 }
 
 // ─── Devolutivas de fim de bloco — a Ponte conversa citando evidência ────────

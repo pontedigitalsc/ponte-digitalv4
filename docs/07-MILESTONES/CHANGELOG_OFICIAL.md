@@ -4,6 +4,27 @@
 
 ---
 
+## Programa 74 — A Conversa Que Parece Humana (a Ponte conversa como conselheiro)
+
+**6 de agosto de 2026**
+
+**"O empresário nunca deve sentir que está falando com um roteiro, com uma IA ou com um chatbot — deve sentir que existe alguém prestando atenção."** Este programa NÃO cria telas, módulos, banco, rotas ou funcionalidades. Altera **exclusivamente o comportamento conversacional** da primeira sessão, na camada de reação (`sistema/src/engine/reacoes.ts`), mantendo tudo determinístico (sem IA):
+
+- **Parte 1 — Organiza-se como conversa, não formulário:** `ABERTURAS_NATURAIS` ("Tem uma curiosidade minha.", "Posso te perguntar uma coisa?", "Enquanto você falava, fiquei pensando...") introduzem as contraperguntas e aparecem sozinhas no ritmo — duas respostas seguidas nunca começam do mesmo jeito.
+- **Parte 3 — A hipótese mudou:** `HIPOTESE_MUDOU` ("Enquanto você respondia, minha hipótese mudou.") — a Ponte mostra que seu próprio raciocínio evolui.
+- **Parte 4 — Mudança de direção** (sinal crítico) realocada ao topo da prioridade: fechar/vender/demitir interrompe o roteiro.
+- **Parte 5 — Conflito: perguntar antes de explicar:** `contradicaoDurante` detecta a tensão real entre respostas (crescimento × dependência) e a Ponte PERGUNTA ("Posso explorar isso com você?") em vez de explicar.
+- **Parte 6 — Pequenos silêncios:** `SILENCIOS_CURTOS` ("Entendi.", "Hm...", "Isso muda como enxergo sua empresa.").
+- **Parte 7 — Humildade intelectual:** `HUMILDADE_INTELECTUAL` precede toda percepção; 1 a cada 3 devolutivas de bloco abre com a salva de que a leitura muda.
+- **Parte 8 — O empresário conduz:** contraperguntas terminam convidando ("Posso olhar isso com você?").
+- **Parte 9 — Emoções discretas:** `surpresaMarcante` só dispara com sinal forte, sempre com humildade.
+
+Sem coaching, sem elogio gratuito, sem theatrical entrega. **STATUS: aprovação aguardada por empresários reais.** Sem migrations, rotas, telas ou módulos.
+
+**Documento:** `P74_CONVERSA_QUE_PARECE_HUMANA.md` (novo), `CHANGELOG_OFICIAL.md`, `CURRENT_PRODUCT.md`, `KNOWN_ISSUES.md`.
+
+---
+
 ## Programa 72 + 73 — Engenharia da Transformação (Espelho Empresarial + Experiência da Descoberta)
 
 **5 de agosto de 2026**

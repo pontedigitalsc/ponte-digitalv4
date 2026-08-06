@@ -1,5 +1,16 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P74 — A CONVERSA QUE PARECE HUMANA — STATUS OFICIAL (comportamental) — 6 de agosto de 2026**
+>
+> **"O empresário nunca deve sentir que está falando com um roteiro, com uma IA ou com um chatbot — deve sentir que existe alguém prestando atenção."** A Ponte aprende a **conversar como um excelente conselheiro** — sem telas, módulos, banco, rotas ou funcionalidades; determinístico (sem IA), tudo na camada de reação da primeira sessão (`sistema/src/engine/reacoes.ts`):
+>
+> - A fala deixa de ser "uma reação" e vira **conversa**: aberturas variadas ("Tem uma curiosidade minha.", "Posso te perguntar uma coisa?") → nunca duas respostas começam iguais; **a hipótese mudou** ("Enquanto você respondia, minha hipótese mudou") — a Ponte mostra que raciocina; **pequenos silêncios** ("Entendi.", "Hm..."); **humildade intelectual** antes de toda percepção e em 1 a cada 3 devolutivas de bloco ("Posso estar interpretando errado."); **surpresa discreta** só com sinal forte.
+> - **Perguntar antes de explicar um conflito:** `contradicaoDurante` detecta a tensão real entre respostas (crescimento × dependência) e a Ponte PERGUNTA ("Parece existir uma contradição... Posso explorar isso com você?") em vez de explicar — o empresário sente controle.
+> - **Mudança de direção** (P71) permanece no topo: fechar/vender/demitir interrompe o roteiro.
+> - Sem coaching, sem elogio, sem teatro. **Aprovação depende de empresários reais** (frases espontâneas como "Parecia que você estava acompanhando meu raciocínio").
+>
+> Ver `docs/07-MILESTONES/P74_CONVERSA_QUE_PARECE_HUMANA.md`.
+
 > **MARCO: P72 + P73 — ENGENHARIA DA TRANSFORMAÇÃO (ESPELHO EMPRESARIAL + EXPERIÊNCIA DA DESCOBERTA) — STATUS OFICIAL — 5 de agosto de 2026**
 >
 > **"A Ponte não existe para responder perguntas. Existe para mudar a forma como o empresário pensa sobre a própria empresa."** O Retrato da primeira sessão deixa de informar e passa a **revelar** — sem módulos, funcionalidades, IA ou telas; determinístico:
