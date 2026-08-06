@@ -4,6 +4,22 @@
 
 ---
 
+## Programa 72 + 73 — Engenharia da Transformação (Espelho Empresarial + Experiência da Descoberta)
+
+**5 de agosto de 2026**
+
+**"A Ponte Digital não existe para responder perguntas. Ela existe para mudar a forma como o empresário pensa sobre a própria empresa."** Este programa NÃO adiciona módulos, funcionalidades, IA ou telas — transforma a qualidade da reflexão da primeira sessão, para que termine o empresário enxergando a empresa de forma diferente de como entrou. Não porque recebeu informações, mas porque percebeu padrões.
+
+**P72 — O Espelho Empresarial (`gerarLeituraCognitiva` em `hipoteses-estrategicas.ts`).** A Ponte deixa de interpretar respostas isoladas e passa a **conectar causas**: mostra relações ("Talvez o problema que você considera financeiro não seja financeiro — o caixa é o sintoma de uma operação que depende de você para girar"), monta mapa mental (pressão → centralização → sobrecarga → crescimento limitado → caixa apertado, "é um sistema; tocar em um ponto move os outros") e identifica contradições ("Você quer crescer — e a empresa para sem você. Talvez essas respostas estejam em conflito"). Tudo determinístico, derivado das respostas reais — nunca afirmar sem evidência, nunca inventar padrão.
+
+**P73 — A Experiência da Descoberta (`gerarRetratoEstrategico` reescrito).** O Retrato deixa de informar e passa a **revelar**, com estrutura de jornada: 1) O que eu achava que você era (hipótese inicial); 2) O que eu fui percebendo (relações + contradições); 3) O que hoje parece me importante (síntese); 4) O ponto que talvez você ainda não esteja olhando (ponto cego); 5) A decisão que eu não decidiria com pressa; 6) A conversa que a gente deveria ter daqui a alguns dias. **Mostra a evolução da própria Ponte** ("Eu achava... fui percebendo... hoje acho"), **discorda com evidência** e entrega uma **frase inesquecível** (`frase` exibida em destaque + incluída no texto copiável). Cerimônia retrabalhada para falar de relações, padrão e descoberta.
+
+**STATUS: A PRIMEIRA SESSÃO TORNA-SE UMA DESCOBERTA.** Sem migrations, rotas, telas ou módulos. `tsc` e `npm run build` limpos.
+
+**Documentos criados/atualizados:** `P72_P73_ENGENHARIA_DA_TRANSFORMACAO.md` (novo), `CHANGELOG_OFICIAL.md`, `CURRENT_PRODUCT.md`, `KNOWN_ISSUES.md`.
+
+---
+
 ## Programa 70 + 71 — Experiência Cognitiva V1 (Primeira Impressão Memorável + Ritmo Cognitivo)
 
 **5 de agosto de 2026**

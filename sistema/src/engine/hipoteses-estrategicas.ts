@@ -216,6 +216,123 @@ export function gerarHipoteses(respostas: Respostas): HipoteseEstrategica[] {
 // memória cognitiva (descobertas) e como sinal de valor. Nenhuma hipótese
 // aparece como "certeza": elas existem para serem observadas, não para
 // rotular a empresa.
+// ─── P72 — O ESPELHO EMPRESARIAL ─────────────────────────────────────────────
+// Até aqui as hipóteses eram lidas uma a uma (Dependência, Maturidade, Cliente,
+// Financeira, Energia). P72 muda isso: a Ponte passa a CONECTAR CAUSAS em vez de
+// interpretar respostas isoladas. Mostra RELAÇÕES não dados; monta mapa mental
+// (pressão → centralização → sobrecarga → crescimento limitado → caixa apertado);
+// identifica CONTRADIÇÕES ("Você quer crescer, mas a empresa para sem você");
+// e entrega uma FRASE que o empresário queira guardar.
+//
+// Determinístico, sem IA, 100% derivado das respostas reais. Nunca afirmar sem
+// evidência, nunca inventar padrão. Toda leitura parte das palavras do próprio
+// empresário.
+
+export interface LeituraCognitiva {
+  padrao: string
+  relacoes: string[]
+  contradicoes: string[]
+  frase: string | null
+}
+
+const palavrasQuerCrescer = ['crescer', 'crescimento', 'expandir', 'evoluir', 'faturar', 'mais vendas', 'ganhar mais', 'escala', 'abrir']
+const palavrasCentralizado = ['depende de mim', 'só eu', 'eu mesmo', 'eu mesma', 'sozinho', 'sozinha', 'ninguém', 'nada', 'sem mim', 'parei', 'pararia', 'estancaria', 'na minha cabeça']
+const palavrasCaixaApertado = ['falta', 'faltar', 'buraco', 'apertado', 'vai faltar', 'não vai dar', 'nao vai dar']
+const palavrasSemTempo = ['falta de tempo', 'tempo', 'gargalo', 'horas', 'sobrecarregado']
+
+function querCrescer(respostas: Respostas): boolean {
+  if (tem(respostas, 'frente.proximo', palavrasQuerCrescer)) return true
+  if (tem(respostas, 'visao.funcionando', palavrasQuerCrescer)) return true
+  return false
+}
+
+function centralizado(respostas: Respostas): boolean {
+  if (tem(respostas, 'empresa.momento', palavrasCentralizado)) return true
+  if (tem(respostas, 'empresa.dependencia', ['pararia', 'sofreria', 'estancaria', 'gargalo'])) return true
+  if (tem(respostas, 'rotina.energia', ['eu mesmo', 'eu mesma', 'operacao'])) return true
+  return false
+}
+
+function caixaApertado(respostas: Respostas): boolean {
+  if (tem(respostas, 'financeiro.caixa', palavrasCaixaApertado)) return true
+  if (tem(respostas, 'financeiro.previsao', ['nao', 'chute', 'parcial', 'mais ou menos'])) return true
+  return false
+}
+
+function semTempo(respostas: Respostas): boolean {
+  if (tem(respostas, 'empresa.crescer', palavrasSemTempo)) return true
+  if (tem(respostas, 'rotina.energia', ['apagar', 'incendio', 'operacao', 'muito trabalho'])) return true
+  return false
+}
+
+export function gerarLeituraCognitiva(respostas: Respostas, hipoteses: HipoteseEstrategica[]): LeituraCognitiva {
+  const leituras: string[] = []
+  const contradicoes: string[] = []
+  let frase: string | null = null
+
+  const quer = querCrescer(respostas)
+  const central = centralizado(respostas)
+  const caixa = caixaApertado(respostas)
+  const tempo = semTempo(respostas)
+
+  // Relação: o problema "financeiro" quase sempre é operacional.
+  if (caixa && central) {
+    leituras.push(
+      'Talvez o problema que você considera financeiro não seja financeiro. O caixa apertado quase nunca é a origem — é o sintoma de uma operação que depende de você para girar. Se a empresa para sem você, o dinheiro só entra onde você está.',
+    )
+    frase = frase ?? 'Seu maior desafio talvez não seja a falta de caixa. Talvez seja o excesso de dependência.'
+  }
+
+  // Relação: crescimento e tempo faltam sempre juntos.
+  if (quer && tempo) {
+    leituras.push(
+      'Curiosamente... toda vez que você fala em crescer, também aparece falta de tempo. Não é coincidência: quando tudo passa por uma pessoa, crescer não soma — ela apenas pesa mais.',
+    )
+    if (!frase) frase = 'Você não parece estar crescendo. Você parece estar acumulando responsabilidade.'
+  }
+
+  // Relação: a energia não some sozinha — é a operação drenando o caixa.
+  if (central && caixa && tempo) {
+    leituras.push(
+      'Existe uma corrente aqui: pressão → você no centro → sobrecarga → crescimento limitado → caixa apertado. Não são fatos isolados; é um sistema. Tocar em um ponto (você) mexe nos outros.',
+    )
+  }
+
+  // Contradição: querer crescer sem conseguir delegar.
+  if (quer && central) {
+    contradicoes.push(
+      'Você quer crescer — e ao mesmo tempo me contou que a empresa depende de você para girar. Talvez essas duas respostas estejam em conflito: crescer amplia exatamente o que você mais precisa ceder.',
+    )
+  }
+
+  // Contradição: desejar previsibilidade enquanto se decide por intuição.
+  if (caixa && hipoteses.some((h) => h.id === 'maturidade_operacional' && h.forca >= 2)) {
+    contradicoes.push(
+      'Você quer mais previsibilidade no caixa — mas me contou que as decisões ainda se sustentam na intuição. A previsão que falta pode não estar nos números, e sim na forma de decidir.',
+    )
+  }
+
+  // Contradição: método de decisão x previsibilidade.
+  if (hipoteses.some((h) => h.id === 'previsibilidade_financeira')) {
+    contradicoes.push(
+      'Você aponta o dinheiro como o que mais pesa — e ao mesmo tempo admite que não sabe exatamente o que vem no próximo mês. O que pesa talvez não seja a falta de dinheiro, seja a leitura.',
+    )
+  }
+
+  // Frase padrão quando nenhuma relação mais forte aparece.
+  if (!frase && hipoteses.length > 0) {
+    frase = 'A empresa está funcionando, sim — mas ainda não está aprendendo. Um negócio que conhece o cliente, decide por intuição e não registra o que aprende gira no lugar com a mesma história.'
+  }
+
+  const padrao =
+    leituras[0] ??
+    (hipoteses[0]
+      ? `Para mim, quem passa tudo: ${hipoteses[0].rotulo.toLowerCase()}.`
+      : 'Começamos há pouco e ainda não tenho um padrão para afirmar — mas já tenho as primeiras conexões para observar com você.')
+
+  return { padrao, relacoes: leituras, contradicoes, frase }
+}
+
 export async function persistirHipoteses(
   empresaId: string,
   hipoteses: HipoteseEstrategica[],

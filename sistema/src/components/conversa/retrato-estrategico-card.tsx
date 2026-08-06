@@ -15,7 +15,8 @@ function montarTextoCompartilhavel(retrato: RetratoEstrategico): string {
         secao.itens ? '\n' + secao.itens.map((item) => `- ${item}`).join('\n') : ''
       }`,
   )
-  return [retrato.titulo, ...partes, `Pergunta para nossa próxima conversa: ${retrato.proximaReflexao}`].join(
+  const destaque = retrato.frase ? `\n\n${retrato.frase}\n` : ''
+  return [retrato.titulo + destaque, ...partes, `Pergunta para nossa próxima conversa: ${retrato.proximaReflexao}`].join(
     '\n\n',
   )
 }
@@ -41,9 +42,18 @@ export function RetratoEstrategicoCard({ retrato, revelar = false }: RetratoEstr
         </p>
         <h3 className="text-lg font-semibold tracking-tight">{retrato.titulo}</h3>
         <p className="text-xs text-muted-foreground leading-relaxed max-w-md mx-auto">
-          Este não é um relatório: é a primeira leitura que a Ponte consegue fazer sobre a sua empresa. Cada parte foi escrita a partir do que você me contou — e termina com uma pergunta para continuarmos.
+          Este não é um relatório: é o caminho que eu percorri lendo a sua empresa. Cada parte nasceu do que você me contou — e termina com uma conversa para continuarmos.
         </p>
       </div>
+
+      {/* P73 — a frase que o empresário quer guardar */}
+      {retrato.frase && (
+        <div
+          className={`rounded-xl border-2 border-primary/40 bg-primary/5 p-5 text-center ${revelar ? 'animate-slide-up delay-100' : 'animate-fade-in'}`}
+        >
+          <p className="text-base font-medium leading-relaxed text-foreground">{retrato.frase}</p>
+        </div>
+      )}
 
       <div className="space-y-4">
         {retrato.secoes.map((secao, i) => (

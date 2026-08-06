@@ -21,10 +21,10 @@ interface RevelacaoCardProps {
 // Cada passo tem uma mensagem própria — nunca um spinner. Depois o Retrato
 // (V3, seis partes) surge gradualmente, seção por seção.
 const PASSOS_CERIMONIA = [
-  { chave: 'organizando', mensagem: 'A conversa terminou. Vou organizar tudo o que consegui entender.' },
-  { chave: 'conectando', mensagem: 'Agora vou conectar o que você me contou em padrões.' },
-  { chave: 'analisando', mensagem: 'Deixa eu analisar sua empresa como um todo.' },
-  { chave: 'preparando', mensagem: 'Estou preparando o seu Retrato Estratégico.' },
+  { chave: 'organizando', mensagem: 'A conversa terminou. Agora quero voltar ao começo dela e rever as primeiras impressões.' },
+  { chave: 'conectando', mensagem: 'Vou conectar o que você me contou em relações — não em respostas soltas.' },
+  { chave: 'analisando', mensagem: 'Deixa eu ver se percebi um padrão que ainda não tinha notado.' },
+  { chave: 'preparando', mensagem: 'Estou organizando a descoberta que quero compartilhar com você.' },
 ] as const
 
 type FaseCerimonia = 'espera' | (typeof PASSOS_CERIMONIA)[number]['chave'] | 'revelando'
@@ -83,7 +83,7 @@ export function RevelacaoCard({ retratoEstrategico }: RevelacaoCardProps) {
           — Sua Primeira Sessão Estratégica —
         </p>
         <h2 className="text-xl font-semibold tracking-tight">
-          Olhando para sua empresa
+          Olhando para sua empresa de um jeito novo
         </h2>
       </div>
 

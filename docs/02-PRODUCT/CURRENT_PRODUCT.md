@@ -1,5 +1,15 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P72 + P73 — ENGENHARIA DA TRANSFORMAÇÃO (ESPELHO EMPRESARIAL + EXPERIÊNCIA DA DESCOBERTA) — STATUS OFICIAL — 5 de agosto de 2026**
+>
+> **"A Ponte não existe para responder perguntas. Existe para mudar a forma como o empresário pensa sobre a própria empresa."** O Retrato da primeira sessão deixa de informar e passa a **revelar** — sem módulos, funcionalidades, IA ou telas; determinístico:
+>
+> - **P72 — Espelho Empresarial (`gerarLeituraCognitiva`):** a Ponte conecta causas, não respostas isoladas — **relações** ("o problema que você considera financeiro talvez seja operacional — o caixa é o sintoma de uma operação que depende de você"), **mapa mental** (pressão → centralização → sobrecarga → crescimento limitado → caixa apertado, "é um sistema"), e **contradições** ("você quer crescer, mas a empresa para sem você — talvez estejam em conflito") — tudo a partir das palavras reais, nunca sem evidência.
+> - **P73 — Experiência da Descoberta:** o Retrato vira **jornada** — 1) O que eu achava que você era; 2) O que eu fui percebendo (relações + contradições); 3) O que hoje parece me importante; 4) O ponto que talvez você ainda não esteja olhando; 5) A decisão que eu não decidiria com pressa; 6) A conversa daqui a alguns dias. **Mostra a evolução da própria Ponte** ("eu achava... fui percebendo... hoje acho"), **discorda com evidência** e entrega uma **frase inesquecível** em destaque.
+> - Cerimônia retrabalhada para falar de *relações, padrão e descoberta*.
+>
+> Ver `docs/07-MILESTONES/P72_P73_ENGENHARIA_DA_TRANSFORMACAO.md`.
+
 > **MARCO: P70 + P71 — EXPERIÊNCIA COGNITIVA V1 (PRIMEIRA IMPRESSÃO + RITMO COGNITIVO) — STATUS OFICIAL — 5 de agosto de 2026**
 >
 > **"A Ponte deixa de parecer um software e passa a parecer um conselheiro."** A primeira conversa muda de experiência — sem funcionalidades, módulos, IA, telas ou migrations; tudo determinístico:

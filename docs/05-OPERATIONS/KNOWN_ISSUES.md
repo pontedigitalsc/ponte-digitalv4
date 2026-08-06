@@ -1,6 +1,20 @@
 # Known Issues
 
-## Contrapergunta vive na reação, não como interação (P70+P71)
+## Leitura cognitiva e Retrato V5 (P72+P73): relações determinísticas, não calibradas
+
+**Status:** Aceito (decisão registrada — não é bug)
+**Prioridade:** Baixa
+**Descrição:** `gerarLeituraCognitiva` (P72) e o Retrato V5 (P73) produzem relações, contradições e uma frase inesquecível por regras determinísticas sobre as respostas. Não foram calibradas com dados reais: é possível que para certas combinações de respostas a frase padrão ("A empresa está funcionando, mas ainda não está aprendendo") apareça com frequência, ou que relações se repitam entre empresas semelhantes.
+**Ação:** observar as primeiras sessões reais. Se a frase/padrão começar a se repetir entre Founders, refinar as regras.
+
+## Contradição "quer crescer × delegar" pode não disparar sem palavras-chave exatas (P72)
+
+**Status:** Aceito (não é bug)
+**Prioridade:** Baixa
+**Descrição:** as relações e contradições dependem de palavras-chave normalizadas (ex.: "depende de mim", "crescer", "falta de tempo"). Respostas muito livres (campo "Minha situação é diferente") podem não casar com nenhuma regra, deixando o Retrato com apenas a frase padrão.
+**Ação:** revisitar a cobertura das regras quando houver volume de respostas abertas reais.
+
+## Soft Delete incompleto
 
 **Status:** Aceito (decisão de escopo registrada — não é bug)
 **Prioridade:** Baixa
