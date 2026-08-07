@@ -132,6 +132,21 @@ export async function responderPerguntaViva(empresaId: string, id: string, respo
 
 // Cria a Pergunta Viva a partir das respostas da conversa, se ainda não houver uma ativa.
 // "Ela nasce naturalmente da conversa." — nunca duas, nunca cinco.
+// P78 — quando nenhuma regra de palavras fecha, a pergunta nasce da descoberta
+// P77 persistida: a Ponte retoma o que percebeu, em vez de criar pergunta vazia.
+async function montarPerguntaVivaDeDescoberta(empresaId: string): Promise<{ pergunta: string; contexto: string } | null> {
+  const descoberta = await prisma.memoriaCognitiva.findFirst({
+    where: { empresaId, tipo: 'descoberta', deletedAt: null },
+    orderBy: { criadaEm: 'desc' },
+  })
+  if (!descoberta) return null
+  const significa = (descoberta.metadados as { significa?: string } | null)?.significa
+  const nucleo = significa ?? descoberta.descricao
+  return {
+    pergunta: 'Na nossa última conversa, percebemos algo sobre a sua operação que ainda está em aberto. Você descobriu alguma coisa nova desde então?',
+    contexto: `Da última vez, descrevemos assim: ${nucleo}. Queremos observar se disso evoluiu — sem afirmar nada antes de ouvir você.`,
+  }
+}
 export async function criarPerguntaVivaSeNecessario(empresaId: string, respostas: Record<string, string | null>): Promise<PerguntaViva | null> {
   const ativa = await obterPerguntaVivaAtiva(empresaId)
   if (ativa) return ativa
@@ -142,10 +157,12 @@ export async function criarPerguntaVivaSeNecessario(empresaId: string, respostas
   }
 
   const regra = encontrarRegraPerguntaViva(respostasString)
-  const pergunta = regra?.pergunta ?? PERGUNTA_VIVA_GENERICA
+  const perguntaVivaDaDescoberta = await montarPerguntaVivaDeDescoberta(empresaId)
+  const pergunta = regra?.pergunta ?? perguntaVivaDaDescoberta?.pergunta ?? PERGUNTA_VIVA_GENERICA
   const contexto = regra
     ? Object.values(respostasString).map(regra.contexto).find(() => true)
-    : 'Ainda estamos conhecendo sua empresa. Essa pergunta vai se tornar mais nítida com o tempo.'
+    : (perguntaVivaDaDescoberta?.contexto ??
+      'Ainda estamos conhecendo sua empresa. Essa pergunta vai se tornar mais nítida com o tempo.')
 
   const criada = await prisma.perguntaViva.create({
     data: { empresaId, pergunta, contexto },

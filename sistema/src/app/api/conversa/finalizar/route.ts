@@ -3,6 +3,7 @@ import { obterRespostas, vincularConversa } from '@/engine/conversation-engine'
 import { interpretarRespostas } from '@/engine/identity-engine'
 import { gerarHipoteses, persistirHipoteses } from '@/engine/hipoteses-estrategicas'
 import { gerarRetratoEstrategico, registrarClarezaGerada } from '@/engine/retrato-estrategico'
+import { persistirDescobertas } from '@/engine/motor-descobertas'
 import { registrarClarezaDaConversa } from '@/engine/clareza-engine'
 import { agendarRetorno, registrarRetornoDaConversa } from '@/engine/retorno-engine'
 import { processarConversa } from '@/engine/cognitive-orchestrator'
@@ -95,6 +96,12 @@ export async function POST(request: NextRequest) {
       // P70 — hipóteses estratégicas gravadas como memória cognitiva e sinal
       // de valor (para serem observadas, nunca rotular a empresa).
       persistirHipoteses(empresaId, hipoteses, 1).catch(() => {
+        // registro é opcional — não interrompe a finalização
+      })
+
+      // P78 — descobertas P77 gravadas como memória para continuarem vivas:
+      // a sessão seguinte pode retomá-las, comparar evidência e ver evolução.
+      persistirDescobertas(empresaId, respostas, 1).catch(() => {
         // registro é opcional — não interrompe a finalização
       })
 

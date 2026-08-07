@@ -8,6 +8,7 @@ import { ClarezaCheckin } from '@/components/conversa/clareza-checkin'
 import { RetornoCheckin } from '@/components/conversa/retorno-checkin'
 import { AvatarPonte } from '@/components/ui/avatar'
 import { BLOCO_LABEL, type BlocoConversa } from '@/engine/tipos'
+import { RITMO_DEVOLUTIVA_MS, RITMO_DEVOLUTIVA_S } from '@/lib/ritmo'
 import Link from 'next/link'
 
 interface Pergunta {
@@ -148,10 +149,11 @@ export default function ConversaPage() {
         progresso: data.progresso,
       }
 
-      // P67 — a percepção fica ~7 segundos (tempo para o empresário sentir que
-      // a Ponte de fato leu a resposta), mas "Continuar agora" está sempre
-      // disponível — ninguém espera 7s à toa.
-      timerRef.current = setTimeout(avancarAgora, 7000)
+      // P78 — o espaço de leitura é de ~12 segundos (tempo para o empresário
+      // sentir que a Ponte devolveu algo que vale a pena ler). Não é um loading:
+      // "Continuar agora" fica disponível imediatamente — ninguém espera à toa.
+      // O timer lógico e a barra visual leem a MESMA fonte (RITMO_DEVOLUTIVA_MS).
+      timerRef.current = setTimeout(avancarAgora, RITMO_DEVOLUTIVA_MS)
     } catch {
       setErro('Não consegui ouvir sua resposta agora. Pode tentar de novo?')
       setEnviando(false)
@@ -160,6 +162,10 @@ export default function ConversaPage() {
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const dadosRespostaRef = useRef<{ concluida: boolean; proximaPergunta: Pergunta | null; progresso: Progresso } | null>(null)
+  // P78 — trava de transição única: o clique em "Continuar agora" e o avanço
+  // automático disputam o mesmo avanço. Um lock ref garante que apenas UM
+  // caminho faça a transição (impede dupla transição / race condition).
+  const transicionandoRef = useRef(false)
   const [reacaoSeq, setReacaoSeq] = useState(0)
 
 // P71 — ritmo cognitivo: a Ponte pensa em voz alta com variação, nunca com a
@@ -172,15 +178,20 @@ const RITUAL_DIGESTAO = [
 ]
 
   const avancarDaReacao = useCallback((concluida: boolean, proximaPergunta: Pergunta | null, proximoProgresso: Progresso) => {
+    if (transicionandoRef.current) return
+    transicionandoRef.current = true
     if (timerRef.current) {
       clearTimeout(timerRef.current)
       timerRef.current = null
     }
+    dadosRespostaRef.current = null
     setMostrandoReacao(false)
     setReacao(null)
 
     if (concluida) {
-      finalizarConversa()
+      finalizarConversa().finally(() => {
+        transicionandoRef.current = false
+      })
       return
     }
 
@@ -189,6 +200,7 @@ const RITUAL_DIGESTAO = [
     }
     setProgresso(proximoProgresso)
     setResposta('')
+    transicionandoRef.current = false
   }, [])
 
   // P67 — "Continuar agora": avança na hora em que o empresário estiver pronto,
@@ -307,7 +319,7 @@ const RITUAL_DIGESTAO = [
               <div className="h-1 w-full overflow-hidden rounded-full bg-muted">
                 <div
                   className="h-full rounded-full bg-primary"
-                  style={{ animation: `reacaoPreenchimento 7s linear forwards` }}
+                  style={{ animation: `reacaoPreenchimento ${RITMO_DEVOLUTIVA_S} linear forwards` }}
                 />
               </div>
               <button

@@ -11,6 +11,18 @@
 >
 > Ver `docs/07-MILESTONES/P74_CONVERSA_QUE_PARECE_HUMANA.md`.
 
+> **MARCO: P78 — A PONTE QUE ACOMPANHA (RITMO 12s + CICLO DE EVOLUÇÃO COGNITIVA) — STATUS OFICIAL — 7 de agosto de 2026**
+>
+> **"A Ponte deixa de entender o empresário e passa a caminhar com ele."** Sem novo módulo, dashboard, banco ou IA generativa — compõe o patrimônio existente e faz as peças começarem a **relação longitudinal**:
+>
+> - **Ritmo de leitura 7s → 12s** (`sistema/src/lib/ritmo.ts` + `app/conversa/page.tsx`): fonte única `RITMO_DEVOLUTIVA_MS=12000` para timer lógico **e** barra visual (nunca mais barra=12s/timer=7s). Os 12s são **espaço cognitivo, não loading** — a devolutiva é algo que vale a pena ler; "Continuar agora" está disponível imediatamente, com trava de transição única (sem dupla transição/race condition).
+> - **Descobertas P77 continuam vivas**: agora persistidas em `MemoriaCognitiva` (`tipo 'descoberta'`, origem `MOTOR_DAS_DESCOBERTAS_P77`, pelo `persistirDescobertas` no finalizar). A sessão seguinte pode **retomá-las** e observar evolução.
+> - **Pergunta viva nasce da descoberta** (`relacao-engine.ts`): quando nenhuma regra de palavras fecha, a Pergunta Viva vira continuidade real — "Na nossa última conversa percebemos algo ainda em aberto. Você descobriu alguma coisa nova desde então?" (o retorno parece continuação, nunca "quer fazer uma nova sessão?").
+> - **Ciclo cognitivo (P78–22):** OBSERVAÇÃO → DESCOBERTA → DECISÃO → AÇÃO → RESULTADO → APRENDIZADO → NOVA EVOLUÇÃO — baseado nas estruturas existentes (`MemoriaCognitiva`, `RespostasConversa`, `Hipotese.estado`, `AcaoCognitiva` com `resultado`, `PerguntaViva`). SABEMOS/ACREDITAMOS/INVESTIGANDO preservados; comparação antes/agora só com evidência, nunca "você melhorou".
+> - **Decisão de arquitetura:** `ObjetoEvolucao` é conceito composto (sem migration); P65/P66/P68/P69.5 já cobrem período temporal — nada duplicado.
+>
+> Ver `docs/07-MILESTONES/P78_ACOMPANHAMENTO_COGNITIVO.md`.
+
 > **MARCO: P72 + P73 — ENGENHARIA DA TRANSFORMAÇÃO (ESPELHO EMPRESARIAL + EXPERIÊNCIA DA DESCOBERTA) — STATUS OFICIAL — 5 de agosto de 2026**
 >
 > **"A Ponte não existe para responder perguntas. Existe para mudar a forma como o empresário pensa sobre a própria empresa."** O Retrato da primeira sessão deixa de informar e passa a **revelar** — sem módulos, funcionalidades, IA ou telas; determinístico:

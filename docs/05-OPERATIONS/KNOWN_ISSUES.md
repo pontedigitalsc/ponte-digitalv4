@@ -1,5 +1,19 @@
 # Known Issues
 
+## P78 — acompanhamento cognitivo: persistin das descobertas e pergunta viva não calibradas ao vivo
+
+**Status:** Aceito (decisão registrada — não é bug)
+**Prioridade:** Média
+**Descrição:** as descobertas P77 passaram a ser persistidas em `MemoriaCognitiva` (tipo `descoberta`) e a Pergunta Viva pode nascer delas (quando nenhuma regra de palavras fecha). Isso ainda não foi exercitado em produção: (a) se a descoberta persistida tiver `versao` repetida ou falhar parcialmente, o histórico de evolução pode ficar com duplicações leves (a persistência é idempotente por versão, mas não universo); (b) a pergunta viva derivada ("…você descobriu algo novo desde então?") pode parecer repetida para quem responde várias vezes. Epistemologia preservada (SABEMOS/ACREDITAMOS/INVESTIGANDO) — sem IA.
+**Ação:** validar em uma sessão real de prod. Se a pergunta soar mecânica, refinar contexto da descoberta sem generalizar.
+
+## Deploy/verificação do P78 em produção pendente
+
+**Status:** Pendente (requer acesso de produção da Ponte)
+**Prioridade:** Alta
+**Descrição:** o P78 (ritmo 12s + persistência de descobertas + pergunta viva) está implementado e passando typecheck/build, mas ainda não foi commitado/ push/deployed nem verificado ao vivo (`/api/health`, `/dashboard`, `/conversa`, `/assistente` + uma conversa real).
+**Ação:** após autorização do usuário, fazer commit, push e deploy pelo procedimento padrão; registrar commit e deploy no milestone P78.
+
 ## P74 — conversa humana: surpresa e contradições não calibradas com empresários reais
 
 **Status:** Aceito (decisão — não é bug)

@@ -4,6 +4,20 @@
 
 ---
 
+## Programa 78 — A Ponte que Acompanha (Ritmo de Leitura 12s + Ciclo de Evolução Cognitiva)
+
+**7 de agosto de 2026**
+
+A Ponte deixa de ser um sistema que *entende* e passa a *caminhar com* o empresário. Sem novo módulo, dashboard, banco ou IA generativa — compõe o patrimônio existente:
+
+- **Ritmo de leitura 7s → 12s** (`sistema/src/lib/ritmo.ts` + `app/conversa/page.tsx`): fonte única `RITMO_DEVOLUTIVA_MS` para timer lógico E barra visual (nada de números mágicos espalhados); os 12s são espaço cognitivo, não loading. "Continuar agora" permanece imediato, com trava de transição única (`transicionandoRef`) que impede dupla transição/race condition.
+- **Descobertas P77 continuam vivas** (`motor-descobertas.ts` + `finalizar/route.ts`): as descobertas do Motor das Descobertas passam a ser persistidas em `MemoriaCognitiva` (`tipo 'descoberta'`, origem `MOTOR_DAS_DESCOBERTAS_P77`), prontas para retomada e comparação temporal.
+- **Perguntas vivas nascidas de descobertas** (`relacao-engine.ts`): quando nenhuma regra de palavras fecha, a Pergunta Viva passa a nascer da última descoberta P77 gravada — "Na nossa última conversa percebemos algo ainda em aberto. Você descobriu alguma coisa nova desde então?"
+- **Diagnóstico arquitetural (PARTE 0/21)**: ObjetoEvolucao é conceito **composto** das estruturas existentes (`MemoriaCognitiva.versao`, `RespostasConversa.criadaEm/token`, `Hipotese.estado`, `AcaoCognitiva.status/resultado`) — sem migration. Ciclo temporal (decisões P68, abertura P69.5, comparação antes/agora, conselheiro P66) já coberto pela infra existe; nada duplicado.
+- Poços de conclusão total (deploy + verificação ao vivo) dependem de acesso de produção — **pendente de confirmação do usuário**.
+
+---
+
 ## Programa 74 — A Conversa Que Parece Humana (a Ponte conversa como conselheiro)
 
 **6 de agosto de 2026**
