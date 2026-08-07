@@ -177,6 +177,36 @@ A cada etapa: `npm run typecheck` ✅ e `npm run build` ✅ (sem regressões).
 - `sistema/src/app/api/conversa/finalizar/route.ts` (chama `persistirDescobertas`).
 - `sistema/src/engine/relacao-engine.ts` (`pergunta viva` da descoberta).
 
-## Condição de conclusão total (PARTE 27 e 28 do programa)
+## Fechamento do P78 (registro de execução — 7/8/2026)
 
-P78 será **completamente** concluído após: commit, push, deploy na produção pelo procedimento padrão da Ponte, verificação `/api/health`, `/dashboard`, `/conversa`, `/assistente` e uma conversa real em produção. Essas ações dependem de acesso de deploy das credenciais e **não foram executadas por este agente**; aguardando autorização/denti fixture do usuário.
+**Entregue, commitado, enviado a `main` e no ar na produção. Validação funcional ao vivo (conversa real) pendente de sessão do Founder.**
+
+| Etapa do fechamento | Resultado |
+|---|---|
+| Auditoria do diff (sem escopo fora do P78) | ✅ só P78 + programas anteriores da sessão, cada um em commit próprio; 3 arquivos (`tsconfig.json`, `IMPLEMENTATION_BLUEPRINT`, `EXECUTION_PROGRAM`) marcados como "M" apenas por line-ending (sem mudança de conteúdo) |
+| Typecheck | ✅ `npm run typecheck` sem erros |
+| Build | ✅ `npm run build` sem erros (todas as rotas compilando) |
+| Verificação de código (não sobrou magic number 7s/7000 no fluxo) | ✅ nenhuma ocorrência |
+| Commit | ✅ `5dadcf5` **P78** (8 arquivos) isolado; anteriores: `fb87146` (reavaliação arquitetural), `b6b218e` (P75+P76), `b9deae5` (P76.5), `9934974` (P77) |
+| Push | ✅ `git push origin main` → `f92a9d4..5dadcf5` em `main` |
+| Deploy produção | ✅ detectado (CLI `vercel` ausente no ambiente; deploy disparado pelo push + integração GitHub Vercel no dashboard — instância recém-reiniciada, uptime ~60s no health check) |
+| `/api/health` produção | ✅ `200 {"status":"ok","ambiente":"production"}` |
+| `/conversa` produção | ✅ respondendo (shell da experiência) |
+| `/dashboard` e `/assistente` | ⚠️ requerem sessão/sessão real do Founder (não testáveis anonimamente) |
+| Conversa real em produção (fluxo completo P77→P78) | ⏳ **PENDENTE — requer Founder autenticado** (não é executável pelo agente sem credenciais de usuário) |
+| Veredito (PARTE 22/23) | **A Ponte ficou PREPARADA e com o mecanismo de acompanhamento ENTREGUE; a confirmação definitiva de que ela "acompanha" depende de 1 conversa + 1 retorno real em produção, em acompanhamento com o Founder.** |
+
+### Veredito
+
+```
+Depois do P78, a Ponte realmente acompanha o empresário?
+RESPOSTA HONESTA: parcialmente.
+O que está entregue e no ar: ritmo único de devolutiva (12s),
+descobertas que persistem entre sessões e viram pergunta viva na próxima conversa,
+e um caminho (AcaoCognitiva + motor-continuacao) para decidir e gerar acompanhamento.
+O que falta para o veredito definitivo: 1 (uma) conversa real em produção que
+gere descoberta → finalize → volte → receba a pergunta viva derivada da memória.
+Enquanto isso não acontecer com um Founder real, a Ponte "acompanha"
+(foi entregue-preparada), mas ainda não foi PROVADO que acompanhará — 
+a prova é empírica, não por código.
+```
