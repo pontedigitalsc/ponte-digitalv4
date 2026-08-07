@@ -2,25 +2,29 @@ import { prismaSeguro } from '@/lib/prisma-tenant-safe'
 import type { Interpretacoes } from '@/engine/tipos'
 import type { HipoteseEstrategica } from '@/engine/hipoteses-estrategicas'
 import { gerarLeituraCognitiva } from '@/engine/hipoteses-estrategicas'
+import { gerarDescobertas } from '@/engine/motor-descobertas'
 import type { Prisma } from '@prisma/client'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // RETRATO ESTRATÉGICO DA EMPRESA — P73 (Retrato V5 — "A Experiência da
-// Descoberta")
+// Descoberta") + P77 ("A Ponte precisa merecer a conversa")
 //
 // O Retrato deixa de INFORMAR e passa a REVELAR. Não é um relatório: é uma
 // JORNADA. A estrutura conta como a Ponte chegou à leitura:
-//   1. O que eu achava que você era       (primeiras respostas — hipótese inicial)
-//   2. O que eu fui percebendo na conversa (mudanças de leitura + contradições)
-//   3. O que hoje parece me importante     (síntese — o padrão que conecta)
-//   4. O ponto que talvez você ainda não esteja olhando (ponto cego)
-//   5. A decisão que eu não decidiria com pressa          (baseada em tudo)
-//   6. A conversa que a gente deveria ter daqui a alguns dias (pergunta aberta)
+//   1. O que eu já tinha como primeira leitura     (hipótese inicial)
+//   2. O que eu fui percebendo na conversa         (mudanças + contradições)
+//   3. As descobertas que você me fez chegar       (MOTOR DAS DESCOBERTAS, P77)
+//   4. O que hoje parece me importante             (síntese — o padrão)
+//   5. O ponto que talvez você ainda não esteja olhando (ponto cego)
+//   6. A decisão que eu não decidiria com pressa          (baseada em tudo)
+//   7. A conversa que teremos daqui a alguns dias   (pergunta aberta)
 //
 // P72 alimenta este Retrato: mostra RELAÇÕES (causa), não fatos isolados;
 // entrega CONTRADIÇÕES; e produz uma FRASE que o empresário quer guardar.
-// Cada retrato parece impossível de reutilizar — nada é template, tudo nasce
-// das respostas reais. Determinístico, sem IA.
+// P77 (Motor das Descobertas) garante que a Ponte PRODUZA CONHECIMENTO — cada
+// descoberta conecta pelo menos duas respostas de momentos diferentes — e
+// jamais invente: sem evidência suficiente, ela diz que ainda não tem
+// elementos para afirmar. Determinístico, sem IA, 100% derivado das respostas.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface SecaoRetrato {
@@ -107,6 +111,23 @@ function hipotesePrioritaria(hipoteses: HipoteseEstrategica[]): HipoteseEstrateg
   return hipoteses[0] ?? null
 }
 
+// ─── 3. As descobertas (P77 — Motor das Descobertas) ───────────────────────
+// Cada descoberta conecta duas ou mais respostas de momentos diferentes e só
+// nasce de evidência. Sem evidência suficiente, a Ponte diz que não tem
+// elementos para afirmar — nunca inventa.
+function capituloDescobertas(geradas: ReturnType<typeof gerarDescobertas>): { corpo: string; itens?: string[] } {
+  if (geradas.insuficiente) {
+    return { corpo: geradas.insuficiente }
+  }
+  const itens = geradas.descobertas.map(
+    (d) => `O que observei: ${d.observacao} Por isso eu acredito: ${d.porque} Isso pode significar: ${d.significa}`,
+  )
+  return {
+    corpo: 'Conectei informações de momentos diferentes da conversa — nenhuma dessas leituras viria de uma resposta isolada.',
+    itens,
+  }
+}
+
 export function gerarRetratoEstrategico(
   respostas: Respostas,
   hipoteses: HipoteseEstrategica[],
@@ -114,10 +135,12 @@ export function gerarRetratoEstrategico(
 ): RetratoEstrategico {
   const prioridade = hipotesePrioritaria(hipoteses)
   const leitura = gerarLeituraCognitiva(respostas, hipoteses)
+  const descobertas = gerarDescobertas(respostas)
+  const capDescobertas = capituloDescobertas(descobertas)
 
   return {
     titulo: 'O que eu descobri sobre a sua empresa',
-    frase: leitura.frase,
+    frase: descobertas.fraseTransformadora ?? leitura.frase,
     secoes: [
       {
         numero: 1,
@@ -131,21 +154,27 @@ export function gerarRetratoEstrategico(
       },
       {
         numero: 3,
+        titulo: 'As descobertas que eu cheguei',
+        corpo: capDescobertas.corpo,
+        itens: capDescobertas.itens,
+      },
+      {
+        numero: 4,
         titulo: 'O que hoje parece me importante',
         corpo: capituloSintese(leitura, prioridade),
       },
       {
-        numero: 4,
+        numero: 5,
         titulo: 'O ponto que talvez você ainda não esteja olhando',
         corpo: capituloPontoCego(prioridade),
       },
       {
-        numero: 5,
+        numero: 6,
         titulo: 'A decisão que eu não decidiria com pressa',
         corpo: capituloDecisao(prioridade),
       },
       {
-        numero: 6,
+        numero: 7,
         titulo: 'A conversa que a gente deveria ter daqui a alguns dias',
         corpo: capituloPergunta(prioridade),
       },
@@ -170,8 +199,8 @@ export async function registrarClarezaGerada(
   retrato: RetratoEstrategico,
   respostas: Respostas,
 ): Promise<void> {
-  const decisao = retrato.secoes.find((s) => s.numero === 5)?.corpo ?? retrato.proximaReflexao
-  const descoberta = retrato.frase ?? retrato.secoes.find((s) => s.numero === 3)?.corpo ?? retrato.titulo
+  const decisao = retrato.secoes.find((s) => s.titulo.includes('A decisão'))?.corpo ?? retrato.proximaReflexao
+  const descoberta = retrato.frase ?? retrato.secoes.find((s) => s.titulo.includes('As descobertas'))?.corpo ?? retrato.titulo
   const clareza: ClarezaGerada = {
     perguntaInicial: r(respostas, 'empresa.momento') ?? r(respostas, 'rotina.energia'),
     descoberta,
