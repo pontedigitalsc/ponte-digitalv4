@@ -44,10 +44,11 @@ export const SILENCIO_INTELIGENTE = [
 export const SILENCIOS_CURTOS = [
   'Entendi.',
   'Interessante.',
-  'Hm...',
   'Certo.',
   'Faz sentido.',
   'Isso muda bastante a forma como estou enxergando sua empresa.',
+  'Isso me dá mais um dado sobre como você lê a empresa.',
+  'Estou começando a enxergar um padrão — ainda deixo em aberto.',
 ]
 
 // ─── P74 — HUMILDADE INTELECTUAL (PARTE 7) ────────────────────────────────────
@@ -507,6 +508,12 @@ function surpresaMarcante(perguntaId: string, resposta: string): string | null {
 // Chamadas quando o empresário responde a última pergunta de um bloco.
 // Cada devolutiva referencia as palavras reais gravadas em `respostas`.
 
+// Ponte P76.5 — Regra dos 5 Minutos.
+// Toda devolutiva de bloco entrega uma micro-descoberta: evidência das palavras
+// reais → evolução da leitura ("quando começamos eu via… agora começo a ver…") →
+// hipótese com humildade → pergunta poderosa que deixa curiosidade e continuidade.
+// O valor nunca fica só no fim: cada bloco fecha deixando algo que já valeu.
+
 export function devolutivaDeBloco(bloco: BlocoConversa, respostas: Respostas): string {
   switch (bloco) {
     case 'atual': {
@@ -520,7 +527,7 @@ export function devolutivaDeBloco(bloco: BlocoConversa, respostas: Respostas): s
       const base = partes.length > 0
         ? `Percebi que ${partes.join(', ')}.`
         : 'Percebi como você lê o momento da empresa.'
-      return `${base} Empresas geralmente travam pela complexidade, não pela falta de clientes. Essa leitura vai guiar o que vamos conversar daqui pra frente.`
+      return `${base}\n\nQuando começamos, eu só tinha uma frase sobre você. Agora já vejo que o travamento não está onde a maioria olha: não é falta de clientes — quase sempre é a complexidade. E me deixou uma pergunta que vai guiar o resto: se esse travamento é a complexidade, o que você mais teme abrir primeiro?`
     }
     case 'peso': {
       const energia = r(respostas, 'rotina.energia')
@@ -529,13 +536,13 @@ export function devolutivaDeBloco(bloco: BlocoConversa, respostas: Respostas): s
       const dependencia = r(respostas, 'empresa.dependencia')
       const partes: string[] = []
       if (energia) partes.push(`o que mais consumiu sua energia foi "${energia}"`)
-      if (cabeca) partes.push(`e o que mais ocupa sua cabeça é "${cabeca}"`)
-      if (previsao) partes.push(`e, sobre o próximo mês, você me disse "${previsao}"`)
-      if (dependencia) partes.push(`e me contou que, se ficasse 30 dias fora, "${dependencia}"`)
+      if (cabeca) partes.push(`o que mais ocupa sua cabeça é "${cabeca}"`)
+      if (previsao) partes.push(`sobre o próximo mês, você me disse "${previsao}"`)
+      if (dependencia) partes.push(`se ficasse 30 dias fora, "${dependencia}"`)
       const base = partes.length > 0
         ? `Reparei que ${partes.join('; ')}.`
         : 'Reparei onde o peso está apoiado hoje.'
-      return `${base} O que consome sua energia quase sempre é também o que ocupa sua cabeça — e quando o conhecimento está só na sua cabeça, a empresa cresce até o tamanho dele. Não por acaso.`
+      return `${base}\n\nNo início eu não sabia por que você parecia cansado com a empresa crescendo. Agora está ficando claro: o que consome sua energia também ocupa sua cabeça — e como esse conhecimento está só com você, a empresa cresce até o tamanho dele. Não por acaso. Fica uma pergunta para o que vem: se esse peso deixasse de ser só seu, o que você faria primeiro com o tempo sobrando?`
     }
     case 'evolucao': {
       const decisao = r(respostas, 'empresa.decisao')
@@ -543,25 +550,25 @@ export function devolutivaDeBloco(bloco: BlocoConversa, respostas: Respostas): s
       const tranquilo = r(respostas, 'rotina.tranquilo')
       const partes: string[] = []
       if (decisao) partes.push(`você descobre se pode investir "${decisao}"`)
-      if (caixa) partes.push(`e que, ao olhar o caixa, vê primeiro "${caixa}"`)
-      if (tranquilo) partes.push(`e que a última vez que terminou o dia tranquilo foi "${tranquilo}"`)
+      if (caixa) partes.push(`ao olhar o caixa, vê primeiro "${caixa}"`)
+      if (tranquilo) partes.push(`a última vez que terminou o dia tranquilo foi "${tranquilo}"`)
       const base = partes.length > 0
         ? `Percebi que ${partes.join('; ')}.`
         : 'Percebi o padrão das decisões da empresa.'
-      return `${base} Decisões que dependem só do momento costumam se repetir do mesmo jeito — e sem previsão, toda decisão vira aposta. É aí que a evolução costuma travar.`
+      return `${base}\n\nNo começo eu só via decisões isoladas. Agora vejo um padrão: quando decidir depende do momento, tem decisão vira aposta — e sem previsão, a evolução trava. Deixo você com uma pergunta que vale o resto da tarde: se tivesse um número confiável na mão, qual decisão você tomaria hoje sem medo?`
     }
     case 'atencao': {
       const visao = r(respostas, 'visao.funcionando')
       const proximo = r(respostas, 'frente.proximo')
       const multiplicar = r(respostas, 'empresa.multiplicar')
       const partes: string[] = []
-      if (visao) partes.push(`que, se a empresa funcionasse como você gostaria, "${visao}"`)
-      if (proximo) partes.push(`que o objetivo dos próximos 6 meses é "${proximo}"`)
-      if (multiplicar) partes.push(`e que você gostaria de multiplicar o cliente "${multiplicar}"`)
+      if (visao) partes.push(`se a empresa funcionasse como você gostaria, "${visao}"`)
+      if (proximo) partes.push(`o objetivo dos próximos 6 meses é "${proximo}"`)
+      if (multiplicar) partes.push(`você gostaria de multiplicar o cliente "${multiplicar}"`)
       const base = partes.length > 0
         ? `Entendi a direção: ${partes.join('; ')}.`
         : 'Entendi a direção que você quer dar para a empresa.'
-      return `${base} Essa imagem é a direção — agora quero organizar tudo o que entendi sobre o caminho até lá.`
+      return `${base}\n\nQuando você começou, falou de problemas; agora você me mostrou a direção. Esse deslocamento — de onde você está para onde quer chegar "${proximo ? '' : 'em 6 meses'}" — é o mapa do caminho que falta. Antes de eu organizar tudo, fica uma pergunta: o que, se fosse resolvido, destravaria a distância até ${proximo ? `"${proximo}"` : 'essa direção'} primeiro?`
     }
     default:
       return obterReacao('')
