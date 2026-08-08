@@ -60,3 +60,9 @@ O P79 é considerado recaluch até que:
 - ⏳ Registro de campo convertido em **hipóteses de fluxo** (não em funcionalidade)
 
 Só então P80 (Motor de Workflow) abre nação com recorte validado — provavelmente bem menor que o roadmap completo (§14 da tese: `Cliente → Orçamento → OS → Produção → Instalação → Conclusão` ).
+
+## Revisão P80/P81 (status — documentos conceituais)
+
+- `P80_MOTOR_WORKFLOW.md` e `P81_APRENDIZADO_OPERACIONAL.md` registram a **auditoria do P79**, o **inventário de compatibilidade** e o **padrão de gates** — **sem código e sem migration**.
+- Estado: **BLOQUEADO até `REGISTRO_CAMPO` real da Souza Mestra** (o template em `docs/05-OPERATIONS/P79/REGISTRO_CAMPO_SOUZA_MESTRINHO_TEMPLATE.md` é o mecanismo de captura).
+- A "unidade operacional" (OS vs Demanda vs Serviço) **permanece em aberto** — só a observação decide (Parte 4 do P80).

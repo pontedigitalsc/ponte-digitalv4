@@ -4,6 +4,24 @@
 
 ---
 
+## Programa 80 + 81 — Motor Operacional: Investigação e Mecânica (sem código)
+
+**7 de agosto de 2026**
+
+P80 (Motor de Workflow) e P81 (Aprendizado Operacional) entram como **documentação conceitual — NENHUMA funcionalidade, NENHUMA migration**:
+
+- **Decisão executiva PARE:** a auditoria confirmou que **não existe registro real de campo** da Souza Mestrinho (nada de `OBSERVADO`/`DITO`). Pela regra absoluta do programa, o workflow **não é inventado pelo desenvolvedor** — o P80 está **bloqueado** até existir `REGISTRO_CAMPO` real (visita à empresa + pergunta-âncora).
+- **Inventário de compatibilidade (verificado no código):** `cognitive-bus`/`event-publisher`/`event-store` já publicam e **gravam `eventos`** (reuso; `event_subscriptions`/`dead_letters` existem mas sem escrita executante); `Implantacao/EtapaImplantacao` (com API `/api/implantacoes/*`) são o **padrão a generalizar** para Workflow; `Cliente/Lead/Tarefa/Historico/Transacao/AcaoCognitiva/MemoriaCognitiva` são reutilizáveis; `motor-continuacao`/`conselheiro`/`memoria-evolutiva` permanecem como estão.
+- **Mecanismo de captura criado:** `docs/05-OPERATIONS/P79/REGISTRO_CAMPO_SOUZA_MESTRINHO_TEMPLATE.md` — separação obrigatória OBSERVADO/DITO/INFERIDO/NÃO-SABEMOS, dependências, estados de parada, pergunta-âncora.
+- **Plano incremental P80 (fases 0→8) com critérios de entrada/saída** para cada fase (observação → modelo → interfaces → 1º workflow → eventos → bloqueios → próxima ação → aprendizado → templates verticais).
+- **P81:** desenho do ciclo TRABALHO→EVENTO→OBSERVAÇÃO→HIPÓTESE→DECISÃO→AÇÃO→RESULTADO→APRENDIZADO→ALTERAÇÃO DO WORKFLOW, mapeado 100% em reuso das estruturas cognitivas (P65–P78) — zero motor novo.
+- **Lacuna:** "Atlas" citado no programa **não foi encontrado** no repositório (investigação pendente).
+- **Verdict da Parte 22:** direção = sistema que **compreende e aprende** (não administrador de tarefas). Afirmação **adiada** até evidência de campo + arquitetura sustentadora. Critério de qualidade (5 testes): **reprovado até evidência** → não implementar.
+
+**Documentos:** `P80_MOTOR_WORKFLOW.md`, `P81_APRENDIZADO_OPERACIONAL.md`, `REGISTRO_CAMPO_SOUZA_MESTRINHO_TEMPLATE.md`, atualizações em `CURRENT_PRODUCT.md`, `KNOWN_ISSUES.md`.
+
+---
+
 ## Programa 79 — Motor Operacional (Tese de Fase + Mapeamento de Domínio)
 
 **7 de agosto de 2026**

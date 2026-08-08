@@ -1,5 +1,19 @@
 # Known Issues
 
+## P80 + P81 — Motor Operacional bloqueado: ausência de evidência de campo (Souza Mestrinho)
+
+**Status:** Bloqueado (decisão de fase registrada — não é bug)
+**Prioridade:** Alta (é o gate de todo o motor operacional)
+**Descrição:** o P80 (Motor de Workflow) e o P81 (Aprendizado Operacional) estão em documentação conceitual, **sem código**. A auditoria confirmou que **não existe nenhum registro real de campo** da Souza Mestra no repositório (somente os documentos do plano P79). Pela regra absoluta do programa, o workflow não pode ser inventado pelo desenvolvedor.
+**Dados que faltam (ver `docs/05-OPERATIONS/P79/REGISTRO_CAMPO_SOUZA_MESTRINHO_TEMPLATE.md`):** resposta da pergunta-âncora; fluxo real (passos/responsáveis/esperas); estados reais de parada; dependências "quem pergunta para quem"; gargalos; tempos que importam; unidade operacional de fato; diferença processo descrito × executado.
+**Ação:** aplicar o template em 1+ visitas reais à Souza Mestra; após registro aceito, liberar a Fase 1 do P80 (modelo conceitual, ainda sem código).
+
+## "Atlas" citado no programa P80 não foi encontrado no repositório
+
+**Prioridade:** Média
+**Descrição:** o P80 (Parte 14) lista "Atlas" entre os componentes a mapear; a busca em `sistema/src`, `docs/` e raiz não encontrou nenhum arquivo/engine chamado "Atlas". Possível referência a conceito futuro ou a doc de outro nome (`MAPS_COMPLETO_DA_APLICACAO.md`, `ARQUITETURA_DA_MEMORIA_OPERACIONAL.md` são os candidatos de nome mais próximo).
+**Ação:** confirmar com o fundador o que "Atlas" designa antes de qualquer uso em arquitetura.
+
 ## P78 — acompanhamento cognitivo: persistin das descobertas e pergunta viva não calibradas ao vivo
 
 **Status:** Aceito (decisão registrada — não é bug)

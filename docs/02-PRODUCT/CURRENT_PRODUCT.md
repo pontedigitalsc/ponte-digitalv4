@@ -1,5 +1,14 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P80 + P81 — MOTOR OPERACIONAL: INVESTIGAÇÃO, SEM CÓDIGO — 7 de agosto de 2026**
+>
+> **P80 e P81 estão em estado de **documentação conceitual** — NENHUMA funcionalidade implementada, NENHUMA migration.** A auditoria confirmou que **não existe evidência de campo** da Souza Mestrinho (nenhum registro `OBSERVADO`/`DITO`); pela regra absoluta do programa, **não se inventa o workflow**. O que foi entregue: a **auditoria do P79** (fato × hipótese), o **inventário de compatibilidade real** (Event `cognitive-bus`/`event-store` gravam `eventos`; `Implantacao/EtapaImplantacao` são o padrão a generalizar; `Cliente/Lead/Tarefa/Historico/Transacao/AcaoCognitiva/MemoriaCognitiva` reutilizáveis), o **mecanismo de captura** (`REGISTRO_CAMPO_SOUZA_MESTRINHO_TEMPLATE.md`) e o **plano de fases 0→8 com gates**.
+> - **Status do gate:** P80 bloqueado até um `REGISTRO_CAMPO` real (visita à Souza Mestrinho) responder à pergunta-âncora e documentar fluxo/paradas/dependências.
+> - **Lacuna registrada:** "Atlas" (citado no P80) **não encontrado** no repositório — a investigar antes de qualquer uso.
+> - **Verdict da Parte 22:** direção estratégica = "compreender como o trabalho acontece e aprender"; afirmação adiada até evidência.
+>
+> Ver `docs/07-MILESTONES/P80_MOTOR_WORKFLOW.md` e `docs/07-MILESTONES/P81_APRENDIZADO_OPERACIONAL.md`.
+
 > **MARCO: P79 — MOTOR OPERACIONAL — TESE DE FASE (MAPEAMENTO, SEM CÓDIGO) — 7 de agosto de 2026**
 >
 > **Nova tese de produto registrada como hipótese de fase, sem funcionalidade implementada.** A Ponte Digital passa a investigar a camada **Operações** (Cliente → Demanda → Orçamento → Execução → Entrega → Relacionamento) como um **motor configurável por vertical** — o CRM, o financeiro e o assistente continuam; o que surge é o "Motor Operacional" com a **Ordem de Serviço como ficha viva** (tipo de trabalho + workflow + etapas + histórico + fotos + materiais + ocorrências). O laboratório real é a **Souza Mestrinho Metais** (serralheria, ~8 funcionários, Palhoça) — primeiro ambiente de descoberta, NÃO "o sistema da Souza".
