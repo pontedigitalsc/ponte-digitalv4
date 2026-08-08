@@ -64,14 +64,26 @@ const MODULO_MAP: Record<string, string> = {
   '/configuracoes': 'configuracoes',
 }
 
+const plataformaGroup = {
+  group: 'Plataforma',
+  items: [
+    { href: '/painel-do-fundador', label: 'Painel do Fundador', icon: Sparkles },
+    { href: '/dashboard/admin/radar-founders', label: 'Radar Founders', icon: Users },
+    { href: '/dashboard/admin/diario-founder', label: 'Diário Founder', icon: Clock },
+    { href: '/dashboard/admin/diario-cientifico', label: 'Diário Científico', icon: BookOpen },
+    { href: '/dashboard/admin/cognitive-observatory', label: 'Observatório Cognitivo', icon: RefreshCw },
+  ],
+}
+
 interface SidebarProps {
   collapsed?: boolean
   onToggle?: () => void
   nomeEmpresa?: string
   modulosLiberados?: string[] | null
+  plataforma?: boolean
 }
 
-export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digital', modulosLiberados }: SidebarProps) {
+export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digital', modulosLiberados, plataforma = false }: SidebarProps) {
   const pathname = usePathname()
 
   const isLiberado = (href: string): boolean => {
@@ -80,6 +92,8 @@ export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digi
     if (!moduloId) return true
     return modulosLiberados.includes(moduloId)
   }
+
+  const grupos = plataforma ? [...navItems, plataformaGroup] : navItems
 
   return (
     <aside
@@ -119,7 +133,7 @@ export function Sidebar({ collapsed = false, onToggle, nomeEmpresa = 'Ponte Digi
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-4">
-        {navItems.map((group) => (
+        {grupos.map((group) => (
           <div key={group.group}>
             {!collapsed && (
               <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">

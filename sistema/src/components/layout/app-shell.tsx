@@ -12,9 +12,10 @@ interface AppShellProps {
   nomeEmpresa?: string
   titulo?: string
   modulosLiberados?: ModulosLiberados | null
+  plataforma?: boolean
 }
 
-export function AppShell({ children, usuario, nomeEmpresa, titulo, modulosLiberados }: AppShellProps) {
+export function AppShell({ children, usuario, nomeEmpresa, titulo, modulosLiberados, plataforma }: AppShellProps) {
   const [collapsed, setCollapsed] = useState(false)
 
   return (
@@ -24,6 +25,7 @@ export function AppShell({ children, usuario, nomeEmpresa, titulo, modulosLibera
         onToggle={() => setCollapsed(!collapsed)}
         nomeEmpresa={nomeEmpresa}
         modulosLiberados={modulosLiberados?.modulos ?? null}
+        plataforma={plataforma}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Header usuario={usuario} titulo={titulo} />

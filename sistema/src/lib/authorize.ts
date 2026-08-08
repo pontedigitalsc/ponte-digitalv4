@@ -1,4 +1,5 @@
 import { getCurrentUser, temPermissao } from '@/lib/auth'
+import { temPermissaoPlataforma, type PlataformaPermissao } from '@/lib/permissao-plataforma'
 import type { Usuario } from '@/types'
 import { AuthenticationError, AuthorizationError } from '@/lib/app-errors'
 
@@ -36,6 +37,25 @@ export async function requireRole(permissaoMinima: 'MEMBRO' | 'GESTOR' | 'ADMIN'
   if (!temPermissao(usuario.role, permissaoMinima)) {
     throw new AuthorizationError(
       `Esta ação exige permissão de ${permissaoMinima} ou superior`
+    )
+  }
+  return usuario
+}
+
+/**
+ * Garante que o usuário autenticado tem uma permissão de PLATAFORMA.
+ * Lança AuthorizationError(403) se o usuário não for Founder Principal ou
+ * não tiver a permissão específica. A identidade vem de `Usuario.platformRole`
+ * (fonte confiável do backend), nunca do frontend.
+ *
+ * Uso típico em uma rota interna da plataforma:
+ *   const usuario = await requirePlataforma('FOUNDER_VIEW_INTERNAL')
+ */
+export async function requirePlataforma(permissao: PlataformaPermissao): Promise<Usuario> {
+  const usuario = await requireUserApi()
+  if (!temPermissaoPlataforma(usuario.platformRole, permissao)) {
+    throw new AuthorizationError(
+      'Acesso restrito à camada de plataforma da Ponte Digital'
     )
   }
   return usuario

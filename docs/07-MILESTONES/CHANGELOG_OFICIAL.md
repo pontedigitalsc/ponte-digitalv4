@@ -4,6 +4,29 @@
 
 ---
 
+## Programa 84 — Founder Access: Identidade e Camada de Plataforma
+
+**8 de agosto de 2026**
+
+P84 criou a **camada de plataforma** — a identidade que distingue quem **opera** a Ponte (Founder Principal) de quem **usa** a Ponte (empresas clientes) — corrigindo a exposição de dados internos:
+
+- **Vazamento corrigido:** o painel do fundador e `/admin/*` eram protegidos pelo mesmo `role: 'ADMIN'` de empresa; qualquer ADMIN de cliente acessava o patrimônio da plataforma. Agora são **gateados no servidor** por `PlatformRole`.
+- **Decisão (ADR-036):** identidade persistente em `Usuario.platformRole` (enum `PlatformRole`, valor inicial `FOUNDER_PRINCIPAL`) — fonte confiável do backend, nunca email/URL/frontend. Sem segundo login, segundo bank, segundo sessão.
+- **Matriz de 5 permissões** (`src/lib/permissao-plataforma.ts`, módulo puro): `FOUNDER_VIEW_PLATFORM`, `FOUNDER_VIEW_INTERNAL`, `FOUNDER_VIEW_SYSTEM_HEALTH`, `FOUNDER_MANAGE_PLATFORM`, `FOUNDER_MANAGE_AUDIT_ACCESS` — validadas no servidor (`requirePlataforma` / `temPermissaoPlataformaUsuario`).
+- **Bootstrap seguro:** `scripts/provision-founder.ts` (server-only `FOUNDER_BOOTSTRAP_*`, one-shot, remover depois) — impossível obter/ativar a identidade por conta própria, URL ou localStorage.
+- **Audit trail mínimo:** tabela `auditorias_plataforma` só para **escritas privilegiadas** (criar/revisar/promover/descartar conhecimento) — nunca leituras.
+- **Health:** `/api/health` público mínimo; detalhe (memória/uptime) só em `/api/health/plataforma` com `FOUNDER_VIEW_SYSTEM_HEALTH`.
+- **Experiência não poluída:** usuário comum não vê nada novo; o grupo "Plataforma" no sidebar aparece só quando o servidor confirma permissão.
+- **Isolamento multi-tenant preservado:** nenhuma mudança em `prismaSeguro`/fluxo de empresa; plataforma opera **agregados**, sem `empresaId` arbitrário.
+
+**Testes:** `npm run test:plataforma` (4/4), `tsc --noEmit` limpo, `prisma generate` OK.
+
+**Documentos:** `docs/04-DECISIONS/ADR/ADR-036-founder-access-plataforma.md` (novo), `docs/07-MILESTONES/P84_FOUNDER_ACCESS.md` (novo), `CURRENT_PRODUCT.md`, `CHANGELOG_OFICIAL.md`, `KNOWN_ISSUES.md`.
+
+**Deploy pendente:** migration `008_found_access` + `founder:provision` em produção (aguardando autorização) — ver `KNOWN_ISSUES.md`.
+
+---
+
 ## Programa 82 — O Campo Real (observação, sem código)
 
 **8 de agosto de 2026**

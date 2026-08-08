@@ -9,9 +9,11 @@
     "start": "next start",
     "lint": "echo lint skipped",
     "typecheck": "tsc --noEmit",
+    "test:plataforma": "node --experimental-strip-types --test src/lib/permissao-plataforma.test.ts",
     "db:generate": "prisma generate",
     "db:deploy": "prisma migrate deploy",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "founder:provision": "node --experimental-strip-types scripts/provision-founder.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.106.0",

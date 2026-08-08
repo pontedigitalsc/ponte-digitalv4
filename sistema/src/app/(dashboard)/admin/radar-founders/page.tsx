@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { requireUser } from '@/lib/auth'
+import { temPermissaoPlataformaUsuario } from '@/lib/plataforma'
 import { prisma } from '@/lib/prisma'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -10,7 +11,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function RadarFoundersPage() {
   const usuario = await requireUser()
-  if (usuario.role !== 'ADMIN') redirect('/dashboard')
+  if (!temPermissaoPlataformaUsuario(usuario, 'FOUNDER_VIEW_INTERNAL')) redirect('/dashboard')
 
   const empresas = await prisma.empresa.findMany({
     where: { ativa: true, deletedAt: null },

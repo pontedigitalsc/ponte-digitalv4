@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { requireUser } from '@/lib/auth'
+import { temPermissaoPlataformaUsuario } from '@/lib/plataforma'
 import {
   obterResumoCognitivo,
   obterEvolucaoDiaria,
@@ -28,7 +29,7 @@ function rotuloCategoria(cat: string): string {
 
 export default async function CognitiveObservatoryPage() {
   const usuario = await requireUser()
-  if (usuario.role !== 'ADMIN') redirect('/dashboard')
+  if (!temPermissaoPlataformaUsuario(usuario, 'FOUNDER_VIEW_INTERNAL')) redirect('/dashboard')
 
   const [resumo, evolucao, categorias, estagnadas, empresas, alertas] = await Promise.all([
     obterResumoCognitivo(),

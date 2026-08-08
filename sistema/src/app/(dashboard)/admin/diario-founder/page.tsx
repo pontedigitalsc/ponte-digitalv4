@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { requireUser } from '@/lib/auth'
+import { temPermissaoPlataformaUsuario } from '@/lib/plataforma'
 import { prisma } from '@/lib/prisma'
 import { calcularMetricasPlataforma } from '@/engine/p36/platform-capital-engine'
 import { obterFricoesAgrupadas } from '@/engine/p36/friction-radar'
@@ -17,7 +18,7 @@ function formatarData(d: Date) {
 
 export default async function DiarioFounderPage() {
   const usuario = await requireUser()
-  if (usuario.role !== 'ADMIN') redirect('/dashboard')
+  if (!temPermissaoPlataformaUsuario(usuario, 'FOUNDER_VIEW_INTERNAL')) redirect('/dashboard')
 
   const hoje = new Date()
   const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1)

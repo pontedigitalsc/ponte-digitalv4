@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { requireUser } from '@/lib/auth'
+import { temPermissaoPlataformaUsuario } from '@/lib/plataforma'
 import { prisma } from '@/lib/prisma'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -23,7 +24,7 @@ const ROTULOS_TIPO: Record<string, string> = {
 
 export default async function DiarioCientificoPage() {
   const usuario = await requireUser()
-  if (usuario.role !== 'ADMIN') redirect('/dashboard')
+  if (!temPermissaoPlataformaUsuario(usuario, 'FOUNDER_VIEW_INTERNAL')) redirect('/dashboard')
 
   const hoje = new Date()
   const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1)

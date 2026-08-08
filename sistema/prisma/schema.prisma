@@ -88,6 +88,7 @@ model Usuario {
   avatar       String?
   cargo        String?
   role         Role     @default(MEMBRO)
+  platformRole PlatformRole?
   ativo        Boolean  @default(true)
   criadoEm     DateTime @default(now())
   atualizadoEm DateTime @updatedAt
@@ -105,6 +106,7 @@ model Usuario {
   @@index([empresaId])
   @@index([empresaId, ativo])
   @@index([empresaId, deletedAt])
+  @@index([platformRole])
   @@map("usuarios")
 }
 
@@ -112,6 +114,31 @@ enum Role {
   ADMIN
   GESTOR
   MEMBRO
+}
+
+enum PlatformRole {
+  FOUNDER_PRINCIPAL
+}
+
+// Auditoria de acoes privilegiadas de plataforma (P84 - Founder Access).
+// Sem coluna de tenant: registra quem fez o que na camada de plataforma,
+// independente de qualquer empresa. Sem FK proposital - um log de auditoria
+// nao pode ser apagado em cascata pela exclusao de um usuario.
+model AuditoriaPlataforma {
+  id        String   @id @default(cuid())
+  usuarioId String?
+  email     String?
+  acao      String
+  modulo    String?
+  contexto  String?
+  empresaId String?
+  detalhes  Json?
+  criadoEm  DateTime @default(now())
+
+  @@index([usuarioId])
+  @@index([criadoEm])
+  @@index([acao])
+  @@map("auditorias_plataforma")
 }
 
 // ─── LEADS ────────────────────────────────────────────────────────────────────

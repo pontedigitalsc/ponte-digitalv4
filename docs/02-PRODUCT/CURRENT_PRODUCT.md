@@ -1,5 +1,17 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P84 — FOUNDER ACCESS — CAMADA DE PLATAFORMA (IDENTIDADE + RE-GATE + AUDITORIA) — 8 de agosto de 2026**
+>
+> **P84 criou a camada de plataforma: a identidade que separa quem opera a Ponte (Founder Principal) de quem usa a Ponte (empresas).** Corrige a exposição de dados internos que existia porque `painel-do-fundador` e `/admin/*` eram protegidos pelo mesmo `role: 'ADMIN'` de empresa.
+> - **Identidade:** `Usuario.platformRole` (enum `PlatformRole` → `FOUNDER_PRINCIPAL`), atribuída por **bootstrap seguro** (`scripts/provision-founder.ts`, vars server-only `FOUNDER_BOOTSTRAP_*`) — nunca email/URL/localStorage/frontend. Sem segundo login/banco/sessão.
+> - **Permissões (5, módulo puro `permissao-plataforma.ts`):** `FOUNDER_VIEW_PLATFORM`, `FOUNDER_VIEW_INTERNAL`, `FOUNDER_VIEW_SYSTEM_HEALTH`, `FOUNDER_MANAGE_PLATFORM`, `FOUNDER_MANAGE_AUDIT_ACCESS` — validadas no servidor (`requirePlataforma`, `temPermissaoPlataformaUsuario`).
+> - **Re-gate:** 5 páginas + 5 APIs gateadas para Founder; **ADMIN de empresa perde acesso** às áreas de plataforma. Health público mínimo (`/api/health`) + detalhe privado (`/api/health/plataforma`).
+> - **Auditoria (`auditorias_plataforma`):** só escritas privilegiadas (criar/revisar/promover/descartar) — nunca leituras.
+> - **Isolamento multi-tenant preservado:** nenhuma mudança em `prismaSeguro`; contexto plataforma = agregados, sem `empresaId` arbitrário.
+> - **Status:** implementado + testes verdes; **deploy de produção pendente** (migration `008` + `founder:provision`) — ver `KNOWN_ISSUES.md`.
+>
+> Ver `docs/07-MILESTONES/P84_FOUNDER_ACCESS.md` e `docs/04-DECISIONS/ADR/ADR-036-founder-access-plataforma.md`.
+
 > **MARCO: P82 — O CAMPO REAL — INVESTIGAÇÃO (SEM CÓDIGO) — 8 de agosto de 2026**
 >
 > **P82 executou o programa de campo e confirmou o bloqueio do Motor Operacional: não existe NENHUM registro real de campo** (nenhum `REGISTRO_CAMPO` preenchido, nenhuma planilha ou anotação bruta da Souza Mestrinho no repositório). Pela regra absoluta do programa, **OBSERVADO = ∅, DITO = 3 declarações do enunciado do P79, o restante NÃO SABEMOS — nada se inventa.**

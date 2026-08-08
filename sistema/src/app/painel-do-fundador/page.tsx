@@ -1,4 +1,5 @@
-import { requireUser, temPermissao } from '@/lib/auth'
+import { requireUser } from '@/lib/auth'
+import { temPermissaoPlataformaUsuario } from '@/lib/plataforma'
 import { redirect } from 'next/navigation'
 import { obterPainelFundador, listarPerguntasAbertas } from '@/engine/pergunta-aberta-service'
 import { BIBLIOTECA_GRANDES_PERGUNTAS } from '@/engine/adaptive-question-engine'
@@ -10,7 +11,7 @@ import { PainelDoFundador } from './painel'
 // Apenas organiza o que as conversas revelaram. Nenhuma IA inventando conclusões.
 export default async function PainelDoFundadorPage() {
   const usuario = await requireUser()
-  if (!temPermissao(usuario.role, 'ADMIN')) redirect('/dashboard')
+  if (!temPermissaoPlataformaUsuario(usuario, 'FOUNDER_VIEW_PLATFORM')) redirect('/dashboard')
 
   const [painel, perguntas, metricas, maturidade, padroes, candidatos] = await Promise.all([
     obterPainelFundador().catch(() => null),

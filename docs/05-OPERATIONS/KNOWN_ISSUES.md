@@ -1,5 +1,13 @@
 # Known Issues
 
+## P84 — Founder Access: código pronto; deploy da migration + bootstrap em produção pendentes
+
+**Status:** Pendente (requer autorização do usuário)
+**Prioridade:** Alta
+**Descrição:** a camada de plataforma (identidade `platformRole`, matriz de 5 permissões, `auditorias_plataforma`, `requirePlataforma`, `/api/health/plataforma`, re-gate das áreas internas) está implementada com testes e typecheck verdes (`npm run test:plataforma`, `tsc --noEmit`). **Ainda não aplicada ao banco de produção**: migration `008_founder_access` + `npm run founder:provision` (com `FOUNDER_BOOTSTRAP_SUPABASE_ID`/`FOUNDER_BOOTSTRAP_EMAIL`, depois remover as vars — bootstrap é one-shot).
+**Impacto conhecido:** após o deploy, usuários `ADMIN` de empresas clientes **perdem** acesso a `/painel-do-fundador` e `/admin/*` — comportamento novo a comunicar no changelog de produto.
+**Ação:** autorização do usuário → commit/push do P84, aplicar a migration em produção (fluxo padrão: `npx prisma migrate deploy`), rodar o `provision`, validar `/api/health` e rotas de plataforma ao vivo, atualizar `P84_FOUNDER_ACCESS.md`.
+
 ## P80 + P81 + P82 — Motor Operacional bloqueado: ausência de evidência de campo (Souza Mestrinho)
 
 **Status:** Bloqueado (decisão de fase registrada — não é bug)
