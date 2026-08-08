@@ -4,6 +4,22 @@
 
 ---
 
+## Programa 79 — Motor Operacional (Tese de Fase + Mapeamento de Domínio)
+
+**7 de agosto de 2026**
+
+A Ponte Digital registra a nova tese de produto **Motor Operacional Verticalizável**, como **hipótese de fase — NENHUMA funcionalidade implementada** (P79 = mapeamento, zero código):
+
+- **Tese:** evoluir de "Cliente → CRM → Tarefas → Financeiro → Assistente" para "Cliente → Demanda → Orçamento → Execução → Entrega → Relacionamento", com um motor de operações configurável por vertical (serralheria igual a lavação pelo mesmo motor; a configuração muda, o motor não). Ordem de Serviço = **ficha viva** do trabalho.
+- **Princípio-guia (ADR-035):** universal → **CORE**; segmento → **template vertical** (metadados/config, nunca módulo dedicado); particular de cliente → configuração/não implementar.
+- **Laboratório real:** Souza Mestrinho Metais (serralheria, ~8 funcionários, Palhoça) — não é "o sistema da Souza", é o primeiro ambiente de descoberta de padrão da camada operacional. Regra: problema observado → hipótese → solução pequena → validação → generalização.
+- **Reuso identificado (não duplicação):** Event Engine já existe (`Event`/`EventSubscription`/`DeadLine` + ADR-011/012) e o padrão de etapas (Implantao/EtapaImplantao) vira base do Workflow.
+- **Gate de saída para P80:** observação de campo real (kit em `docs/05-OPERATIONS/P79/ROTEIRO_CAMPO_SOUZA_MESTRINHO.md`) + pergunta-âncora ("uma única bagunça?") respondida → só então Motor de Workflow (P80).
+
+**Documentos:** `MOTOR_OPERACIONAL_TESE.md`, `ADR-035`, `docs/03-ENGINEERING/OPERACIONAL/DOMINIO.md`, `docs/05-OPERATIONS/P79/ROTEIRO_CAMPO_SOUZA_MESTRINHO.md`, `P79_MOTOR_OPERACIONAL.md`, `CURRENT_PRODUCT.md`.
+
+---
+
 ## Programa 78 — A Ponte que Acompanha (Ritmo de Leitura 12s + Ciclo de Evolução Cognitiva)
 
 **7 de agosto de 2026**

@@ -1,5 +1,15 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P79 — MOTOR OPERACIONAL — TESE DE FASE (MAPEAMENTO, SEM CÓDIGO) — 7 de agosto de 2026**
+>
+> **Nova tese de produto registrada como hipótese de fase, sem funcionalidade implementada.** A Ponte Digital passa a investigar a camada **Operações** (Cliente → Demanda → Orçamento → Execução → Entrega → Relacionamento) como um **motor configurável por vertical** — o CRM, o financeiro e o assistente continuam; o que surge é o "Motor Operacional" com a **Ordem de Serviço como ficha viva** (tipo de trabalho + workflow + etapas + histórico + fotos + materiais + ocorrências). O laboratório real é a **Souza Mestrinho Metais** (serralheria, ~8 funcionários, Palhoça) — primeiro ambiente de descoberta, NÃO "o sistema da Souza".
+> - **Princípio-guia (ADR-035):** universal → CORE (modelo universal); específico de segmento → **template vertical** (configuração/metadados, NUNCA módulo novo); particular de um cliente → configuração tenant ou não implementar.
+> - **P79 = zero código:** entregas são documentais — `MOTOR_OPERACIONAL_TESE.md`, `ADR-035`, `docs/03-ENGINEERING/OPERACIONAL/DOMINIO.md` (mapa existe/a criar) e o kit de campo `ROTEIRO_CAMPO_SOUZA_MESTRINHO.md`.
+> - **Já existe para reutilizar:** Event Engine (`Event`/`EventSubscription`/`DeadLetter` + ADR-011) e o padrão de etapas (`Implantacao`/`EtapaImplantacao`) — o novo motor generaliza, não duplica.
+> - **Gate de saída:** P80 (Motor de Workflow) só abre após observação real de campo na Souza Mestrinho e resposta à pergunta-âncora *"Se pudéssemos eliminar uma única bagunça da empresa hoje, qual seria?"*.
+>
+> Ver `docs/07-MILESTONES/P79_MOTOR_OPERACIONAL.md`.
+
 > **MARCO: P74 — A CONVERSA QUE PARECE HUMANA — STATUS OFICIAL (comportamental) — 6 de agosto de 2026**
 >
 > **"O empresário nunca deve sentir que está falando com um roteiro, com uma IA ou com um chatbot — deve sentir que existe alguém prestando atenção."** A Ponte aprende a **conversar como um excelente conselheiro** — sem telas, módulos, banco, rotas ou funcionalidades; determinístico (sem IA), tudo na camada de reação da primeira sessão (`sistema/src/engine/reacoes.ts`):
