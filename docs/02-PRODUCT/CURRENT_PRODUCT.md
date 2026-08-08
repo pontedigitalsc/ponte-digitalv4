@@ -1,5 +1,15 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P82 — O CAMPO REAL — INVESTIGAÇÃO (SEM CÓDIGO) — 8 de agosto de 2026**
+>
+> **P82 executou o programa de campo e confirmou o bloqueio do Motor Operacional: não existe NENHUM registro real de campo** (nenhum `REGISTRO_CAMPO` preenchido, nenhuma planilha ou anotação bruta da Souza Mestrinho no repositório). Pela regra absoluta do programa, **OBSERVADO = ∅, DITO = 3 declarações do enunciado do P79, o restante NÃO SABEMOS — nada se inventa.**
+> - **Entregue:** `docs/07-MILESTONES/P82_O_CAMPO_REAL.md` (27 seções, classificação centralizada OBSERVADO/DITO/INFERIDO/NÃO SABEMOS). Gate A–F do P82: **BLOQUEADO** — veredito: P82 NÃO concluído.
+> - **Método ancorado:** `PROTOCOLO_DA_OBSERVACAO_REAL` (P26) — primeiro uso fora da Empresa Zero; captura pelo template `REGISTRO_CAMPO_SOUZA_MESTRINHO_TEMPLATE.md`.
+> - **Pergunta-âncora** ("Qual é a única bagunça...?"): **sem resposta**. Unidade operacional: **não escolhida**.
+> - **P83 (A Unidade Operacional) NÃO abre** até existir registro real que sustente hipótese operacional.
+>
+> Ver `docs/07-MILESTONES/P82_O_CAMPO_REAL.md`.
+
 > **MARCO: P80 + P81 — MOTOR OPERACIONAL: INVESTIGAÇÃO, SEM CÓDIGO — 7 de agosto de 2026**
 >
 > **P80 e P81 estão em estado de **documentação conceitual** — NENHUMA funcionalidade implementada, NENHUMA migration.** A auditoria confirmou que **não existe evidência de campo** da Souza Mestrinho (nenhum registro `OBSERVADO`/`DITO`); pela regra absoluta do programa, **não se inventa o workflow**. O que foi entregue: a **auditoria do P79** (fato × hipótese), o **inventário de compatibilidade real** (Event `cognitive-bus`/`event-store` gravam `eventos`; `Implantacao/EtapaImplantacao` são o padrão a generalizar; `Cliente/Lead/Tarefa/Historico/Transacao/AcaoCognitiva/MemoriaCognitiva` reutilizáveis), o **mecanismo de captura** (`REGISTRO_CAMPO_SOUZA_MESTRINHO_TEMPLATE.md`) e o **plano de fases 0→8 com gates**.

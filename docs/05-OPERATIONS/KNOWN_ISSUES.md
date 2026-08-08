@@ -1,12 +1,12 @@
 # Known Issues
 
-## P80 + P81 — Motor Operacional bloqueado: ausência de evidência de campo (Souza Mestrinho)
+## P80 + P81 + P82 — Motor Operacional bloqueado: ausência de evidência de campo (Souza Mestrinho)
 
 **Status:** Bloqueado (decisão de fase registrada — não é bug)
 **Prioridade:** Alta (é o gate de todo o motor operacional)
-**Descrição:** o P80 (Motor de Workflow) e o P81 (Aprendizado Operacional) estão em documentação conceitual, **sem código**. A auditoria confirmou que **não existe nenhum registro real de campo** da Souza Mestra no repositório (somente os documentos do plano P79). Pela regra absoluta do programa, o workflow não pode ser inventado pelo desenvolvedor.
+**Descrição:** o P80 (Motor de Workflow) e o P81 (Aprendizado Operacional) estão em documentação conceitual, **sem código**. O **P82 (O Campo Real, 8/8/2026)** executou o programa de campo e **reiterou o bloqueio**: nenhum registro real de campo da Souza Mestrinho existe no repositório (OBSERVADO = ∅; só os documentos do plano P79 e o template). Pela regra absoluta do programa, o workflow não pode ser inventado pelo desenvolvedor.
 **Dados que faltam (ver `docs/05-OPERATIONS/P79/REGISTRO_CAMPO_SOUZA_MESTRINHO_TEMPLATE.md`):** resposta da pergunta-âncora; fluxo real (passos/responsáveis/esperas); estados reais de parada; dependências "quem pergunta para quem"; gargalos; tempos que importam; unidade operacional de fato; diferença processo descrito × executado.
-**Ação:** aplicar o template em 1+ visitas reais à Souza Mestra; após registro aceito, liberar a Fase 1 do P80 (modelo conceitual, ainda sem código).
+**Ação:** aplicar o template em 1+ visitas reais à Souza Mestrinho; após registro aceito, liberar a Fase 1 do P80 (modelo conceitual, ainda sem código) e o P83 (Unidade Operacional). Ver `docs/07-MILESTONES/P82_O_CAMPO_REAL.md` (gate do P82) e `docs/02-PRODUCT/CURRENT_PRODUCT.md`.
 
 ## "Atlas" citado no programa P80 não foi encontrado no repositório
 

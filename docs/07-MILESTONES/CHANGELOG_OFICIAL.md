@@ -4,6 +4,21 @@
 
 ---
 
+## Programa 82 — O Campo Real (observação, sem código)
+
+**8 de agosto de 2026**
+
+P82 executou o programa de campo **sem nenhuma funcionalidade** — zero código, zero migration, zero workflow, zero entidade/tabela, zero API, zero unidade operacional escolhida:
+
+- **Auditoria de evidência:** busca no repositório (planilhas, "Souza Mestrinho", registros `OBSERVADO`/`DITO`, resposta da pergunta-âncora) → **não existe nenhum registro real de campo**.
+- **Documento oficial `docs/07-MILESTONES/P82_O_CAMPO_REAL.md`** com as 27 seções do programa e classificação honesta: **OBSERVADO = ∅ · DITO = 3 declarações do enunciado do P79 · INFERIDO = 2 hipóteses não evidenciadas · NÃO SABEMOS = o restante.** Gate A–F **BLOQUEADO**.
+- **Método ancorado no P26** (`PROTOCOLO_DA_OBSERVACAO_REAL`): primeiro uso do protocolo fora da Empresa Zero — validade da observação, separação fato × interpretação, viés do observador, limite de 30min/sessão. Captura em `docs/05-OPERATIONS/P79/REGISTRO_CAMPO_SOUZA_MESTRINHO_TEMPLATE.md`.
+- **Veredito:** P82 **NÃO concluído** — investigação paralisada pela falta de evidência de campo; não há nada a modelar até a visita real. P83 **não abre**.
+
+**Documentos:** `docs/07-MILESTONES/P82_O_CAMPO_REAL.md` (novo), `docs/02-PRODUCT/CURRENT_PRODUCT.md`, `docs/05-OPERATIONS/KNOWN_ISSUES.md`.
+
+---
+
 ## Programa 80 + 81 — Motor Operacional: Investigação e Mecânica (sem código)
 
 **7 de agosto de 2026**
