@@ -12,6 +12,17 @@
 >
 > Ver `docs/07-MILESTONES/P84_FOUNDER_ACCESS.md` e `docs/04-DECISIONS/ADR/ADR-036-founder-access-plataforma.md`.
 
+> **MARCO: P85 — A PONTE USA A PONTE — IDENTIDADE DEFINITIVA (BLOCO A) — 8 de agosto de 2026**
+>
+> **A Ponte Digital torna-se a primeira empresa real que usa o próprio Business OS.** Bloco A (Fases 1–6) implementado; Bloco B (Fases 7–10: Conversa de Configuração Cognitiva P86) aguarda aprovação.
+> - **Modelo (`migration 009`):** enum `PlatformRole` alargado para `FOUNDER_PRINCIPAL | FOUNDER | APOIADOR` (só vocabulário — NENHUMA permissão nova); nova tabela `EmpresaUsuario` (`empresa_usuarios`) — associação explícita usuário ↔ empresa com `role`/`ativo`, `@@unique([empresaId, usuarioId])`. `Usuario.empresaId` permanece como empresa principal (compatibilidade total).
+> - **Permissões:** `FOUNDER`/`APOIADOR` têm **zero** permissões de plataforma (regra "não inventar privilégios"); a matriz continua resolvendo apenas `FOUNDER_PRINCIPAL`.
+> - **Multi-tenancy:** `empresa_usuarios` entra nos `MODELOS_MULTI_TENANT` do `prismaSeguro` — membership respeita o tenant guard.
+> - **Fundação plantada:** script idempotente `scripts/plantar-fundacao.ts` garante a empresa **Imperador** (slug `imperador`, Apoiador nº1 / Fundador nº1), numera a **Ponte Digital canônica** (`slug: ponte-digital`, do seed) com os números nº2, provisiona o **Founder Principal** (`FOUNDER_PRINCIPAL` via env `FOUNDER_BOOTSTRAP_*`) e cria a **membership ADMIN** do Founder na empresa canônica. **Duplicatas de "Ponte Digital" de fases anteriores não são tocadas** (histórico preservado).
+> - **Status:** `tsc`, `test:plataforma` (5/5) e `npm run build` limpos; **deploy de produção pendente** — migrations `008`+`009` + rodar `founder:plantar-fundacao`.
+>
+> Ver `docs/07-MILESTONES/P85_PONTE_USA_A_PONTE.md` e `docs/04-DECISIONS/ADR/ADR-037-founder-identidade-membership.md`.
+
 > **MARCO: P82 — O CAMPO REAL — INVESTIGAÇÃO (SEM CÓDIGO) — 8 de agosto de 2026**
 >
 > **P82 executou o programa de campo e confirmou o bloqueio do Motor Operacional: não existe NENHUM registro real de campo** (nenhum `REGISTRO_CAMPO` preenchido, nenhuma planilha ou anotação bruta da Souza Mestrinho no repositório). Pela regra absoluta do programa, **OBSERVADO = ∅, DITO = 3 declarações do enunciado do P79, o restante NÃO SABEMOS — nada se inventa.**

@@ -27,6 +27,29 @@ P84 criou a **camada de plataforma** — a identidade que distingue quem **opera
 
 ---
 
+## Programa 85 — A Ponte Usa a Ponte: Identidade Definitiva (Bloco A)
+
+**8 de agosto de 2026**
+
+A Ponte Digital deixa de ser "o sistema de exemplo" e passa a ser **a primeira empresa real que usa o próprio Business OS**. Bloco A (Fases 1–6) implementado — identidade, memberships e fundação plantada:
+
+- **Modelo (`migration 009_ponte_usa_a_ponte`):** enum `PlatformRole` ampliado para `FOUNDER_PRINCIPAL | FOUNDER | APOIADOR` via `ALTER TYPE ... ADD VALUE` (sem remover valores); nova tabela **`EmpresaUsuario`** (`empresa_usuarios`) com `role`/`ativo`/`deletedAt` e `@@unique([empresaId, usuarioId])` — associação explícita usuário ↔ empresa (membership). `Usuario.empresaId` segue como **empresa principal**, compatibilidade total.
+- **Decisão (ADR-037):** associação real para que o Founder seja ADMIN da sua empresa **e** da empresa da plataforma; identidade ≠ privilégio — `FOUNDER` e `APOIADOR` entram no vocabulário **sem NENHUMA permissão** (matriz continua só para `FOUNDER_PRINCIPAL`).
+- **Multi-tenancy preservada:** `empresa_usuarios` passa a integrar `MODELOS_MULTI_TENANT` do `prismaSeguro` — nunca escrita cross-tenant.
+- **Fundação plantada (`scripts/plantar-fundacao.ts`, idempotente, server-only):** garante a empresa **Imperador** (`slug: imperador`, Apoiador nº1 / Fundador nº1); numera a **Ponte Digital canônica** (`slug: ponte-digital`, empresa do seed) para **nº2**; provisiona o Founder Principal (`FOUNDER_PRINCIPAL` via `FOUNDER_BOOTSTRAP_*`); cria a membership ADMIN do Founder na empresa canônica; auditoria `FUNDACAO_PLANTADA`.
+- **Legado preservado:** duas "Ponte Digital" duplicadas de fases anteriores **não são apagadas nem renumeradas** — registradas em `KNOWN_ISSUES.md`.
+- **Tipos:** `PlatformRole` (3 valores), interface `EmpresaUsuario`, `Usuario.membros`.
+
+**Testes:** `npm run test:plataforma` (5/5, inclui P85 de "FOUNDER/APOIADOR sem permissões"), `tsc --noEmit` limpo, `npm run build` limpo (63 rotas).
+
+**Bloco B (Fases 7–10, P86 — Conversa de Configuração Cognitiva): pendente de aprovação** — ver `P85_PONTE_USA_A_PONTE.md`.
+
+**Documentos:** `docs/04-DECISIONS/ADR/ADR-037-founder-identidade-membership.md` (novo), `docs/07-MILESTONES/P85_PONTE_USA_A_PONTE.md` (novo), `CURRENT_PRODUCT.md`, `CHANGELOG_OFICIAL.md`, `KNOWN_ISSUES.md`.
+
+**Deploy pendente:** migrations `008`+`009` + `founder:plantar-fundacao` em produção (aguardando autorização) — ver `KNOWN_ISSUES.md`.
+
+---
+
 ## Programa 82 — O Campo Real (observação, sem código)
 
 **8 de agosto de 2026**

@@ -9,7 +9,13 @@
  * campo controlado pelo usuário — ela vem de `Usuario.platformRole`, uma coluna
  * persistida no banco e atribuída por um bootstrap seguro (scripts/provision-founder.ts).
  */
-export type PlataformaRole = 'FOUNDER_PRINCIPAL'
+/**
+ * Roles de plataforma (P84 + P85). `FOUNDER` e `APOIADOR` já existem no
+ * vocabulário da identidade, mas NENHUMA permissão é concedida a eles ainda
+ * (§18 do P85: "não inventar privilégios" — só mapear). A matriz abaixo só
+ * autoriza `FOUNDER_PRINCIPAL`; qualquer papel futuro exige decisão e ADR.
+ */
+export type PlataformaRole = 'FOUNDER_PRINCIPAL' | 'FOUNDER' | 'APOIADOR'
 
 export type PlataformaPermissao =
   | 'FOUNDER_VIEW_PLATFORM'

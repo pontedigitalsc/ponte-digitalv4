@@ -2,7 +2,7 @@
 
 export type Plano = 'BASICO' | 'PROFISSIONAL' | 'ENTERPRISE'
 export type Role = 'ADMIN' | 'GESTOR' | 'MEMBRO'
-export type PlatformRole = 'FOUNDER_PRINCIPAL'
+export type PlatformRole = 'FOUNDER_PRINCIPAL' | 'FOUNDER' | 'APOIADOR'
 export type OrigemLead = 'INDICACAO' | 'SITE' | 'INSTAGRAM' | 'FACEBOOK' | 'GOOGLE' | 'WHATSAPP' | 'COLD_OUTREACH' | 'EVENTO' | 'OUTRO'
 export type EstagioLead = 'CONTATO' | 'DIAGNOSTICO' | 'PROPOSTA' | 'NEGOCIACAO' | 'FECHADO_GANHO' | 'FECHADO_PERDIDO'
 export type Temperatura = 'QUENTE' | 'MORNO' | 'FRIO'
@@ -28,6 +28,17 @@ export interface Empresa {
   atualizadaEm: Date
 }
 
+export interface EmpresaUsuario {
+  id: string
+  empresaId: string
+  usuarioId: string
+  role: Role
+  ativo: boolean
+  criadoEm: Date
+  atualizadoEm: Date
+  deletedAt?: Date | null
+}
+
 export interface Usuario {
   id: string
   empresaId: string
@@ -38,6 +49,7 @@ export interface Usuario {
   cargo?: string | null
   role: Role
   platformRole?: PlatformRole | null
+  membros?: EmpresaUsuario[]
   ativo: boolean
   criadoEm: Date
   atualizadoEm: Date

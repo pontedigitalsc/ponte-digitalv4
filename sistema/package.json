@@ -13,7 +13,8 @@
     "db:generate": "prisma generate",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
-    "founder:provision": "node --experimental-strip-types scripts/provision-founder.ts"
+    "founder:provision": "node --experimental-strip-types scripts/provision-founder.ts",
+    "founder:plantar-fundacao": "node --experimental-strip-types scripts/plantar-fundacao.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.106.0",

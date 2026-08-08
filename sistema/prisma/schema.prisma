@@ -22,6 +22,7 @@ model Empresa {
   deletedAt   DateTime?
 
   usuarios      Usuario[]
+  membros       EmpresaUsuario[]
   leads         Lead[]
   clientes      Cliente[]
   contatos      Contato[]
@@ -95,6 +96,7 @@ model Usuario {
   deletedAt    DateTime?
 
   empresa      Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  membros      EmpresaUsuario[]
 
   tarefasCriadas   Tarefa[]       @relation("TarefaCriador")
   tarefasAtribuidas Tarefa[]      @relation("TarefaResponsavel")
@@ -118,6 +120,34 @@ enum Role {
 
 enum PlatformRole {
   FOUNDER_PRINCIPAL
+  FOUNDER
+  APOIADOR
+}
+
+// Associação explícita usuário ↔ empresa (P85 — identidade definitiva).
+// Um usuário pode ter várias empresas por Membro (uma por linha); o papel
+// administrativo real vive aqui. Usuario.empresaId continua sendo a "empresa
+// principal" (compatibilidade), mas a autorização multi-tenant passa a ser
+// resolvida também por esta tabela.
+model EmpresaUsuario {
+  id          String   @id @default(cuid())
+  empresaId   String
+  usuarioId   String
+  role        Role     @default(MEMBRO)
+  ativo       Boolean  @default(true)
+  criadoEm    DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+  deletedAt   DateTime?
+
+  empresa     Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([empresaId, usuarioId])
+  @@index([empresaId, ativo])
+  @@index([usuarioId, ativo])
+  @@index([empresaId, deletedAt])
+  @@index([usuarioId, deletedAt])
+  @@map("empresa_usuarios")
 }
 
 // Auditoria de acoes privilegiadas de plataforma (P84 - Founder Access).

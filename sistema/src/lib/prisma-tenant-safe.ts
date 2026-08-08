@@ -55,6 +55,7 @@ const MODELOS_MULTI_TENANT = [
   'tag',
   'onboardingDecisao',
   'decisaoSinal',
+  'empresaUsuario',
   'event',
   'eventSubscription',
   'deadLetter',
