@@ -12,9 +12,35 @@ import { requireUserApi } from '@/lib/authorize'
 import { AuthenticationError } from '@/lib/app-errors'
 import { montarContinuidadeConversa } from '@/engine/relacao-engine'
 import { obterRetornoDisponivel } from '@/engine/retorno-engine'
+import { decisaoFluxoInicial } from '@/engine/fluxos/configuracao-founder'
+import { eFounderPrincipal } from '@/lib/permissao-plataforma'
 
 function obterToken(request: NextRequest): string | null {
   return request.cookies.get('conv_token')?.value ?? null
+}
+
+// P86 — Define o fluxo de uma conversa NOVA a partir de quem está pedindo.
+// O Founder Principal sem configuração concluída entra pelo fluxo de
+// configuração (`configuracao-founder`); qualquer outra situação — fundador
+// já configurado, usuário comum ou visitante anônimo — segue o fluxo padrão
+// (`primeira-conversa`). O fluxo é decidido no servidor, a partir de
+// `Usuario.platformRole` e do estado real de `Conversa`; nunca por parâmetro
+// de requisição.
+async function fluxoParaNovaConversa(usuario: Awaited<ReturnType<typeof requireUserApi>> | null, token: string): Promise<string> {
+  if (!usuario || !eFounderPrincipal(usuario.platformRole)) return 'primeira-conversa'
+
+  // Já configurado? (configurada + colada à empresa, ou ainda só no token)
+  const configurada = await prismaSeguro.conversa.findFirst({
+    where: {
+      fluxo: 'configuracao-founder',
+      concluida: true,
+      deletedAt: null,
+      OR: [{ empresaId: usuario.empresaId }, { token }],
+    },
+    select: { id: true },
+  })
+
+  return decisaoFluxoInicial(true, !!configurada)
 }
 
 // Valida que o usuário autenticado tem acesso à conversa
@@ -92,7 +118,8 @@ export async function GET(request: NextRequest) {
           retorno,
         })
       } else {
-        const nova = await criarConversa(token)
+        const fluxoId = await fluxoParaNovaConversa(usuario, token)
+        const nova = await criarConversa(token, fluxoId)
         const fluxo = (await import('@/engine/fluxos/primeira-conversa')).FLUXOS[nova.fluxo]
         const primeira = fluxo?.etapas[0] ?? null
 
@@ -113,7 +140,8 @@ export async function GET(request: NextRequest) {
       })
     } else {
       // quererNova com estado ativo não deveria acontecer; cria conversa nova.
-      const nova = await criarConversa(token)
+      const fluxoId = await fluxoParaNovaConversa(usuario, token)
+      const nova = await criarConversa(token, fluxoId)
       const fluxo = (await import('@/engine/fluxos/primeira-conversa')).FLUXOS[nova.fluxo]
       const primeira = fluxo?.etapas[0] ?? null
 

@@ -200,6 +200,10 @@ function fFinanceiro(s: Respostas): Descoberta | null {
 }
 
 export function gerarDescobertas(par: Respostas): DescobertasGeradas {
+  // P86-B2 — contexto Founder: as descobertas conectam evidências do fluxo
+  // `configuracao-founder` com o MESMO padrão P77 (evidência → porque → significa).
+  if (ehConversaFounder(par)) return gerarDescobertasFounder(par)
+
   const candidatos = [descobertaCrescimento(par), fTempo(par), fFinanceiro(par)].filter((d): d is Descoberta => d !== null)
 
   // no máximo 3 (já são 3) — mantemos as que nasceram de evidência real.
@@ -221,6 +225,104 @@ export function gerarDescobertas(par: Respostas): DescobertasGeradas {
     fraseTransformadora = 'Você não está sem tempo — está sem espaço para decidir.'
   } else if (d.id === 'dinheiro_e_leitura') {
     fraseTransformadora = 'Talvez o problema não seja o que falta de dinheiro. Seja o que falta de se ler.'
+  }
+
+  return { descobertas: candidatos.slice(0, 3), fraseTransformadora, insuficiente: null }
+}
+
+// P86-B2 — P77 NO CONTEXTO DO FOUNDER.
+// As MESMAS descobertas do P77, alimentadas pelo fluxo `configuracao-founder`.
+// Cada descoberta conecta pelo menos duas respostas de momentos diferentes e
+// só nasce de evidência real. A guarda de evidência permanece: sem subsídio,
+// a Ponte diz que ainda não tem elementos — jamais inventa padrão.
+
+function ehConversaFounder(par: Respostas): boolean {
+  return !!r(par, 'fundador.papel') || !!r(par, 'fluxo.afastamento') || !!r(par, 'atencao.mudanca')
+}
+
+function fTem(par: Respostas, id: string, fragmentos: string[]): boolean {
+  const valor = r(par, id)
+  if (!valor) return false
+  const limpo = (v: string) => v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  const alvo = limpo(valor)
+  return fragmentos.some((f) => alvo.includes(limpo(f)))
+}
+
+// ─── Descoberta do Founder — dependência do centro é a fase de estrutura ─────
+function fFounderDependencia(par: Respostas): Descoberta | null {
+  const centralTrabalho = fTem(par, 'fluxo.trabalho', ['tudo passa por voce'])
+  const paraSemVocê = fTem(par, 'fluxo.afastamento', ['quase tudo', 'improviso'])
+  const querMenosDeMim = fTem(par, 'atencao.mudanca', ['menos de mim', 'girar com menos', 'decolagem'])
+  if (!querMenosDeMim || !(centralTrabalho || paraSemVocê)) return null
+
+  const trabalho = r(par, 'fluxo.trabalho')
+  const afastamento = r(par, 'fluxo.afastamento')
+  const mudanca = r(par, 'atencao.mudanca')
+  const obs = [
+    'O que observei:',
+    trabalho ? `você me contou que o trabalho da Ponte está organizado hoje como "${trabalho}"` : 'o trabalho da Ponte ainda parece organizado em torno de você',
+    afastamento ? `e que, se você se afastasse por trinta dias, ela "${afastamento}"` : null,
+    querMenosDeMim ? `e que a única mudança que você faria hoje é "${mudanca}"` : null,
+    '— informações de momentos diferentes apontando para o mesmo lugar.',
+  ].filter(Boolean).join(' ')
+  return {
+    id: 'founder_girar_com_menos',
+    observacao: obs,
+    porque: 'Porque acreditamos nisso: quando uma empresa ainda muda a própria velocidade conforme a presença do fundador, o próximo passo não aparece em plano de produto — aparece em uma estrutura que anda sem depender de uma pessoa.',
+    significa: 'Pode significar que o próximo movimento da Ponte não é construir mais, é transferir o que precisa sair das suas mãos e observar o que acontece.',
+  }
+}
+
+// ─── Descoberta do Founder — conhecimento valioso sem endereço ────────────────
+function fFounderConhecimento(par: Respostas): Descoberta | null {
+  const aprendeu = r(par, 'evolucao.aprendizado')
+  const registrou = r(par, 'evolucao.registro')
+  const cabeca = fTem(par, 'evolucao.registro', ['minha cabeca', 'pouco ainda e registrado', 'docs e arquivos', 'espalhados'])
+  if (!aprendeu || !registrou || !cabeca) return null
+
+  return {
+    id: 'founder_conhecimento_sem_endereco',
+    observacao: `O que observei: você apontou como o aprendizado que mais vale para a Ponte "${aprendeu}" e, em outro momento, disse onde isso mora: "${registrou}". O patrimônio que você mais cuida está sem endereço firme.`,
+    porque: 'Porque acreditamos nisso: quando o conhecimento mais valioso mora em uma cabeça ou em arquivos espalhados, a empresa funciona por memória, não por infraestrutura.',
+    significa: 'Pode significar que o primeiro ativo de infraestrutura da Ponte não é software — é tirar esse aprendizado da cabeça com quem a criou.',
+  }
+}
+
+// ─── Descoberta do Founder — fase de construção x tração ──────────────────────
+function fFounderFaseTravao(par: Respostas): Descoberta | null {
+  const emConstrucao = fTem(par, 'realidade.momento', ['formacao', 'visao', 'fundada', 'comecando a andar'])
+  const travaTração = fTem(par, 'decisoes.trava', ['tracao', 'founders'])
+  if (!emConstrucao || !travaTração) return null
+
+  const momento = r(par, 'realidade.momento')
+  const trava = r(par, 'decisoes.trava')
+  return {
+    id: 'founder_fase_e_tracao',
+    observacao: `O que observei: você descreveu a Ponte como "${momento}" e, no mesmo respiro, nomeou como trava "${trava}". A visão e a validação ainda não se encontraram.`,
+    porque: 'Porque acreditamos nisso: uma empresa em construção que nomeia a trava de tração como principal trava ainda está fechando o motor de repetição de quem usa.',
+    significa: 'Pode significar que o próximo aprendizado mais caro da Ponte é descobrir por que quem experimenta ainda não volta — não por que o produto ainda não é completo.',
+  }
+}
+
+function gerarDescobertasFounder(par: Respostas): DescobertasGeradas {
+  const candidatos = [
+    fFounderDependencia(par),
+    fFounderConhecimento(par),
+    fFounderFaseTravao(par),
+  ].filter((d): d is Descoberta => d !== null)
+
+  if (candidatos.length === 0) {
+    return { descobertas: [], fraseTransformadora: null, insuficiente: 'Ainda não tenho elementos suficientes para afirmar isso.' }
+  }
+
+  let fraseTransformadora: string | null = null
+  const d = candidatos[0]
+  if (d.id === 'founder_girar_com_menos') {
+    fraseTransformadora = 'O próximo passo da Ponte talvez não seja construir mais. Seja parar de girar sempre em você.'
+  } else if (d.id === 'founder_conhecimento_sem_endereco') {
+    fraseTransformadora = 'O maior patrimônio da Ponte pode ser o mais difícil de achar: o que ainda mora só na sua cabeça.'
+  } else if (d.id === 'founder_fase_e_tracao') {
+    fraseTransformadora = 'A Ponte talvez não precise de mais direção. Talvez precise de mais Founders voltando.'
   }
 
   return { descobertas: candidatos.slice(0, 3), fraseTransformadora, insuficiente: null }

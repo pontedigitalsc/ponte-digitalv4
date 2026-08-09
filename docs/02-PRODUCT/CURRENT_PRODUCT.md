@@ -12,9 +12,19 @@
 >
 > Ver `docs/07-MILESTONES/P84_FOUNDER_ACCESS.md` e `docs/04-DECISIONS/ADR/ADR-036-founder-access-plataforma.md`.
 
+> **MARCO: P86 — CONVERSA DE CONFIGURAÇÃO COGNITIVA DO FOUNDER (BLOCO B) — 8 de agosto de 2026**
+>
+> **O Bloco B do P85/P86 está implementado: a Ponte usa a própria conversa para se configurar com o Founder Principal.** B1 (roteamento) + B2 (Fundação Cognitiva) reutilizam 100% do cérebro existente — P70/P72/P73/P77/P78 — sem engines nem tabelas paralelas:
+> - **P86-1:** `decisaoFluxoInicial` em `configuracao-founder.ts` — só `FOUNDER_PRINCIPAL` sem configuração concluída entra no fluxo `configuracao-founder` (13 interações/6 blocos); qualquer outro caso segue `primeira-conversa`.
+> - **P86-2 (guarda `ehConversaFounder` nos 4 motores):** hipóteses `founder_*` (dependência, construção, decisão por evidência/momento, conhecimento na cabeça/sistema, trava) com `forca`/`confianca`; leitura P72 com a contradição "centralidade × querer girar com menos"; descobertas P77 conectando ≥ 2 respostas com guarda de evidência (`insuficiente`); carta P49 que fala da **Ponte** com o `atencao.nao_dito` como **lacuna investigável**; **Retrato Inicial** P73 em 7 seções.
+> - **Determinístico, sem IA; um único caminho de persistência** (idempotente por versão); comportamento da Primeira Sessão de empresas preservado 100% (testes comprovam).
+> - **Status:** testes 21/21 (`configuracao-founder-cognitivo.test.ts` 11 + legado 10), `tsc` e `npm run build` limpos (63 rotas); **deploy de produção pendente** (migrations `008`+`009` + `founder:plantar-fundacao`) — ver `KNOWN_ISSUES.md`.
+>
+> Ver `docs/07-MILESTONES/P86_CONFIGURACAO_COGNITIVA.md`.
+
 > **MARCO: P85 — A PONTE USA A PONTE — IDENTIDADE DEFINITIVA (BLOCO A) — 8 de agosto de 2026**
 >
-> **A Ponte Digital torna-se a primeira empresa real que usa o próprio Business OS.** Bloco A (Fases 1–6) implementado; Bloco B (Fases 7–10: Conversa de Configuração Cognitiva P86) aguarda aprovação.
+> **A Ponte Digital torna-se a primeira empresa real que usa o próprio Business OS.** Bloco A (Fases 1–6) implementado; **Bloco B (Fases 7–10: Conversa de Configuração Cognitiva P86) implementado — ver o marco P86 acima**.
 > - **Modelo (`migration 009`):** enum `PlatformRole` alargado para `FOUNDER_PRINCIPAL | FOUNDER | APOIADOR` (só vocabulário — NENHUMA permissão nova); nova tabela `EmpresaUsuario` (`empresa_usuarios`) — associação explícita usuário ↔ empresa com `role`/`ativo`, `@@unique([empresaId, usuarioId])`. `Usuario.empresaId` permanece como empresa principal (compatibilidade total).
 > - **Permissões:** `FOUNDER`/`APOIADOR` têm **zero** permissões de plataforma (regra "não inventar privilégios"); a matriz continua resolvendo apenas `FOUNDER_PRINCIPAL`.
 > - **Multi-tenancy:** `empresa_usuarios` entra nos `MODELOS_MULTI_TENANT` do `prismaSeguro` — membership respeita o tenant guard.

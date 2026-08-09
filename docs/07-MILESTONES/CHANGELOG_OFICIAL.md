@@ -42,11 +42,42 @@ A Ponte Digital deixa de ser "o sistema de exemplo" e passa a ser **a primeira e
 
 **Testes:** `npm run test:plataforma` (5/5, inclui P85 de "FOUNDER/APOIADOR sem permissões"), `tsc --noEmit` limpo, `npm run build` limpo (63 rotas).
 
-**Bloco B (Fases 7–10, P86 — Conversa de Configuração Cognitiva): pendente de aprovação** — ver `P85_PONTE_USA_A_PONTE.md`.
+**Bloco B (Fases 7–10, P86 — Conversa de Configuração Cognitiva): implementado** — ver `P86_CONFIGURACAO_COGNITIVA.md`.
 
 **Documentos:** `docs/04-DECISIONS/ADR/ADR-037-founder-identidade-membership.md` (novo), `docs/07-MILESTONES/P85_PONTE_USA_A_PONTE.md` (novo), `CURRENT_PRODUCT.md`, `CHANGELOG_OFICIAL.md`, `KNOWN_ISSUES.md`.
 
 **Deploy pendente:** migrations `008`+`009` + `founder:plantar-fundacao` em produção (aguardando autorização) — ver `KNOWN_ISSUES.md`.
+
+---
+
+## Programa 86 — A Ponte Usa a Ponte: Conversa de Configuração Cognitiva (Bloco B)
+
+**8 de agosto de 2026**
+
+O Bloco B do P85/P86 (Fases 7–10) está **implementado** (B1 roteamento + B2 Fundação Cognitiva)
+— a Conversa de Configuração Cognitiva do Founder Principal reutiliza 100% do cérebro existente
+(P70/P72/P73/P77/P78), sem engines nem tabelas paralelas:
+
+- **P86-1 (roteamento):** `decisaoFluxoInicial(eFounderPrincipal, configuracaoConcluida)` em
+  `configuracao-founder.ts` — só `FOUNDER_PRINCIPAL` sem configuração concluída entra no fluxo
+  `configuracao-founder`; qualquer outro caso segue `primeira-conversa`. Testes: 5 casos.
+- **P86-2 (Fundação Cognitiva):** guarda `ehConversaFounder` nos quatro motores existentes, com
+  roteamento determinístico para leituras do Founder — **hipóteses** `founder_*` (dependência,
+  construção, decisão, conhecimento, trava), **leitura P72** (contradição
+  centralidade × girar com menos), **descobertas P77** (3 conectando ≥ 2 respostas, com guarda de
+  evidência), **carta P49** que fala da Ponte (o `nao_dito` vira lacuna investigável) e
+  **Retrato Inicial P73** com as 7 seções da jornada.
+- **Decisão de arquitetura:** um só caminho de persistência (idempotente por versão); sem engine
+  nova; determinístico, sem IA; comportamento da Primeira Sessão preservado (comprovado por teste).
+- **Testes:** `configuracao-founder-cognitivo.test.ts` (11 novos, determinísticos) +
+  `configuracao-founder.test.ts` (5) + `permissao-plataforma.test.ts` (5) — **21/21**. `tsc` e
+  `npm run build` limpos (63 rotas).
+
+**Documentos:** `docs/07-MILESTONES/P86_CONFIGURACAO_COGNITIVA.md` (novo), `CURRENT_PRODUCT.md`,
+`KNOWN_ISSUES.md`, `P85_PONTE_USA_A_PONTE.md`.
+
+**Deploy pendente:** migrations `008`+`009` + `founder:plantar-fundacao` em produção (pré-requisito
+da configuração ao vivo) — ver `KNOWN_ISSUES.md`.
 
 ---
 

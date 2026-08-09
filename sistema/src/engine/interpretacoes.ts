@@ -23,6 +23,67 @@ function r(ctx: ContextoInterpretacao, id: string): string | null {
   return ctx.respostas[id]?.trim() || null
 }
 
+// ─── Contexto Founder — P86-B2 ────────────────────────────────────────────
+// O fluxo `configuracao-founder` responde ao sujeito FOUNDER_PRINCIPAL. As
+// leituras abaixo usam os MESMOS princípios da carta P49 (toda carta termina
+// aberta), mas alimentadas pelos ids desse fluxo. A guarda `ehConversaFounder`
+// impede qualquer interferência na Primeira Conversa.
+
+function ehConversaFounder(respostas: Record<string, string | null>): boolean {
+  return !!respostas['fundador.papel']?.trim() || !!respostas['fluxo.afastamento']?.trim() || !!respostas['atencao.mudanca']?.trim()
+}
+
+function gerarObservacaoFounder(ctx: ContextoInterpretacao): string {
+  const papel = r(ctx, 'fundador.papel')
+  const momento = r(ctx, 'realidade.momento')
+  const uso = r(ctx, 'realidade.uso')
+
+  if (momento) {
+    return `Você descreveu a Ponte neste momento como "${momento}". A forma como você lê esse momento costuma guiar o que você decide construir a seguir.`
+  }
+  if (uso) {
+    return `Você me contou como a Ponte é usada hoje: "${uso}". Observar como quem usa recebe o que você construiu é onde começa qualquer leitura honesta.`
+  }
+  if (papel) {
+    return `Você se apresentou como "${papel}". Pelo que você contou, essa origem ainda influencia as decisões que toma hoje.`
+  }
+  return 'Pelo que você me contou, a Ponte ainda vive um momento em que muita coisa depende de uma só pessoa — a sua.'
+}
+
+function gerarPontoAtencaoFounder(ctx: ContextoInterpretacao): string {
+  const trava = r(ctx, 'decisoes.trava')
+  const afastamento = r(ctx, 'fluxo.afastamento')
+  const mudanca = r(ctx, 'atencao.mudanca')
+
+  if (trava) {
+    return `Você nomeou como grande trava hoje "${trava}". Travas têm nome e história — nomeá-las é o primeiro passo de observação.`
+  }
+  if (afastamento) {
+    return `Você me disse que, se se afastasse por trinta dias, a Ponte "${afastamento}". Esse cenário mostra onde a Ponte ainda precisa ficar mais de pé sozinha.`
+  }
+  if (mudanca) {
+    return `Você disse que, se pudesse mudar uma única coisa, mudaria "${mudanca}". Uma coisa só já é um padrão em construção — quero observar com você.`
+  }
+  return 'Existe uma concentração grande de decisões e contexto em você. Quando tudo passa por uma pessoa, a Ponte fica limitada ao que uma pessoa consegue carregar.'
+}
+
+function gerarAlinhamentoFounder(ctx: ContextoInterpretacao): string {
+  const sucesso = r(ctx, 'atencao.sucesso')
+  const registro = r(ctx, 'evolucao.registro')
+  const interesse = r(ctx, 'atencao.nao_dito')
+
+  if (sucesso) {
+    return `Você disse que vai saber que a mudança funcionou quando "${sucesso}". Proteger essa resposta é o menor movimento que pode melhorar sua próxima semana.`
+  }
+  if (registro) {
+    return `Você me disse que o conhecimento da Ponte mora "${registro}". Tirar uma parte disso da cabeça já é um começo concreto.`
+  }
+  if (interesse) {
+    return `Você contou que ainda não sente que merece a atenção que quer — e é exatamente isso que quero observar com você até que a resposta fique mais clara.`
+  }
+  return 'O menor movimento que pode melhorar sua próxima semana é escolher uma única coisa para observar com atenção.'
+}
+
 // ─── O que mais me chamou atenção hoje ─────────────────────────────────────
 function gerarObservacao(ctx: ContextoInterpretacao): string {
   const nascer = r(ctx, 'historia.nascer')
@@ -109,6 +170,13 @@ function gerarContinuidade(ctx: ContextoInterpretacao): string {
 
 export function interpretar(respostas: Record<string, string | null>): Interpretacoes {
   const ctx = extrairContexto(respostas)
+  if (ehConversaFounder(respostas)) {
+    return {
+      pontoAtencao: gerarPontoAtencaoFounder(ctx),
+      observacao: gerarObservacaoFounder(ctx),
+      alinhamento: gerarAlinhamentoFounder(ctx),
+    }
+  }
   return {
     pontoAtencao: gerarPontoAtencao(ctx),
     observacao: gerarObservacao(ctx),
@@ -177,6 +245,30 @@ function gerarSecao5(ctx: ContextoInterpretacao): string {
 
 export function gerarResumoNatural(respostas: Record<string, string | null>, interpretacoes: Interpretacoes): ResumoNatural {
   const ctx = extrairContexto(respostas)
+  if (ehConversaFounder(respostas)) {
+    return {
+      secao1: {
+        titulo: 'Pelo que você me contou',
+        paragrafo: gerarSecao1Founder(ctx),
+      },
+      secao2: {
+        titulo: 'Duas coisas que me chamaram a atenção',
+        pontos: gerarSecao2Founder(ctx, interpretacoes),
+      },
+      secao3: {
+        titulo: 'Algo em que você aposta',
+        paragrafo: gerarSecao3Founder(ctx),
+      },
+      secao4: {
+        titulo: 'O que ainda quero entender',
+        lacunas: gerarSecao4Founder(ctx),
+      },
+      secao5: {
+        titulo: 'Para sua próxima semana',
+        acao: gerarSecao5Founder(ctx),
+      },
+    }
+  }
   return {
     secao1: {
       titulo: 'Pelo que você me contou',
@@ -199,4 +291,70 @@ export function gerarResumoNatural(respostas: Record<string, string | null>, int
       acao: gerarSecao5(ctx),
     },
   }
+}
+
+// ─── Resumo Natural no contexto Founder (P86-B2) ──────────────────────────
+
+function gerarSecao1Founder(ctx: ContextoInterpretacao): string {
+  const papel = r(ctx, 'fundador.papel')
+  const momento = r(ctx, 'realidade.momento')
+  const uso = r(ctx, 'realidade.uso')
+
+  const partes: string[] = []
+  if (papel) partes.push(`você se apresentou na Ponte como "${papel}"`)
+  if (momento) partes.push(`descreve a Ponte hoje como "${momento}"`)
+  if (uso) partes.push(`contou que ela é usada assim: "${uso}"`)
+
+  if (partes.length > 0) {
+    return `Pelo que você me contou, ${partes.join('; e ')}. Isso já me dá um retrato inicial de como você olha para a Ponte.`
+  }
+  return 'Pelo que você me contou, a Ponte está em um momento decisivo da sua trajetória — esse retrato ficará mais nítido a cada conversa.'
+}
+
+function gerarSecao2Founder(ctx: ContextoInterpretacao, interpretacoes: Interpretacoes): { evidencia: string; analise: string }[] {
+  const pontos: { evidencia: string; analise: string }[] = [
+    { evidencia: interpretacoes.pontoAtencao, analise: interpretacoes.observacao },
+  ]
+  const afastamento = r(ctx, 'fluxo.afastamento')
+  if (afastamento) {
+    pontos.push({ evidencia: `Se você se afastasse por trinta dias: "${afastamento}"`, analise: 'O que acontece na sua ausência é a medida mais honesta de como a Ponte está consolidada.' })
+  }
+  return pontos
+}
+
+function gerarSecao3Founder(ctx: ContextoInterpretacao): string {
+  const aprendizado = r(ctx, 'evolucao.aprendizado')
+  const mudanca = r(ctx, 'atencao.mudanca')
+  if (aprendizado) {
+    return `Você apontou como o aprendizado mais valioso até aqui "${aprendizado}". Esse é um ponto de força sobre o qual construir — e proteger.`
+  }
+  if (mudanca) {
+    return `Você sabe exatamente o que gostaria de mudar primeiro — "${mudanca}". Saber o primeiro passo já é uma aposta clara.`
+  }
+  return 'Você anda construindo uma visão — e a visão é a aposta mais forte desta fase.'
+}
+
+function gerarSecao4Founder(ctx: ContextoInterpretacao): string[] {
+  const lacunas: string[] = []
+  if (!r(ctx, 'realidade.uso')) lacunas.push('Como a Ponte é usada hoje, na prática')
+  if (!r(ctx, 'decisoes.trava')) lacunas.push('Qual é a principal trava de recursos ou direção')
+  if (!r(ctx, 'atencao.mudanca')) lacunas.push('O que você quer mudar primeiro na Ponte')
+  if (lacunas.length === 0) lacunas.push('Alguns detalhes que só aparecem com o tempo — e com mais conversas')
+  return lacunas.slice(0, 2)
+}
+
+function gerarSecao5Founder(ctx: ContextoInterpretacao): string {
+  const travada = r(ctx, 'decisoes.trava')
+  const mudanca = r(ctx, 'atencao.mudanca')
+  const sucesso = r(ctx, 'atencao.sucesso')
+  if (travada) {
+    return `Durante uma semana, apenas observe: quantas vezes "${travada}" aparece nas suas decisões. Não precisa resolver — só anote quando ela aparecer.`
+  }
+  if (mudanca) {
+    return `Durante uma semana, observe as vezes em que "${mudanca}" entra na conversa. Não muda nada — só perceba quando e o que vem antes.`
+  }
+  if (sucesso) {
+    return `Durante uma semana, preste atenção em quando "${sucesso}" acontece — um encontro, uma resposta espontânea. Só observe.`
+  }
+  return 'Durante uma semana, escolha uma única coisa para observar — só observar, sem querer resolver. O simples registro já traz respostas que passavam despercebidas.'
 }

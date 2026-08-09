@@ -1,4 +1,5 @@
 import type { Fluxo } from '@/engine/tipos'
+import { CONFIGURACAO_FOUNDER } from '@/engine/fluxos/configuracao-founder'
 
 // P70 → P67 — PRIMEIRA SESSÃO ESTRATÉGICA (V4)
 //
@@ -175,4 +176,8 @@ export const PRIMEIRA_CONVERSA: Fluxo = {
 
 export const FLUXOS: Record<string, Fluxo> = {
   'primeira-conversa': PRIMEIRA_CONVERSA,
+  // P86 — Fluxo da Configuração Cognitiva do Founder Principal. O bloco não é
+  // duplicado de `primeira-conversa`: é um fluxo próprio com blocos prefixados
+  // `fundador_` (reutiliza as mesmas engines sem colidir IDs nem regras).
+  'configuracao-founder': CONFIGURACAO_FOUNDER,
 }

@@ -31,6 +31,14 @@ function r(respostas: Respostas, id: string): string | null {
   return respostas[id]?.trim() || null
 }
 
+// P86-B2 — reconhecimento do contexto Founder (fluxo `configuracao-founder`).
+// A presença de um único id desse fluxo é suficiente para a Ponte tratar as
+// respostas como uma conversa sobre a PONTE (a própria empresa do Founder),
+// reutilizando as MESMAS estruturas P70/P72/P73/P77/P78.
+function ehConversaFounder(respostas: Respostas): boolean {
+  return !!r(respostas, 'fundador.papel') || !!r(respostas, 'fluxo.afastamento') || !!r(respostas, 'atencao.mudanca')
+}
+
 function tem(respostas: Respostas, id: string, palavras: string[]): boolean {
   const v = r(respostas, id)?.toLowerCase() ?? ''
   return palavras.some((p) => v.includes(p.toLowerCase()))
@@ -200,6 +208,13 @@ function hipoteseEnergia(respostas: Respostas): HipoteseEstrategica | null {
 }
 
 export function gerarHipoteses(respostas: Respostas): HipoteseEstrategica[] {
+  // P86-B2 — a mesma conversa, um contexto diferente. Quando as respostas vêm do
+  // fluxo `configuracao-founder`, o motor lê a Ponte como a "empresa" sob
+  // gestão do Founder. Determinístico, guiado pelas MESMAS estruturas P70.
+  if (ehConversaFounder(respostas)) {
+    return gerarHipotesesFounder(respostas)
+  }
+
   const candidatas = [
     hipoteseDependencia(respostas),
     hipoteseMaturidade(respostas),
@@ -266,6 +281,9 @@ function semTempo(respostas: Respostas): boolean {
 }
 
 export function gerarLeituraCognitiva(respostas: Respostas, hipoteses: HipoteseEstrategica[]): LeituraCognitiva {
+  // P86-B2 — leitura do contexto Founder (a Ponte como empresa do Founder).
+  if (ehConversaFounder(respostas)) return gerarLeituraFounder(respostas, hipoteses)
+
   const leituras: string[] = []
   const contradicoes: string[] = []
   let frase: string | null = null
@@ -329,6 +347,228 @@ export function gerarLeituraCognitiva(respostas: Respostas, hipoteses: HipoteseE
     (hipoteses[0]
       ? `Para mim, quem passa tudo: ${hipoteses[0].rotulo.toLowerCase()}.`
       : 'Começamos há pouco e ainda não tenho um padrão para afirmar — mas já tenho as primeiras conexões para observar com você.')
+
+  return { padrao, relacoes: leituras, contradicoes, frase }
+}
+
+// ─── P86-B2 — AS HIPÓTESES DO FOUNDER ────────────────────────────────────────
+// Mesmo motor P70, contexto da Conversa de Configuração Cognitiva do Founder
+// (`configuracao-founder`). As respostas usam ids `fundador_*` e temáticas
+// próprias (`realidade.*`, `fluxo.*`, `decisoes.*`, `evolucao.*`, `atencao.*`)
+// — por isso estas regras só disparam quando esse contexto existe. Nenhuma
+// hipótese afirma certeza: toda leitura segue como observação (SABEMOS /
+// ACREDITAMOS / INVESTIGANDO), nunca como rótulo da pessoa ou da empresa.
+
+function fTem(respostas: Respostas, id: string, fragmentos: string[]): boolean {
+  const valor = r(respostas, id)
+  if (!valor) return false
+  const limpo = (v: string) => v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  const alvo = limpo(valor)
+  return fragmentos.some((f) => alvo.includes(limpo(f)))
+}
+
+function hipoteseFounderDependencia(respostas: Respostas): HipoteseEstrategica | null {
+  const trabalho = r(respostas, 'fluxo.trabalho')
+  const afastamento = r(respostas, 'fluxo.afastamento')
+  const uso = r(respostas, 'realidade.uso')
+  if (!trabalho && !afastamento && !uso) return null
+
+  let forca = 1
+  if (trabalho && fTem(respostas, 'fluxo.trabalho', ['tudo passa por voce'])) forca += 1
+  if (afastamento && fTem(respostas, 'fluxo.afastamento', ['quase tudo', 'improviso'])) forca += 1
+  if (uso && fTem(respostas, 'realidade.uso', ['so eu'])) forca += 1
+  if (trabalho && fTem(respostas, 'fluxo.trabalho', ['time conduz', 'revisa', 'terceiros'])) forca -= 1
+  if (afastamento && fTem(respostas, 'fluxo.afastamento', ['quase sozinha'])) forca -= 1
+  forca = Math.max(1, Math.min(3, forca))
+
+  return {
+    id: 'founder_dependencia_pessoal',
+    rotulo: 'A Ponte ainda gira em torno de você',
+    texto: `Boa parte do que sustenta a Ponte continua passando por você — o papel de fundador e o papel de funcionamento ainda se misturam mais do que deveriam.`,
+    evidencia: afastamento ?? trabalho ?? uso ?? '',
+    forca,
+    confianca: confiancaPorForca(forca),
+    prioridade: 'Escolher um pedaço da operação que só você faz e escrever o passo a passo dele — a Ponte precisa de ao menos um processo que não dependa do seu dia para virar empresa de verdade.',
+    decisao: 'Se eu estivesse no seu lugar, observaria qual tarefa — se você faltasse trinta dias — pararia a Ponte — e decidiria qual delas merece virar um processo escrito primeiro.',
+    pergunta: 'Se uma pessoa de confiança assumisse o seu papel por um mês, o que você pediria que ela mantivesse exatamente como você faz hoje?',
+    pontoCego: 'O que talvez você ainda não esteja percebendo: você criou a Ponte para empresas deixarem de depender de uma pessoa só — e a própria Ponte, hoje, pode estar dependendo só de você. O próximo movimento talvez não seja construir mais: seja escolher o que deixar de carregar sozinho.',
+  }
+}
+
+function hipoteseFounderConstrucao(respostas: Respostas): HipoteseEstrategica | null {
+  const momento = r(respostas, 'realidade.momento')
+  if (!momento) return null
+
+  let forca = 1
+  if (fTem(respostas, 'realidade.momento', ['formacao', 'visao', 'fundada', 'comecando a andar'])) forca += 1
+  if (fTem(respostas, 'realidade.momento', ['funciona', 'founders de rua', 'usando'])) forca -= 1
+  forca = Math.max(1, Math.min(3, forca))
+
+  return {
+    id: 'founder_construcao_fase',
+    rotulo: 'A Ponte ainda é mais direção do que operação',
+    texto: `Você descreveu a Ponte como "${momento}". A construção parece mais próxima da direção escolhida do que de uma operação estabelecida.`,
+    evidencia: momento,
+    forca,
+    confianca: confiancaPorForca(forca),
+    prioridade: 'Definir a menor operação que precisa existir para validar a direção — antes de construir mais estrutura.',
+    decisao: 'Se eu estivesse no seu lugar, observaria se as decisões da próxima semana aproximam a Ponte do uso real de Founders ou apenas vertem em produto.',
+    pergunta: 'Se daqui a trinta dias só um fato pudesse provar que a direção está certa, qual fato você escolheria?',
+    pontoCego: 'O que talvez você ainda não esteja olhando: construção constante pode confundir atividade com progresso — movimento não é a mesma coisa que avanço.',
+  }
+}
+
+function hipoteseFounderDecisao(respostas: Respostas): HipoteseEstrategica | null {
+  const influencia = r(respostas, 'decisoes.influencia')
+  if (!influencia) return null
+
+  const porEvidencia = fTem(respostas, 'decisoes.influencia', ['evidencias', 'dados e evidencia', 'encontros'])
+  const porMomento = !porEvidencia &&
+    fTem(respostas, 'decisoes.influencia', ['intuicao', 'urgente', 'recursos permitem'])
+
+  let forca = 1
+  if (porEvidencia && fTem(respostas, 'evolucao.registro', ['sistema da ponte', 'memoria'])) forca += 1
+  if (porMomento && fTem(respostas, 'evolucao.registro', ['minha cabeca', 'pouco ainda e registrado', 'docs e arquivos'])) forca += 1
+  forca = Math.max(1, Math.min(3, forca))
+
+  const base = porEvidencia
+    ? {
+        id: 'founder_decisao_por_evidencia',
+        rotulo: 'As decisões já se sustentam em evidência',
+        texto: `A influência das suas decisões sobre a Ponte vem de evidência — encontros e dados —, não apenas de percepção.`,
+      }
+    : {
+        id: 'founder_decisao_por_momento',
+        rotulo: 'As decisões ainda se guiam pela percepção do momento',
+        texto: `O que mais influencia suas decisões sobre a Ponte é a leitura do momento — a evidência ainda sustenta menos do que a percepção de hoje.`,
+      }
+
+  return {
+    ...base,
+    evidencia: influencia,
+    forca,
+    confianca: confiancaPorForca(forca),
+    prioridade: 'Observar quantas decisões da próxima semana nascem de informação real e quantas nascem de sensação — sem precisar mudar nada, apenas anotando.',
+    decisao: 'Se eu estivesse no seu lugar, separaria a próxima decisão importante e anotaria o que a sustentou: dado ou sensação — e checaria se o dado mudaria a escolha.',
+    pergunta: 'Uma decisão sua recente sobre a Ponte mudaria se você tivesse mais informação confiável antes de tomá-la?',
+    pontoCego: 'O possível ponto cego: o que parece ser "decisão de fundador" pode estar, na verdade, sendo uma decisão sem informação suficiente — e o padrão só aparece quando começa a ser registrado.',
+  }
+}
+
+function hipoteseFounderConhecimento(respostas: Respostas): HipoteseEstrategica | null {
+  const registro = r(respostas, 'evolucao.registro')
+  if (!registro) return null
+
+  const estruturado = fTem(respostas, 'evolucao.registro', ['sistema da ponte', 'memoria'])
+  let forca = estruturado ? 2 : 3
+  if (registro && fTem(respostas, 'evolucao.registro', ['pouco ainda e registrado'])) forca = 3
+  if (registro && fTem(respostas, 'evolucao.registro', ['sistema da ponte'])) forca = 1
+
+  return {
+    id: estruturado ? 'founder_conhecimento_sistema' : 'founder_conhecimento_na_cabeca',
+    rotulo: estruturado
+      ? 'O conhecimento dos resultados já mora na memória da empresa'
+      : 'O conhecimento ainda mora na cabeça de quem toca a Ponte',
+    texto: `Sobre onde mora o conhecimento dos resultados que a Ponte vê, você disse: "${registro}". Isso define de onde partem as próximas decisões.`,
+    evidencia: registro,
+    forca,
+    confianca: confiancaPorForca(forca),
+    prioridade: 'Proteger o lugar onde o conhecimento mora — e, se ele mora em gente só, dar a ele o primeiro endereço fora da cabeça do fundador.',
+    decisao: 'Se eu estivesse no seu lugar, escolheria uma descoberta dos últimos trinta dias e decidiria onde ela vai viver a partir de agora (documento, memória do sistema ou com as pessoas).',
+    pergunta: 'O que a Ponte aprendeu nos últimos meses que, se apenas uma pessoa saísse, simplesmente se perderia?',
+    pontoCego: 'O que parece invisível: conhecimento que mora numa cabeça não é patrimônio — é risco. O primeiro registro vale mais do que o décimo sistema.',
+  }
+}
+
+function hipoteseFounderTrava(respostas: Respostas): HipoteseEstrategica | null {
+  const trava = r(respostas, 'decisoes.trava')
+  if (!trava) return null
+
+  const nomeTrava = fTem(respostas, 'decisoes.trava', ['produto', 'proposta', 'ajuste']) 
+    ? 'a direção do produto ainda não fecha a proposta'
+    : fTem(respostas, 'decisoes.trava', ['recursos'])
+      ? 'a escassez de recursos (dinheiro, tempo, pessoas)'
+      : fTem(respostas, 'decisoes.trava', ['construindo', 'ocupados', 'recuar'])
+        ? 'a ocupação de construir sem parar'
+        : fTem(respostas, 'decisoes.trava', ['tracao', 'founders'])
+          ? 'a tração ainda pequena de Founders de verdade'
+          : trava
+
+  return {
+    id: 'founder_trava_principal',
+    rotulo: 'A trava que você nomeou é o primeiro lugar onde vou olhar',
+    texto: `Você nomeou como travamento: ${nomeTrava}. Esse é o ponto que a Ponte e você vão observar junto — não a solução pronta, mas a confirmação de que é ali.`,
+    evidencia: trava,
+    forca: 2,
+    confianca: 'MEDIA',
+    prioridade: 'Observar, por duas semanas, se o travamento nomeado reaparece nas decisões — e registrar quando ele aparece, sem tentar resolvê-lo já.',
+    decisao: 'A decisão a acompanhar nos próximos dias: qual trabalho da semana se aproxima ou se afasta dessa trava — para saber se o tempo está indo para onde você apontou.',
+    pergunta: 'Se a revista principal da Ponte fosse resolvida em trinta dias, o que você faria com o tempo que ela está tomando?',
+    pontoCego: 'O mapa que talvez você ainda não esteja vendo: o que você nomeou como trava pode ser a tradução de uma raiz mais central — por isso vamos conferir com convivência, não com chute.',
+  }
+}
+
+function gerarHipotesesFounder(respostas: Respostas): HipoteseEstrategica[] {
+  const candidatas = [
+    hipoteseFounderDependencia(respostas),
+    hipoteseFounderConstrucao(respostas),
+    hipoteseFounderDecisao(respostas),
+    hipoteseFounderConhecimento(respostas),
+    hipoteseFounderTrava(respostas),
+  ].filter((h): h is HipoteseEstrategica => h !== null)
+  return [...candidatas].sort((a, b) => b.forca - a.forca)
+}
+
+// P86-B2 — a leitura do contexto Founder conecta evidências de momentos
+// diferentes (P72), com contradições quando elas aparecem — sempre como
+// pergunta, nunca como sentença.
+function gerarLeituraFounder(respostas: Respostas, hipoteses: HipoteseEstrategica[]): LeituraCognitiva {
+  const leituras: string[] = []
+  const contradicoes: string[] = []
+  let frase: string | null = null
+
+  const central = hipoteses.find((h) => h.id === 'founder_dependencia_pessoal')
+  const trava = hipoteses.find((h) => h.id === 'founder_trava_principal')
+  const construcao = hipoteses.find((h) => h.id === 'founder_construcao_fase')
+  const afastamento = r(respostas, 'fluxo.afastamento')
+  const querSairDoCentro = fTem(respostas, 'atencao.mudanca', ['menos de mim', 'girar com menos', 'decolagem'])
+
+  if (central && trava) {
+    leituras.push(
+      `Tem uma conexão aqui: você apontou "${trava.evidencia}" como travamento — e, em outro momento, me contou que, se você saísse por trinta dias, a Ponte "${afastamento ?? 'ficaria na suas mãos'}". Quando o funcionamento passa por uma pessoa, trocar o nome da trava não muda o destino — mas enxergar as duas coisas juntas começa a mudar.`,
+    )
+  }
+
+  if (construcao && central) {
+    leituras.push(
+      'O momento de construção e o fato de que "o que sustenta funciona por você" contaram a mesma história com duas palavras: a Ponte ainda é mais direção do que operação. Não é um defeito — é onde o próximo capítulo começa.',
+    )
+  }
+
+  if (central && querSairDoCentro) {
+    contradicoes.push(
+      `Você quer ver a Ponte girar com menos de você no comando — e, ao mesmo tempo, me contou que ela ainda precisa de você para funcionar. Não é incoerência: é a própria tarefa dos próximos meses.`,
+    )
+  }
+
+  if (trava && fTem(respostas, 'atencao.sucesso', ['por conta propria'])) {
+    contradicoes.push(
+      'Você define avanço pela volta espontânea de quem usa — e nomeia uma trava de recursos ou direção no mesmo conjunto. As duas leituras pedem observação, não resolução das duas de uma vez.',
+    )
+  }
+
+  frase = central && querSairDoCentro
+    ? 'Apoiar a Ponte nem sempre é fazer mais — muitas vezes é parar de ser o combustível de todos os passos.'
+    : null
+  if (!frase && central) {
+    frase = 'Você construiu a Ponte para empresas nunca dependerem de uma só pessoa. A pergunta mais incômoda que eu trago desta conversa é: e ela?'
+  }
+
+  const padrao =
+    leituras[0] ??
+    (hipoteses[0]
+      ? `No centro de tudo o que você falou hoje, vejo: ${hipoteses[0].rotulo.toLowerCase()}.`
+      : 'Começamos há poucos minutos — ainda não há padrão, mas já há o que observar com você.')
 
   return { padrao, relacoes: leituras, contradicoes, frase }
 }

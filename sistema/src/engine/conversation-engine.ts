@@ -6,7 +6,7 @@ import { registrarEventoAtivacao } from '@/engine/founder-activation-engine'
 import { registrarResposta } from '@/engine/question-answer-engine'
 import { obterProximaPergunta } from '@/engine/adaptive-question-engine'
 import { BLOCOS_ORDEM } from '@/engine/tipos'
-import type { EstadoConversa, RespostaConversa, Progresso, Fluxo, EstagioConselheiro, Etapa } from '@/engine/tipos'
+import type { EstadoConversa, RespostaConversa, Progresso, Fluxo, EstagioConselheiro, Etapa, BlocoConversa } from '@/engine/tipos'
 import { NotFoundError, BusinessRuleError } from '@/lib/app-errors'
 
 // P52 — cada pergunta da primeira conversa pertence a um estágio do conselheiro.
@@ -69,21 +69,30 @@ function proximaEtapaElegivel(fluxo: Fluxo, respostas: Record<string, string | n
   return null
 }
 
+function blocosDoFluxo(fluxo: Fluxo): BlocoConversa[] {
+  const vistos: BlocoConversa[] = []
+  for (const e of fluxo.etapas) {
+    if (e.bloco && !vistos.includes(e.bloco)) vistos.push(e.bloco)
+  }
+  return vistos
+}
+
 function calcularProgresso(etapaIndex: number, fluxo: Fluxo): Progresso {
-  if (etapaIndex < 0 || fluxo.etapas.length === 0) {
+  const blocos = blocosDoFluxo(fluxo)
+  if (etapaIndex < 0 || fluxo.etapas.length === 0 || blocos.length === 0) {
     return { blocoAtual: 1, totalBlocos: BLOCOS_ORDEM.length, etapaNoBloco: 1, totalEtapasNoBloco: 1, percentual: 0 }
   }
 
   const etapaAtual = fluxo.etapas[etapaIndex]
-  const blocoAtual = etapaAtual.bloco ?? BLOCOS_ORDEM[0]
-  const blocoIdx = BLOCOS_ORDEM.indexOf(blocoAtual)
+  const blocoAtual = etapaAtual.bloco ?? blocos[0]
+  const blocoIdx = blocos.indexOf(blocoAtual)
 
   const etapasNoBloco = fluxo.etapas.filter((e) => e.bloco === blocoAtual)
   const posNoBloco = etapasNoBloco.findIndex((e) => e.id === etapaAtual.id)
 
   return {
     blocoAtual: blocoIdx + 1,
-    totalBlocos: BLOCOS_ORDEM.length,
+    totalBlocos: blocos.length,
     etapaNoBloco: Math.max(posNoBloco + 1, 1),
     totalEtapasNoBloco: Math.max(etapasNoBloco.length, 1),
     percentual: Math.round(((etapaIndex + 1) / fluxo.etapas.length) * 100),
@@ -264,6 +273,15 @@ function mapearBlocoParaCategoria(bloco: string) {
     atual: 'GESTAO',
     peso: 'OPERACAO',
     atencao: 'ESTRATEGIA',
+    // P86 — blocos da Conversa de Configuração Cognitiva do Founder.
+    // Adminstração (identidade/funcionamento da própria Ponte) vira GESTAO;
+    // fluxo/decisões de produto ficam em OPERACAO; aprendizado/acumulação vira ESTRATEGIA.
+    fundador_identidade: 'GESTAO',
+    fundador_realidade: 'OPERACAO',
+    fundador_fluxo: 'OPERACAO',
+    fundador_decisoes: 'GESTAO',
+    fundador_evolucao: 'ESTRATEGIA',
+    fundador_atencao: 'ESTRATEGIA',
     FINANCEIRO: 'FINANCEIRO',
     CLIENTES: 'CLIENTES',
     OPERACAO: 'OPERACAO',

@@ -1,11 +1,11 @@
 # P85 — A PONTE USA A PONTE: IDENTIDADE DEFINITIVA DO FOUNDER
 
-> **Status:** BLOCO A CONCLUÍDO (Fases 1–6) — 8 de agosto de 2026
+> **Status:** BLOCO A CONCLUÍDO (Fases 1–6) — 8 de agosto de 2026 · **BLOCO B CONCLUÍDO (Fases 7–10) — 8 de agosto de 2026, ver `docs/07-MILESTONES/P86_CONFIGURACAO_COGNITIVA.md`**
 >
 > Programa em dois blocos: **Bloco A** (Fases 1–6) entrega a identidade definitiva
 > (modelo, permissões, numeração, empresa "Imperador", provisionamento); **Bloco B**
 > (Fases 7–10) entrega a Conversa de Configuração Cognitiva (P86) e o retrato
-> estratégico de abertura — a aguardar aprovação.
+> estratégico de abertura — **implementado** (responsabilidade P86-1+P86-2).
 > ADR: `docs/04-DECISIONS/ADR/ADR-037-founder-identidade-membership.md`.
 
 ---
@@ -100,18 +100,20 @@ canônica (`slug: ponte-digital`, empresa do seed).
 - `npm run test:plataforma`: 5 testes passando (inclui o novo P85);
 - `npm run build` completo (63 páginas).
 
-## 6. Fases 7–10 (Bloco B — pendente de aprovação)
+## 6. Fases 7–10 (Bloco B — implementado, ver `P86_CONFIGURACAO_COGNITIVA.md`)
 
 - **Fase 7 — Rota da Conversa de Configuração** (P86): novo `fluxo='configuracao-founder'`
   na tabela `Conversa`, **reutilizando** `adaptive-question-engine` /
-  `conversation-engine` / `retrato-estrategico` (proibido duplicar o cérebro);
+  `conversation-engine` / `retrato-estrategico` (proibido duplicar o cérebro) — **implementado**
+  (`decisaoFluxoInicial` + `CONFIGURACAO_FOUNDER`, 13 etapas em 6 blocos);
 - **Fase 8 — Sem infraestrutura nova**: não há novas tabelas; o fluxo grava em
-  `Conversa` + `RespostasConversa` + `IdentidadeDigital` como feito hoje;
+  `Conversa` + `RespostasConversa` + `IdentidadeDigital` como feito hoje — **implementado**;
 - **Fase 9 — Primeiro acesso**: quando o Founder entra na Ponte Digital canônica
   ainda sem retrato estratégico, abre a conversa P86 (sem fricção — nunca força
   cadastro);
 - **Fase 10 — Retorno estratégico**: `retrato-estrategico.ts` reutilizado para
-  gerar o retrato de abertura (fatia do Motor Cognitivo, não um novo motor).
+  gerar o retrato de abertura (fatia do Motor Cognitivo, não um novo motor) — **implementado**
+  (Retrato Inicial P73 em 7 seções + hipóteses/descobertas/leitura/carta do Founder).
 
 ## 7. Testes Bloco A
 
@@ -135,4 +137,5 @@ canônica (`slug: ponte-digital`, empresa do seed).
 - Rodar `npm run founder:plantar-fundacao` **em produção** com
   `FOUNDER_BOOTSTRAP_SUPABASE_ID` do usuário do Founder;
 - Depois remover `FOUNDER_BOOTSTRAP_*` do ambiente (bootstrap é one-shot);
-- Bloco B (Fases 7–10) após aprovação.
+- **Bloco B (Fases 7–10) — implementado** (`P86_CONFIGURACAO_COGNITIVA.md`); validar ao vivo
+  após o deploy do Bloco A.

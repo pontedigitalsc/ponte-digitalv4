@@ -111,6 +111,15 @@ export type BlocoConversa =
   | 'peso'
   | 'evolucao'
   | 'atencao'
+  // P86 — blocos da Conversa de Configuração Cognitiva do Founder Principal.
+  // O prefixo `fundador_` evita colisão com os blocos da Primeira Sessão e com
+  // as regras de devolutiva/reacão existentes (reacoes.ts / mapearBlocoParaCategoria).
+  | 'fundador_identidade'
+  | 'fundador_realidade'
+  | 'fundador_fluxo'
+  | 'fundador_decisoes'
+  | 'fundador_evolucao'
+  | 'fundador_atencao'
 
 export const BLOCOS_ORDEM: BlocoConversa[] = [
   'atual',
@@ -119,11 +128,29 @@ export const BLOCOS_ORDEM: BlocoConversa[] = [
   'atencao',
 ]
 
+export const BLOCOS_FUNDADOR_ORDEM: BlocoConversa[] = [
+  'fundador_identidade',
+  'fundador_realidade',
+  'fundador_fluxo',
+  'fundador_decisoes',
+  'fundador_evolucao',
+  'fundador_atencao',
+]
+
 export const BLOCO_LABEL: Record<BlocoConversa, string> = {
   atual: 'Onde sua empresa está hoje',
   peso: 'Onde o peso está',
   evolucao: 'O que impede a evolução',
   atencao: 'O que merece atenção',
+  // P86 — conversa de configuração do Founder. Cada bloco responde a uma
+  // pergunta-guia sobre a própria Ponte (que está sendo administrada pelo
+  // Founder Principal dentro do mesmo sistema que constrói para seus Founders).
+  fundador_identidade: 'Quem está administrando a Ponte',
+  fundador_realidade: 'A realidade de hoje',
+  fundador_fluxo: 'Como o trabalho acontece',
+  fundador_decisoes: 'Como as decisões acontecem',
+  fundador_evolucao: 'O que a Ponte já aprendeu',
+  fundador_atencao: 'O que merece atenção',
 }
 
 export interface Opcao {

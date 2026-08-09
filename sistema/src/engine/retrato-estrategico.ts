@@ -111,6 +111,111 @@ function hipotesePrioritaria(hipoteses: HipoteseEstrategica[]): HipoteseEstrateg
   return hipoteses[0] ?? null
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// RETRATO INICIAL DO FOUNDER — P86-B2
+//
+// O fluxo `configuracao-founder` gera um "Retrato Inicial" (não um veredito):
+// as MESMAS seções da carta P73, mas contando o que a Ponte entendeu sobre a
+// PONTE que o fundador está construindo. Cada capítulo só usa o que foi
+// realmente dito; a guarda de evidência continua valendo (sem resposta, a
+// Ponte não inventa). A seção "O que eu descobri sobre a Ponte" substitui o
+// retrato empresarial sem alterá-lo — o fluxo da Primeira Conversa permanece.
+// ─────────────────────────────────────────────────────────────────────────────
+
+function ehConversaFounder(respostas: Respostas): boolean {
+  return !!r(respostas, 'fundador.papel') || !!r(respostas, 'fluxo.afastamento') || !!r(respostas, 'atencao.mudanca')
+}
+
+function capituloHipoteseInicialFounder(respostas: Respostas): string {
+  const momento = r(respostas, 'realidade.momento')
+  const papel = r(respostas, 'fundador.papel')
+  const primeira = momento ?? papel
+  if (!primeira) {
+    return 'Quando você começou a falar da Ponte, eu ainda não sabia por onde ia caminhar — só percebia que você estava aberto a olhar de verdade para o que está construindo.'
+  }
+  return `Quando você começou me contando que a Ponte está assim — "${primeira}" —, minha primeira tentativa de leitura foi procurar ali o ponto mais pesado: a energia indo para segurar uma operação que ainda depende de você. Era o melhor que eu podia inferir naquele início.`
+}
+
+function capituloPontoCegoFounder(prioridade: HipoteseEstrategica | null): string {
+  if (!prioridade) {
+    return 'Ainda não tenho confiança para apontar um ponto cego — começamos há poucos minutos. Mas já tenho o que observar juntos na próxima conversa.'
+  }
+  return prioridade.pontoCego
+}
+
+function capituloDecisaoFounder(prioridade: HipoteseEstrategica | null): string {
+  if (!prioridade) {
+    return 'Observar quais decisões da próxima semana vêm de número e quais vêm de intuição — e escolher UMA para esperar o número antes de decidir.'
+  }
+  return prioridade.decisao
+}
+
+function capituloPerguntaFounder(respostas: Respostas, prioridade: HipoteseEstrategica | null): string {
+  if (prioridade?.pergunta) return prioridade.pergunta
+  if (!r(respostas, 'realidade.uso')) {
+    return 'O que acontece hoje quando alguém encontra a Ponte pela primeira vez? O que faz essa pessoa voltar?'
+  }
+  return 'Se você tivesse um mês de trégua nas urgências, qual é a primeira coisa que tentaria mudar na Ponte?'
+}
+
+function gerarRetratoFounder(respostas: Respostas, hipoteses: HipoteseEstrategica[]): RetratoEstrategico {
+  const prioridade = hipotesePrioritaria(hipoteses)
+  const leitura = gerarLeituraCognitiva(respostas, hipoteses)
+  const descobertas = gerarDescobertas(respostas)
+  const capDescobertas = capituloDescobertas(descobertas)
+
+  const capPercepcao = capituloPercepcao(respostas, leitura)
+  const padraoSintese = leitura.padrao
+  const sintese = prioridade
+    ? `${padraoSintese} Por isso o mais importante hoje não é uma ação pontual — é enxergar que ${prioridade.rotulo.toLowerCase()}.`
+    : padraoSintese
+
+  return {
+    titulo: 'O que eu descobri sobre a Ponte até agora',
+    frase: descobertas.fraseTransformadora ?? leitura.frase,
+    secoes: [
+      {
+        numero: 1,
+        titulo: 'O que eu achei que a Ponte era',
+        corpo: capituloHipoteseInicialFounder(respostas),
+      },
+      {
+        numero: 2,
+        titulo: 'O que eu fui percebendo durante a conversa',
+        corpo: capPercepcao,
+      },
+      {
+        numero: 3,
+        titulo: 'As descobertas que eu cheguei',
+        corpo: capDescobertas.corpo,
+        itens: capDescobertas.itens,
+      },
+      {
+        numero: 4,
+        titulo: 'O que hoje me parece importante',
+        corpo: sintese,
+      },
+      {
+        numero: 5,
+        titulo: 'O ponto que talvez você ainda não esteja olhando',
+        corpo: capituloPontoCegoFounder(prioridade),
+      },
+      {
+        numero: 6,
+        titulo: 'A decisão que eu não decidiria com pressa',
+        corpo: capituloDecisaoFounder(prioridade),
+      },
+      {
+        numero: 7,
+        titulo: 'A conversa que a gente deveria ter daqui a alguns dias',
+        corpo: capituloPerguntaFounder(respostas, prioridade),
+      },
+    ],
+    proximaReflexao: capituloPerguntaFounder(respostas, prioridade),
+    aviso: 'Este não é um veredito — é o começo de uma leitura sobre a Ponte que vamos construir juntos. O que eu acredito hoje muda com cada conversa.',
+  }
+}
+
 // ─── 3. As descobertas (P77 — Motor das Descobertas) ───────────────────────
 // Cada descoberta conecta duas ou mais respostas de momentos diferentes e só
 // nasce de evidência. Sem evidência suficiente, a Ponte diz que não tem
@@ -133,6 +238,8 @@ export function gerarRetratoEstrategico(
   hipoteses: HipoteseEstrategica[],
   _interpretacoes?: Interpretacoes,
 ): RetratoEstrategico {
+  if (ehConversaFounder(respostas)) return gerarRetratoFounder(respostas, hipoteses)
+
   const prioridade = hipotesePrioritaria(hipoteses)
   const leitura = gerarLeituraCognitiva(respostas, hipoteses)
   const descobertas = gerarDescobertas(respostas)
