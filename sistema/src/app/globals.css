@@ -47,6 +47,19 @@
   --duration-normal: 400ms;
   --duration-slow: 600ms;
   --duration-insight: 800ms;
+
+  /* Landing — camada atmosférica (uso restrito à marketing/landing; o
+     resto do produto continua em --background/--card/--primary etc.,
+     inalterados). Azul-névoa = respiro; verde profundo = evolução. */
+  --mist: 200 40% 94%;
+  --mist-deep: 206 36% 90%;
+  --mist-2: 204 38% 86%;
+  --azure: 208 42% 78%;
+  --evergreen: 165 34% 26%;
+  --evergreen-soft: 165 28% 93%;
+  --evergreen-light: 155 42% 68%;
+  --warm-surface: 88 14% 96%;
+  --shadow-soft: 0 1px 3px hsl(225 40% 20% / 0.04), 0 28px 60px -28px hsl(225 40% 20% / 0.22);
 }
 
 .dark {
@@ -85,6 +98,16 @@
   --shadow-card: 0 1px 2px hsl(225 40% 0% / 0.4), 0 10px 30px -12px hsl(225 40% 0% / 0.5);
   --shadow-lift: 0 16px 40px -16px hsl(225 40% 0% / 0.6);
   --shadow-primary: 0 10px 28px -10px hsl(217 91% 60% / 0.35);
+
+  --mist: 208 26% 15%;
+  --mist-deep: 207 26% 12%;
+  --mist-2: 206 26% 14%;
+  --azure: 208 28% 19%;
+  --evergreen: 165 30% 45%;
+  --evergreen-soft: 165 20% 16%;
+  --evergreen-light: 155 40% 62%;
+  --warm-surface: 128 10% 11%;
+  --shadow-soft: 0 1px 3px hsl(225 40% 0% / 0.24), 0 28px 60px -28px hsl(225 40% 0% / 0.55);
 }
 
 @layer base {
@@ -187,6 +210,11 @@
   .bg-ponte-gradient {
     background-image: linear-gradient(135deg, hsl(var(--institutional-900)) 0%, hsl(var(--institutional-700)) 45%, hsl(var(--primary)) 100%);
   }
+  /* Founder — azul-noite com verde profundo entrando muito sutilmente no
+     canto, distinto do gradiente da seção de Visão. */
+  .bg-founder-gradient {
+    background-image: radial-gradient(120% 140% at 15% 0%, hsl(var(--institutional-800)) 0%, hsl(var(--institutional-900)) 55%, hsl(var(--evergreen) / 0.35) 130%);
+  }
   .shadow-card {
     box-shadow: var(--shadow-card);
   }
@@ -196,11 +224,106 @@
   .shadow-primary {
     box-shadow: var(--shadow-primary);
   }
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
   .font-display {
     letter-spacing: -0.02em;
   }
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Landing — reveal discreto e 100% opcional.
+     Sem a classe "js" no <html> (JS bloqueado/indisponível), .reveal fica
+     sempre visível — a página nunca depende de JavaScript para ser lida. */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity var(--duration-slow) var(--ease-out-expo),
+                transform var(--duration-slow) var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Hero — traço dos sinais se conectando (fragmentação → conexão → clareza).
+     --line-duration é configurável por elemento: as linhas locais (fragmentos
+     se relacionando) e as linhas de convergência (chegando até o Avatar) têm
+     ritmos diferentes — ver hero-visual.tsx. */
+  .signal-line {
+    stroke-dasharray: var(--line-length, 1);
+    stroke-dashoffset: var(--line-length, 1);
+    animation-name: drawLine;
+    animation-duration: var(--line-duration, 1.4s);
+    animation-timing-function: var(--ease-out-expo);
+    animation-fill-mode: forwards;
+    animation-delay: var(--line-delay, 0ms);
+  }
+  .signal-dot {
+    opacity: 0;
+    animation: dotIn 0.6s var(--ease-out-expo) forwards;
+    animation-delay: var(--dot-delay, 0ms);
+    transform-origin: center;
+  }
+
+  /* Hero — chegada do AvatarPonte. Fica invisível/reduzido até o instante em
+     que as linhas de convergência terminam de chegar até ele (--arrive-delay
+     e --arrive-duration são calculados em hero-visual.tsx para coincidir
+     exatamente com o fim da última linha convergente). Só então ele atinge
+     o estado final — o clímax visual é a chegada, não o avatar sozinho. */
+  .hero-avatar-arrive {
+    opacity: 0;
+    transform: scale(0.55);
+    animation-name: heroAvatarArrive;
+    animation-duration: var(--arrive-duration, 1.6s);
+    animation-timing-function: var(--ease-out-expo);
+    animation-fill-mode: forwards;
+    animation-delay: var(--arrive-delay, 0ms);
+  }
+  /* Pulso único de "clareza alcançada", disparado exatamente quando a
+     chegada termina. Azul profundo e sutil — sem âmbar, sem neon. */
+  .hero-avatar-glow {
+    animation-name: heroClarityGlow;
+    animation-duration: 900ms;
+    animation-timing-function: var(--ease-out-expo);
+    animation-fill-mode: forwards;
+    animation-delay: var(--glow-delay, 0ms);
+  }
+}
+
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes dotIn {
+  from { opacity: 0; transform: scale(0.4); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes heroAvatarArrive {
+  0% { opacity: 0; transform: scale(0.55); }
+  60% { opacity: 0.55; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes heroClarityGlow {
+  0% { box-shadow: 0 0 0 0 hsl(var(--institutional-900) / 0); }
+  45% { box-shadow: 0 0 26px 6px hsl(var(--primary) / 0.22); }
+  100% { box-shadow: 0 0 0 0 hsl(var(--institutional-900) / 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal {
+    transition-duration: 1ms;
+    transform: none;
+  }
+  .signal-line, .signal-dot, .hero-avatar-arrive, .hero-avatar-glow,
+  .animate-breathing, .animate-thinking-glow, .animate-pulse-soft {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -264,7 +387,8 @@
   to { width: var(--progress-target, 100%); }
 }
 
-/* P67 — preenchimento de 7s da percepção: mostram que a Ponte está digerindo */
+/* P78 — preenchimento do ritmo de leitura das devolutivas: mostra que a Ponte
+   está digerindo. A duração vem de RITMO_DEVOLUTIVA_S (fonte única: ritmo.ts). */
 @keyframes reacaoPreenchimento {
   from { width: 0%; }
   to { width: 100%; }

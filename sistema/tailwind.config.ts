@@ -11,6 +11,9 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        // Editorial: reservada para grandes momentos narrativos (hero,
+        // viradas, headlines de seção selecionadas). Nunca em UI/produto.
+        editorial: ['var(--font-fraunces)', 'Georgia', 'serif'],
       },
       colors: {
         border:      'hsl(var(--border))',
@@ -52,6 +55,20 @@ const config: Config = {
           800: 'hsl(var(--institutional-800))',
           700: 'hsl(var(--institutional-700))',
         },
+        // Landing — camada atmosférica (ver globals.css). Uso restrito à
+        // marketing/landing; o resto do produto não referencia estas cores.
+        mist: {
+          DEFAULT: 'hsl(var(--mist))',
+          deep:    'hsl(var(--mist-deep))',
+          2:       'hsl(var(--mist-2))',
+        },
+        azure: 'hsl(var(--azure))',
+        evergreen: {
+          DEFAULT: 'hsl(var(--evergreen))',
+          soft:    'hsl(var(--evergreen-soft))',
+          light:   'hsl(var(--evergreen-light))',
+        },
+        'warm-surface': 'hsl(var(--warm-surface))',
       },
       boxShadow: {
         card:    'var(--shadow-card)',

@@ -1,10 +1,21 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Fraunces } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import { ToastProvider } from '@/components/ui/toat'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+
+// Fraunces: usada com critério — apenas nos grandes momentos narrativos da
+// landing (hero, viradas, algumas headlines editoriais). Nunca em interface,
+// navegação ou CTAs funcionais, que continuam em Inter. Pesos leves/médios
+// para manter o caráter contemporâneo, sem tom clássico/formal.
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-fraunces',
+  weight: ['300', '400', '500', '600'],
+  style: ['normal', 'italic'],
+})
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://pontedigital.com.br'
 
@@ -37,7 +48,21 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <head>
+        {/*
+          Progressive enhancement para as animações de "reveal" da landing.
+          Sem este script (JS desabilitado/bloqueado), a classe "js" nunca é
+          adicionada e o CSS correspondente nunca esconde conteúdo — a página
+          permanece 100% visível e utilizável. Roda antes do primeiro paint
+          para não haver flash de conteúdo.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js')",
+          }}
+        />
+      </head>
+      <body className={`${inter.variable} ${fraunces.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
