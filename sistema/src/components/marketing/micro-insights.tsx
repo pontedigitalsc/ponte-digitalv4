@@ -20,6 +20,7 @@ const INSIGHTS = [
  * Micro-insights — três observações curtas sobre sinais, relações e
  * evolução. Linguagem deliberadamente aberta ("talvez", "podem"): a Ponte
  * não promete certezas, devolve possibilidades para o leitor considerar.
+ * Camada Rodada 3: balões translúcidos com luz verde discreta no topo.
  */
 export function MicroInsights() {
   return (
@@ -27,16 +28,16 @@ export function MicroInsights() {
       {INSIGHTS.map((ins) => (
         <div
           key={ins.titulo}
-          className="rounded-2xl border border-border/70 bg-card/70 px-5 py-6 shadow-soft"
+          className="balloon balloon-lift px-5 py-6"
         >
           <span
             aria-hidden="true"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-mist text-base text-primary"
+            className="dot-green flex h-9 w-9 items-center justify-center rounded-full text-base font-semibold text-night-text"
           >
             {ins.icone}
           </span>
-          <h3 className="mt-4 text-base font-semibold tracking-tight text-foreground">{ins.titulo}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{ins.texto}</p>
+          <h3 className="mt-4 font-editorial text-lg font-light leading-snug text-night-text">{ins.titulo}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-night-text-soft">{ins.texto}</p>
         </div>
       ))}
     </div>

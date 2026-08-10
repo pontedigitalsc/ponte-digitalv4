@@ -19,7 +19,8 @@ const DADOS_CONCRETOS = [
  * A seção "Você já tem os dados": fontes de onde a realidade aparece, mas
  * abaixo delas, dado concreto + a Ponte como ponto que as liga. O aviso
  * final ("não substitui") mantém o tom honesto — nada de prometer que a
- * Ponte lê mentes.
+ * Ponte lê mentes. Camada Rodada 3: chips como balões translúcidos sobre
+ * azul-noite; o dado concreto com o ponto verde; a Ponte como o nó.
  */
 export function SignalStrip() {
   return (
@@ -28,7 +29,7 @@ export function SignalStrip() {
         {FONTES.map((f) => (
           <span
             key={f.label}
-            className="rounded-full border border-border/70 bg-warm-surface px-4 py-1.5 text-sm text-muted-foreground"
+            className="pill px-4 py-1.5 text-sm text-night-text-soft"
             style={{ transform: `rotate(${f.rotate}deg)` }}
           >
             {f.label}
@@ -38,19 +39,19 @@ export function SignalStrip() {
 
       <ul className="mx-auto max-w-md space-y-2 text-left">
         {DADOS_CONCRETOS.map((d) => (
-          <li key={d} className="flex items-start gap-2.5 text-sm leading-relaxed text-muted-foreground">
-            <span aria-hidden="true" className="mt-[0.35em] h-1.5 w-1.5 shrink-0 rounded-full bg-evergreen-light/70" />
+          <li key={d} className="flex items-start gap-2.5 text-sm leading-relaxed text-night-text-soft">
+            <span aria-hidden="true" className="dot-green mt-[0.35em] h-1.5 w-1.5 shrink-0 rounded-full" />
             {d}
           </li>
         ))}
       </ul>
 
       <div className="flex flex-col items-center gap-4">
-        <span className="text-2xl leading-none text-muted-foreground/50" aria-hidden="true">↓</span>
-        <span className="rounded-2xl bg-institutional-900 px-6 py-2.5 text-sm font-semibold tracking-wide text-white">
-          PONTE
+        <span className="text-2xl leading-none text-night-text-dim/50" aria-hidden="true">↓</span>
+        <span className="rounded-full border border-night-700/60 bg-night-800 px-7 py-2.5 text-sm font-semibold tracking-[0.3em] text-night-mist uppercase">
+          Ponte
         </span>
-        <p className="mx-auto max-w-xs text-center text-xs italic leading-relaxed text-muted-foreground/80">
+        <p className="mx-auto max-w-xs text-center text-xs italic leading-relaxed text-night-text-dim">
           A Ponte não substitui o seu julgamento — ela aproxima o que já está aí.
         </p>
       </div>

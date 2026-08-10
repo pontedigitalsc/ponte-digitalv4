@@ -2,28 +2,31 @@ import Link from 'next/link'
 
 export function MarketingNav() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/75 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-night-700/50 bg-night-900/70 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-1.5 text-sm font-semibold tracking-tight text-foreground">
-          <span aria-hidden="true" className="text-base leading-none text-primary">✦</span>
+        <Link href="/" className="flex items-center gap-1.5 text-sm font-semibold tracking-tight text-night-text">
+          <span aria-hidden="true" className="text-base leading-none text-night-azure">✦</span>
           Ponte Digital
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          <a href="#como-funciona" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            Como funciona
+        <nav className="hidden items-center gap-6 md:flex" aria-label="Seções">
+          <a href="#o-problema" className="text-sm text-night-text-soft transition-colors hover:text-night-text">
+            O problema
           </a>
-          <a href="#a-ponte" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            A Ponte
+          <a href="#como-funciona" className="text-sm text-night-text-soft transition-colors hover:text-night-text">
+            Como pensa
           </a>
-          <a href="#founder" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+          <a href="#a-nova-categoria" className="text-sm text-night-text-soft transition-colors hover:text-night-text">
+            A categoria
+          </a>
+          <a href="#founder" className="text-sm text-night-text-soft transition-colors hover:text-night-text">
             Founder
           </a>
         </nav>
 
         <Link
           href="/conversa"
-          className="rounded-lg bg-primary px-3.5 py-1.5 text-xs font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 sm:px-4 sm:py-2 sm:text-sm"
+          className="rounded-lg bg-night-azure text-night-light-foreground px-3.5 py-1.5 text-xs font-medium shadow-[0_8px_20px_-8px_hsl(var(--l-azure)/0.5)] transition-colors hover:bg-night-mist sm:px-4 sm:py-2 sm:text-sm"
         >
           Ter a primeira conversa
         </Link>

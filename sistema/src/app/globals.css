@@ -60,6 +60,32 @@
   --evergreen-light: 155 42% 68%;
   --warm-surface: 88 14% 96%;
   --shadow-soft: 0 1px 3px hsl(225 40% 20% / 0.04), 0 28px 60px -28px hsl(225 40% 20% / 0.22);
+
+  /* Landing — Rodada 3: camada azul-noite (constante; NÃO varia com o tema
+     light/dark do produto — a landing é um ambiente visual próprio, com
+     variações de profundidade entre camadas). Uso restrito à marketing;
+     o produto continua em --background/--card/--mist etc., inalterados. */
+  --l-night-950: 210 55% 7%;
+  --l-night-900: 210 51% 10%;
+  --l-night-850: 210 47% 13%;
+  --l-night-800: 211 44% 16%;
+  --l-night-750: 211 41% 19%;
+  --l-night-700: 212 38% 23%;
+  --l-surf:      210 38% 13%;
+  --l-surf-2:    211 40% 17%;
+  --l-azure:     205 50% 80%;
+  --l-azure-soft: 205 32% 62%;
+  --l-azure-dim: 205 24% 47%;
+  --l-teal:      183 42% 60%;
+  --l-green:     157 40% 45%;
+  --l-green-soft: 157 36% 58%;
+  --l-green-bright: 155 46% 70%;
+  --l-mist:      206 26% 88%;
+  --l-text:      203 30% 94%;
+  --l-text-soft: 205 24% 73%;
+  --l-text-dim:  206 20% 60%;
+  --l-light:     205 45% 96%;
+  --l-light-foreground: 211 45% 13%;
 }
 
 .dark {
@@ -292,6 +318,128 @@
     animation-fill-mode: forwards;
     animation-delay: var(--glow-delay, 0ms);
   }
+
+  /* ── Landing Rodada 3 — camada azul-noite ─────────────────────────────
+     Uso restrito à marketing/landing. Tudo é variável por seção (camadas),
+     com movimento que significa: sinais → conexão → convergência → clareza. */
+
+  /* Base atmosférica: o fundo da página (não substitui o body do produto). */
+  .bg-landing-night {
+    background-color: hsl(var(--l-night-950));
+    background-image:
+      radial-gradient(900px 480px at 18% -8%, hsl(var(--l-night-700) / 0.5), transparent 60%),
+      radial-gradient(720px 440px at 84% -6%, hsl(var(--l-teal) / 0.09), transparent 55%),
+      radial-gradient(820px 540px at 50% 108%, hsl(var(--l-green) / 0.08), transparent 62%);
+  }
+
+  /* Luminárias internas discretas das seções mais profundas. */
+  .bg-landing-glow-azure {
+    background-image: radial-gradient(560px 380px at 50% -6%, hsl(var(--l-azure) / 0.08), transparent 62%);
+  }
+  .bg-landing-glow-green {
+    background-image: radial-gradient(640px 420px at 50% 112%, hsl(var(--l-green) / 0.1), transparent 62%);
+  }
+
+  /* Balões de informação — a superfície viva que substitui a "caixa":
+     generoso border-radius, borda sutil, transparência, blur moderado,
+     sombra difusa, luz interna no canto. Não é glassmorphism generalizado —
+     é a linguagem de card da landing. */
+  .balloon {
+    position: relative;
+    border-radius: 1.4rem;
+    border: 1px solid hsl(var(--l-night-700) / 0.55);
+    background:
+      radial-gradient(140px 90px at 94% 0%, hsl(var(--l-teal) / 0.07), transparent 70%),
+      linear-gradient(180deg, hsl(var(--l-surf) / 0.9), hsl(var(--l-surf-2) / 0.45));
+    box-shadow:
+      inset 0 1px 0 hsl(var(--l-mist) / 0.07),
+      0 30px 60px -32px hsl(210 55% 4% / 0.9);
+    backdrop-filter: blur(8px);
+  }
+  .balloon::before {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 18px;
+    right: 30%;
+    height: 1px;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, hsl(var(--l-mist) / 0.16), transparent);
+  }
+  .balloon-lift {
+    transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
+  }
+  .balloon-lift:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      inset 0 1px 0 hsl(var(--l-mist) / 0.08),
+      0 40px 70px -32px hsl(205 40% 3% / 0.85);
+  }
+
+  /* Pílula — a mesma família, sem o brilho interno: para chips pequenos
+     (rótulos, mundos, fontes) onde o gloss do balloon ficaria estranho. */
+  .pill {
+    border-radius: 9999px;
+    border: 1px solid hsl(var(--l-night-700) / 0.55);
+    background: linear-gradient(180deg, hsl(var(--l-surf) / 0.75), hsl(var(--l-surf-2) / 0.35));
+    backdrop-filter: blur(6px);
+  }
+
+  /* Pequena área clara — só onde o contraste é necessário (viradas de
+     gramática). Texto escuro sobre superfície luminosa. */
+  .light-panel {
+    border-radius: 1.6rem;
+    background: linear-gradient(160deg, hsl(var(--l-light)) 0%, hsl(var(--l-azure) / 0.28) 100%);
+    color: hsl(var(--l-light-foreground));
+  }
+
+  /* Ponto de luz verde — o "sinal de vida" das superfícies. Nunca neon. */
+  .dot-green {
+    background-color: hsl(var(--l-green-bright));
+    box-shadow: 0 0 14px 2px hsl(var(--l-green) / 0.5);
+  }
+  .dot-azure {
+    background-color: hsl(var(--l-azure));
+    box-shadow: 0 0 12px 1px hsl(var(--l-azure) / 0.4);
+  }
+  .dot-teal {
+    background-color: hsl(var(--l-teal));
+    box-shadow: 0 0 12px 1px hsl(var(--l-teal) / 0.4);
+  }
+
+  /* Movimento lento e contínuo — "o sistema respirando". Discreto; mais
+     um contato visual do que um efeito. */
+  .animate-note {
+    animation: note 3.2s ease-in-out infinite;
+  }
+  .animate-float {
+    animation: floatSlow 9s ease-in-out infinite;
+  }
+
+  /* Linhas que desenham quando a seção entra na tela (reusa o mecanismo do
+     reveal): com o seletor .js aplicado (JS disponível), a linha nasce
+     apagada e desenha ao virar visível; sem JS permanece desenhada. */
+  .reveal-line {
+    stroke-dasharray: var(--line-length, 1);
+    stroke-dashoffset: var(--line-length, 1);
+  }
+  .js .reveal.is-visible .reveal-line {
+    transition: stroke-dashoffset 1.3s var(--ease-out-expo);
+    transition-delay: var(--line-delay, 0ms);
+    stroke-dashoffset: 0;
+  }
+}
+
+@layer base {
+  /* Foco visível dentro da landing (escopo: só os elementos sobre a camada
+     azul-noite; o resto do produto mantém o foco padrão do browser). */
+  .bg-landing-night :is(a, button) {
+    border-radius: 0.5rem;
+  }
+  .bg-landing-night :focus-visible {
+    outline: 2px solid hsl(var(--l-azure));
+    outline-offset: 2px;
+  }
 }
 
 @keyframes drawLine {
@@ -311,8 +459,18 @@
 
 @keyframes heroClarityGlow {
   0% { box-shadow: 0 0 0 0 hsl(var(--institutional-900) / 0); }
-  45% { box-shadow: 0 0 26px 6px hsl(var(--primary) / 0.22); }
+  45% { box-shadow: 0 0 26px 6px hsl(var(--l-teal) / 0.3); }
   100% { box-shadow: 0 0 0 0 hsl(var(--institutional-900) / 0); }
+}
+
+@keyframes note {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -321,9 +479,14 @@
     transform: none;
   }
   .signal-line, .signal-dot, .hero-avatar-arrive, .hero-avatar-glow,
-  .animate-breathing, .animate-thinking-glow, .animate-pulse-soft {
+  .animate-breathing, .animate-thinking-glow, .animate-pulse-soft,
+  .animate-note, .animate-float {
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;
+  }
+  .js .reveal.is-visible .reveal-line {
+    transition-duration: 1ms;
+    stroke-dashoffset: 0;
   }
 }
 

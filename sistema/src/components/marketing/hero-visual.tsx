@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { AvatarPonte } from '@/components/ui/avatar'
 
 /**
@@ -86,8 +87,8 @@ export function HeroVisual() {
             d={line.d}
             pathLength={1}
             className="signal-line"
-            style={{ '--line-delay': `${line.delay}ms`, '--line-duration': LOCAL_LINE_DURATION } as React.CSSProperties}
-            stroke="hsl(var(--mist-deep) / 0.9)"
+            style={{ '--line-delay': `${line.delay}ms`, '--line-duration': LOCAL_LINE_DURATION } as CSSProperties}
+            stroke="hsl(var(--l-azure-soft) / 0.4)"
             strokeWidth={1}
           />
         ))}
@@ -97,8 +98,8 @@ export function HeroVisual() {
             d={line.d}
             pathLength={1}
             className="signal-line"
-            style={{ '--line-delay': `${line.delay}ms`, '--line-duration': CONVERGING_LINE_DURATION } as React.CSSProperties}
-            stroke="hsl(var(--institutional-700) / 0.6)"
+            style={{ '--line-delay': `${line.delay}ms`, '--line-duration': CONVERGING_LINE_DURATION } as CSSProperties}
+            stroke="hsl(var(--l-teal) / 0.5)"
             strokeWidth={1.25}
           />
         ))}
@@ -109,8 +110,8 @@ export function HeroVisual() {
             cy={dot.y}
             r={dot.r}
             className="signal-dot"
-            style={{ '--dot-delay': `${dot.delay}ms` } as React.CSSProperties}
-            fill="hsl(var(--institutional-700) / 0.45)"
+            style={{ '--dot-delay': `${dot.delay}ms` } as CSSProperties}
+            fill="hsl(var(--l-azure) / 0.45)"
           />
         ))}
       </svg>
@@ -129,11 +130,11 @@ export function HeroVisual() {
           style={{
             '--arrive-delay': `${ARRIVE_DELAY}ms`,
             '--arrive-duration': `${ARRIVE_DURATION}ms`,
-          } as React.CSSProperties}
+          } as CSSProperties}
         >
           <div
             className="rounded-full hero-avatar-glow"
-            style={{ '--glow-delay': `${CLARITY_MOMENT}ms` } as React.CSSProperties}
+            style={{ '--glow-delay': `${CLARITY_MOMENT}ms` } as CSSProperties}
           >
             <AvatarPonte state="breathing" size="lg" className="shadow-soft" />
           </div>

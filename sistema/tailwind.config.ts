@@ -69,6 +69,32 @@ const config: Config = {
           light:   'hsl(var(--evergreen-light))',
         },
         'warm-surface': 'hsl(var(--warm-surface))',
+        // Landing — Rodada 3: camada azul-noite constante (ver globals.css).
+        // Uso restrito à marketing/landing. A base do produto não referencia
+        // estas cores.
+        night: {
+          950: 'hsl(var(--l-night-950))',
+          900: 'hsl(var(--l-night-900))',
+          850: 'hsl(var(--l-night-850))',
+          800: 'hsl(var(--l-night-800))',
+          750: 'hsl(var(--l-night-750))',
+          700: 'hsl(var(--l-night-700))',
+          surf: 'hsl(var(--l-surf))',
+          'surf-2': 'hsl(var(--l-surf-2))',
+          azure: 'hsl(var(--l-azure))',
+          'azure-soft': 'hsl(var(--l-azure-soft))',
+          'azure-dim': 'hsl(var(--l-azure-dim))',
+          teal: 'hsl(var(--l-teal))',
+          green: 'hsl(var(--l-green))',
+          'green-soft': 'hsl(var(--l-green-soft))',
+          'green-bright': 'hsl(var(--l-green-bright))',
+          mist: 'hsl(var(--l-mist))',
+          text: 'hsl(var(--l-text))',
+          'text-soft': 'hsl(var(--l-text-soft))',
+          'text-dim': 'hsl(var(--l-text-dim))',
+          light: 'hsl(var(--l-light))',
+          'light-foreground': 'hsl(var(--l-light-foreground))',
+        },
       },
       boxShadow: {
         card:    'var(--shadow-card)',
