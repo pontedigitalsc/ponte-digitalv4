@@ -214,3 +214,24 @@ export const founderSolicitacaoSchema = z.object({
 })
 
 export type FounderSolicitacaoInput = z.infer<typeof founderSolicitacaoSchema>
+
+// ─── OPERAÇÕES FOUNDER (P91) ──────────────────────────────────────────────────
+
+export const STATUS_SOLICITACAO_FOUNDER_OPCOES = ['PENDING', 'CONTACTED', 'IN_REVIEW', 'APPROVED', 'REJECTED'] as const
+
+export const ONBOARDING_FOUNDER_CHAVES = ['RAPIDA', 'GRADUAL', 'COMPLETA'] as const
+
+export const atualizarSolicitacaoFounderSchema = z.object({
+  status: z.enum(STATUS_SOLICITACAO_FOUNDER_OPCOES).optional(),
+  observacaoAdmin: z.string().trim().max(2000, 'Observação muito longa.').optional().nullable(),
+  onboardingTipo: z.enum(ONBOARDING_FOUNDER_CHAVES).optional().nullable(),
+})
+
+export type AtualizarSolicitacaoFounderInput = z.infer<typeof atualizarSolicitacaoFounderSchema>
+
+export const ativarFounderSchema = z.object({
+  empresaId: z.string().min(1, 'Empresa obrigatória.'),
+  numeroFundador: z.coerce.number().int('Número inteiro.').positive('Número positivo.').max(999_999, 'Número muito grande.').optional().nullable(),
+})
+
+export type AtivarFounderInput = z.infer<typeof ativarFounderSchema>

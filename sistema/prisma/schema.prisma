@@ -190,15 +190,43 @@ model SolicitacaoFounder {
   status             StatusSolicitacaoFounder @default(PENDING)
   origem             String   @default("SITE")
   usuarioId          String?
-  observacaoAdmin    String?
+  observacaoAdmin    String? // P91 — observação interna do time (só visível no painel)
+  empresaId          String? // P91 — empresa vinculada quando a solicitação é ativada
+  onboardingTipo     String? // P91 — RAPIDA | GRADUAL | COMPLETA (decisão do time, sem IA)
+  contatoEm          DateTime? // P91 — primeiro contato registrado (status CONTACTED)
+  fundadorAtivadoEm  DateTime? // P91 — quando a empresa passou a ser Founder
   criadoEm           DateTime @default(now())
   atualizadoEm       DateTime @updatedAt
   deletedAt          DateTime?
+
+  historico          SolicitacaoFounderHistorico[]
 
   @@index([status])
   @@index([criadoEm])
   @@index([usuarioId])
   @@map("solicitacoes_founder")
+}
+
+// P91 — Histórico das solicitações Founder: cada mudança relevante (status,
+// observação, onboarding, ativação) vira um evento rastreável. Nível de
+// plataforma, como a própria solicitação — sem tenant, sem FK de usuário
+// proposital (usuário pode ser excluído em cascata sem apagar o histórico).
+model SolicitacaoFounderHistorico {
+  id                   String   @id @default(cuid())
+  solicitacaoFounderId String
+  acao                 String   // STATUS_ALTERADO | OBSERVACAO_ATUALIZADA | ONBOARDING_DEFINIDO | FOUNDER_ATIVADO | CONTATO_INICIADO
+  statusDe             String?
+  statusPara           String?
+  detalhes             Json?
+  criadoPorUsuarioId   String?
+  criadoPorEmail       String?
+  criadoEm             DateTime @default(now())
+
+  solicitacaoFounder   SolicitacaoFounder @relation(fields: [solicitacaoFounderId], references: [id], onDelete: Cascade)
+
+  @@index([solicitacaoFounderId])
+  @@index([criadoEm])
+  @@map("solicitacoes_founder_historico")
 }
 
 enum StatusSolicitacaoFounder {

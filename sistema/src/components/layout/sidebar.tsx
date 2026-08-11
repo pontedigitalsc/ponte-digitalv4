@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, UserCheck, Users,
   DollarSign, Settings, Bot, ChevronLeft, Building2,
-  Clock, Sparkles, RefreshCw, Compass, BookOpen,
+  Clock, Sparkles, RefreshCw, Compass, BookOpen, Inbox,
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -68,10 +68,11 @@ const plataformaGroup = {
   group: 'Plataforma',
   items: [
     { href: '/painel-do-fundador', label: 'Painel do Fundador', icon: Sparkles },
-    { href: '/dashboard/admin/radar-founders', label: 'Radar Founders', icon: Users },
-    { href: '/dashboard/admin/diario-founder', label: 'Diário Founder', icon: Clock },
-    { href: '/dashboard/admin/diario-cientifico', label: 'Diário Científico', icon: BookOpen },
-    { href: '/dashboard/admin/cognitive-observatory', label: 'Observatório Cognitivo', icon: RefreshCw },
+    { href: '/admin/founder-operacoes', label: 'Solicitações Founder', icon: Inbox },
+    { href: '/admin/radar-founders', label: 'Radar Founders', icon: Users },
+    { href: '/admin/diario-founder', label: 'Diário Founder', icon: Clock },
+    { href: '/admin/diario-cientifico', label: 'Diário Científico', icon: BookOpen },
+    { href: '/admin/cognitive-observatory', label: 'Observatório Cognitivo', icon: RefreshCw },
   ],
 }
 
