@@ -11,9 +11,13 @@ import { Comparison } from '@/components/marketing/comparison'
 import { EvidenceFlow } from '@/components/marketing/evidence-flow'
 import { StoryExample } from '@/components/marketing/story-example'
 import { FlowSteps } from '@/components/marketing/flow-steps'
-import { Reach } from '@/components/marketing/reach'
 import { Beliefs } from '@/components/marketing/beliefs'
 import { NewCategory } from '@/components/marketing/new-category'
+import { PonteEssence } from '@/components/marketing/ponte-essence'
+import { ThoughtChain } from '@/components/marketing/thought-chain'
+import { Organism } from '@/components/marketing/organism'
+import { Realities } from '@/components/marketing/realities'
+import { Evolucao } from '@/components/marketing/evolucao'
 import { FounderStory } from '@/components/marketing/founder-story'
 import { Futuro } from '@/components/marketing/futuro'
 import { FounderCTA } from '@/components/marketing/founder-cta'
@@ -79,7 +83,7 @@ export default function LandingPage() {
               <Link href="/conversa" className={PRIMARY_CTA}>
                 Ter a primeira conversa
               </Link>
-              <FounderCTA className="w-full sm:w-auto">Tornar-me fundador</FounderCTA>
+              <FounderCTA className="w-full sm:w-auto">Tornar-me Founder</FounderCTA>
             </div>
           </div>
 
@@ -91,8 +95,22 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* 02 — A FRAGMENTAÇÃO */}
-        <section id="a-fragmentacao" className="bg-night-900 px-4 py-16 sm:px-6 sm:py-24">
+        {/* 02 — O QUE É A PONTE */}
+        <section id="o-que-e" className="bg-night-900 px-4 py-16 sm:px-6 sm:py-24">
+          <Reveal className="mx-auto max-w-2xl text-center">
+            <Eyebrow>O que é a Ponte</Eyebrow>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-night-text-soft sm:text-base">
+              Não é mais um sistema para guardar coisas. É uma camada que procura
+              ajudar a empresa a compreender as informações que ela já tem.
+            </p>
+          </Reveal>
+          <Reveal delay={120} className="mt-12">
+            <PonteEssence />
+          </Reveal>
+        </section>
+
+        {/* 03 — FRAGMENTAÇÃO */}
+        <section id="a-fragmentacao" className="bg-night-850 px-4 py-16 sm:px-6 sm:py-24">
           <Reveal className="mx-auto max-w-2xl text-center">
             <Eyebrow>Toda a informação já existe</Eyebrow>
             <h2 className="mt-3 font-editorial text-3xl font-light leading-tight text-night-text text-balance sm:text-4xl">
@@ -124,44 +142,53 @@ export default function LandingPage() {
               Cada parte diz uma coisa — e nenhuma fala com as outras.
             </p>
           </Reveal>
-        </section>
 
-        {/* 03 — O PROBLEMA REAL: dados ≠ clareza */}
-        <section id="o-problema" className="bg-night-850 px-4 py-16 sm:px-6 sm:py-24">
-          <Reveal className="mx-auto max-w-md text-center">
-            <p className="font-editorial text-2xl font-light italic leading-snug text-night-text text-balance sm:text-3xl">
-              Você já tem os dados. Tem clareza sobre eles?
-            </p>
-          </Reveal>
-
-          <Reveal delay={120} className="mt-12">
+          <Reveal delay={260} className="mt-10">
             <SignalStrip />
           </Reveal>
-
-          <Reveal delay={200} className="mt-10">
-            <p className="mx-auto max-w-md text-center text-sm leading-relaxed text-night-text-dim">
-              Informação espalhada não é clareza. O que falta, quase sempre, é a
-              conexão entre as partes.
-            </p>
-          </Reveal>
         </section>
 
-        {/* 04 — A CONEXÃO (virada editorial, quase só espaço) */}
+        {/* 04 — NOVA FORMA DE CONECTAR */}
         <section className="bg-night-800 px-4 py-20 text-center sm:px-6 sm:py-28">
           <Reveal className="mx-auto max-w-xl">
             <p className="font-editorial text-2xl font-light italic leading-snug text-night-text text-balance sm:text-3xl">
-              A Ponte conecta por construção de contexto,
-              <span className="text-night-green-bright"> não por mágica.</span>
+              Mais sistemas organizam as partes. Poucos{' '}
+              <span className="text-night-green-bright">conectam o todo.</span>
             </p>
             <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-night-text-dim">
-              Informações diferentes começam a conversar entre si — e o que parecia
-              isolado ganha significado.
+              Organizar fatos não é o mesmo que compreendê-los. A Ponte se propõe
+              a uma nova forma de conectar: as informações conversam, e a empresa
+              ganha um olhar de conjunto.
             </p>
+          </Reveal>
+          <Reveal delay={160} className="mt-12">
+            <FlowSteps />
           </Reveal>
         </section>
 
-        {/* 05 — EXEMPLO PEQUENO */}
-        <section id="exemplo" className="bg-night-900 px-4 py-16 sm:px-6 sm:py-24">
+        {/* 05 — COMO A PONTE PENSA */}
+        <section id="como-funciona" className="bg-night-900 px-4 py-16 sm:px-6 sm:py-24">
+          <Reveal className="mx-auto max-w-lg text-center">
+            <Eyebrow>Como a Ponte pensa</Eyebrow>
+            <h2 className="mt-3 font-editorial text-3xl font-light leading-tight text-night-text text-balance sm:text-4xl">
+              Sinal, contexto, hipótese, pergunta, decisão.
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-night-text-soft sm:text-base">
+              Uma pergunta só merece resposta quando a pergunta está bem feita.
+              Essa é a forma de pensar que a Ponte procura ajudar a construir.
+            </p>
+          </Reveal>
+          <Reveal delay={120} className="mt-12">
+            <ThoughtChain />
+          </Reveal>
+
+          <Reveal delay={200} className="mt-16">
+            <StoryExample />
+          </Reveal>
+        </section>
+
+        {/* 06 — EXEMPLO VISUAL */}
+        <section id="exemplo" className="bg-night-850 px-4 py-16 sm:px-6 sm:py-24">
           <Reveal className="mx-auto max-w-lg text-center">
             <Eyebrow>A lógica na prática</Eyebrow>
             <h2 className="mt-3 font-editorial text-3xl font-light leading-tight text-night-text text-balance sm:text-4xl">
@@ -177,19 +204,12 @@ export default function LandingPage() {
           </Reveal>
         </section>
 
-        {/* micro-insights — a mesma camada, ainda respirando */}
-        <section className="bg-night-900 px-4 pb-16 sm:px-6 sm:pb-24" aria-label="Observações sobre sinais">
-          <Reveal>
-            <MicroInsights />
-          </Reveal>
-        </section>
-
-        {/* 06 — A DIFERENÇA */}
+        {/* 07 — SISTEMAS TRADICIONAIS × PONTE */}
         <section id="a-diferenca" className="bg-night-950 px-4 py-16 sm:px-6 sm:py-24">
           <Reveal className="mx-auto max-w-lg text-center">
             <Eyebrow>A diferença fundamental</Eyebrow>
             <h2 className="mt-3 font-editorial text-3xl font-light leading-tight text-night-text text-balance sm:text-4xl">
-              O que muda, quando existe uma Ponte.
+              Dois modelos de ver uma empresa.
             </h2>
           </Reveal>
           <Reveal delay={120} className="mt-12">
@@ -197,8 +217,8 @@ export default function LandingPage() {
           </Reveal>
         </section>
 
-        {/* 07 — INTELIGÊNCIA SEM CAIXA-PRETA */}
-        <section className="bg-night-850 px-4 py-16 sm:px-6 sm:py-24">
+        {/* 08 — INTELIGÊNCIA SEM CAIXA-PRETA */}
+        <section className="bg-night-900 px-4 py-16 sm:px-6 sm:py-24">
           <Reveal className="mx-auto max-w-lg text-center">
             <Eyebrow>Sem caixa-preta</Eyebrow>
             <h2 className="mt-3 font-editorial text-2xl font-light italic leading-snug text-night-text text-balance sm:text-3xl">
@@ -216,50 +236,51 @@ export default function LandingPage() {
           </Reveal>
         </section>
 
-        {/* 08 — A CONVERSA */}
-        <section className="bg-night-900 px-4 py-16 sm:px-6 sm:py-24">
+        {/* 09 — EMPRESA COMO ORGANISMO DE CONHECIMENTO */}
+        <section id="organismo" className="bg-night-800 px-4 py-16 sm:px-6 sm:py-24">
           <Reveal className="mx-auto max-w-lg text-center">
-            <Eyebrow>Uma conversa</Eyebrow>
+            <Eyebrow>Um organismo de conhecimento</Eyebrow>
             <h2 className="mt-3 font-editorial text-3xl font-light leading-tight text-night-text text-balance sm:text-4xl">
-              Uma conversa pode mudar a pergunta.
+              Cada função vê a empresa de um ângulo.
             </h2>
-          </Reveal>
-          <Reveal delay={120} className="mt-10">
-            <StoryExample />
-          </Reveal>
-        </section>
-
-        {/* 09 — COMO A PONTE PENSA */}
-        <section id="como-funciona" className="bg-night-800 px-4 py-16 sm:px-6 sm:py-24">
-          <Reveal className="mx-auto max-w-lg text-center">
-            <Eyebrow>Como a Ponte pensa</Eyebrow>
-            <h2 className="mt-3 font-editorial text-3xl font-light leading-tight text-night-text text-balance sm:text-4xl">
-              Você não decide depois dela. Decide com ela.
-            </h2>
-          </Reveal>
-          <Reveal delay={120} className="mt-10">
-            <FlowSteps />
-          </Reveal>
-        </section>
-
-        {/* 10 — O QUE A PONTE PODE ACOMPANHAR */}
-        <section className="bg-night-950 px-4 py-16 sm:px-6 sm:py-24">
-          <Reveal className="mx-auto max-w-lg text-center">
-            <Eyebrow>O alcance do olhar</Eyebrow>
-            <h2 className="mt-3 font-editorial text-3xl font-light leading-tight text-night-text text-balance sm:text-4xl">
-              A empresa inteira, não um pedaço dela.
-            </h2>
-            <p className="mt-3 text-sm text-night-text-soft">
-              Não é uma lista de recursos: é a amplitude conceitual do que uma
-              camada de contexto pode cobrir.
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-night-text-soft sm:text-base">
+              Multiperfis e permissões: cada pessoa enxerga o que o papel dela
+              permite — e todas as visões alimentam uma compreensão mais rica.
             </p>
           </Reveal>
-          <Reveal delay={120} className="mt-10">
-            <Reach />
+          <Reveal delay={120} className="mt-12">
+            <Organism />
           </Reveal>
         </section>
 
-        {/* 11 — O QUE A PONTE ACREDITA */}
+        {/* 10 — QUEM PODE USAR */}
+        <section id="quem-pode-usar" className="bg-night-950 px-4 py-16 sm:px-6 sm:py-24">
+          <Reveal className="mx-auto max-w-lg text-center">
+            <Eyebrow>Quem pode usar</Eyebrow>
+            <h2 className="mt-3 font-editorial text-3xl font-light leading-tight text-night-text text-balance sm:text-4xl">
+              Empresas de verdade, nos seus tamanhos.
+            </h2>
+          </Reveal>
+          <Reveal delay={120} className="mt-12">
+            <Realities />
+          </Reveal>
+        </section>
+
+        {/* 11 — COMO A PONTE EVOLUI */}
+        <section id="evolucao" className="bg-night-900 px-4 py-16 sm:px-6 sm:py-24">
+          <Reveal>
+            <Evolucao />
+          </Reveal>
+        </section>
+
+        {/* 12 — A HISTÓRIA DO KELVEN */}
+        <section id="a-historia" className="bg-night-850 bg-landing-glow-green px-4 py-16 sm:px-6 sm:py-24">
+          <Reveal>
+            <FounderStory />
+          </Reveal>
+        </section>
+
+        {/* 13 — O QUE A PONTE ACREDITA */}
         <section className="bg-night-900 px-4 py-16 sm:px-6 sm:py-24">
           <Reveal className="mx-auto max-w-lg text-center">
             <Eyebrow>O que a Ponte acredita</Eyebrow>
@@ -272,29 +293,15 @@ export default function LandingPage() {
           </Reveal>
         </section>
 
-        {/* 12 — A NOVA CATEGORIA */}
+        {/* 14 — A NOVA CATEGORIA */}
         <section id="a-nova-categoria" className="bg-night-950 bg-landing-glow-green px-4 py-20 sm:px-6 sm:py-28">
           <Reveal>
             <NewCategory />
           </Reveal>
         </section>
 
-        {/* 13 — A HISTÓRIA */}
-        <section id="a-historia" className="bg-night-900 px-4 py-16 sm:px-6 sm:py-24">
-          <Reveal>
-            <FounderStory />
-          </Reveal>
-        </section>
-
-        {/* 14 — FUTURO */}
-        <section id="visao" className="bg-night-850 bg-landing-glow-green px-4 py-16 sm:px-6 sm:py-24">
-          <Reveal>
-            <Futuro />
-          </Reveal>
-        </section>
-
         {/* divisor editorial — respiro antes do Founder */}
-        <div className="bg-night-850 px-4 pb-2 text-center sm:px-6" aria-hidden="true">
+        <div className="bg-night-950 px-4 pb-2 text-center sm:px-6" aria-hidden="true">
           <p className="font-editorial mx-auto max-w-sm text-lg italic font-light leading-snug text-night-text-dim sm:text-xl">
             Nem toda leitura é uma certeza. Essa é uma forma de olhar — aberta a quem quer enxergar melhor.
           </p>
@@ -307,26 +314,32 @@ export default function LandingPage() {
           </Reveal>
         </section>
 
-        {/* 16 — CTA FINAL · e o que a Ponte encontraria na sua empresa? */}
+        {/* 16 — VISÃO DE FUTURO */}
+        <section id="a-visao" className="bg-night-900 bg-landing-glow-green px-4 py-16 sm:px-6 sm:py-24">
+          <Reveal>
+            <Futuro />
+          </Reveal>
+        </section>
+
+        {/* 17 — CTA FINAL · a pergunta que fica */}
         <section className="bg-landing-glow-azure px-4 py-24 text-center sm:px-6 sm:py-32">
           <Reveal className="mx-auto max-w-xl">
             <Eyebrow>A pergunta que fica</Eyebrow>
             <p className="mt-4 font-editorial text-3xl font-light italic leading-snug text-night-text text-balance sm:text-4xl">
-              E o que a Ponte encontraria na sua empresa?
+              Quer descobrir o que esses sinais significam na sua realidade?
             </p>
             <p className="mx-auto mt-6 max-w-sm text-sm leading-relaxed text-night-text-soft">
               Conte como as coisas funcionam hoje. Depois começamos a descobrir
               juntos onde existe clareza para ganhar — uma conversa de cada vez.
             </p>
-            <p className="mx-auto mt-8 max-w-xs font-editorial text-lg font-light italic leading-snug text-night-text-dim">
-              Quer descobrir o que esses sinais significam na sua realidade?
-            </p>
 
-            <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               <Link href="/conversa" className={PRIMARY_CTA}>
                 Ter a primeira conversa
               </Link>
-              <FounderCTA className="w-full sm:w-auto">Tornar-me fundador</FounderCTA>
+              <FounderCTA variant="evergreen" className="w-full sm:w-auto">
+                Tornar-me Founder
+              </FounderCTA>
             </div>
 
             <p className="mx-auto mt-8 max-w-xs text-center text-xs leading-relaxed text-night-text-dim">

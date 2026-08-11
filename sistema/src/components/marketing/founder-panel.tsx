@@ -24,21 +24,40 @@ function FounderMark() {
   )
 }
 
-const BENEFICIOS = [
-  'acesso antecipado ao que está sendo construído',
-  'proximidade da evolução da Ponte',
-  'influência por meio de feedback real',
-  'participação na fase de construção e aprendizado',
-  'proximidade com o projeto e com quem o constrói',
-  'participar da primeira geração dessa abordagem',
+const ONDE_CONTRIBUIR = [
+  {
+    titulo: 'Problemas que importam',
+    texto: 'o que sua realidade mostra que ainda não foi resolvido',
+  },
+  {
+    titulo: 'Informações a conectar',
+    texto: 'quais partes da empresa você gostaria que conversassem',
+  },
+  {
+    titulo: 'Perguntas relevantes',
+    texto: 'as perguntas que você sempre quis poder fazer',
+  },
+  {
+    titulo: 'Funcionalidades',
+    texto: 'o que faz sentido primeiro, no dia a dia real',
+  },
+  {
+    titulo: 'Comportamento da inteligência',
+    texto: 'como a camada deve ler, perguntar e se posicionar',
+  },
+  {
+    titulo: 'Limites',
+    texto: 'até onde a inteligência deve ir — e onde parar',
+  },
 ]
 
 /**
- * Founder — o momento mais marcante da página (azul-noite + verde
- * profundo). Não é um CTA: é um convite institucional para participar da
- * construção. Texto em tom claro sobre fundo escuro; o verde fica
- * reservado ao rótulo "ou", aos benefícios e ao CTA — "verde = decisão
- * de participar".
+ * Founder — convite institucional para participar da CONSTRUÇÃO DA
+ * CATEGORIA (não é "benefícios de assinatura"). A participação guia
+ * problemas, informações, perguntas, funcionalidades, comportamento da
+ * inteligência e limites. Nada de benefícios inventados: o que não está
+ * confirmado é remetido à conversa inicial ("Os detalhes da participação
+ * Founder são apresentados na conversa inicial.").
  */
 export function FounderPanel() {
   return (
@@ -65,25 +84,32 @@ export function FounderPanel() {
 
       <div className="relative border-t border-white/10 px-6 py-8 sm:px-10">
         <p className="mx-auto max-w-lg text-sm leading-relaxed text-white/65">
-          A Ponte ainda está na fase de construção e aprendizado. Os primeiros
-          participantes não apenas experimentam o que existe — participam de
-          perto da evolução daquilo que a Ponte pode se tornar.
+          Founder não é um plano de compra: é participar da construção de uma
+          categoria. Os primeiros participantes ajudam a definir o que a Ponte
+          deve observar, conectar e perguntar — antes de ela existir por completo.
         </p>
 
-        <ul className="mx-auto mt-7 grid max-w-2xl gap-x-8 gap-y-3 text-left sm:grid-cols-2">
-          {BENEFICIOS.map((b) => (
-            <li key={b} className="flex items-start gap-2.5 text-sm leading-relaxed text-white/75">
+        <div className="mx-auto mt-7 grid max-w-2xl gap-x-8 gap-y-4 text-left sm:grid-cols-2">
+          {ONDE_CONTRIBUIR.map((c) => (
+            <div key={c.titulo} className="flex items-start gap-2.5">
               <span aria-hidden="true" className="dot-green mt-[0.45em] h-1.5 w-1.5 shrink-0 rounded-full" />
-              {b}
-            </li>
+              <div>
+                <p className="text-sm font-medium text-white/85">{c.titulo}</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-white/55">{c.texto}</p>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
 
         <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <FounderCTA variant="evergreen" className="w-full sm:w-auto">
-            Quero ser Founder
+            Quero participar como Founder
           </FounderCTA>
         </div>
+
+        <p className="mx-auto mt-6 max-w-md text-center text-xs italic leading-relaxed text-white/50">
+          Os detalhes da participação Founder são apresentados na conversa inicial.
+        </p>
       </div>
     </div>
   )

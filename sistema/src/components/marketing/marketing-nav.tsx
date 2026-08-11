@@ -10,14 +10,14 @@ export function MarketingNav() {
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex" aria-label="Seções">
-          <a href="#o-problema" className="text-sm text-night-text-soft transition-colors hover:text-night-text">
-            O problema
+          <a href="#o-que-e" className="text-sm text-night-text-soft transition-colors hover:text-night-text">
+            O que é
           </a>
           <a href="#como-funciona" className="text-sm text-night-text-soft transition-colors hover:text-night-text">
-            Como pensa
+            Como funciona
           </a>
-          <a href="#a-nova-categoria" className="text-sm text-night-text-soft transition-colors hover:text-night-text">
-            A categoria
+          <a href="#a-visao" className="text-sm text-night-text-soft transition-colors hover:text-night-text">
+            A visão
           </a>
           <a href="#founder" className="text-sm text-night-text-soft transition-colors hover:text-night-text">
             Founder
