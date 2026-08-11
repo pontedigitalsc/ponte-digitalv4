@@ -1,8 +1,5 @@
 import Link from 'next/link'
 
-const FOUNDER_WHATSAPP_URL =
-  'https://api.whatsapp.com/send/?phone=5548991133397&text=Ol%C3%A1%2C+quero+participar+como+Founder+da+Ponte+Digital.&type=phone_number&app_absent=0'
-
 export function MarketingFooter() {
   return (
     <footer className="border-t border-night-700/50 bg-night-950/80">
@@ -22,14 +19,9 @@ export function MarketingFooter() {
             <Link href="/conversa" className="transition-colors hover:text-night-text">
               Primeira conversa
             </Link>
-            <a
-              href={FOUNDER_WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-colors hover:text-night-text"
-            >
+            <Link href="/solicitar-founder" className="transition-colors hover:text-night-text">
               Founder
-            </a>
+            </Link>
             <Link href="/login" className="transition-colors hover:text-night-text">
               Já tenho conta
             </Link>

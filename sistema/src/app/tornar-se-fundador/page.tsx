@@ -5,8 +5,6 @@ import Link from 'next/link'
 
 export const metadata = { title: 'Tornar-se Fundador' }
 
-const WHATSAPP_URL = 'https://wa.me/5548991133397'
-
 export default async function TornarSeFundadorPage() {
   const usuario = await getCurrentUser().catch(() => null)
 
@@ -76,16 +74,14 @@ export default async function TornarSeFundadorPage() {
           <p className="text-sm font-medium">
             Quer fazer parte dos primeiros 1000?
           </p>
-          <a
-            href={`${WHATSAPP_URL}?text=${encodeURIComponent('Olá, quero participar como Founder da Ponte Digital.')}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/solicitar-founder"
             className="block w-full rounded-xl bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             Quero ser Fundador
-          </a>
+          </Link>
           <p className="text-xs text-muted-foreground">
-            O primeiro contato acontece pelo WhatsApp, direto com a equipe da Ponte.
+            Conte sobre sua empresa no formulário — sem cadastro para começar. Depois seguimos pelo WhatsApp.
           </p>
           <div className="space-y-2 pt-1">
             <Link href="/fundador" className="block text-xs text-primary hover:underline underline-offset-2">

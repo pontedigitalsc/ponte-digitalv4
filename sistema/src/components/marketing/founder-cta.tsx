@@ -1,5 +1,4 @@
-const FOUNDER_WHATSAPP_URL =
-  'https://api.whatsapp.com/send/?phone=5548991133397&text=Ol%C3%A1%2C+quero+participar+como+Founder+da+Ponte+Digital.&type=phone_number&app_absent=0'
+import Link from 'next/link'
 
 interface FounderCTAProps {
   className?: string
@@ -16,13 +15,8 @@ export function FounderCTA({ className, variant = 'secondary', children }: Found
       : 'border border-night-700/70 bg-night-surf/60 text-night-text hover:bg-night-800/70'
 
   return (
-    <a
-      href={FOUNDER_WHATSAPP_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`${base} ${styles} ${className ?? ''}`}
-    >
+    <Link href="/solicitar-founder" className={`${base} ${styles} ${className ?? ''}`}>
       {children}
-    </a>
+    </Link>
   )
 }

@@ -11,9 +11,6 @@ import {
 
 export const metadata = { title: 'Fundador — A Ponte Digital' }
 
-const WHATSAPP_URL = 'https://wa.me/5548991133397'
-const WHATSAPP_MSG = 'Olá, quero participar como Founder da Ponte Digital.'
-
 export default async function FundadorPage() {
   const usuario = await getCurrentUser().catch(() => null)
   const nome = usuario?.nome?.split(' ')[0]
@@ -359,15 +356,13 @@ export default async function FundadorPage() {
             Os primeiros 1000 empresários estão construindo uma nova forma de pensar empresas.
           </p>
           <div className="space-y-2 pt-2">
-            <a
-              href={`${WHATSAPP_URL}?text=${encodeURIComponent(WHATSAPP_MSG)}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/solicitar-founder"
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-sm font-medium text-amber-50 hover:bg-amber-600 transition-colors"
             >
               <MessageCircle className="h-4 w-4" />
               Quero me tornar Founder
-            </a>
+            </Link>
             <Link
               href={usuario ? '/conversa' : '/criar-conta'}
               className="block w-full rounded-xl bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"

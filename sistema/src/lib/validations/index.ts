@@ -160,3 +160,57 @@ export const aprendizadoSchema = z.object({
 })
 
 export type AprendizadoInput = z.infer<typeof aprendizadoSchema>
+
+// ─── SOLICITAÇÃO FOUNDER ───────────────────────────────────────────────────────
+
+export const EQUIPE_FOUNDER_OPCOES = [
+  { chave: 'SOZINHO', rotulo: 'Só eu' },
+  { chave: '2_A_5', rotulo: '2 a 5 pessoas' },
+  { chave: '6_A_15', rotulo: '6 a 15 pessoas' },
+  { chave: '16_A_30', rotulo: '16 a 30 pessoas' },
+  { chave: '31_A_50', rotulo: '31 a 50 pessoas' },
+  { chave: 'MAIS_50', rotulo: 'Mais de 50 pessoas' },
+] as const
+
+export type EquipeFounderChave = (typeof EQUIPE_FOUNDER_OPCOES)[number]['chave']
+
+export function rotuloEquipeFounder(chave: string | null | undefined): string | null {
+  if (!chave) return null
+  return EQUIPE_FOUNDER_OPCOES.find((o) => o.chave === chave)?.rotulo ?? null
+}
+
+const textAreaObrigatorio = (mensagem: string) =>
+  z.string().trim().min(10, mensagem).max(4000, 'Escreva em até 4000 caracteres.')
+
+export const founderSolicitacaoSchema = z.object({
+  nomeEmpresa: z
+    .string()
+    .trim()
+    .min(2, 'Conte o nome da sua empresa.')
+    .max(120, 'Nome da empresa muito longo.'),
+  responsavel: z
+    .string()
+    .trim()
+    .min(2, 'Conte o nome de quem é responsável pela empresa.')
+    .max(120, 'Nome muito longo.'),
+  segmento: z
+    .string()
+    .trim()
+    .min(2, 'Conte o segmento da sua empresa.')
+    .max(80, 'Segmento muito longo.'),
+  cidadeRegiao: z
+    .string()
+    .trim()
+    .min(2, 'Conte a cidade ou região da sua empresa.')
+    .max(120, 'Localização muito longa.'),
+  equipe: z
+    .enum(['SOZINHO', '2_A_5', '6_A_15', '16_A_30', '31_A_50', 'MAIS_50'] as const)
+    .optional()
+    .nullable(),
+  oQueEmpresaFaz: textAreaObrigatorio('Conte um pouco sobre o que sua empresa faz.'),
+  principalDesafio: textAreaObrigatorio('Conte qual é o principal desafio hoje.'),
+  gostariaEnxergar: textAreaObrigatorio('Conte o que gostaria de enxergar melhor.'),
+  motivacao: textAreaObrigatorio('Conte por que quer se tornar Founder.'),
+})
+
+export type FounderSolicitacaoInput = z.infer<typeof founderSolicitacaoSchema>

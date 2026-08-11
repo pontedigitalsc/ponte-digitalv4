@@ -171,6 +171,44 @@ model AuditoriaPlataforma {
   @@map("auditorias_plataforma")
 }
 
+// Solicitações de participação como Founder (P90) — formulário profissional
+// antes do primeiro contato. Nível de plataforma (como AuditoriaPlataforma):
+// aceita visitantes anônimos (pré-cadastro), então NÃO possui tenant/empresaId.
+// Sem FK proposital para Usuario (usuário pode não existir ainda) — o vínculo
+// é registrado quando o solicitante já está autenticado.
+model SolicitacaoFounder {
+  id                 String   @id @default(cuid())
+  nomeEmpresa        String
+  responsavel        String
+  segmento           String
+  cidadeRegiao       String
+  equipe             String? // uma das opções de faixa (ver validations) — opcional
+  oQueEmpresaFaz     String
+  principalDesafio   String
+  gostariaEnxergar   String
+  motivacao          String
+  status             StatusSolicitacaoFounder @default(PENDING)
+  origem             String   @default("SITE")
+  usuarioId          String?
+  observacaoAdmin    String?
+  criadoEm           DateTime @default(now())
+  atualizadoEm       DateTime @updatedAt
+  deletedAt          DateTime?
+
+  @@index([status])
+  @@index([criadoEm])
+  @@index([usuarioId])
+  @@map("solicitacoes_founder")
+}
+
+enum StatusSolicitacaoFounder {
+  PENDING
+  CONTACTED
+  IN_REVIEW
+  APPROVED
+  REJECTED
+}
+
 // ─── LEADS ────────────────────────────────────────────────────────────────────
 
 model Lead {
