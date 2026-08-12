@@ -69,6 +69,7 @@ const plataformaGroup = {
   items: [
     { href: '/painel-do-fundador', label: 'Painel do Fundador', icon: Sparkles },
     { href: '/admin/founder-operacoes', label: 'Solicitações Founder', icon: Inbox },
+    { href: '/admin/descoberta', label: 'Descoberta', icon: Compass },
     { href: '/admin/radar-founders', label: 'Radar Founders', icon: Users },
     { href: '/admin/diario-founder', label: 'Diário Founder', icon: Clock },
     { href: '/admin/diario-cientifico', label: 'Diário Científico', icon: BookOpen },

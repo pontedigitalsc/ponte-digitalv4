@@ -235,3 +235,137 @@ export const ativarFounderSchema = z.object({
 })
 
 export type AtivarFounderInput = z.infer<typeof ativarFounderSchema>
+
+// ─── PONTE DESCOBERTA (P92) ───────────────────────────────────────────────────
+
+export const STATUS_DIAGNOSTICO_DESCOBERTA_OPCOES = [
+  'NAO_INICIADO',
+  'EM_DESCOBERTA',
+  'MAPEADO',
+  'EM_VALIDACAO',
+  'VALIDADO',
+  'EM_IMPLEMENTACAO',
+  'IMPLEMENTADO',
+  'EM_APRENDIZADO',
+] as const
+
+export const TAXONOMIA_REGISTRO_DESCOBERTA_OPCOES = [
+  'CONHECIMENTO_CONHECIDO',
+  'INFORMACAO_FORNECIDA',
+  'OBSERVACAO',
+  'HIPOTESE',
+  'DECISAO',
+  'OPORTUNIDADE',
+  'DESCONHECIDO',
+] as const
+
+export const PAPEL_PARTICIPANTE_DESCOBERTA_OPCOES = ['PROPRIETARIO', 'GESTAO', 'OPERACAO'] as const
+
+export const CONFIANCA_DESCOBERTA_OPCOES = ['ALTA', 'MEDIA', 'BAIXA'] as const
+
+const textoSemHtml = (msg: string) =>
+  z.string().trim().min(1, msg).max(8000, 'Texto muito longo.')
+
+export const criarDiagnosticoDescobertaSchema = z.object({
+  nomeEmpresa: z.string().trim().min(2, 'Nome da empresa é obrigatório.').max(120, 'Nome muito longo.'),
+  categoriaNome: z.string().trim().min(2, 'Categoria é obrigatória.').max(80, 'Categoria muito longa.'),
+  categoriaSlug: z
+    .string()
+    .trim()
+    .min(2, 'Identificador da categoria é obrigatório.')
+    .max(80, 'Identificador muito longo.')
+    .regex(/^[a-z0-9-]+$/, 'Identificador deve ser minúsculo, sem espaços nem acentos.'),
+  empresaId: z.string().min(1, 'Empresa inválida.').optional().nullable(),
+  unidadeOperacional: z.string().trim().max(150, 'Textualidade longa.').optional().nullable(),
+  usarTemplateSerralheria: z.boolean().optional(),
+})
+
+export type CriarDiagnosticoDescobertaInput = z.infer<typeof criarDiagnosticoDescobertaSchema>
+
+export const atualizarStatusDiagnosticoDescobertaSchema = z.object({
+  status: z.enum(STATUS_DIAGNOSTICO_DESCOBERTA_OPCOES),
+})
+
+export type AtualizarStatusDiagnosticoDescobertaInput = z.infer<
+  typeof atualizarStatusDiagnosticoDescobertaSchema
+>
+
+export const registrarRespostaAncoraSchema = z.object({
+  resposta: textoSemHtml('A resposta da pergunta-âncora é obrigatória no MVP.'),
+  resultadoDeclarado: z.string().trim().max(8000, 'Texto muito longo.').optional().nullable(),
+})
+
+export const adicionarParticipanteSchema = z.object({
+  nome: z.string().trim().min(2, 'Nome do participante é obrigatório.').max(120, 'Nome muito longo.'),
+  papel: z.enum(PAPEL_PARTICIPANTE_DESCOBERTA_OPCOES),
+  cargo: z.string().trim().max(120, 'Cargo muito longo.').optional().nullable(),
+})
+
+export const registrarRespostaDescobertaSchema = z.object({
+  participanteId: z.string().min(1, 'Participante inválido.').optional().nullable(),
+  resposta: textoSemHtml('A resposta é obrigatória.'),
+})
+
+export const criarRegistroDescobertaSchema = z.object({
+  tipo: z.enum(TAXONOMIA_REGISTRO_DESCOBERTA_OPCOES),
+  conteudo: textoSemHtml('O conteúdo do registro é obrigatório.'),
+  area: z.string().trim().max(150, 'Área muito longa.').optional().nullable(),
+  processoId: z.string().min(1, 'Processo inválido.').optional().nullable(),
+  confianca: z.enum(CONFIANCA_DESCOBERTA_OPCOES).optional().nullable(),
+  verificacaoEm: z.string().datetime({ offset: true }).or(z.string().datetime()).optional().nullable(),
+})
+
+export type CriarRegistroDescobertaInput = z.infer<typeof criarRegistroDescobertaSchema>
+
+const listaDeElementos = (maxItens = 60) =>
+  z.array(z.string().trim().min(1, 'Item vazio.').max(400, 'Item muito longo.')).max(maxItens, 'Muitos itens.').default([])
+
+export const criarProcessoDescobertaSchema = z.object({
+  nome: z.string().trim().min(2, 'Nome do processo é obrigatório.').max(160, 'Nome muito longo.'),
+  descricao: z.string().trim().max(3000, 'Descrição muito longa.').optional().nullable(),
+  inicio: z.string().trim().max(300, 'Gatilho muito longo.').optional().nullable(),
+  fim: z.string().trim().max(300, 'Sinal de termo muito longo.').optional().nullable(),
+  responsavel: z.string().trim().max(120, 'Responsável muito longo.').optional().nullable(),
+  nivelConfianca: z.enum(CONFIANCA_DESCOBERTA_OPCOES).optional(),
+  fonte: z.string().trim().max(300, 'Fonte muito longa.').optional().nullable(),
+  etapas: listaDeElementos(),
+  entradas: listaDeElementos(),
+  saidas: listaDeElementos(),
+  ferramentas: listaDeElementos(),
+  retrabalhos: listaDeElementos(),
+  dependencias: listaDeElementos(),
+  riscos: listaDeElementos(),
+  indicadores: listaDeElementos(),
+})
+
+export type CriarProcessoDescobertaInput = z.infer<typeof criarProcessoDescobertaSchema>
+
+export const criarProcessoDesejadoSchema = z.object({
+  processoAtualId: z.string().min(1, 'Processo inválido.').optional().nullable(),
+  nome: z.string().trim().min(2, 'Nome do desenho é obrigatório.').max(160, 'Nome muito longo.'),
+  descricao: z.string().trim().max(3000, 'Descrição muito longa.').optional().nullable(),
+  melhoriaPrincipal: z.string().trim().max(3000, 'Texto muito longo.').optional().nullable(),
+  etapasDesejadas: listaDeElementos(),
+})
+
+export const validarProcessoDesejadoSchema = z.object({})
+
+export const criarDivergenciaSchema = z.object({
+  titulo: z.string().trim().min(2, 'Título é obrigatório.').max(160, 'Título muito longo.'),
+  descricao: textoSemHtml('Descreva a divergência.'),
+  processoId: z.string().min(1, 'Processo inválido.').optional().nullable(),
+  participantesId: z.string().min(1, 'Participante inválido.').optional().nullable(),
+  questaoValidacao: z.string().trim().max(3000, 'Texto muito longo.').optional().nullable(),
+})
+
+export const resolverDivergenciaSchema = z.object({
+  questaoValidacao: z.string().trim().min(2, 'Escreva a pergunta de validação.').max(3000, 'Texto muito longo.'),
+})
+
+export const criarOportunidadeSchema = z.object({
+  descricao: textoSemHtml('Descreva a oportunidade.'),
+  categoria: z.string().trim().min(2, 'Categoria é obrigatória.').max(80, 'Categoria muito longa.'),
+  processoId: z.string().min(1, 'Processo inválido.').optional().nullable(),
+  etapaReferente: z.string().trim().max(300, 'Etapa muito longa.').optional().nullable(),
+  impactoEstimado: z.string().trim().max(8000, 'Texto muito longo.').optional().nullable(),
+})
