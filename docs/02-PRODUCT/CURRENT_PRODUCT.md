@@ -1,5 +1,17 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P92 — PONTE DESCOBERTA — CADERNO DE CAMPO REAL + PIONEIRO DE CATEGORIA — 12 de agosto de 2026**
+>
+> **O programa de campo real agora tem instrumento: um caderno de campo digital interno (nível plataforma) para o condutor registrar e organizar o que encontra na empresa.** O P82 havia provado que "OBSERVADO = ∅"; o P92 não inventa dados — constrói o fluxo guiado para que o próximo campo deixe rastro digital, sem IA.
+> - **Fluxo obrigatório:** pergunta-âncora P82 (obrigatória no MVP) → participantes → falas → fatos classificados pela taxonomia (7 tipos; hipóteses/informações fornecidas exigem verificação) → processos COMO É → COMO PODERIA SER → divergências (dito × observado) → oportunidades → relatório final (12 seções §21, texto puro).
+> - **Engine puro `descoberta-operacional.ts`:** 8 estados com transições, taxonomia com `exigeVerificacao`, template de vertical (ADR-035), progresso/checklist, relatório determinístico (nunca inventa a âncora). **15 testes verdes.**
+> - **Pioneiro de Categoria:** a primeira empresa de cada vertical é marcada automaticamente (`empresaPioneiraId`) e exibida como "pioneira de categoria" — patrimônio de aprendizado estrutural.
+> - **Páginas:** `/admin/descoberta` (lista por estado) e `/admin/descoberta/[id]` (detalhe com checklist, âncora, participantes, falas, registros, processos, desenhos, divergências, oportunidades, fluxo de estado com confirmação, relatório com copiar, histórico). 15 rotas API com `requirePlataforma` (leitura/escrita).
+> - **Migration `012_descoberta_operacional`:** 11 tabelas + 7 enums, aplicada via `prisma migrate deploy`. **Problema registrado:** shadow DB do Supabase não reexecuta a migration `002` (P3006) — migrations novas são escritas à mão.
+> - **Status:** typecheck limpo, build limpo, 15 testes novos verdes + legado (5/5 + 4/4). Commit `0929496` publicado em `main`; deploy Vercel automático via integração Git.
+>
+> Ver `docs/05-OPERATIONS/REPORTS/P92-PONTE-DESCOBERTA.md` + `GUIA-PONTE-DESCOBERTA.md` + `ponte-descoberta-p92.zip`.
+
 > **MARCO: P84 — FOUNDER ACCESS — CAMADA DE PLATAFORMA (IDENTIDADE + RE-GATE + AUDITORIA) — 8 de agosto de 2026**
 >
 > **P84 criou a camada de plataforma: a identidade que separa quem opera a Ponte (Founder Principal) de quem usa a Ponte (empresas).** Corrige a exposição de dados internos que existia porque `painel-do-fundador` e `/admin/*` eram protegidos pelo mesmo `role: 'ADMIN'` de empresa.
