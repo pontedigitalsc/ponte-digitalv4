@@ -16,6 +16,20 @@
 **Impacto conhecido:** após o deploy, usuários `ADMIN` de empresas clientes **perdem** acesso a `/painel-do-fundador` e `/admin/*` — comportamento novo a comunicar no changelog de produto.
 **Ação:** autorização do usuário → commit/push do P84, aplicar a migration em produção (fluxo padrão: `npx prisma migrate deploy`), rodar o `provision`, validar `/api/health` e rotas de plataforma ao vivo, atualizar `P84_FOUNDER_ACCESS.md`.
 
+## Copiloto Operacional — arquitetura desenhada, motor puro entregue; gate de campo mantido
+
+**Status:** Aceito (decisão registrada — não é bug)
+**Prioridade:** Média
+**Descrição:** a rodada "Copiloto Operacional" (evolução da P92) entregou **arquitetura conceitual** (`docs/03-ENGINEERING/OPERACIONAL/ARQUITETURA_DO_COPILOTO_OPERACIONAL.md`), **kit de reunião** (`docs/05-OPERATIONS/P79/KIT_REUNIAO_SOUZA_MESTRINHO.md`) e **motor puro** `sistema/src/engine/copiloto-operacional.ts` (14 testes) que classifica Nv de intervenção 0–4 e monta a "Visão do gerente" **apenas a partir do registrado no caderno P92**. **Nada de P80/P81/P82 foi liberado**: o gate de campo real continua (OBSERVADO = ∅), então eventos operacionais, OS/Workflow e regras da Souza Mestrinho ficam para depois da reunião com a empresa.
+**Ação:** após a reunião com a Souza Mestrinho (usar o kit), preencher `REGISTRO_CAMPO_SOUZA_MESTRINHO_<data>.md`, alimentar o caderno P92 e só então revisar com o dono o nível de intervenção/contexto gerados pelo motor; reavaliar a abertura do P80/P81.
+
+## Nomenclatura da empresa-piloto — "Mestre Metais" × "Souza Mestrinho Metais"
+
+**Status:** Resolvida (decisão do fundador — canônico é **Souza Mestrinho Metais**)
+**Prioridade:** Baixa
+**Descrição:** o briefing da rodada "Copiloto Operacional" citou o laboratório como "Mestre Metais"; todos os artefatos do repositório (P79, P92, docs de campo, código `TEMPLATE_SERRALHERIA`, relatórios) usam **Souza Mestrinho Metais** (serralheria/metais, Palhoça). Decidido com o usuário manter **Souza Mestrinho Metais** como nome canônico e considerar "Mestre Metais" uma variação informal da mesma empresa — sem corrigir docs existentes.
+**Ação:** manter Souza Mestrinho Metais em novos artefatos; registrar a variação quando aparecer.
+
 ## P80 + P81 + P82 — Motor Operacional bloqueado: ausência de evidência de campo (Souza Mestrinho)
 
 **Status:** Bloqueado (decisão de fase registrada — não é bug)

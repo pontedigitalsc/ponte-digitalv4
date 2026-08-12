@@ -1,5 +1,16 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: COPILOTO OPERACIONAL — A DESCOBERTA VIRA PONTE QUE ACOMPANHA A OPERAÇÃO — 12 de agosto de 2026**
+>
+> **A descoberta P92 ganha a camada de leitura para decisão: um motor puro que devolve o que já está registrado no caderno transformado em nível de intervenção (Nv 0–4) e "Visão do gerente".** Sem migration, sem rotas novas, sem IA e sem inventar a operação da Souza Mestrinho (P80/P81/P82 seguem bloqueados até campo real).
+> - **Arquitetura conceitual** em `docs/03-ENGINEERING/OPERACIONAL/ARQUITETURA_DO_COPILOTO_OPERACIONAL.md`: mapa de eventos e estados, modelo de entradas/relações ("uma vez informado, muitas vezes utilizado"), carga cognitiva (8 dimensões), mapa de atrito, perguntas contextuais, hierarquia Nv 0–4 (recorte dos 7 níveis existentes do `MODELO_DE_INTERVENCAO`), memória operacional, ciclo descobrir→validar→implementar→observar→melhorar, 5 realidades, empresa pioneira, modelo de dados conceitual e mapa de integração.
+> - **Motor puro `copiloto-operacional.ts`:** `classificarNivelIntervencao` (Nv 0–4 + motivos, prioridade 4>3>2>1>0), `montarContextoOperacional` (o que aconteceu / estado / responsável / o que falta / risco / decisão pendente — lacunas como "não sabemos"), `avaliarCargaCognitivaPorProcesso` (8 dimensões BAIXA/MEDIA/ALTA), `montarMapaDeAtrito` (nunca inventa frequência/impacto sem dado) e `proximasPerguntasContextuais` (≤3, só com gatilho real). **14 testes verdes.**
+> - **Kit de reunião** para o primeiro campo: `docs/05-OPERATIONS/P79/KIT_REUNIAO_SOUZA_MESTRINHO.md` (agenda 90 min, roteiro pela âncora, captura direta para o caderno P92, separação das 5 realidades, critério de aceite).
+> - **Decisão de nomenclatura:** nome canônico da empresa = **Souza Mestrinho Metais** (variação informal "Mestre Metais" descartada; registrada em `KNOWN_ISSUES.md`).
+> - **Status:** typecheck limpo, build limpo (67 páginas), 14 testes novos + regressão legada intacta (P92 15/15, plataforma 5/5, handoff 4/4). Nenhum arquivo existente alterado em código.
+>
+> Ver `docs/05-OPERATIONS/REPORTS/COPILOTO-OPERACIONAL.md` + `GUIA-COPILOTO-OPERACIONAL.md` + `copiloto-operacional.zip`.
+
 > **MARCO: P92 — PONTE DESCOBERTA — CADERNO DE CAMPO REAL + PIONEIRO DE CATEGORIA — 12 de agosto de 2026**
 >
 > **O programa de campo real agora tem instrumento: um caderno de campo digital interno (nível plataforma) para o condutor registrar e organizar o que encontra na empresa.** O P82 havia provado que "OBSERVADO = ∅"; o P92 não inventa dados — constrói o fluxo guiado para que o próximo campo deixe rastro digital, sem IA.
