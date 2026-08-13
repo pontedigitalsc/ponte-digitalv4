@@ -31,7 +31,7 @@ const CATEGORIA_HREF: Record<string, string> = {
   GESTAO: '/tarefas',
   OPERACAO: '/implantacoes',
   CONFIGURACOES: '/configuracoes',
-  HISTORICO: '/historico',
+  HISTORICO: '/minha-jornada',
 }
 
 const MAPA_TIPO_ACAO: Record<string, ExperienceAction['tipo']> = {

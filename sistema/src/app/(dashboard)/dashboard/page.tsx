@@ -10,6 +10,7 @@ import { listarAprendizados } from '@/engine/aprendizado-service'
 import { obterRitualDiario } from '@/engine/ritual-engine'
 import { obterConquistas } from '@/engine/celebracao-service'
 import { montarAberturaPermanente } from '@/engine/motor-continuacao'
+import { persistirSinaisOperacionais } from '@/engine/registro-sinais'
 import { prismaSeguro as prisma } from '@/lib/prisma-tenant-safe'
 import { AvatarPonte } from '@/components/ui/avatar'
 import { ComoEstaHoje } from '@/components/dashboard/como-esta-hoje'
@@ -70,11 +71,19 @@ export default async function DashboardPage() {
     ? Math.floor((Date.now() - new Date(ultimaConversa.criadaEm).getTime()) / (24 * 60 * 60 * 1000))
     : null
 
+  // P94 — sinais operacionais passam a ser persistidos (HistoricoSinal),
+  // idempotente: o mesmo sinal ativo não duplica dentro da janela.
+  const sinaisPersistidos = situacao?.sinais?.length
+    ? await persistirSinaisOperacionais(usuario.empresaId, situacao.sinais).catch(() => [])
+    : []
+
   const centroDiario: CentroDiarioData = {
     mudancas: contexto?.mudancasRecentes ?? [],
     aprendizados: aprendizados.map((a) => ({ id: a.id, descricao: a.descricao, categoria: a.categoria })),
     memoriasEmocionais: memorias.map((m) => m.sentimento),
-    atencao: (situacao?.sinais ?? []).slice(0, 3).map((s) => ({ titulo: s.titulo, descricao: s.descricao ?? '' })),
+    atencao: (sinaisPersistidos.length > 0 ? sinaisPersistidos : situacao?.sinais ?? [])
+      .slice(0, 3)
+      .map((s) => ({ titulo: s.titulo, descricao: s.descricao ?? '' })),
     oportunidade: situacao?.temLeadsQuentes
       ? 'Você tem negociações com clientes novos em andamento — o momento de retomá-las é agora.'
       : situacao?.variacaoReceita && situacao.variacaoReceita > 0
@@ -117,6 +126,11 @@ export default async function DashboardPage() {
 
       {/* Ritual Diário — a abertura que acolhe */}
       <RitualDiario data={ritual} />
+
+      {/* P52 — Centro Diário: o que a Ponte enxerga hoje na empresa.
+          Dados reais (sinais, aprendizados, memórias, contexto) que antes
+          eram calculados e descartados. */}
+      <CentroDiario data={centroDiario} />
 
       {/* Pergunta Viva — UMA pergunta */}
       {perguntaViva && (
@@ -177,6 +191,9 @@ export default async function DashboardPage() {
 
       {/* Celebrações de evolução — conquistas, não apenas dinheiro */}
       {conquistas.length > 0 && <Celebracoes conquistas={conquistas} />}
+
+      {/* P52 — Revisão da Evolução (mensal, quando há distância da última conversa) */}
+      {revisao && <RevisaoEvolucao data={revisao} />}
 
       {/* Linha da História */}
       <div className="text-center pt-2">

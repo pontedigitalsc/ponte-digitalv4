@@ -11,12 +11,16 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
 import { ClienteModal } from './cliente-modal'
+import { TarefaModal } from '@/components/tarefas/tarefa-modal'
+import { TransacaoModal } from '@/components/financeiro/transacao-modal'
+import { HistoricoModal } from './historico-modal'
+import { apiFetch } from '@/lib/api-client'
 import { STATUS_CLIENTE, STATUS_TAREFA, PRIORIDADE, STATUS_IMPLANTACAO } from '@/constants'
 import {
   formatarMoeda, formatarData, formatarDataHora,
   formatarTelefone, estaAtrasado, cn,
 } from '@/lib/utils'
-import type { ClienteInput } from '@/lib/validations'
+import type { ClienteInput, TarefaInput, TransacaoInput, HistoricoInput } from '@/lib/validations'
 
 // Importação de tipos de Prisma via any para evitar problema de serialização
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,8 +48,35 @@ export function ClientePerfil({ cliente, onAtualizar }: ClientePerfilProps) {
   const router = useRouter()
   const [abaAtiva, setAbaAtiva] = useState<Aba>('visao-geral')
   const [modalOpen, setModalOpen] = useState(false)
+  const [tarefaModalOpen, setTarefaModalOpen] = useState(false)
+  const [historicoModalOpen, setHistoricoModalOpen] = useState(false)
+  const [transacaoModalOpen, setTransacaoModalOpen] = useState(false)
 
   const status = STATUS_CLIENTE[cliente.status as keyof typeof STATUS_CLIENTE]
+
+  const criarTarefaDoCliente = async (dados: TarefaInput) => {
+    await apiFetch<{ data: unknown }>('/api/tarefas', {
+      method: 'POST',
+      json: { ...dados, clienteId: cliente.id },
+    })
+    router.refresh()
+  }
+
+  const anotarContatoDoCliente = async (dados: HistoricoInput) => {
+    await apiFetch<{ data: unknown }>('/api/historicos', {
+      method: 'POST',
+      json: { ...dados, clienteId: cliente.id },
+    })
+    router.refresh()
+  }
+
+  const criarCobrancaDoCliente = async (dados: TransacaoInput) => {
+    await apiFetch<{ data: unknown }>('/api/transacoes', {
+      method: 'POST',
+      json: { ...dados, clienteId: cliente.id },
+    })
+    router.refresh()
+  }
 
   const abas: { id: Aba; label: string; icone: React.ElementType; count?: number }[] = [
     { id: 'visao-geral',   label: 'Visão geral',  icone: FileText },
@@ -236,7 +267,7 @@ export function ClientePerfil({ cliente, onAtualizar }: ClientePerfilProps) {
         {abaAtiva === 'tarefas' && (
           <div className="space-y-2">
             <div className="flex justify-end">
-              <Button size="sm" variant="outline">
+              <Button size="sm" variant="outline" onClick={() => setTarefaModalOpen(true)}>
                 <Plus className="h-3.5 w-3.5" /> Nova tarefa
               </Button>
             </div>
@@ -286,7 +317,7 @@ export function ClientePerfil({ cliente, onAtualizar }: ClientePerfilProps) {
         {abaAtiva === 'historico' && (
           <div className="space-y-3">
             <div className="flex justify-end">
-              <Button size="sm" variant="outline">
+              <Button size="sm" variant="outline" onClick={() => setHistoricoModalOpen(true)}>
                 <MessageSquare className="h-3.5 w-3.5" /> Anotar contato
               </Button>
             </div>
@@ -431,7 +462,7 @@ export function ClientePerfil({ cliente, onAtualizar }: ClientePerfilProps) {
         {abaAtiva === 'financeiro' && (
           <div className="space-y-3">
             <div className="flex justify-end">
-              <Button size="sm" variant="outline">
+              <Button size="sm" variant="outline" onClick={() => setTransacaoModalOpen(true)}>
                 <Plus className="h-3.5 w-3.5" /> Nova cobrança
               </Button>
             </div>
@@ -482,6 +513,28 @@ export function ClientePerfil({ cliente, onAtualizar }: ClientePerfilProps) {
         cliente={cliente}
         onClose={() => setModalOpen(false)}
         onSubmit={async (dados) => { await onAtualizar(dados); setModalOpen(false) }}
+      />
+
+      <TarefaModal
+        open={tarefaModalOpen}
+        clienteIdInicial={cliente.id}
+        onClose={() => setTarefaModalOpen(false)}
+        onSubmit={criarTarefaDoCliente}
+      />
+
+      <HistoricoModal
+        open={historicoModalOpen}
+        clienteId={cliente.id}
+        onClose={() => setHistoricoModalOpen(false)}
+        onSubmit={anotarContatoDoCliente}
+      />
+
+      <TransacaoModal
+        open={transacaoModalOpen}
+        tipoInicial="RECEITA"
+        clienteIdInicial={cliente.id}
+        onClose={() => setTransacaoModalOpen(false)}
+        onSubmit={criarCobrancaDoCliente}
       />
     </div>
   )

@@ -1,5 +1,19 @@
 # Known Issues
 
+## P94 — tenant wrapper (`prismaSeguro`) e RLS: decisão de NÃO conectar nesta fase (documentado apenas)
+
+**Status:** Aceito (decisão de escopo registrada pelo usuário — não é bug)
+**Prioridade:** Alta (conhecida; mitigada por decisão de fase)
+**Descrição:** a rodada P94 auditou a coluna "segurança/isolamento entre empresas" e confirmou o estado já conhecido: (a) `sistema/src/lib/prisma-tenant-safe.ts` define o wrapper `prismaSeguro` (detecta queries sem `empresaId` no `where`), mas nem todos os services o importam — a maioria usa o cliente direto (`@/lib/prisma`); (b) `sistema/prisma/rls-policies.sql` habilita RLS em 11 tabelas mas só cria policy em 8 (`empresas`, `contatos` e `etapas_implantacao` sem policy), e a role de conexão do Prisma (Supabase `service_role`) ignora RLS por padrão — ou seja, o RLS hoje é defesa em profundidade latente, não a barreira real. **Decisão do usuário na P94: NÃO conectar o wrapper nem corrigir as policies agora** — apenas registrar. Motivo: nesta fase, a barreira real de isolamento é a disciplina de query com `empresaId` no `where` (aplicada em TODAS as rotas auditadas), e conectar o wrapper/RLS seria mudança transversal com risco sem valor imediato ao empresário.
+**Ação:** manter a disciplina de `empresaId` no código novo como hoje. Quando houver evidência de risco real (multi-usuário ativo, feature multiempresa, agente externo) ou quando a arquitetura evoluir, conectar `prismaSeguro` por service e completar as policies do RLS. Detalhe no `AUDITORIA_INTEGRAL_PONTE.md` (seção Segurança/Isolamento).
+
+## P94 — barrel de tipos do `lucide-react` truncado silenciosamente pelo tsc (bug de tooling com workaround)
+
+**Status:** Aceito (workaround aplicado — não é bug do produto)
+**Prioridade:** Baixa (afeta só desenvolvimento/tooling)
+**Descrição:** durante a P94 (P0-1) descobriu-se que `node_modules/lucide-react/dist/lucide-react.d.ts` é uma **linha única gigante** (linha 26255, ~155KB) no barrel export; o TypeScript **trunca silenciosamente** essa linha, então vários ícones não existem para o tsc (TS2305/TS2724) mesmo existindo no runtime. Funcionam: `Moon`, `User`, `LogOut`, `ChevronRight`, `LayoutDashboard`, `BookOpen`, `MessageCircle`, `Sparkles`, `Compass`, `Clock`, `Inbox`, `RefreshCw`, `Building2`, `Eye`, `ListOrdered`, `HelpCircle`, `LucideIcon`. Falham: `Menu`, `PanelLeft`, `AlignJustify`, `SquareMenu`, `LayoutList`, `List`, `Square`, `LibraryBig`, `ListStart`, `PanelLeftClose`, `Rows3`, `SlidersHorizontal`, `TextAlignJustify`, `createLucideIcon`, `icons`, `LucideProps`. Confirmado que não é posicional nem cache (`tsbuildinfo` removido, `--skipLibCheck false`, `traceResolution` OK); `lucide-react@1.31.0` mantém o mesmo formato. **Workaround:** o ícone de hamburger `Menu` foi substituído por SVG inline (`MenuIcon`) no header — zero dependência nova, zero impacto em runtime.
+**Ação:** ao precisar de ícones do lucide, testar contra o tsc antes e preferir os que já funcionam (liste acima) ou usar SVG inline quando o ícone falhar. Opção futura: fixar versão/formatar a `.d.ts`, ou trocar de biblioteca de ícones — não vale a pena agora.
+
 ## P85 — Identidade definitiva (Bloco A): deploy das migrations 008+009 + plantação da fundação pendentes
 
 **Status:** Pendente (requer autorização do usuário)

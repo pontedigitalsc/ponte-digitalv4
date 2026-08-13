@@ -13,11 +13,12 @@ interface TransacaoModalProps {
   open: boolean
   transacao?: Transacao | null
   tipoInicial?: 'RECEITA' | 'DESPESA'
+  clienteIdInicial?: string
   onClose: () => void
   onSubmit: (dados: TransacaoInput) => Promise<void>
 }
 
-export function TransacaoModal({ open, transacao, tipoInicial, onClose, onSubmit }: TransacaoModalProps) {
+export function TransacaoModal({ open, transacao, tipoInicial, clienteIdInicial, onClose, onSubmit }: TransacaoModalProps) {
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (dados: TransacaoInput) => {
@@ -38,6 +39,7 @@ export function TransacaoModal({ open, transacao, tipoInicial, onClose, onSubmit
         <TransacaoForm
           transacao={transacao}
           tipoInicial={tipoInicial}
+          clienteIdInicial={clienteIdInicial}
           onSubmit={handleSubmit}
           onCancel={onClose}
           loading={loading}

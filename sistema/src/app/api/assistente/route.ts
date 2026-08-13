@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireUserApi } from '@/lib/authorize'
-import { requireRecurso } from '@/lib/planos'
+import { requireRecurso, LIMITE_IA_DIARIO, PlanoError } from '@/lib/planos'
+import type { Plano } from '@/types'
 import { handleApiError } from '@/lib/api-error'
 import { assertRateLimit } from '@/lib/rate-limit'
 import { getEmpresaDoUsuario } from '@/lib/auth'
@@ -292,6 +293,34 @@ function tentarResponderPorFormula(pergunta: string, contexto: ContextoEstrutura
   return null
 }
 
+// ─── LIMITE DIÁRIO DE IA ─────────────────────────────────────────────────────
+// O plano limita quantas chamadas de modelo o assistente pode fazer por dia.
+// O curto-circuito por fórmula não consome o modelo e portanto não conta.
+// A contagem é feita nas respostas registradas: a rota grava cada chamada de
+// modelo com perguntaId prefixado por "assistente-ai:" — fórmula usa "assistente:".
+
+async function assertLimiteIaDiario(empresaId: string, plano: Plano): Promise<void> {
+  const limite = LIMITE_IA_DIARIO[plano]
+  if (!limite || limite <= 0) return
+
+  const inicioDoDia = new Date()
+  inicioDoDia.setHours(0, 0, 0, 0)
+
+  const usadosHoje = await prisma.respostasConversa.count({
+    where: {
+      empresaId,
+      criadaEm: { gte: inicioDoDia },
+      perguntaId: { startsWith: 'assistente-ai:' },
+    },
+  })
+
+  if (usadosHoje >= limite) {
+    throw new PlanoError(
+      `Você atingiu o limite diário de ${limite} conversas com IA da Ponte. Elas voltam amanhã — ou faça upgrade para aumentar.`
+    )
+  }
+}
+
 // ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
 
 // ─── HELPERS DE RESILIÊNCIA ──────────────────────────────────────────────────
@@ -424,7 +453,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // ── Pergunta exige interpretação: vai para o modelo ──
+    // ── Pergunta exige interpretação: vai para o modelo. Antes, aplica o
+    // limite diário do plano (fórmula não conta — não consome o modelo).
+    await assertLimiteIaDiario(empresa.id, empresa.plano)
+
     const provider = getAIProvider()
 
     // ── Conselheiro (P66): se for uma decisão importante, a Ponte pensa junto.

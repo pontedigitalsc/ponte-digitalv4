@@ -2096,7 +2096,7 @@ export function createExperienceEngine(orchestrator: OrchestratorInterface) {
       const temFeedback = tipos.has('PRIMEIRO_FEEDBACK')
       const temAcaoConcluida = tipos.has('PRIMEIRA_ACAO_CONCLUIDA')
 
-      const modulos: string[] = ['inicio', 'assistente', 'decisoes', 'memoria']
+      const modulos: string[] = ['inicio', 'assistente', 'decisoes', 'memoria', 'implantacoes']
 
       if (temAcao) modulos.push('tarefas')
       if (diasDesdeCriacao >= 3 || temDecisao) modulos.push('crm', 'clientes')

@@ -37,6 +37,7 @@ import {
   type StatusDiagnosticoDescobertaOp,
   type ProgressoDescoberta,
 } from '@/engine/descoberta-operacional'
+import { CopilotoVisaoGerente } from './copiloto-visao-gerente'
 
 // ─── TIPOS (DTOs vindos do servidor) ──────────────────────────────────────────
 
@@ -452,6 +453,42 @@ export function DescobertaDetalhe({ detalhe, progresso, rotuloTipo }: DetalhePro
           ))}
         </div>
       </div>
+
+      <CopilotoVisaoGerente
+        diagnostico={{
+          nomeEmpresa: d.nomeEmpresa,
+          unidadeOperacional: d.unidadeOperacional,
+          status: d.status,
+          respostaAncora: d.respostaAncora,
+        }}
+        processos={detalhe.processos.map((p) => ({
+          nome: p.nome,
+          inicio: p.inicio,
+          fim: p.fim,
+          responsavel: p.responsavel,
+          etapas: p.etapas,
+          retrabalhos: p.retrabalhos,
+          dependencias: p.dependencias,
+          riscos: p.riscos,
+        }))}
+        divergencias={detalhe.divergencias.map((dv) => ({
+          titulo: dv.titulo,
+          descricao: dv.descricao,
+          questaoValidacao: dv.questaoValidacao,
+          status: dv.status,
+        }))}
+        oportunidades={detalhe.oportunidades.map((o) => ({
+          descricao: o.descricao,
+          categoria: o.categoria,
+          status: o.status,
+        }))}
+        historico={detalhe.historico.map((h) => ({
+          acao: h.acao,
+          statusDe: h.statusDe,
+          statusPara: h.statusPara,
+          criadoEm: h.criadoEm,
+        }))}
+      />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-6">

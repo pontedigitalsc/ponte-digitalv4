@@ -121,7 +121,7 @@ export function gerarNotificacoes(
       categoria: oc.categoria,
       prioridade: 'informativa',
       origem: 'Outcome Engine',
-      cta: { rotulo: 'Ver detalhes', href: '/historico' },
+      cta: { rotulo: 'Ver detalhes', href: '/minha-jornada' },
       lida: false,
       criadaEm: agora,
     })

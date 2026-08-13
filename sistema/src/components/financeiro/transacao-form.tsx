@@ -17,12 +17,13 @@ import type { Transacao } from '@/types'
 interface TransacaoFormProps {
   transacao?: Transacao | null
   tipoInicial?: 'RECEITA' | 'DESPESA'
+  clienteIdInicial?: string
   onSubmit: (dados: TransacaoInput) => Promise<void>
   onCancel: () => void
   loading?: boolean
 }
 
-export function TransacaoForm({ transacao, tipoInicial = 'RECEITA', onSubmit, onCancel, loading }: TransacaoFormProps) {
+export function TransacaoForm({ transacao, tipoInicial = 'RECEITA', clienteIdInicial, onSubmit, onCancel, loading }: TransacaoFormProps) {
   const {
     register, handleSubmit, control, watch, reset,
     formState: { errors },
@@ -37,7 +38,7 @@ export function TransacaoForm({ transacao, tipoInicial = 'RECEITA', onSubmit, on
       dataVencimento: null,
       dataPagamento:  null,
       recorrente:     false,
-      clienteId:      null,
+      clienteId:      clienteIdInicial ?? null,
       observacoes:    '',
     },
   })

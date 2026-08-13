@@ -11,9 +11,29 @@ import type { Usuario } from '@/types'
 interface HeaderProps {
   usuario?: Pick<Usuario, 'nome' | 'email' | 'avatar' | 'cargo'> | null
   titulo?: string
+  onAbrirMenu?: () => void
 }
 
-export function Header({ usuario, titulo }: HeaderProps) {
+function MenuIcon() {
+  return (
+    <svg
+      className="h-5 w-5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="4" x2="20" y1="6" y2="6" />
+      <line x1="4" x2="20" y1="12" y2="12" />
+      <line x1="4" x2="20" y1="18" y2="18" />
+    </svg>
+  )
+}
+
+export function Header({ usuario, titulo, onAbrirMenu }: HeaderProps) {
   const { theme, setTheme } = useTheme()
   const router = useRouter()
 
@@ -27,6 +47,17 @@ export function Header({ usuario, titulo }: HeaderProps) {
   return (
     <header className="flex h-14 items-center justify-between border-b bg-card px-4 lg:px-6">
       <div className="flex items-center gap-3">
+        {onAbrirMenu && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onAbrirMenu}
+            className="lg:hidden"
+            aria-label="Abrir menu"
+          >
+            <MenuIcon />
+          </Button>
+        )}
         {titulo && (
           <h1 className="text-base font-semibold text-foreground">{titulo}</h1>
         )}
