@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Bell, Moon, Sun, LogOut, User, Settings } from 'lucide-react'
+import { Moon, Sun, LogOut, User } from 'lucide-react'
 import { DropdownMenu } from '@/components/shared/dropdown-menu'
 import { useTheme } from 'next-themes'
 import { Avatar } from '@/components/ui/avatar'
@@ -58,8 +58,7 @@ export function Header({ usuario, titulo }: HeaderProps) {
               </div>
             }
             items={[
-              { label: 'Meu perfil', onClick: () => router.push('/configuracoes/perfil'), icon: <User className="h-4 w-4" /> },
-              { label: 'Configurações', onClick: () => router.push('/configuracoes'), icon: <Settings className="h-4 w-4" /> },
+              { label: 'Meu perfil', onClick: () => router.push('/configuracoes'), icon: <User className="h-4 w-4" /> },
               'divider',
               { label: 'Sair', onClick: handleSignOut, variant: 'danger', icon: <LogOut className="h-4 w-4" /> },
             ]}

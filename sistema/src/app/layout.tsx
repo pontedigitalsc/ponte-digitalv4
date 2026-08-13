@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Fraunces } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
-import { ToastProvider } from '@/components/ui/toat'
+import { ToastProvider } from '@/components/ui/toast'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })

@@ -1,41 +1,42 @@
 const PASSOS = [
   {
     n: '01',
-    titulo: 'Observar',
+    titulo: 'Escuta',
     texto: 'Você conta como as coisas funcionam. A Ponte escuta o que já está acontecendo — sem pressa.',
   },
   {
     n: '02',
-    titulo: 'Conectar',
+    titulo: 'Organização',
     texto: 'O que foi dito ganha estrutura, e informações de mundos diferentes começam a conversar entre si.',
   },
   {
     n: '03',
-    titulo: 'Compreender',
+    titulo: 'Conexão',
     texto: 'O que parecia isolado pode revelar uma relação — e a relação muda a leitura.',
   },
   {
     n: '04',
-    titulo: 'Questionar',
+    titulo: 'Pergunta',
     texto: 'Antes de uma resposta pronta, uma pergunta melhor: é aqui que a decisão começa a melhorar.',
   },
   {
     n: '05',
-    titulo: 'Decidir',
+    titulo: 'Apoio',
     texto: 'A decisão continua sendo sua — agora, sobre uma base mais clara.',
   },
   {
     n: '06',
-    titulo: 'A realidade evolui',
+    titulo: 'Aprendizado',
     texto: 'A próxima conversa parte de um lugar melhor. O olhar sobre a empresa constrói memória.',
   },
 ]
 
 /**
  * O fluxo mental da Ponte — não um roteiro, mas uma forma de pensar:
- * observar → conectar → compreender → questionar → decidir → evoluir.
- * Camada Rodada 3: timeline vertical em balões translúcidos, nós verdes
- * com luz interna, fio teal correndo entre eles.
+ * escuta → organização → conexão → pergunta → apoio → aprendizado.
+ * A empresa alimenta; a Ponte devolve compreensão — e a decisão permanece
+ * de quem conhece a operação. Camada Rodada 3: timeline vertical em balões
+ * translúcidos, nós verdes com luz interna, fio teal correndo entre eles.
  */
 export function FlowSteps() {
   return (

@@ -1,5 +1,15 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P93 — CONSOLIDAÇÃO DO SISTEMA + LANDING VIVA — 12 de agosto de 2026**
+>
+> **A casa foi limpa e a porta da frente reconstruída: a landing deixou de ser slides que explicam e passou a ser um caminho que demonstra compreensão, sem inventar nenhuma promessa.** Nenhuma funcionalidade nova entrou na sprint — tudo o que foi feito fortalece o que já existia (Regra Final: conhecimento, confiabilidade, capacidade de evolução).
+> - **Landing viva (~20 seções, `page.tsx` reconstruído):** narrativa "informação espalhada → conexões → compreensão → melhores perguntas → melhores decisões → empresa que aprende". Novo **mapa vivo** (8 pílulas de informação → linhas → AvatarPonte → clareza), **copiloto demonstrativo** (a descoberta P92/COPILOTO lida pelo que ela lê: "Cliente aprovou o orçamento" → ainda falta sinal de pagamento e prazo), **3 exemplos de valor** (marcados "exemplo conceitual"), **carga cognitiva** (8 dimensões reais do motor), **não-substitui**, **base + pioneiro de categoria** (fato real: `empresaPioneiraId`).
+> - **Nada inventado:** os componentes citam apenas o que existe em código (8 dimensões de `copiloto-operacional.ts`, pioneiro de `descoberta-operacional.service.ts`, passos reais do fluxo). Exemplos numericos/claims foram vetados — o que é ilustração está explícito como "exemplo conceitual".
+> - **Fixes técnicos P1/P2:** header com link correto (`/configuracoes`), import de `toast` corrigido (`toat`→`toast`, `git mv` preserva histórico), número de WhatsApp unificado via engine (`FOUNDER_WHATSAPP_NUMERO`), 6 componentes mortos deletados (0 referências restantes), nav mobile com menu hambúrguer.
+> - **Status:** typecheck limpo, **build limpo** (66 páginas + proxy, `Compiled successfully` + `Finished TypeScript`), 52 testes verdes (copiloto 14 + descoberta 15 + founder-operações 9 + plataforma 5 + handoff 4 + configuração 5). Nenhum schema novo, nenhuma API de negócio alterada, `package.json` intocado.
+>
+> Ver `docs/05-OPERATIONS/REPORTS/P93-CONSOLIDACAO-PONTE.md` + `GUIA-P93.md` + `ponte-p93-final.zip`.
+
 > **MARCO: COPILOTO OPERACIONAL — A DESCOBERTA VIRA PONTE QUE ACOMPANHA A OPERAÇÃO — 12 de agosto de 2026**
 >
 > **A descoberta P92 ganha a camada de leitura para decisão: um motor puro que devolve o que já está registrado no caderno transformado em nível de intervenção (Nv 0–4) e "Visão do gerente".** Sem migration, sem rotas novas, sem IA e sem inventar a operação da Souza Mestrinho (P80/P81/P82 seguem bloqueados até campo real).

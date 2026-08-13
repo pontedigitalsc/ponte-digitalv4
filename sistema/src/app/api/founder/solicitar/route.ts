@@ -5,10 +5,9 @@ import { handleApiError } from '@/lib/api-error'
 import { assertRateLimit } from '@/lib/rate-limit'
 import { getCurrentUser } from '@/lib/auth'
 import { createLogger } from '@/lib/logger'
+import { FOUNDER_WHATSAPP_NUMERO } from '@/engine/founder-operacoes'
 
 const log = createLogger('api', 'founder-solicitar')
-
-const WHATSAPP_NUMERO = '5548991133397'
 
 function montarResumoWhatsApp(dados: FounderSolicitacaoInput): string {
   const linhas: string[] = []
@@ -73,7 +72,7 @@ export async function POST(request: NextRequest) {
     })
 
     const resumo = montarResumoWhatsApp(dados)
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(resumo)}`
+    const whatsappUrl = `https://wa.me/${FOUNDER_WHATSAPP_NUMERO}?text=${encodeURIComponent(resumo)}`
 
     log.info('Solicitação Founder registrada', {
       details: { solicitacaoId: solicitacao.id, autenticado: usuario != null },
