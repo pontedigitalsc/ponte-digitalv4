@@ -17,12 +17,28 @@ const PONTE = [
   'Inteligência',
 ]
 
+const PARES = [
+  { tradicional: 'Cadastro', ponte: 'Contexto' },
+  { tradicional: 'Relatório', ponte: 'Leitura' },
+  { tradicional: 'Alerta', ponte: 'Sinal contextual' },
+  { tradicional: 'Formulário', ponte: 'Entrada simples' },
+  { tradicional: 'Módulo isolado', ponte: 'Operação conectada' },
+  { tradicional: 'Automação rígida', ponte: 'Evolução validada' },
+  { tradicional: 'Banco de dados', ponte: 'Memória operacional' },
+  { tradicional: 'IA genérica', ponte: 'Inteligência contextual' },
+]
+
 /**
  * Comparação conceitual entre o modelo tradicional (cada parte em um
  * lugar — realidade fragmentada) e o modelo Ponte (as informações formam
  * uma cadeia e começam a conversar entre si). Sem atacar sistemas: eles
  * resolveram problemas reais; a Ponte tenta existir no ponto em que as
  * partes podem conversar.
+ *
+ * Abaixo do grid, a tabela por pares mostra a MUDANÇA DE PAPEL de cada
+ * ideia (o que era guardar/averbar vira compreender/conectar). Por regra
+ * da rodada, é direção — a Ponte não entrega "mais uma tela do mesmo";
+ * a mudança de papel é o que procuramos construir.
  */
 export function Comparison() {
   return (
@@ -75,6 +91,43 @@ export function Comparison() {
             As informações começam a conversar entre si.
           </p>
         </div>
+      </div>
+
+      {/* Tabela por pares — a mudança de papel de cada ideia */}
+      <div className="mt-12">
+        <p className="text-center text-[10px] font-semibold uppercase tracking-[0.2em] text-night-text-dim">
+          A mudança de papel — o que era guardar vira compreender
+        </p>
+
+        <div className="mx-auto mt-6 max-w-3xl overflow-hidden rounded-2xl border border-night-700/50 bg-night-850/60">
+          <div className="grid grid-cols-2 gap-px bg-night-700/40">
+            <p className="bg-night-800/70 px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-night-text-dim">
+              Sistema tradicional
+            </p>
+            <p className="bg-night-800/70 px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-night-green-bright">
+              Ponte
+            </p>
+          </div>
+
+          {PARES.map((par) => (
+            <div key={par.tradicional} className="grid grid-cols-2 gap-px bg-night-700/40">
+              <div className="flex items-center justify-between gap-3 bg-night-900/60 px-4 py-3">
+                <span className="text-sm text-night-text-soft">{par.tradicional}</span>
+                <span aria-hidden="true" className="text-xs text-night-text-dim/50">→</span>
+              </div>
+              <div className="flex items-center gap-2.5 bg-night-800/70 px-4 py-3">
+                <span aria-hidden="true" className="dot-green h-1.5 w-1.5 shrink-0 rounded-full" />
+                <span className="text-sm font-medium text-night-text">{par.ponte}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p className="mx-auto mt-5 max-w-lg text-center text-xs italic leading-relaxed text-night-text-dim">
+          Não é trocar um sistema por outro: é mudar o papel que a tecnologia
+          cumpre — de guardar o que já foi feito para compreender o que está
+          acontecendo. Direção, não promessa de entrega pronta.
+        </p>
       </div>
     </div>
   )

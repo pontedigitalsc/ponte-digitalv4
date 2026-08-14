@@ -14,7 +14,30 @@ const HUMORES = [
 
 export function ComoEstaHoje() {
   const [selecionado, setSelecionado] = useState<string | null>(null)
+  const [texto, setTexto] = useState('')
+  const [enviando, setEnviando] = useState(false)
+  const [erro, setErro] = useState<string | null>(null)
   const router = useRouter()
+
+  const continuar = async () => {
+    if (enviando) return
+    setEnviando(true)
+    setErro(null)
+    try {
+      if (selecionado && texto.trim()) {
+        await fetch('/api/dashboard/checkin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ humor: selecionado, texto: texto.trim() }),
+        })
+      }
+    } catch {
+      setErro('Não consegui guardar isso agora, mas vamos conversar do mesmo jeito.')
+    } finally {
+      setEnviando(false)
+      router.push('/conversa')
+    }
+  }
 
   if (selecionado) {
     return (
@@ -25,14 +48,18 @@ export function ComoEstaHoje() {
         </p>
         <textarea
           autoFocus
+          value={texto}
+          onChange={(e) => setTexto(e.target.value)}
           className="w-full rounded-xl border bg-background p-4 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 min-h-[100px]"
           placeholder="Pode escrever à vontade. Estou aqui para ouvir."
         />
+        {erro && <p className="text-xs text-destructive">{erro}</p>}
         <button
-          onClick={() => router.push('/conversa')}
-          className="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+          onClick={continuar}
+          disabled={enviando}
+          className="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-60"
         >
-          Quero conversar sobre isso
+          {enviando ? 'Guardando...' : 'Quero conversar sobre isso'}
         </button>
       </div>
     )
