@@ -4,11 +4,12 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, UserCheck, Users,
-  DollarSign, Settings, Bot, ChevronLeft, Building2,
+  DollarSign, Settings, Bot, ChevronLeft,
   Clock, Sparkles, RefreshCw, Compass, BookOpen, Inbox,
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
+import { PonteSymbol } from '@/components/brand/ponte-logo'
 
 const navItems = [
   {
@@ -131,13 +132,13 @@ export function Sidebar({ collapsed = false, onToggle, mobileAberto = false, onC
         {mostrarRotulos ? (
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-              <Building2 className="h-4 w-4 text-primary-foreground" />
+              <PonteSymbol variant="micro" surface="mono" className="h-[18px] w-auto text-primary-foreground" />
             </div>
             <span className="text-sm font-semibold truncate">{nomeEmpresa}</span>
           </div>
         ) : (
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-            <Building2 className="h-4 w-4 text-primary-foreground" />
+            <PonteSymbol variant="micro" surface="mono" className="h-[18px] w-auto text-primary-foreground" />
           </div>
         )}
         {mostrarRotulos && onToggle && !mobileAberto && (

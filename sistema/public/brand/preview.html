@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ponte Digital — Identidade Visual · Verificação</title>
+<style>
+  :root { --night: #0d183b; --night-2: #101d3f; --ink: #0d183b; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: Inter, system-ui, sans-serif; color: #16203a; background:#f4f6fb; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 48px 24px 80px; }
+  h1 { font-size: 22px; font-weight: 700; letter-spacing:-0.02em; }
+  h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing:0.14em; color:#6b7a99; margin: 0 0 14px; }
+  p.sub { font-size:14px; color:#4a5878; margin:8px 0 28px; line-height:1.6; }
+  section { margin-bottom: 48px; }
+  .card { border-radius:16px; padding:28px; border:1px solid #dde4f0; background:#fff; box-shadow: 0 10px 30px -18px rgba(13,24,59,.25); }
+  .card.night { background:#0d183b; border-color:#1c2b55; }
+  .row { display:flex; flex-wrap:wrap; gap:28px; align-items:center; }
+  .cell { display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; }
+  .cell .lbl { font-size:11px; color:#6b7a99; }
+  .card.night .cell .lbl { color:#91a3c4; }
+  .depth { display:flex; align-items:center; gap:18px; background:repeating-linear-gradient( 90deg, #0d183b 0 64px, #ffffff 64px 128px ); border-radius:12px; padding:14px; }
+  .swatch { width:64px; height:64px; border-radius:12px; border:1px solid rgba(0,0,0,.08); }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media (max-width:640px){ .grid-2{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Ponte Digital — Identidade Visual · O Encontro</h1>
+  <p class="sub">Página de verificação das superfícies. Abra e compare: fundo claro, fundo azul-noite,
+  monocromático, favicon, horizontal, e o teste de redução (128 → 16 px).</p>
+
+  <section>
+    <h2>Fundo claro</h2>
+    <div class="card">
+      <div class="row">
+        <div class="cell"><img src="simbolo.svg" width="96" height="96" alt="símbolo full"><div class="lbl">full · 96</div></div>
+        <div class="cell"><img src="simbolo-micro.svg" width="64" height="64" alt="símbolo micro"><div class="lbl">micro · 64</div></div>
+        <div class="cell"><img src="ponte-digital.svg" height="44" alt="horizontal"><div class="lbl">horizontal</div></div>
+        <div class="cell"><img src="simbolo-mono.svg" width="64" height="64" alt="mono preto"><div class="lbl">mono · preto</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Fundo azul-noite</h2>
+    <div class="card night">
+      <div class="row">
+        <div class="cell"><img src="simbolo-azul-noite.svg" width="96" height="96" alt="símbolo noite"><div class="lbl">noite · 96</div></div>
+        <div class="cell"><img src="simbolo-micro-azul-noite.svg" width="64" height="64" alt="micro noite"><div class="lbl">micro noite</div></div>
+        <div class="cell"><img src="ponte-digital-azul-noite.svg" height="44" alt="horizontal noite"><div class="lbl">horizontal noite</div></div>
+        <div class="cell"><img src="../favicon.svg" width="64" height="64" alt="favicon"><div class="lbl">favicon</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Redução — o símbolo sobrevive? (full)</h2>
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <div class="cell"><img src="simbolo-azul-noite.svg" width="128" height="128" alt="128"><div class="lbl">128px</div></div>
+        <div class="cell"><img src="simbolo-azul-noite.svg" width="64" height="64" alt="64"><div class="lbl">64px</div></div>
+        <div class="cell"><img src="simbolo-azul-noite.svg" width="48" height="48" alt="48"><div class="lbl">48px</div></div>
+        <div class="cell"><img src="simbolo-azul-noite.svg" width="32" height="32" alt="32"><div class="lbl">32px</div></div>
+        <div class="cell"><img src="simbolo-micro-azul-noite.svg" width="24" height="24" alt="24 micro"><div class="lbl">24px (micro)</div></div>
+        <div class="cell"><img src="simbolo-micro-azul-noite.svg" width="16" height="16" alt="16 micro"><div class="lbl">16px (micro)</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Paleta utilizada</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="row" style="gap:12px">
+          <div class="swatch" style="background:#0d183b"></div><div style="font-size:13px;color:#33405f">Azul-noite institucional<br><code>hsl(226 64% 14%)</code> · estrutura</div>
+          <div class="swatch" style="background:hsl(221,72%,45%)"></div><div style="font-size:13px;color:#33405f">Azul primário (caminho)<br><code>hsl(221 72% 45%)</code> · arcos</div>
+          <div class="swatch" style="background:hsl(165,34%,26%)"></div><div style="font-size:13px;color:#33405f">Evergreen (clareza)<br><code>hsl(165 34% 26%)</code> · ponto central</div>
+        </div>
+      </div>
+      <div class="card night">
+        <div class="row" style="gap:12px">
+          <div class="swatch" style="background:hsl(205,32%,62%)"></div><div style="font-size:13px;color:#91a3c4">Azure suave<br><code>hsl(205 32% 62%)</code> · margens</div>
+          <div class="swatch" style="background:hsl(205,50%,80%)"></div><div style="font-size:13px;color:#91a3c4">Azure<br><code>hsl(205 50% 80%)</code> · arcos</div>
+          <div class="swatch" style="background:hsl(157,40%,45%)"></div><div style="font-size:13px;color:#91a3c4">Verde sinal<br><code>hsl(157 40% 45%)</code> · clareza</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

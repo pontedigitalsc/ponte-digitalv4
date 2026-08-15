@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { PonteLogo } from '@/components/brand/ponte-logo'
 
 const LINKS = [
   { href: '#o-que-e', label: 'O que é' },
@@ -25,9 +26,8 @@ export function MarketingNav() {
   return (
     <header className="sticky top-0 z-40 border-b border-night-700/50 bg-night-900/70 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-1.5 text-sm font-semibold tracking-tight text-night-text">
-          <span aria-hidden="true" className="text-base leading-none text-night-azure">✦</span>
-          Ponte Digital
+        <Link href="/" aria-label="Ponte Digital — início">
+          <PonteLogo withWordmark surface="dark" variant="micro" symbolClassName="h-5 w-auto" className="text-sm text-night-text" />
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex" aria-label="Seções">

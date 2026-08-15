@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Ponte Digital" focusable="false">
+  <!-- Ponte Digital — Símbolo "micro" (redução responsiva) — fundo azul-noite -->
+  <path d="M 17 19 Q 10 24 17 29" stroke="hsl(205, 50%, 80%)" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+  <path d="M 31 19 Q 38 24 31 29" stroke="hsl(205, 50%, 80%)" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+  <circle cx="17" cy="19" r="1.5" fill="hsl(205, 32%, 62%)"/>
+  <circle cx="17" cy="29" r="1.5" fill="hsl(205, 32%, 62%)"/>
+  <circle cx="31" cy="19" r="1.5" fill="hsl(205, 32%, 62%)"/>
+  <circle cx="31" cy="29" r="1.5" fill="hsl(205, 32%, 62%)"/>
+  <circle cx="24" cy="24" r="5" fill="hsl(157, 40%, 45%)"/>
+</svg>

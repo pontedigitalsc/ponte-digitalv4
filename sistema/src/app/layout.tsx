@@ -38,8 +38,8 @@ export const metadata: Metadata = {
     type: 'website',
   },
   icons: {
-    icon: '/favicon.ico',
-    apple: '/favicon.ico',
+    icon: '/favicon.svg',
+    apple: '/favicon.svg',
   },
   manifest: '/manifest',
   robots: '/robots',

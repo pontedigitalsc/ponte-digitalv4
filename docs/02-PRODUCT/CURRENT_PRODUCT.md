@@ -1,5 +1,16 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: IDENTIDADE VISUAL — "O ENCONTRO" — SÍMBOLO INSTITUCIONAL DEFINITIVO — 14 de agosto de 2026**
+>
+> **A Ponte ganha marca definitiva: um único gesto geométrico — margens de sinais → arcos que convergem → um ponto central que se completa (clareza nascida da geometria, sem estrela/ornamento).** Rodada exclusiva de identidade visual, sem tocar em arquitetura, schema, APIs, rotas, autenticação, Copiloto, descoberta ou multi-tenant.
+> - **Conceito "O Encontro":** 4 pontos (fragmentos) nas margens + 2 arcos (conexão) convergindo para **1 ponto central** (convergência→clareza). Simbólico de "conectar coisas que estavam separadas", humano e equilibrado; não é ponte literal, não é rede/IA genérica, não é estrela.
+> - **Variações:** símbolo full/micro, fundo claro/azul-noite, mono preto/branco, lockup horizontal, favicon canônico (micro sobre azul-noite), `preview.html` para verificação. **Componente reutilizável** `PonteSymbol`/`PonteLogo` (`sistema/src/components/brand/ponte-logo.tsx`, `surface` light/dark/mono + `variant` full/micro — zero SVG duplicado).
+> - **Integrado:** `marketing-nav`, `marketing-footer` (substituem o glyph "✦"), `(auth)/layout` e `sidebar` (substituem ícone `Building2`), favicon em `layout.tsx` + `manifest.ts` unificado para `/favicon.svg` (corrige referência morta a `/favicon.ico`). `AvatarPonte` **inalterado** (elemento narrativo, não mascote).
+> - **Tudo vem dos tokens existentes** (institutional-900/primary/evergreen ← l-azure/l-green): nenhuma cor nova. Wordmark em Inter; Fraunces segue nos momentos narrativos.
+> - **Status:** typecheck limpo, **build limpo** (68 rotas), testes verdes (plataforma 5/5 + handoff 4/4). Validação visual manual pendente via `public/brand/preview.html` (ver seção 11 do relatório).
+>
+> Ver `docs/05-OPERATIONS/REPORTS/IDENTIDADE-VISUAL.md` + `ponte-identidade-visual.zip`.
+
 > **MARCO: P93 — CONSOLIDAÇÃO DO SISTEMA + LANDING VIVA — 12 de agosto de 2026**
 >
 > **A casa foi limpa e a porta da frente reconstruída: a landing deixou de ser slides que explicam e passou a ser um caminho que demonstra compreensão, sem inventar nenhuma promessa.** Nenhuma funcionalidade nova entrou na sprint — tudo o que foi feito fortalece o que já existia (Regra Final: conhecimento, confiabilidade, capacidade de evolução).

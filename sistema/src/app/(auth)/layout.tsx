@@ -1,4 +1,4 @@
-import { Building2 } from 'lucide-react'
+import { PonteSymbol } from '@/components/brand/ponte-logo'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,7 +7,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="hidden lg:flex flex-col justify-between bg-primary p-10">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20">
-            <Building2 className="h-5 w-5 text-white" />
+            <PonteSymbol variant="micro" surface="mono" className="h-5 w-auto text-white" />
           </div>
           <span className="text-lg font-semibold text-white">Ponte Digital</span>
         </div>
@@ -38,7 +38,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="w-full max-w-sm">
           <div className="mb-8 flex items-center gap-2 lg:hidden">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <Building2 className="h-5 w-5 text-primary-foreground" />
+              <PonteSymbol variant="micro" surface="mono" className="h-5 w-auto text-primary-foreground" />
             </div>
             <span className="text-lg font-semibold">Ponte Digital</span>
           </div>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 48" role="img" aria-label="Ponte Digital" focusable="false">
+  <!-- Ponte Digital — Logo horizontal "O Encontro" (fundo claro) -->
+  <g transform="translate(4 3) scale(0.88)">
+    <path d="M 11 13 Q 3 24 11 35" stroke="hsl(221, 72%, 45%)" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+    <path d="M 37 13 Q 45 24 37 35" stroke="hsl(221, 72%, 45%)" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+    <circle cx="7.6" cy="19.6" r="1.9" fill="hsl(226, 64%, 14%)"/>
+    <circle cx="7.6" cy="28.4" r="1.9" fill="hsl(226, 64%, 14%)"/>
+    <circle cx="40.4" cy="19.6" r="1.9" fill="hsl(226, 64%, 14%)"/>
+    <circle cx="40.4" cy="28.4" r="1.9" fill="hsl(226, 64%, 14%)"/>
+    <circle cx="24" cy="24" r="5" fill="hsl(165, 34%, 26%)"/>
+  </g>
+  <text x="56" y="31" fill="hsl(226, 64%, 14%)" font-family="Inter, 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="26" font-weight="600" letter-spacing="-0.6">Ponte Digital</text>
+</svg>
