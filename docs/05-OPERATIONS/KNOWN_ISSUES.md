@@ -184,6 +184,13 @@
 **Descrição:** `OPS-INFRASTRUCTURE.md` e outros docs citam `https://pontedigital.com.br` como produção, mas o domínio personalizado não responde ao health check; a URL de produção real e ativa é `https://ponte-digital.vercel.app` (projeto `ponte-digital`, equipe `ponte-digital1`).
 **Ação:** concluído — URL oficial registrada. Vincular `pontedigital.com.br` fica como pendência operacional (ver abaixo).
 
+## Alias real de produção — `pontedigital.vercel.app` (sem hífen)
+
+**Status:** Registrado em 2026-08-14 (P96 — verificação de produção)
+**Prioridade:** Baixa (documental)
+**Descrição:** na verificação pós-deploy de P96, `https://ponte-digital.vercel.app` (com hífen, referenciada em docs como URL oficial) responde **404** para `/`, `/api/health`, `/favicon.svg` e assets; o alias vivo e saudável é **`https://pontedigital.vercel.app`** (sem hífen — health 200, favicon novo 200, logo nova presente no HTML). Docs de P86/P88/P90/P91/P92 já usam a forma sem hífen.
+**Ação:** atualizar as referências com hífen (`CURRENT_PRODUCT.md`, `CHANGELOG_OFICIAL.md`, `FOUNDATION.md`, `PRODUCTION_CERTIFIED_V1.md`, `INICIO_DA_OPERACAO.md`, `FOUNDER_V1_FREEZE.md`, `HISTORIA_DA_PONTE_DIGITAL.md`, `KNOWN_ISSUES.md` acima) para `https://pontedigital.vercel.app` na próxima rodada de auditoria documental.
+
 ## Domínio personalizado `pontedigital.com.br` — pendência operacional
 
 **Status:** Pendente (adiado para a fase operacional — decisão do usuário 2026-08-02)
