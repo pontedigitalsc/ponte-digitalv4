@@ -1,5 +1,16 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P99 — "A TRAVESSIA" — A MARCA AGORA É UMA PONTE — 15 de agosto de 2026**
+>
+> **A identidade deixa de esconder o nome: o símbolo institucional evolui da lente/portal "A Passagem" (P102) para "A Travessia" — uma ponte arquitetônica estilizada reconhecível em 2 segundos como UMA PONTE.** Mesma filosofia (fragmentos → conexão → clareza → evolução), agora com leitura literal: LOGO = ponte · MARCA = ponte + conexão + inteligência · EXPERIÊNCIA = fragmentação → conexão → contexto → clareza → evolução. Rodada exclusiva de identidade visual, sem migration, sem novas dependências, sem tocar em backend/schema/auth/Copiloto/Founder.
+> - **Geometria "A Travessia" (viewBox 48×48):** duas torres (pilares 12/36, y 16→40) sustentando a **corda de suspensão** (arco de Bézier 12,16 → ápice 24,6 → 36,16 — sem ambigüidade de sweep de arco SVG); **tabuleiro partido** (y=22, trechos 12–20 e 28–36) com **vão central** onde brilha a **jóia** (24,22); finas **linhas de conexão** (hangers) ligando corda a tabuleiro. micro (16–24px): mesma silhueta, sem hangers, traços mais pesados.
+> - **Correção importante:** a rodada anterior usava `A 20.69 20.69 0 0 0` que desenhava o cabo curvando para **baixo** (bulbo); a nova geometria usa Béziers determinísticos — validação por pixel-scan confirma: cable no ápice, tabuleiro partido, pilares como estrutura, jóia no vão, espaço transparente no centro (a passagem).
+> - **Hierarquia de cor (só tokens existentes):** ink (estrutura/pilares) → path (travessia/corda+tabuleiro) → signal (jóia). Light/dark/deepnight via CSS vars; mono = currentColor. Nenhuma cor nova.
+> - **Componentes:** `PonteSymbol` (full/micro × 4 surfaces), `PonteLogo`, `PonteLogoHorizontal`, `PonteLogoStacked` em `ponte-logo.tsx`; `AvatarPonte` e sidebar herdam automaticamente (mono). 8 SVGs de `public/brand` + `favicon.svg` + `app/icon.svg` + 4 ecos da landing regravados.
+> - **Status:** typecheck limpo, **build limpo** (69 rotas + `/icon`), forma validada por amostragem de pixels (full 96/48/32, micro 24/16, noite, favicon, horizontal). Ecos da landing com a silhueta quase invisível da ponte.
+>
+> Ver P99 em `docs/05-OPERATIONS/REPORTS/IDENTIDADE-VISUAL.md`.
+
 > **MARCO: P98 — HOMOLOGAÇÃO DA IDENTIDADE "A PASSAGEM" + EVOLUÇÃO DA EXPERIÊNCIA DA LANDING — 15 de agosto de 2026**
 >
 > **A própria landing passa a demonstrar a filosofia da marca — fragmentos → conexão → contexto → clareza → evolução — sem tocar na forma validada da identidade (a margem de evolução era a experiência, não a marca).** Rodada exclusiva de experiência da landing, sem backend, schema, API, autenticação, Copiloto, Founder, descoberta ou multi-tenant.

@@ -1,15 +1,47 @@
 # RODADA DE IDENTIDADE VISUAL — A MARCA DA PONTE DIGITAL
 
-> **P-102 — "A Passagem": evolução da identidade (o símbolo institucional definitivo)**
+> **P99 — "A Travessia": a marca agora é UMA PONTE (supersede "A Passagem"/P102)**
 >
 > Data: 15 de agosto de 2026
-> Tipo de trabalho: identidade visual (rodada do Founder) — **sem mudanças de arquitetura, schema, APIs, rotas, autenticação, Copiloto, Foundation, descoberta ou multi-tenant**.
-> Status: implementado — `typecheck` limpo, `build` limpo (69 rotas, incluindo `/icon`), testes verdes (5/5 plataforma + 4/4 handoff), validação programática da forma em 6 tamanhos.
-> Componente: `sistema/src/components/brand/ponte-logo.tsx`.
+> Tipo de trabalho: identidade visual (rodada do Founder) — **sem mudanças de arquitetura, schema, APIs, rotas, autenticação, Copiloto, Founder, descoberta ou multi-tenant**.
+> Status: implementado — `typecheck` limpo, `build` limpo (69 rotas + `/icon`), forma validada por amostragem de pixels (full 96/48/32, micro 24/16, noite, favicon, lockup).
+> Componente: `sistema/src/components/brand/ponte-logo.tsx` — `PonteSymbol` / `PonteLogo` / `PonteLogoHorizontal` / `PonteLogoStacked`.
+
+**Esta rodada SUPERSEDE a P-102. O conteúdo abaixo de "Conceito" deste documento descreve a rodada anterior. A partir da P99, vale o seguinte:**
 
 ---
 
-## 1. Conceito — "A Passagem"
+## 1. Conceito — "A Travessia" (P99)
+
+A marca para de esconder o próprio nome. **A primeira leitura (2 segundos) é UMA PONTE.** Uma ponte arquitetônica estilizada: duas torres que sustentam uma corda de suspensão, um tabuleiro partido com vão central onde brilha a jóia, e finas linhas de conexão. A lente/portal da P-102 sobrevive como segunda leitura: o contexto (fio + vão) ainda forma a "passagem"; a jóia continua sendo o ponto de clareza.
+
+```
+LOGO     = ponte
+MARCA    = ponte + conexão + inteligência
+EXPERIÊNCIA = fragmentação → conexão → contexto → clareza → evolução
+```
+
+- **Torres (pilares, `ink`):** x=12 e x=36, y 16→40 — a estrutura feita de duas margens que precisavam se conectar.
+- **Corda de suspensão (`path`):** arco de Bézier `M 12 16 C 16 16, 19 6, 24 6 C 29 6, 32 16, 36 16` — une as margens por cima. Bézier determinístico (sem flag de sweep de arco SVG).
+- **Tabuleiro partido (`path`):** y=22, trechos 12–20 e 28–36 — as partes separadas se encontram num vão.
+- **Jóia (`signal`):** (24,22) r 4.2 — a clareza completa o vão central.
+- **Linhas de conexão (hangers, `path`):** (16,12)→(16,22), (20,8)→(20,22), (28,8)→(28,22), (32,12)→(32,22) — fios que ligam estrutura à travessia.
+- **Espaço vazio abaixo do tabuleiro = A PASSAGEM:** o vão que se atravessa.
+- **Micro:** mesma silhueta, sem hangers, traços mais pesados (cable 3.0, deck 4.6, pier 3.9, jóia r 4.0).
+
+### Por que uma ponte desenhada agora
+
+"O Encontro" (P-101) era minimalista demais; "A Passagem" (P-102) era uma abstração (lente/portal) que escondia o próprio nome da empresa. A direção do Founder para a P99 (fórmula vinculante): **LOGO = ponte; MARCA = ponte + conexão + inteligência; EXPERIÊNCIA = fragmentação → conexão → contexto → clareza → evolução.** O símbolo não carrega toda a filosofia — ele é a porta de entrada literal, lida em 2 segundos.
+
+### Correção técnica importante (arco)
+
+A primeira tentativa desta rodada usou `A 20.69 20.69 0 0 0 44 38`, que desenhava o cabo curvando para **baixo** (bulbo abaixo de y=28). A geometria final usa **Béziers** (mesma família de comandos da lente da P-102), eliminando a ambigüidade de sweep de arco. Validado: cable no ápice (24,6), tabuleiro partido, pilares como estrutura, jóia no vão, vão central em branco.
+
+---
+
+## 2. Conceito — "A Passagem" (P-102 — SUPERSEDIDA pela P99)
+
+> **Nota de supersessão:** todo o conteúdo abaixo descreve a rodada anterior (P-102), que foi **substituída pela P99** em `ponte-logo.tsx`, `public/brand/*`, `public/favicon.svg`, `src/app/icon.svg` e nos ecos da landing. A direção conceitual (passagem + clareza + evolução) permanece como segunda leitura dentro da ponte.
 
 A primeira marca ("O Encontro", rodada P-101) era minimalista demais para carregar a personalidade institucional. A evolução mantém a mesma filosofia geométrica e adiciona **fluxo e segunda leitura**, sem perder a redução:
 
@@ -46,17 +78,19 @@ Não há tabuleiro, pilares ou vão explícito. A **lente é a passagem** — a 
 
 | Arquivo | Uso |
 |---|---|
-| `public/brand/simbolo.svg` | símbolo completo "A Passagem", fundo claro |
+| `public/brand/simbolo.svg` | símbolo completo "A Travessia", fundo claro |
 | `public/brand/simbolo-azul-noite.svg` | símbolo completo, fundo azul-noite |
 | `public/brand/simbolo-mono.svg` | monocromático preto (PB / impressão) |
 | `public/brand/simbolo-mono-branco.svg` | monocromático branco |
-| `public/brand/simbolo-micro.svg` | **versão micro** (16–24px / favicon / avatares / tiles), fundo claro — lente + 2 pontos + jóia |
+| `public/brand/simbolo-micro.svg` | **versão micro** (16–24px / favicon / avatares / tiles), fundo claro |
 | `public/brand/simbolo-micro-azul-noite.svg` | **versão micro**, fundo azul-noite |
 | `public/brand/ponte-digital.svg` | logo horizontal (símbolo + wordmark), fundo claro |
 | `public/brand/ponte-digital-azul-noite.svg` | logo horizontal, fundo azul-noite |
 | `public/favicon.svg` | favicon estático (64×64, micro sobre azul-noite) — usado pelo manifest/PWA |
 | `src/app/icon.svg` | **ícone canônico do site** (file convention do Next) — `<link rel="icon">` SVG |
 | `public/brand/preview.html` | página de verificação das superfícies (abrir num navegador) |
+
+> **P99:** os mesmos 8 SVGs de `public/brand` + favicon + icon foram regravados para a geometria da ponte. A tabela acima continua válida — só a forma interna mudou.
 
 ### Componente reutilizável
 
@@ -88,11 +122,18 @@ Idêntica à rodada anterior (sem fontes novas): wordmark/UI Inter (`font-semibo
 
 ## 6. Geometria e tamanho mínimo
 
+> **Geometria P99 (ponte, viewBox 48×48):** torres `M 12 16 L 12 40` e `M 36 16 L 36 40` (pier stroke 3.6 full / 3.9 micro); corda de suspensão `M 12 16 C 16 16, 19 6, 24 6 C 29 6, 32 16, 36 16` (≤ 3.0); tabuleiro partido `M 12 22 L 20 22` + `M 28 22 L 36 22` (deck 4.6); 4 hangers (full 1.2, opacity 0.5/0.55); jóia (24,22) r 4.2 full / 4.0 micro. Lockup horizontal 224:48. Tamanho mínimo: full 24px; micro 16px.
+
 - Símbolo full: **quadrado 1:1** (viewBox 48×48). Lente: `M 24 9.5 C 17.6 10.9, 13.9 16.7, 13.9 24 C 13.9 31.3, 17.6 37.1, 24 38.5` + espelho direito; 6 fragmentos em colunas (cx 8.2/7.6/8.2 e 39.8/40.4/39.8); fluxos `M 34.8 6.2 C…` e `M 24 38.5 C…`; jóia central r 3.4.
 - Micro: lente espessa (stroke 3.4) + 2 pontos diagonais + jóia r 4.2 — legível em 16px.
 - Lockup horizontal: proporção ≈ **224:48**.
 - Tamanho mínimo: full **24px**; micro **16px**. Abaixo de 16px não usar.
 - **Validação programática da forma (6 tamanhos):** renderização headless + amostragem por pixel (centro = jóia evergreen; x=30%/70% = lente primary; cobertura de tinta 20–33%) — a geometria é fiel de 16px a 96px em full e micro.
+
+> **P99 — geometria desta rodada (a lente acima é da rodada anterior, supersedida):**
+> - Full (`BRIDGE`): torres/pilares x=12 e x=36 (y 16→40, ink); corda `M 12 16 C 16 16, 19 6, 24 6 C 29 6, 32 16, 36 16` (path); tabuleiro partido y=22 (`M 12 22 L 20 22` + `M 28 22 L 36 22`); 4 hangers `M {16|20|28|32} {12|8|8|12} L {16|20|28|32} 22` (full); jóia (24,22) r 4.2.
+> - Micro (`BRIDGE_MICRO`): mesmos corda/tabuleiro/pilares, sem hangers; cable 3.0 / deck 4.6 / pier 3.9; jóia r 4.0.
+> - Validação P99 por pixel-scan (96px): pilares `#0D183B` em (26,34/58/78) e (74,…); cable `#2054C5` no ápice (50,14) e flanco (34,26)/(66,26); tabuleiro `#2054C5` em y=46 com jóia `#2C594E` em (50,46); vão central `#FFFFFF` em (50,62). Micro 24px lê-se: cable no topo, pilares nas laterais, deck+jóia no centro.
 
 ## 7. Regras de uso
 
@@ -104,12 +145,15 @@ Idêntica à rodada anterior (sem fontes novas): wordmark/UI Inter (`font-semibo
 
 **Não fazer:**
 - Não redesenhar a forma, nem escalar fora das proporções (squash/stretch).
-- Não usar estrelas, engrenagens, cérebros, robôs, circuitos, setas de crescimento, ícones de alvo/mira literais ou arcos de ponte com tabuleiro.
+- Não usar estrelas, engrenagens, cérebros, robôs, circuitos, setas de crescimento ou ícones de alvo/mira literais.
+- Não acrescentar second reading contraditória: a P99 é literalmente UMA PONTE; não regredir para lente/portal como forma principal.
 - Não aplicar gradientes, sombras decorativas ou efeitos 3D no símbolo.
 - Não trocar o wordmark de fonte.
 - Não usar a versão a cores sobre fundos intermediários que concorram com a hierarquia tinta/caminho/clareza.
 
 ## 8. Integração realizada
+
+> **P99:** o componente `PonteSymbol` foi reescrito com a nova forma (full/micro × 4 surfaces) e ganhou `PonteLogoHorizontal`/`PonteLogoStacked`. As integrações da tabela abaixo (nav/footer/auth/sidebar/avatar/manifest/landing) **herdam a nova marca automaticamente** porque usam o componente — nenhuma mudança pontual adicional foi necessária nesses arquivos. Ecos decorativos da landing foram regravados para a silhueta da ponte (hero topo + base, `#a-nova-categoria`, `#a-visao`).
 
 | Onde | Antes (P-101) | Agora (P-102) |
 |---|---|---|
@@ -170,3 +214,5 @@ import { PonteLogo, PonteSymbol } from '@/components/brand/ponte-logo'
 | Continua boa em 5–10 anos? | Sim — geometria simples, sem modismos |
 | Funciona em azul-noite, claro, PB, documento, sistema? | Sim — surfaces light/dark/mono |
 | Animável com elegância? | Sim — pontos → lente → jóia (não implementado por escopo) |
+
+> **P99 — critérios atualizados:** Funciona em 16/24px? Sim — micro sem hangers. Funciona sem o nome? Sim — UMA PONTE lida em 2s. Reconhecível? Sim — ponte arquitetônica (torres + corda + tabuleiro partido + jóia). Segunda leitura? Sim — o vão central + jóia = a passagem/clareza da rodada anterior, agora como narrativa interna da ponte. Relação com "Ponte"? **Literal agora** — o símbolo desenha a própria ponte que antes só existia como abstração.
