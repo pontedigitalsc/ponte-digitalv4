@@ -55,7 +55,8 @@ Não há tabuleiro, não há pilares, não há vão explícito. O símbolo dá a
 | `public/brand/simbolo-micro-azul-noite.svg` | **versão micro**, fundo azul-noite |
 | `public/brand/ponte-digital.svg` | logo horizontal (símbolo + wordmark), fundo claro |
 | `public/brand/ponte-digital-azul-noite.svg` | logo horizontal, fundo azul-noite |
-| `public/favicon.svg` | favicon/avatar canônico (64×64, micro sobre azul-noite) — **substituiu o favicon anterior (ponte literal)** |
+| `public/favicon.svg` | favicon/avatar estático (64×64, micro sobre azul-noite) — usado pelo manifest/PWA — **substituiu o favicon anterior (ponte literal)** |
+| `src/app/icon.svg` | **ícone canônico do site** (file convention do Next) — gera `<link rel="icon" type="image/svg+xml" sizes="any">` sem depender de metadata |
 | `public/brand/preview.html` | página de verificação das superfícies (abrir num navegador) |
 
 ### Componente reutilizável
@@ -122,7 +123,7 @@ Mantém a identidade existente (sem fontes novas):
 | `marketing-footer.tsx` | glyph "✦" | `PonteLogo withWordmark` (micro, fundo noite) |
 | `(auth)/layout.tsx` (painel esquerdo + mobile) | ícone `Building2` | `PonteSymbol` micro, mono (`text-white` / `text-primary-foreground`) |
 | `(dashboard)/layout.tsx` → `sidebar.tsx` (tile de logo) | ícone `Building2` | `PonteSymbol` micro, mono (`text-primary-foreground`) |
-| `layout.tsx` (metadata icons) | `/favicon.ico` (**inexistente**) | `/favicon.svg` (novo, canônico) |
+| `layout.tsx` (metadata) | `/favicon.ico` (**inexistente**) | file convention `src/app/icon.svg` — `<link rel="icon">` SVG canônico |
 | `manifest.ts` | `/favicon.ico` (**inexistente**) | `/favicon.svg` (svg/xml) |
 | `public/favicon.svg` | ponte literal + estrela | símbolo "O Encontro" (micro) |
 
@@ -162,7 +163,7 @@ Não é possível validar automaticamente a renderização pixel em navegador ne
 1. **Contraste no tile do app** (sidebar: símbolo 18px dentro de tile `bg-primary` mono branco) — verificar visibilidade em tema claro e escuro.
 2. **Favicon em abas** escuras e claras (fundo azul-noite + traço azure + ponto verde): conferir leitura entre 16 e 24px.
 3. **Lockup horizontal** em larguras de footer/nav ≤ 320px (não quebrar linha).
-4. **iOS apple-touch icon**: `layout.tsx` aponta `apple: '/favicon.svg'`; iOS atual prefere PNG — se desejado, gerar `apple-icon.png` (round +, fora do escopo desta rodada).
+4. **iOS apple-touch icon**: o iOS ignora SVG; geração de `apple-icon.png` fica **pendente de decisão manual** (fora do escopo desta rodada). Nota: o Next mantém um `<link rel="icon" href="/favicon.ico?hash">` default (placeholder padrão, não é 404) mesmo com `app/icon.svg` — comportamento da plataforma, não da marca.
 5. **`docs/05-OPERATIONS/REPORTS/`**: identificada divergência documental pré-existente (P33 fala em `docs/05-OPERATIONS/SPRINTS/` como local de auditorias) — sem impacto nesta rodada; registrada para auditoria futura.
 
 ---

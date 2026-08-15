@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Ponte Digital — Ícone canônico do site (app/icon.svg) — variante "micro" -->
+  <!-- Fundo azul-noite institucional; arcos azure; ponto central verde (clareza) -->
+  <rect width="64" height="64" rx="16" fill="hsl(226, 64%, 14%)"/>
+  <g transform="translate(-5 -4)" fill="none">
+    <path d="M 25.5 28.5 Q 15 36 25.5 43.5" stroke="hsl(205, 50%, 80%)" stroke-width="4.8" stroke-linecap="round"/>
+    <path d="M 46.5 28.5 Q 57 36 46.5 43.5" stroke="hsl(205, 50%, 80%)" stroke-width="4.8" stroke-linecap="round"/>
+    <circle cx="25.5" cy="28.5" r="2.25" fill="hsl(205, 32%, 62%)"/>
+    <circle cx="25.5" cy="43.5" r="2.25" fill="hsl(205, 32%, 62%)"/>
+    <circle cx="46.5" cy="28.5" r="2.25" fill="hsl(205, 32%, 62%)"/>
+    <circle cx="46.5" cy="43.5" r="2.25" fill="hsl(205, 32%, 62%)"/>
+    <circle cx="36" cy="36" r="7.5" fill="hsl(157, 40%, 45%)"/>
+  </g>
+</svg>
