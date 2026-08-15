@@ -2,47 +2,50 @@ import type { CSSProperties } from 'react'
 import { cn } from '@/lib/utils'
 
 /**
- * Marca institucional da Ponte Digital — P99, "A Travessia".
+ * Marca institucional da Ponte Digital — P100, "A Travessia" (reconstruída).
  *
- * Primeira leitura (2 segundos): UMA PONTE.
- * A marca para de esconder o próprio nome. Uma ponte arquitetônica estilizada:
- * uma corda de suspensão (arco), um tabuleiro em dois trechos separados por um
- * vão central, dois pilares que apoiam a travessia e finas linhas de conexão.
+ * Primeira leitura (2 segundos): UMA PONTE — um arco elegante entre duas
+ * margens, com os dois lados quase se tocando no alto, fechados por um único
+ * nó (a conexão central). Não é ponte de engenharia, nem ponte suspensa com
+ * cabos: é a estrutura mínima e sofisticada de uma travessia.
  *
- * Segunda leitura (quem conhece a Ponte):
- *   · dois lados que precisavam se conectar (as margens do arco);
- *   · o vão central — um TABULEIRO PARTIDO, com uma JÓIA verde que o completa:
- *     as partes separadas se encontram num ponto de clareza (contexto);
- *   · o espaço vazio abaixo do tabuleiro = A PASSAGEM (o vão que se atravessa);
- *   · as linhas de conexão = fios que ligam estrutura à travessia.
- * A lente/portal das rodadas P96–P98 sobrevive: o arco + o tabuleiro formam a
- * mesma abertura, agora dentro de uma leitura literalmente de ponte.
+ * Segunda leitura (a linguagem da Ponte — pontos, sinais, convergência):
+ *   · as duas margens (pilares + apoios no chão) = as partes separadas de
+ *     uma empresa que precisam conversar;
+ *   · o arco em DOIS TRECHOS que se aproximam pelo alto = informação
+ *     convergindo de cada lado — a mesma conversa que a landing desenha
+ *     (sinais → linhas → convergência);
+ *   · o NÓ no ápice = a clareza onde as partes se encontram — não é um
+ *     enfeite, é a consequência da conexão (o keystone que fecha o arco);
+ *   · o espaço entre as duas margens, aberto, = A PASSAGEM (o vão que se
+ *     atravessa; aquilo que ainda não foi conectado).
  *
  * Regra da rodada: LOGO = ponte · MARCA = ponte + conexão + inteligência ·
  * EXPERIÊNCIA = fragmentação → conexão → contexto → clareza → evolução.
- * O símbolo não tenta carregar toda a filosofia — ele é a porta de entrada.
+ * O símbolo não tenta carregar toda a filosofia — ele é a origem dela: a
+ * mesma gramática (arco + margens + nó) é o que a landing repete em
+ * hero-visual, live-map e passagem.
  *
  * Variação:
- *   · variant="full"  — versão completa (padrão): arco + tabuleiro partido +
- *     jóia + pilares + linhas de conexão. Usar a partir de 24px.
+ *   · variant="full"  — versão completa (padrão): arco em dois trechos +
+ *     nó central + duas margens (pilares com apoio no chão). Usar ≥ 24px.
  *   · variant="micro" — redução responsiva (16–24px, favicon, avatares, tiles):
- *     mesma silhueta, sem as linhas de conexão, traços mais pesados.
+ *     mesma silhueta, traços mais pesados, nó maior para sobreviver.
  *
  * Cores (hierarquia da identidade, só tokens existentes):
- *   · ink     — estrutura (pilares) — institutional-900 / l-azure-soft;
- *   · path    — a travessia (tabuleiro + arco) — primary / l-azure;
- *   · signal  — o ponto de clareza (jóia) — evergreen / l-green.
+ *   · ink    — estrutura (margens/pilares e apoios no chão);
+ *   · path   — a travessia (o arco);
+ *   · signal — a clareza (o nó onde as partes se encontram).
  *
  * Superfícies:
  *   · surface="light"     — fundo claro (produto/documentos).
  *   · surface="dark"      — fundo azul-noite (landing).
- *   · surface="deepnight" — fundo muito escuro/colorido (blanco para estrutura,
- *     mesmo arco/jóia com brilho maior).
+ *   · surface="deepnight" — fundo muito escuro/colorido (estrutura em branco).
  *   · surface="mono"      — tudo herda currentColor (PB, tiles, impressão).
  *
- * Animação futura (geometria já separada em elementos): margens aparecem →
- * arco se desenha → tabuleiro nasce das bordas → linhas conectam → jóia
- * converge ao centro. Elementos individuais, desenháveis via stroke-dashoffset.
+ * Animação futura (cada elemento é um path separado, desenhável via
+ * stroke-dashoffset): margens aparecem → o arco nasce das duas bordas e
+ * converge → o nó fecha a conexão → a passagem completa a leitura.
  */
 export type PonteSurface = 'light' | 'dark' | 'deepnight' | 'mono'
 export type PonteSymbolVariant = 'full' | 'micro'
@@ -73,50 +76,44 @@ const SURFACE_VARS: Record<Exclude<PonteSurface, 'mono'>, CSSProperties> = {
 }
 
 interface BridgeShape {
-  cable: string
-  deckL: string
-  deckR: string
-  pierL: string
-  pierR: string
-  hangers: Array<{ d: string; o: number }>
-  jewel: { cx: number; cy: number; r: number }
-  stroke: { cable: number; deck: number; hanger: number; pier: number }
-  cableOpacity: number
+  arcL: string
+  arcR: string
+  pillarL: string
+  pillarR: string
+  groundL: string
+  groundR: string
+  node: { cx: number; cy: number; r: number }
+  stroke: { arc: number; pillar: number; ground: number }
 }
 
-// "A Travessia" — ponte estaiada de perfil, viewBox 48×48:
-// duas torres (pilares 12/36, y 16→40) que sustentam a corda de suspensão
-// (arco de Bézier 12,16 → ápice 24,6 → 36,16); o tabuleiro partido desce
-// (y=22, trechos 12–20 e 28–36) deixando um vão central onde brilha a jóia;
-// finas linhas de conexão ligam corda a tabuleiro. Margens (pilares) em ink,
-// travessia (corda + tabuleiro) em path, jóia no vão em signal.
+// "A Travessia" (P100) — ponte-e-nó, viewBox 48×48:
+// duas margens (pilares 13/35, y 15→40, apoiadas nos dois blocos do solo
+// 5–20 e 28–43) sustentam um arco em DOIS TRECHOS que convergem pelo alto
+// (Béziers a partir dos topos 13,15 e 35,15, ápice ~24,4.6) — cada lado da
+// empresa se aproxima do outro; o NÓ no ápice (24,5) fecha a conexão no ponto
+// exato do encontro, como a pedra de fecho do arco. O espaço aberto entre as
+// margens = A PASSAGEM (o vão que se atravessa). Estrutura/margens em ink,
+// travessia (o arco) em path, clareza (o nó) em signal.
 const BRIDGE: BridgeShape = {
-  cable: 'M 12 16 C 16 16, 19 6, 24 6 C 29 6, 32 16, 36 16',
-  deckL: 'M 12 22 L 20 22',
-  deckR: 'M 28 22 L 36 22',
-  pierL: 'M 12 16 L 12 40',
-  pierR: 'M 36 16 L 36 40',
-  hangers: [
-    { d: 'M 16 12 L 16 22', o: 0.5 },
-    { d: 'M 20 8 L 20 22', o: 0.55 },
-    { d: 'M 28 8 L 28 22', o: 0.55 },
-    { d: 'M 32 12 L 32 22', o: 0.5 },
-  ],
-  jewel: { cx: 24, cy: 22, r: 4.2 },
-  stroke: { cable: 2.4, deck: 4.6, hanger: 1.2, pier: 3.6 },
-  cableOpacity: 1,
+  arcL: 'M 13 15 C 16 6, 21 4.6, 23.3 4.6',
+  arcR: 'M 35 15 C 32 6, 27 4.6, 24.7 4.6',
+  pillarL: 'M 13 15 L 13 40',
+  pillarR: 'M 35 15 L 35 40',
+  groundL: 'M 5 40 L 20 40',
+  groundR: 'M 28 40 L 43 40',
+  node: { cx: 24, cy: 5, r: 3.2 },
+  stroke: { arc: 3.6, pillar: 3.0, ground: 3.0 },
 }
 
 const BRIDGE_MICRO: BridgeShape = {
-  cable: BRIDGE.cable,
-  deckL: BRIDGE.deckL,
-  deckR: BRIDGE.deckR,
-  pierL: BRIDGE.pierL,
-  pierR: BRIDGE.pierR,
-  hangers: [],
-  jewel: { cx: 24, cy: 22, r: 4.0 },
-  stroke: { cable: 3.0, deck: 4.6, hanger: 0, pier: 3.9 },
-  cableOpacity: 1,
+  arcL: BRIDGE.arcL,
+  arcR: BRIDGE.arcR,
+  pillarL: BRIDGE.pillarL,
+  pillarR: BRIDGE.pillarR,
+  groundL: BRIDGE.groundL,
+  groundR: BRIDGE.groundR,
+  node: { cx: 24, cy: 5, r: 3.8 },
+  stroke: { arc: 4.4, pillar: 3.8, ground: 3.8 },
 }
 
 export function PonteSymbol({ className, surface = 'light', variant = 'full' }: PonteSymbolProps) {
@@ -135,33 +132,17 @@ export function PonteSymbol({ className, surface = 'light', variant = 'full' }: 
       style={style as CSSProperties}
       fill="none"
     >
-      {/* Linhas de conexão — arco → tabuleiro (full apenas) */}
-      {s.hangers.map((h, i) => (
-        <path
-          key={i}
-          d={h.d}
-          stroke={c('path')}
-          strokeWidth={s.stroke.hanger}
-          strokeLinecap="round"
-          opacity={h.o}
-        />
-      ))}
-      {/* Corda de suspensão — o arco que une as duas margens */}
-      <path
-        d={s.cable}
-        stroke={c('path')}
-        strokeWidth={s.stroke.cable}
-        strokeLinecap="round"
-        opacity={s.cableOpacity}
-      />
-      {/* Tabuleiro partido — dois trechos separados pelo vão central */}
-      <path d={s.deckL} stroke={c('path')} strokeWidth={s.stroke.deck} strokeLinecap="round" />
-      <path d={s.deckR} stroke={c('path')} strokeWidth={s.stroke.deck} strokeLinecap="round" />
-      {/* Pilares — estrutura (as margens) */}
-      <path d={s.pierL} stroke={c('ink')} strokeWidth={s.stroke.pier} strokeLinecap="round" />
-      <path d={s.pierR} stroke={c('ink')} strokeWidth={s.stroke.pier} strokeLinecap="round" />
-      {/* Jóia no vão — as partes separadas se encontram num ponto de clareza */}
-      <circle cx={s.jewel.cx} cy={s.jewel.cy} r={s.jewel.r} fill={c('signal')} />
+      {/* Apoios no chão — as duas margens que sustentam a travessia */}
+      <path d={s.groundL} stroke={c('ink')} strokeWidth={s.stroke.ground} strokeLinecap="round" />
+      <path d={s.groundR} stroke={c('ink')} strokeWidth={s.stroke.ground} strokeLinecap="round" />
+      {/* Pilares — a estrutura levantada por cada lado */}
+      <path d={s.pillarL} stroke={c('ink')} strokeWidth={s.stroke.pillar} strokeLinecap="round" />
+      <path d={s.pillarR} stroke={c('ink')} strokeWidth={s.stroke.pillar} strokeLinecap="round" />
+      {/* O arco — dois trechos que convergem pelo alto (a travessia) */}
+      <path d={s.arcL} stroke={c('path')} strokeWidth={s.stroke.arc} strokeLinecap="round" />
+      <path d={s.arcR} stroke={c('path')} strokeWidth={s.stroke.arc} strokeLinecap="round" />
+      {/* O nó no ápice — a clareza onde as duas partes se encontram */}
+      <circle cx={s.node.cx} cy={s.node.cy} r={s.node.r} fill={c('signal')} />
     </svg>
   )
 }

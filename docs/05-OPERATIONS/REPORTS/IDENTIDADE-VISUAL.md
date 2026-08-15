@@ -1,17 +1,32 @@
 # RODADA DE IDENTIDADE VISUAL — A MARCA DA PONTE DIGITAL
 
-> **P99 — "A Travessia": a marca agora é UMA PONTE (supersede "A Passagem"/P102)**
+> **P100 — "A Travessia" (reconstruída): o ARCO como protagonista (supersede "A Travessia"/P99)**
 >
 > Data: 15 de agosto de 2026
 > Tipo de trabalho: identidade visual (rodada do Founder) — **sem mudanças de arquitetura, schema, APIs, rotas, autenticação, Copiloto, Founder, descoberta ou multi-tenant**.
-> Status: implementado — `typecheck` limpo, `build` limpo (69 rotas + `/icon`), forma validada por amostragem de pixels (full 96/48/32, micro 24/16, noite, favicon, lockup).
+> Status: implementado — `typecheck` limpo, `build` limpo (69 rotas + `/icon`), forma validada por pixel-scan (full 96, micro/noite 48), testes verdes (plataforma 5/5 + handoff 4/4). Publicado e verificado em produção.
 > Componente: `sistema/src/components/brand/ponte-logo.tsx` — `PonteSymbol` / `PonteLogo` / `PonteLogoHorizontal` / `PonteLogoStacked`.
 
-**Esta rodada SUPERSEDE a P-102. O conteúdo abaixo de "Conceito" deste documento descreve a rodada anterior. A partir da P99, vale o seguinte:**
+**Esta rodada SUPERSEDE a P99. O conteúdo das seções "Conceito" deste documento descreve as rodadas anteriores. A partir da P100, vale o seguinte:**
 
 ---
 
-## 1. Conceito — "A Travessia" (P99)
+## 1. Conceito — "A Travessia" (P100, reconstruída)
+
+A P99 leu como "ponte de engenharia / construtora" — desenho literal, não marca. A P100 recupera a força conceitual mantendo a ponte, mas elegante: **o arco é o protagonista**, com dois apoios discretos e uma conexão central integrada. Primeira leitura (2 segundos): UMA PONTE ELEGANTE. Segunda leitura: **está conectando coisas que antes estavam separadas** — os dois trechos do arco são as partes da empresa convergindo para um único ponto de clareza.
+
+```
+LOGO     = ponte
+MARCA    = ponte + conexão + inteligência
+EXPERIÊNCIA = fragmentação → conexão → contexto → clareza → evolução
+```
+
+- **O arco, em DOIS TRECHOS (`path`):** `M 13 15 C 16 6, 21 4.6, 23.3 4.6` e `M 35 15 C 32 6, 27 4.6, 24.7 4.6` — cada lado da empresa nasce da sua margem e sobe convergindo pelo alto (ápice ~24,4.6). A travessia propriamente dita.
+- **O NÓ no ápice (`signal`):** (24,5) r 3.2 — o keystone que fecha o arco exatamente onde os dois trechos se encontram. **É consequência da conexão, não enfeite.** Não é estrela, diamante, olho ou mira.
+- **Margens — pilar + apoio (`ink`):** pilares (13,15→40) e (35,15→40), apoiados nos dois blocos do solo (5–20 e 28–43, y 40) — são as partes separadas da empresa que precisavam conversar.
+- **ESPAÇO ABERTO entre as margens = A PASSAGEM:** o vão que se atravessa; aquilo que ainda não foi conectado.
+- **Micro (16–24px):** mesma silhueta, traços mais pesados (arc 4.4, pilar/solo 3.8, nó r 3.8) para sobreviver a 16px.
+- **Decisão de design (rodada do Founder):** exploradas internamente as variações A — Ponte Convergente (arco em dois trechos + nó ao ápice), B — Ponte/Conexão (arco cheio + nó ao centro) e C — Ponte Viva (traços orgânicos). Escolhida a **A — Ponte Convergente**: é a que melhor traduz convergência → clareza, a que pertence à gramática da landing (sinais → linhas → AvatarPonte) e a mais estável em micro.
 
 A marca para de esconder o próprio nome. **A primeira leitura (2 segundos) é UMA PONTE.** Uma ponte arquitetônica estilizada: duas torres que sustentam uma corda de suspensão, um tabuleiro partido com vão central onde brilha a jóia, e finas linhas de conexão. A lente/portal da P-102 sobrevive como segunda leitura: o contexto (fio + vão) ainda forma a "passagem"; a jóia continua sendo o ponto de clareza.
 

@@ -1,5 +1,18 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P100 — "A TRAVESSIA" RECONSTRUÍDA — A PONTE ELEGANTE, NÃO A PONTE DE ENGENHARIA — 15 de agosto de 2026**
+>
+> **A P99 não passou no controle estético do Founder: a ponte suspensa literal leu como "ponte de engenharia / construtora" — desenho, não marca. A P100 reconstrói a mesma filosofia com o ARCO como protagonista, recuperando a força conceitual (fragmentos → conexão → convergência → clareza) que antes só a P102 tinha, agora com leitura clara de ponte elegante.** Mesma filosofia, mesma linguagem da landing (pontos → linhas → convergência → clareza), sem migration, sem novas dependências, sem tocar em backend/schema/auth/Copiloto/Founder/multi-tenant.
+> - **Geometria "A Travessia" (P100, viewBox 48×48) — Ponte Convergente:** **o arco é o protagonista** — dois trechos de Bézier que nascem das margens (de 13,15 e 35,15) e convergem pelo alto (ápice ~24,4.6), fechados por um **único nó/keystone** (24,5) que é a *consequência* do encontro, não um enfeite; cada margem é um **pilar elegante** (13/35, y 15→40) com **apoio no chão** (solo 5–20 e 28–43, y 40). O **espaço aberto entre as duas margens = A PASSAGEM.**
+> - **Segunda leitura (a linguagem da Ponte):** os dois trechos do arco são as partes separadas da empresa convergindo; o nó no ápice é o ponto de clareza onde elas se encontram — a mesma gramática que a landing desenha em hero-visual (sinais → AvatarPonte), live-map (pílulas → centro) e passagem (antagonismo → passagem). **A logo agora parece a ORIGEM da linguagem da landing, não uma identidade paralela.**
+> - **Decisão de design (rodada do Founder):** das três variações avaliadas (Ponte Convergente / Ponte-Conexão / Ponte Viva), foi escolhida a **Ponte Convergente** — arco em dois trechos + nó keystone. O que foi evitado: ponte rodoviária, ponte suspensa realista, cabos demais, torres enormes, estrela/diamante decorativo, excesso de linhas, olho/mira, banco, SaaS genérico, minimalismo excessivo.
+> - **Hierarquia de cor (só tokens existentes):** ink (estrutura — margens/pilares/apoios) → path (travessia — o arco) → signal (clareza — o nó). Light/dark/deepnight via CSS vars; mono = currentColor. Nenhuma cor nova.
+> - **Animação futura pronta:** cada elemento é um path separado (desenhável via stroke-dashoffset): margens aparecem → arco nasce das bordas e converge → nó fecha → passagem completa.
+> - **Componentes:** `PonteSymbol` (full/micro × 4 surfaces), `PonteLogo`, `PonteLogoHorizontal`, `PonteLogoStacked` em `ponte-logo.tsx`; `AvatarPonte`, sidebar, nav/footer, auth herdam automaticamente. 8 SVGs de `public/brand` + `favicon.svg` + `app/icon.svg` + 4 ecos da landing regravados com a nova silhueta.
+> - **Status:** typecheck limpo, **build limpo** (69 rotas + `/icon`), forma validada por pixel-scan (full 96, micro/noite 48). Lançado em produção e verificado em `https://pontedigital.vercel.app`.
+>
+> Ver P100 em `docs/05-OPERATIONS/REPORTS/IDENTIDADE-VISUAL.md`.
+
 > **MARCO: P99 — "A TRAVESSIA" — A MARCA AGORA É UMA PONTE — 15 de agosto de 2026**
 >
 > **A identidade deixa de esconder o nome: o símbolo institucional evolui da lente/portal "A Passagem" (P102) para "A Travessia" — uma ponte arquitetônica estilizada reconhecível em 2 segundos como UMA PONTE.** Mesma filosofia (fragmentos → conexão → clareza → evolução), agora com leitura literal: LOGO = ponte · MARCA = ponte + conexão + inteligência · EXPERIÊNCIA = fragmentação → conexão → contexto → clareza → evolução. Rodada exclusiva de identidade visual, sem migration, sem novas dependências, sem tocar em backend/schema/auth/Copiloto/Founder.
