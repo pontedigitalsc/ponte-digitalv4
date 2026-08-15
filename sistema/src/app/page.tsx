@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { MarketingNav } from '@/components/marketing/marketing-nav'
 import { MarketingFooter } from '@/components/marketing/marketing-footer'
 import { HeroVisual } from '@/components/marketing/hero-visual'
-import { PonteSymbol } from '@/components/brand/ponte-logo'
 import { HeroSignals } from '@/components/marketing/hero-signals'
-import { SignalStrip } from '@/components/marketing/signal-strip'
+import { FragmentacaoMap } from '@/components/marketing/fragmentacao-map'
+import { Passagem } from '@/components/marketing/passagem'
 import { LiveMap } from '@/components/marketing/live-map'
 import { Comparison } from '@/components/marketing/comparison'
 import { EvidenceFlow } from '@/components/marketing/evidence-flow'
@@ -94,6 +94,9 @@ export default function LandingPage() {
               tudo isso. A Ponte conecta o que hoje está separado — e devolve
               contexto, em vez de mais telas.
             </p>
+            <p className="mx-auto mt-5 max-w-md font-editorial text-lg font-light italic leading-snug text-night-mist text-balance sm:text-xl">
+              Existe muita coisa acontecendo dentro de uma empresa.
+            </p>
 
             <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               <Link href="/conversa" className={PRIMARY_CTA}>
@@ -101,6 +104,19 @@ export default function LandingPage() {
               </Link>
               <FounderCTA className="w-full sm:w-auto">Tornar-me Founder</FounderCTA>
             </div>
+          </div>
+
+          {/* os fragmentos que já existem — sinais nomeados da vida real */}
+          <div aria-hidden="true" className="mx-auto mt-12 flex max-w-xl flex-wrap items-center justify-center gap-2 sm:gap-2.5">
+            {['Cliente', 'Operação', 'Equipe', 'Financeiro', 'Pedidos', 'Decisões'].map((w, i) => (
+              <span
+                key={w}
+                className="pill animate-note px-3.5 py-1.5 text-xs text-night-text-soft"
+                style={{ transform: `rotate(${[-2, 2, -1.5, 1, 0.5, -1][i]}deg)` }}
+              >
+                {w}
+              </span>
+            ))}
           </div>
 
           <Reveal delay={200} className="mt-14 sm:mt-16">
@@ -140,17 +156,7 @@ export default function LandingPage() {
           </Reveal>
 
           <Reveal delay={120} className="mt-10">
-            <div className="flex flex-wrap justify-center gap-2.5" aria-hidden="true">
-              {['Cliente', 'Operação', 'Equipe', 'Financeiro', 'Conversas', 'Tarefas', 'Histórico'].map((w, i) => (
-                <span
-                  key={w}
-                  className="pill px-4 py-1.5 text-sm text-night-text-dim"
-                  style={{ transform: `rotate(${[-2, 2, -3, 1.5, -1, 2.5, -2][i]}deg)` }}
-                >
-                  {w}
-                </span>
-              ))}
-            </div>
+            <FragmentacaoMap />
           </Reveal>
 
           <Reveal delay={200} className="mt-8">
@@ -158,22 +164,14 @@ export default function LandingPage() {
               Cada parte diz uma coisa — e nenhuma fala com as outras.
             </p>
           </Reveal>
-
-          <Reveal delay={260} className="mt-10">
-            <SignalStrip />
-          </Reveal>
         </section>
 
-        {/* 03.5 — A PASSAGEM: margens → lente → clareza (a travessia da marca) */}
-        <div aria-hidden="true" className="flex items-center justify-center gap-3 bg-night-800 pb-1 pt-1">
-          <span className="dot-azure h-1.5 w-1.5 rounded-full opacity-40" />
-          <span className="dot-azure h-1.5 w-1.5 rounded-full opacity-70" />
-          <span className="mx-1 opacity-95">
-            <PonteSymbol variant="full" surface="dark" className="h-11 w-auto" />
-          </span>
-          <span className="dot-teal h-1.5 w-1.5 rounded-full opacity-70" />
-          <span className="dot-teal h-1.5 w-1.5 rounded-full opacity-40" />
-        </div>
+        {/* 03.5 — A PASSAGEM: a travessia da marca, do espalhado à visão */}
+        <section id="a-passagem" className="relative overflow-hidden bg-night-800 bg-landing-glow-azure px-4 py-16 sm:px-6 sm:py-24">
+          <Reveal>
+            <Passagem />
+          </Reveal>
+        </section>
 
         {/* 04 — MAPA VIVO: INFORMAÇÃO ISOLADA → CONEXÃO → CLAREZA */}
         <section id="o-mapa" className="bg-night-800 px-4 py-20 text-center sm:px-6 sm:py-28">
@@ -338,7 +336,15 @@ export default function LandingPage() {
         </section>
 
         {/* 17 — A NOVA CATEGORIA */}
-        <section id="a-nova-categoria" className="bg-night-950 bg-landing-glow-green px-4 py-20 sm:px-6 sm:py-28">
+        <section id="a-nova-categoria" className="relative overflow-hidden bg-night-950 bg-landing-glow-green px-4 py-20 sm:px-6 sm:py-28">
+          <div aria-hidden="true" className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 opacity-[0.05]">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M 24 9.5 C 17.6 10.9, 13.9 16.7, 13.9 24 C 13.9 31.3, 17.6 37.1, 24 38.5" stroke="hsl(var(--l-azure))" strokeWidth="2" strokeLinecap="round" />
+              <path d="M 24 38.5 C 30.4 37.1, 34.1 31.3, 34.1 24 C 34.1 16.7, 30.4 10.9, 24 9.5" stroke="hsl(var(--l-azure))" strokeWidth="2" strokeLinecap="round" />
+              <circle cx="39.8" cy="13.2" r="1.9" fill="hsl(var(--l-azure-soft))" />
+              <circle cx="8.2" cy="34.8" r="1.9" fill="hsl(var(--l-azure-soft))" />
+            </svg>
+          </div>
           <Reveal>
             <NewCategory />
           </Reveal>
@@ -359,7 +365,15 @@ export default function LandingPage() {
         </section>
 
         {/* 19 — VISÃO DE FUTURO */}
-        <section id="a-visao" className="bg-night-900 bg-landing-glow-green px-4 py-16 sm:px-6 sm:py-24">
+        <section id="a-visao" className="relative overflow-hidden bg-night-900 bg-landing-glow-green px-4 py-16 sm:px-6 sm:py-24">
+          <div aria-hidden="true" className="pointer-events-none absolute -left-28 -bottom-28 h-80 w-80 opacity-[0.05]">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M 24 9.5 C 17.6 10.9, 13.9 16.7, 13.9 24 C 13.9 31.3, 17.6 37.1, 24 38.5" stroke="hsl(var(--l-azure))" strokeWidth="2" strokeLinecap="round" />
+              <path d="M 24 38.5 C 30.4 37.1, 34.1 31.3, 34.1 24 C 34.1 16.7, 30.4 10.9, 24 9.5" stroke="hsl(var(--l-azure))" strokeWidth="2" strokeLinecap="round" />
+              <circle cx="39.8" cy="13.2" r="1.9" fill="hsl(var(--l-azure-soft))" />
+              <circle cx="8.2" cy="34.8" r="1.9" fill="hsl(var(--l-azure-soft))" />
+            </svg>
+          </div>
           <Reveal>
             <Futuro />
           </Reveal>

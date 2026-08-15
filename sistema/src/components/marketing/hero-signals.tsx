@@ -38,8 +38,8 @@ export function HeroSignals() {
       </div>
 
       <p className="mx-auto mt-9 max-w-md text-center font-editorial text-xl font-light italic leading-snug text-night-text text-balance sm:text-2xl">
-        Quando esses sinais aparecem juntos,
-        <span className="text-night-green-bright"> talvez exista um padrão.</span>
+        Quando as partes começam a conversar,
+        <span className="text-night-green-bright"> a empresa começa a enxergar melhor.</span>
       </p>
     </div>
   )

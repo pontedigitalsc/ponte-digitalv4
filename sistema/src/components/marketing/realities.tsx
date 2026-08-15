@@ -27,6 +27,21 @@ const EXEMPLO_BARBEARIA = [
   { tipo: 'Pergunta', titulo: 'Investigação', texto: 'O que mudou na experiência ou no ciclo dele?' },
 ]
 
+const OPERACOES = [
+  {
+    nome: 'Serralheria',
+    passos: ['orçamento', 'materiais', 'produção', 'instalação', 'financeiro'],
+  },
+  {
+    nome: 'Lavação',
+    passos: ['cliente', 'serviço', 'recorrência', 'equipe', 'financeiro'],
+  },
+  {
+    nome: 'Barbearia',
+    passos: ['cliente', 'agenda', 'atendimento', 'relacionamento', 'gestão'],
+  },
+]
+
 /**
  * Quem pode usar — realidades concretas de pequenos negócios, sem inventar
  * números nem clientes. Cada cartão é uma situação comum, descrita como
@@ -71,6 +86,40 @@ export function Realities() {
         <p className="mt-4 text-xs italic leading-relaxed text-night-text-dim">
           Exemplo conceitual — mostra o tipo de pergunta que a Ponte procura
           fazer, não um caso real.
+        </p>
+      </div>
+
+      {/* como a Ponte pode investigar e organizar uma operação */}
+      <div className="mt-6">
+        <p className="text-left text-[10px] font-semibold uppercase tracking-[0.25em] text-night-teal">
+          Como a Ponte pode investigar e organizar uma operação
+        </p>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-night-text-soft">
+          Em cada ramo, os acontecimentos formam uma cadeia. A Ponte procura
+          compreender essa cadeia em conversa — e depois conectar cada elo ao
+          que vem antes e depois.
+        </p>
+
+        <div className="mt-5 grid gap-3 lg:grid-cols-3">
+          {OPERACOES.map((op) => (
+            <div key={op.nome} className="balloon px-5 py-5">
+              <h3 className="font-editorial text-lg font-light text-night-text">{op.nome}</h3>
+              <ol className="mt-3 space-y-2">
+                {op.passos.map((passo) => (
+                  <li key={passo} className="flex items-center gap-2 text-sm text-night-text-soft">
+                    <span className="dot-teal h-1 w-1 shrink-0 rounded-full" />
+                    {passo}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
+        </div>
+
+        <p className="mx-auto mt-4 max-w-2xl text-center text-xs italic leading-relaxed text-night-text-dim">
+          São exemplos de como a Ponte pode investigar e organizar uma operação —
+          não promessa de módulos já prontos. Cada empresa é compreendida em
+          conversa real, do jeito que ela funciona.
         </p>
       </div>
     </div>

@@ -16,6 +16,16 @@ const SEPARACOES = [
   'conhecimento espalhado',
 ]
 
+const CONECTA = [
+  'pessoas',
+  'processos',
+  'sinais',
+  'decisões',
+  'histórico',
+  'contexto',
+  'melhorias',
+]
+
 /**
  * O que é a Ponte — uma explicação simples e profunda. A metáfora do nome
  * vira narrativa: uma ponte conecta lugares que estavam separados; na
@@ -44,6 +54,19 @@ export function PonteEssence() {
             </li>
           ))}
         </ul>
+
+        <div className="mt-6">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-night-teal">
+            O que ela procura conectar
+          </p>
+          <ul className="mt-3 flex flex-wrap gap-2" aria-hidden="true">
+            {CONECTA.map((c) => (
+              <li key={c} className="pill px-3.5 py-1.5 text-xs text-night-text">
+                {c}
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <p className="mt-6 text-sm leading-relaxed text-night-text-soft sm:text-base sm:leading-7">
           Não basta armazenar informações sobre uma empresa. É preciso{' '}

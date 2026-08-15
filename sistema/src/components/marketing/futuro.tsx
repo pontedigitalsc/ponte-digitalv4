@@ -1,7 +1,7 @@
 const TEMPOS = [
   {
     nome: 'Hoje',
-    tipo: 'O que já existe',
+    tipo: 'existe',
     itens: [
       'uma conversa que entende o que já foi dito',
       'leitura dos sinais que a empresa produz',
@@ -10,8 +10,8 @@ const TEMPOS = [
     ],
   },
   {
-    nome: 'Próximo',
-    tipo: 'O que estamos construindo',
+    nome: 'Em construção',
+    tipo: 'em desenvolvimento',
     itens: [
       'sinais com mais contexto da operação',
       'perguntas melhores a partir de mais história',
@@ -20,7 +20,7 @@ const TEMPOS = [
   },
   {
     nome: 'Depois',
-    tipo: 'Para onde a construção aponta',
+    tipo: 'visão',
     itens: [
       'uma camada que acompanha a empresa de ponta a ponta',
       'conversas que usam o contexto acumulado',
@@ -29,7 +29,7 @@ const TEMPOS = [
   },
   {
     nome: 'Futuro',
-    tipo: 'A direção maior',
+    tipo: 'visão maior',
     itens: [
       'a camada cognitiva da empresa: entre a operação e a decisão, uma camada que compreende',
     ],

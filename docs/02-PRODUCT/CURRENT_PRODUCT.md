@@ -1,5 +1,17 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
+> **MARCO: P98 — HOMOLOGAÇÃO DA IDENTIDADE "A PASSAGEM" + EVOLUÇÃO DA EXPERIÊNCIA DA LANDING — 15 de agosto de 2026**
+>
+> **A própria landing passa a demonstrar a filosofia da marca — fragmentos → conexão → contexto → clareza → evolução — sem tocar na forma validada da identidade (a margem de evolução era a experiência, não a marca).** Rodada exclusiva de experiência da landing, sem backend, schema, API, autenticação, Copiloto, Founder, descoberta ou multi-tenant.
+> - **Hero:** sublinha editorial *"Existe muita coisa acontecendo dentro de uma empresa."* + fragmentos nomeados (Cliente/Operação/Equipe/Financeiro/Pedidos/Decisões) + frase de chegada da marca (*"Quando as partes começam a conversar, a empresa começa a enxergar melhor."*) + ecos da lente quase invisíveis no fundo.
+> - **"O problema"** (novo `fragmentacao-map.tsx`): mapa honesto de silos (informação → lugar onde vive — WhatsApp/planilha/conversa/memória/improviso), linguagem "em muitas empresas, é comum...", fechamento "a decisão fica no improviso" + nota de que não é regra universal.
+> - **"A Passagem"** (novo `passagem.tsx`): travessia ANTES (espalhado) → PASSAGEM (`PonteSymbol` central + chip "conexão + contexto") → DEPOIS (visão mais clara) — a identidade se torna o fio condutor da narrativa, sem prometer resultado.
+> - **Refinamentos de conteúdo:** PonteEssence com chips "o que ela procura conectar" (pessoas/processos/sinais/decisões/histórico/contexto/melhorias); Realities com cadeias de operação conceituais (Serralheria/Lavação/Barbearia) marcadas como "como a Ponte pode investigar e organizar"; Futuro com rótulos audáveis **Hoje · Em construção · Depois · Futuro** ("existe"/"em desenvolvimento"/"visão"); lentes gigantes quase invisíveis nos fundos de `#a-nova-categoria` e `#a-visao` (eco da identidade).
+> - **Limpeza:** `signal-strip.tsx` removido (componente morto, superado pelo mapa de fragmentação + fragmentos do hero).
+> - **Status:** typecheck limpo, **build limpo** (rota `/icon` presente), testes verdes (plataforma 5/5 + handoff 4/4). Responsividade validada por medição objetiva de `scrollWidth ≤ clientWidth` no Chrome headless nas larguras 320–1440 (sem overflow horizontal); `prefers-reduced-motion` respeitado.
+>
+> Ver `docs/05-OPERATIONS/REPORTS/P98-LANDING-EXPERIENCIA.md`.
+
 > **MARCO: IDENTIDADE VISUAL — "A PASSAGEM" — SÍMBOLO INSTITUCIONAL DEFINITIVO — 15 de agosto de 2026**
 >
 > **A marca ganha personalidade institucional: fragmentos → passagem (lente/portal) → jóia (clareza) + fluxo contínuo (evolução).** Evolução da rodada P-101 ("O Encontro", minimalista demais), mesma filosofia — nada é ponte literal, estrela, cérebro, robô, circuito ou alvo literal. Rodada exclusiva de identidade visual, sem tocar em arquitetura, schema, APIs, rotas, autenticação, Copiloto, descoberta ou multi-tenant.
