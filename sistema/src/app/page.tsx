@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { MarketingNav } from '@/components/marketing/marketing-nav'
 import { MarketingFooter } from '@/components/marketing/marketing-footer'
 import { HeroVisual } from '@/components/marketing/hero-visual'
+import { PonteSymbol } from '@/components/brand/ponte-logo'
 import { HeroSignals } from '@/components/marketing/hero-signals'
 import { SignalStrip } from '@/components/marketing/signal-strip'
 import { LiveMap } from '@/components/marketing/live-map'
@@ -66,6 +67,20 @@ export default function LandingPage() {
             <span className="dot-teal animate-float absolute right-[12%] top-[15%] h-2 w-2 rounded-full opacity-50" />
             <span className="dot-green animate-note absolute bottom-[26%] left-[16%] h-2 w-2 rounded-full opacity-40" />
             <span className="dot-azure animate-float absolute bottom-[18%] right-[9%] h-1.5 w-1.5 rounded-full opacity-60" />
+            {/* eco da marca "A Passagem" — a lente (mira) quase invisível, topo-direita */}
+            <svg viewBox="0 0 48 48" className="absolute -right-20 -top-28 h-80 w-80 sm:h-[26rem] sm:w-[26rem]" fill="none" style={{ stroke: 'hsl(var(--l-azure) / 0.07)' }}>
+              <path d="M 24 9.5 C 17.6 10.9, 13.9 16.7, 13.9 24 C 13.9 31.3, 17.6 37.1, 24 38.5" strokeWidth="2" strokeLinecap="round" />
+              <path d="M 24 38.5 C 30.4 37.1, 34.1 31.3, 34.1 24 C 34.1 16.7, 30.4 10.9, 24 9.5" strokeWidth="2" strokeLinecap="round" />
+              <circle cx="8.2" cy="34.8" r="1.9" fill="hsla(var(--l-azure-soft) / 0.10)" />
+              <circle cx="39.8" cy="13.2" r="1.9" fill="hsla(var(--l-azure-soft) / 0.10)" />
+            </svg>
+            {/* eco espelhado, base-esquerda */}
+            <svg viewBox="0 0 48 48" className="absolute -bottom-32 -left-24 h-96 w-96 sm:h-[30rem] sm:w-[30rem]" fill="none" style={{ stroke: 'hsl(var(--l-azure) / 0.06)' }}>
+              <path d="M 24 9.5 C 17.6 10.9, 13.9 16.7, 13.9 24 C 13.9 31.3, 17.6 37.1, 24 38.5" strokeWidth="2" strokeLinecap="round" />
+              <path d="M 24 38.5 C 30.4 37.1, 34.1 31.3, 34.1 24 C 34.1 16.7, 30.4 10.9, 24 9.5" strokeWidth="2" strokeLinecap="round" />
+              <circle cx="8.2" cy="13.2" r="1.9" fill="hsla(var(--l-azure-soft) / 0.08)" />
+              <circle cx="39.8" cy="34.8" r="1.9" fill="hsla(var(--l-azure-soft) / 0.08)" />
+            </svg>
           </div>
 
           <div className="mx-auto max-w-3xl text-center">
@@ -148,6 +163,17 @@ export default function LandingPage() {
             <SignalStrip />
           </Reveal>
         </section>
+
+        {/* 03.5 — A PASSAGEM: margens → lente → clareza (a travessia da marca) */}
+        <div aria-hidden="true" className="flex items-center justify-center gap-3 bg-night-800 pb-1 pt-1">
+          <span className="dot-azure h-1.5 w-1.5 rounded-full opacity-40" />
+          <span className="dot-azure h-1.5 w-1.5 rounded-full opacity-70" />
+          <span className="mx-1 opacity-95">
+            <PonteSymbol variant="full" surface="dark" className="h-11 w-auto" />
+          </span>
+          <span className="dot-teal h-1.5 w-1.5 rounded-full opacity-70" />
+          <span className="dot-teal h-1.5 w-1.5 rounded-full opacity-40" />
+        </div>
 
         {/* 04 — MAPA VIVO: INFORMAÇÃO ISOLADA → CONEXÃO → CLAREZA */}
         <section id="o-mapa" className="bg-night-800 px-4 py-20 text-center sm:px-6 sm:py-28">

@@ -1,45 +1,44 @@
 # RODADA DE IDENTIDADE VISUAL — A MARCA DA PONTE DIGITAL
 
-> **P‑101 — "O Encontro": símbolo institucional definitivo + sistema de marca**
+> **P-102 — "A Passagem": evolução da identidade (o símbolo institucional definitivo)**
 >
-> Data: 14 de agosto de 2026
+> Data: 15 de agosto de 2026
 > Tipo de trabalho: identidade visual (rodada do Founder) — **sem mudanças de arquitetura, schema, APIs, rotas, autenticação, Copiloto, Foundation, descoberta ou multi-tenant**.
-> Status: implementado — `typecheck` limpo, `build` limpo (68 páginas), testes verdes (5/5 plataforma + 4/4 handoff).
+> Status: implementado — `typecheck` limpo, `build` limpo (69 rotas, incluindo `/icon`), testes verdes (5/5 plataforma + 4/4 handoff), validação programática da forma em 6 tamanhos.
 > Componente: `sistema/src/components/brand/ponte-logo.tsx`.
 
 ---
 
-## 1. Conceito — "O Encontro"
+## 1. Conceito — "A Passagem"
 
-Um único gesto geométrico que traduz a filosofia da Ponte:
+A primeira marca ("O Encontro", rodada P-101) era minimalista demais para carregar a personalidade institucional. A evolução mantém a mesma filosofia geométrica e adiciona **fluxo e segunda leitura**, sem perder a redução:
 
 ```
-fragmentos → conexão → convergência → clareza
-   (4 pontos)   (2 arcos)   (os arcos encontram)   (1 ponto central)
+fragmentos → passagem → clareza + fluxo contínuo
+  (6 pontos)  (lente)    (jóia)    (a forma continua = evolução)
 ```
 
-- **Fragmentos:** quatro pequenos sinais (pontos) dispersos nas margens esquerda e direita — a informação espalhada entre pessoas, planilhas, sistemas e conversas.
-- **Conexão:** dois arcos serenos partem das margens e convergem ao centro — a linha que liga o que estava separado.
-- **Convergência:** as duas margens apontam para um único ponto central; o olhar naturalmente converge.
-- **Clareza:** no centro, **um único ponto se completa**. A clareza **nasce da própria geometria** — não é um desenho acrescentado (não há estrela, não há engrenagem, não há arco de ponte literal).
-
-A leitura é de **acolhimento** (duas margens que se abrem para um centro): humana, calma, equilibrada e tecnológica sem ser genérica. Ao esconder o nome "Ponte Digital", o gesto reconhecível é: *duas bordas que caminham para encontrar um centro*.
-
-> **Nota de evolução (rodada +):** a primeira execução da direção D1 continha um glifo "✦" como terminação do traço. Por decisão do Founder, o símbolo NÃO deve conter estrela/ornamento literal — a clareza deve surgir da geometria. A versão final remove o glifo e trata o ponto central como a forma completa em si. O "✦" permanece apenas como elemento narrativo do `AvatarPonte` (identidade não-mascote, inalterado).
+- **Fragmentos (6):** pequenos sinais em duas colunas nas margens — a informação dispersa. Na leitura dinâmica, eles **se aproximam** (convergência).
+- **Passagem — a lente:** dois arcos que se cruzam criando uma **lente/portal vertical** no centro. Uma ponte existe **sem ser desenhada**: o olhar atravessa a abertura. Abstraction idêntica da rodada anterior (nenhum tabuleiro, nenhum pilar — só a passagem).
+- **Clareza — a jóia:** no centro da lente, o ponto central virou uma **jóia** (sinal evergreen). A clareza é o núcleo, não um detalhe das margens.
+- **Fluxo (2 diagonais curtas):** nas pontas superior-direita e inferior-esquerda, a forma **continua para fora do enquadramento** — nada na empresa é estático; a marca nunca "acaba".
+- **Segunda leitura — a mira:** lente + colunas laterais + jóia coincidem com uma **mira/olho**, reforçando o posicionamento **"Antes de melhorar sua empresa, enxergue-a melhor"** — sem ser literal (não é ícone de alvo/visão genérico).
 
 ### Por que não é uma ponte desenhada
 
-Não há tabuleiro, não há pilares, não há vão explícito. O símbolo dá a VER o relacionamento entre dois lados sem desenhar a infraestrutura — o que importa é a passagem/relação, não a estrutura de engenharia. Esse é o grau de abstração desejado: a pessoa percebe "isso conecta dois lados" sem apontar "isso é uma ponte".
+Não há tabuleiro, pilares ou vão explícito. A **lente é a passagem** — a empresa atravessa a estrutura; o símbolo VAR ver o relacionamento entre dois lados sem desenhar a infraestrutura. Esse é o grau de abstração desejado.
+
+> **Nota de evolução:** o glifo "✦" do `AvatarPonte` (rodada P-101) foi **substituído pela própria marca** (micro, mono). O `AvatarPonte` agora converge na marca — clareza = a Ponte. Nenhuma personificação foi criada: a marca não é mascote, é o ponto de convergência.
 
 ---
 
-## 2. As 3 direções conceituais avaliadas
+## 2. As 3 variações avaliadas (evolução visual)
 
-| Direção | Ideia | Veredito |
+| Variação | Ideia | Veredito |
 |---|---|---|
-| **D1 · Convergência → "O Encontro"** | margens de sinais → arcos → ponto central único | **ESCOLHIDA** — melhor representa a etapa convergência/clareza, reusa a linguagem de sinais existente, é uma única construção, sobrevive à redução e é animável |
-| D2 · Vale (espaço negativo) | duas placas geométricas deslocadas com um vão | Descartada — emblemática em favicon, porém leitura mais institucional/genérica |
-| D3 · Constelação (rede de nós) | mini-mapa vivo (muitos nós + linhas) | Descartada — tende a "rede/IA genérica", densa em 24px |
+| **A · Passagem** | colunas de pontos → lente/portal vertical → jóia + fluxos diagonais | **ESCOLHIDA** — personalidade institucional, segunda leitura (mira), única construção, animável (pontos se aproximam → lente se forma → jóia converge) e sobrevive à redução |
+| B · Encontro | versão polida do símbolo anterior (4 pontos + arcos + ponto) | Descartada — leitura ambígua (balança/livro) e ainda minimalista |
+| C · Fluxo | linhas fluidas atravessando arcos | Descartada — parece circuito/SaaS genérico; perde o "encontro" |
 
 ---
 
@@ -47,16 +46,16 @@ Não há tabuleiro, não há pilares, não há vão explícito. O símbolo dá a
 
 | Arquivo | Uso |
 |---|---|
-| `public/brand/simbolo.svg` | símbolo completo, fundo claro |
+| `public/brand/simbolo.svg` | símbolo completo "A Passagem", fundo claro |
 | `public/brand/simbolo-azul-noite.svg` | símbolo completo, fundo azul-noite |
 | `public/brand/simbolo-mono.svg` | monocromático preto (PB / impressão) |
 | `public/brand/simbolo-mono-branco.svg` | monocromático branco |
-| `public/brand/simbolo-micro.svg` | **versão micro** (16–24px / avatares / tiles), fundo claro |
+| `public/brand/simbolo-micro.svg` | **versão micro** (16–24px / favicon / avatares / tiles), fundo claro — lente + 2 pontos + jóia |
 | `public/brand/simbolo-micro-azul-noite.svg` | **versão micro**, fundo azul-noite |
 | `public/brand/ponte-digital.svg` | logo horizontal (símbolo + wordmark), fundo claro |
 | `public/brand/ponte-digital-azul-noite.svg` | logo horizontal, fundo azul-noite |
-| `public/favicon.svg` | favicon/avatar estático (64×64, micro sobre azul-noite) — usado pelo manifest/PWA — **substituiu o favicon anterior (ponte literal)** |
-| `src/app/icon.svg` | **ícone canônico do site** (file convention do Next) — gera `<link rel="icon" type="image/svg+xml" sizes="any">` sem depender de metadata |
+| `public/favicon.svg` | favicon estático (64×64, micro sobre azul-noite) — usado pelo manifest/PWA |
+| `src/app/icon.svg` | **ícone canônico do site** (file convention do Next) — `<link rel="icon">` SVG |
 | `public/brand/preview.html` | página de verificação das superfícies (abrir num navegador) |
 
 ### Componente reutilizável
@@ -66,68 +65,63 @@ Não há tabuleiro, não há pilares, não há vão explícito. O símbolo dá a
 - `variant="full"` (padrão) ou `variant="micro"`.
 - `surface="light"` (padrão, produto/documentos) · `"dark"` (landing azul-noite) · `"mono"` (herda `currentColor` — tiles, PB, favicon).
 - `PonteLogo withWordmark` → lockup horizontal (símbolo + "Ponte Digital"), com `symbolClassName` para controle de altura.
-- 100% vetorial; nenhum SVG duplicado em dezenas de arquivos.
+- 100% vetorial; nenhum SVG duplicado.
 
 ---
 
 ## 4. Paleta utilizada
 
-Todas as cores são **tokens já existentes** da identidade (globals.css / tailwind.config). Nenhuma cor nova desconectada.
+Todas as cores são **tokens já existentes** (globals.css). Nenhuma cor nova.
 
 | Papel | Claro (produto/documentos) | Azul-noite (landing) |
 |---|---|---|
-| Margens/fragmentos (ink) | `hsl(226 64% 14%)` · institutional-900 | `hsl(205 32% 62%)` · l-azure-soft |
-| Arcos — o caminho (path) | `hsl(221 72% 45%)` · primary | `hsl(205 50% 80%)` · l-azure |
-| Ponto central — a clareza (signal) | `hsl(165 34% 26%)` · evergreen | `hsl(157 40% 45%)` · l-green |
+| Fragmentos/ink (estrutura) | `hsl(226 64% 14%)` · institutional-900 | `hsl(205 32% 62%)` · l-azure-soft |
+| Lente — o caminho (path) | `hsl(221 72% 45%)` · primary | `hsl(205 50% 80%)` · l-azure |
+| Jóia — a clareza (signal) | `hsl(165 34% 26%)` · evergreen | `hsl(157 40% 45%)` · l-green |
+| Fluxos (same path, opacity 0.7) | primary desbotado | l-azure desbotado |
 
-Hierarquia conceitual: tinta (estrutura) + azul (caminho) + evergreen (clareza). Gradientes: **nenhum** — contraste plano e robusto.
+Hierarquia: tinta (estrutura) + azul (caminho/passagem) + evergreen (clareza). Gradientes: **nenhum** — contraste plano e robusto.
 
 ## 5. Tipografia
 
-Mantém a identidade existente (sem fontes novas):
-- **Wordmark / UI:** Inter — projectivo `font-semibold` + `tracking-tight` (→ `font-sans`).
-- **Momentos narrativos:** Fraunces (`font-editorial`) — permanece nos textos editoriais da landing; a logo usa Inter, coerente com navegação funcional.
+Idêntica à rodada anterior (sem fontes novas): wordmark/UI Inter (`font-semibold` + `tracking-tight`); Fraunces (`font-editorial`) nos momentos narrativos.
 
 ## 6. Geometria e tamanho mínimo
 
-- Símbolo: **quadrado 1:1** (viewBox 48×48), próprio para favicon/avatar.
-- Lockup horizontal: proporção ≈ **220:48** (símbolo + wordmark).
-- Tamanho mínimo:
-  - `variant="full"`: **24px** de altura.
-  - `variant="micro"`: **16px** de altura (favicon, avatares pequenos, tiles).
-  - Abaixo de 16px: não usar — o ponto central deve permanecer sempre a leitura dominante.
-- Área de proteção: margem livre em torno do símbolo igual a **1× o diâmetro do ponto central** (ponto: unidade da marca).
-- Metodologia de redução testada (ver `preview.html`): 128 / 64 / 48 / 32 / 24 (micro) / 16 (micro) sobre fundo azul-noite.
+- Símbolo full: **quadrado 1:1** (viewBox 48×48). Lente: `M 24 9.5 C 17.6 10.9, 13.9 16.7, 13.9 24 C 13.9 31.3, 17.6 37.1, 24 38.5` + espelho direito; 6 fragmentos em colunas (cx 8.2/7.6/8.2 e 39.8/40.4/39.8); fluxos `M 34.8 6.2 C…` e `M 24 38.5 C…`; jóia central r 3.4.
+- Micro: lente espessa (stroke 3.4) + 2 pontos diagonais + jóia r 4.2 — legível em 16px.
+- Lockup horizontal: proporção ≈ **224:48**.
+- Tamanho mínimo: full **24px**; micro **16px**. Abaixo de 16px não usar.
+- **Validação programática da forma (6 tamanhos):** renderização headless + amostragem por pixel (centro = jóia evergreen; x=30%/70% = lente primary; cobertura de tinta 20–33%) — a geometria é fiel de 16px a 96px em full e micro.
 
 ## 7. Regras de uso
 
 **Fazer:**
-- Usar sempre nas duas superfícies canônicas: claro (produto) ou azul-noite (landing), nunca fora delas.
-- Em fundos coloridos (ex. tile azul do app), usar `surface="mono"` com a cor de contraste adequada (`text-white` / `text-primary-foreground`).
+- Usar sempre nas duas superfícies canônicas: claro (produto) ou azul-noite (landing).
+- Em fundos coloridos (tile azul do app), usar `surface="mono"` com cor de contraste adequada.
 - Preferir o componente React a qualquer cópia de SVG.
 - Favicon sempre na variante canônica (micro sobre azul-noite).
 
 **Não fazer:**
-- Não redesenhar a forma, nem escalar fora das proporções.
-- Não usar estrelas, engrenagens, cerebros, robôs, circuitos, setas de crescimento ou arcos de ponte literal.
+- Não redesenhar a forma, nem escalar fora das proporções (squash/stretch).
+- Não usar estrelas, engrenagens, cérebros, robôs, circuitos, setas de crescimento, ícones de alvo/mira literais ou arcos de ponte com tabuleiro.
 - Não aplicar gradientes, sombras decorativas ou efeitos 3D no símbolo.
-- Não deformar/recolher/estender a marca (ex. em squash/estretch).
 - Não trocar o wordmark de fonte.
 - Não usar a versão a cores sobre fundos intermediários que concorram com a hierarquia tinta/caminho/clareza.
 
 ## 8. Integração realizada
 
-| Onde | Antes | Depois |
+| Onde | Antes (P-101) | Agora (P-102) |
 |---|---|---|
-| `marketing-nav.tsx` | glyph "✦" | `PonteLogo withWordmark` (micro, fundo noite) |
-| `marketing-footer.tsx` | glyph "✦" | `PonteLogo withWordmark` (micro, fundo noite) |
-| `(auth)/layout.tsx` (painel esquerdo + mobile) | ícone `Building2` | `PonteSymbol` micro, mono (`text-white` / `text-primary-foreground`) |
-| `(dashboard)/layout.tsx` → `sidebar.tsx` (tile de logo) | ícone `Building2` | `PonteSymbol` micro, mono (`text-primary-foreground`) |
-| `layout.tsx` (metadata) | `/favicon.ico` (**inexistente**) | file convention `src/app/icon.svg` — `<link rel="icon">` SVG canônico |
-| `manifest.ts` | `/favicon.ico` (**inexistente**) | `/favicon.svg` (svg/xml) |
-| `public/favicon.svg` | ponte literal + estrela | símbolo "O Encontro" (micro) |
+| `marketing-nav.tsx` | `PonteLogo withWordmark` → marca P-101 | componente atualizado → **nova marca** automática |
+| `marketing-footer.tsx` | `PonteLogo withWordmark` | componente atualizado → **nova marca** automática |
+| `(auth)/layout.tsx` + `sidebar.tsx` | `PonteSymbol` micro mono | componente atualizado → **nova marca** automática |
+| `ui/avatar.tsx` → `AvatarPonte` | glifo "✦" narrativo | **`PonteSymbol` micro mono** (a convergência da presenza é a marca) |
+| `layout.tsx` (metadata) | `src/app/icon.svg` canônico | atualizado para a nova marca (micro, azul-noite) |
+| `manifest.ts` | `/favicon.svg` | mesma referência; arquivo atualizado |
+| Landing `page.tsx` (P-101 intacta) | sem eco de marca | **linguagem P-102:** 2 lentes gigantes quase invisíveis + pontos no hero (eco da "mira"); **divisor "A Passagem"** (pontos → símbolo → pontos) entre a Fragmentação e o Mapa Vivo |
 
-**Preservado (fora do escopo):** `AvatarPonte` (elemento narrativo; **não virou mascote** e não foi substituído pela logo), hero da landing (`hero-visual.tsx` já usa a linguagem sinais→convergência e não foi alterado), demais telas do produto. Nenhuma API, banco, rota, autenticação ou regra de negócio foi alterada.
+**Fora do escopo:** arquitetura, schema, APIs, rotas, autenticação, Copiloto, descoberta, Foundation, multi-tenant — nenhum arquivo tocado. `Building2` remanescente é funcional (preservado). Hero `hero-visual.tsx` intacto (já usa linguagem sinais→convergência).
 
 ### Como usar daqui em diante
 
@@ -142,44 +136,37 @@ import { PonteLogo, PonteSymbol } from '@/components/brand/ponte-logo'
 <PonteSymbol variant="micro" surface="mono" className="text-white" />
 ```
 
-## 9. Animação futura (possibilitada pela geometria)
+## 9. Animação possível (geometria suporta)
 
-A marca permite a animação "a filosofia da Ponte":
-1. os 4 fragmentos aparecem (sinais dispersos);
-2. os 2 arcos se desenham (conexões chegam);
-3. o ponto central se completa (convergência → clareza).
-
-Não foi implementada nesta rodada por escopo — a geometria já a suporta (elementos são discretos e desenháveis via `stroke-dashoffset`, mesmo mecanismo de `.signal-line`).
+1. os 6 fragmentos surgem (sinais dispersos); 2. aproximam-se / a lente se desenha (passagem); 3. o fluxo continua além do quadro (evolução); 4. a jóia converge ao centro (clareza). Não implementada nesta rodada por escopo — elementos discretos e desenháveis via `stroke-dashoffset` (mesmo mecanismo de `.signal-line`).
 
 ## 10. Backup e substituição
 
-- O favicon anterior (ponte literal) foi **substituído** (arquivo único, resgatável no git).
-- Sistema de marca consolidado em `sistema/public/brand/` (this rodada) para futuras consultas.
-- ZIP de entregáveis: `docs/05-OPERATIONS/REPORTS/ponte-identidade-visual.zip`.
+- Todas as formas anteriores resgatáveis no git; o símbolo P-101 foi **substituído** pela nova marca em todos os pontos (componente + `public/brand/*` + favicon + icon).
+- Sistema de marca consolidado em `sistema/public/brand/`.
 
-## 11. Limitações de validação automática (validação manual pendente)
+## 11. Validação desta rodada
 
-Não é possível validar automaticamente a renderização pixel em navegador nesta rodada. Antes de anunciar a marca como definitiva, sugere-se conferir manualmente em `sistema/public/brand/preview.html`:
-1. **Contraste no tile do app** (sidebar: símbolo 18px dentro de tile `bg-primary` mono branco) — verificar visibilidade em tema claro e escuro.
-2. **Favicon em abas** escuras e claras (fundo azul-noite + traço azure + ponto verde): conferir leitura entre 16 e 24px.
-3. **Lockup horizontal** em larguras de footer/nav ≤ 320px (não quebrar linha).
-4. **iOS apple-touch icon**: o iOS ignora SVG; geração de `apple-icon.png` fica **pendente de decisão manual** (fora do escopo desta rodada). Nota: o Next mantém um `<link rel="icon" href="/favicon.ico?hash">` default (placeholder padrão, não é 404) mesmo com `app/icon.svg` — comportamento da plataforma, não da marca.
-5. **`docs/05-OPERATIONS/REPORTS/`**: identificada divergência documental pré-existente (P33 fala em `docs/05-OPERATIONS/SPRINTS/` como local de auditorias) — sem impacto nesta rodada; registrada para auditoria futura.
+1. **Programática (forma):** headless Chrome + amostragem de pixels — jóia central no pixel exato, lente nos dois lados, cobertura de tinta consistente em 16/20/24/48/96px (full e micro). A estética final permanece uma decisão humana: `sistema/public/brand/preview.html`.
+2. **Manual pendente (decisão estética):** contraste no tile do app (sidebar 18px, mono branco), favicon em abas escuras/claras, lockup em larguras ≤ 320px, `apple-icon.png` (iOS ignora SVG — decisão manual, fora do escopo).
+3. Nota plataforma: o Next mantém `<link rel="icon" href="/favicon.ico?hash">` default (placeholder padrão, não 404) mesmo com `app/icon.svg` — comportamento da plataforma.
 
 ---
 
-## 12. Critérios de qualidade (resumo da resposta)
+## 12. Critérios de qualidade
 
 | Pergunta | Resposta |
 |---|---|
 | Funciona em 24px? | Sim — variante micro dedicada |
 | Funciona como favicon? | Sim — canônico 64×64 |
-| Funciona sem o nome "Ponte Digital"? | Sim — "duas margens que encontram um centro" |
-| Reconhecível rapidamente? | Sim — um único gesto |
-| Profissional / tecnológica sem ser genérica? | Sim — sem estrela, engrenagem, cérebro, robô, rede ou ponte literal |
-| Humana? | Sim — acolhimento / equilíbrio |
-| Relação conceitual real com "Ponte"? | Sim — conexão+convergência+clareza |
-| Gera linguagem visual? | Sim — ponto / arco / convergência (ver §9) |
+| Funciona sem o nome "Ponte Digital"? | Sim — a lente/portal é reconhecível |
+| Reconhecível rapidamente? | Sim — gesto único (lente + jóia) |
+| Profissional / tecnológica sem ser genérica? | Sim — sem estrela, engrenagem, cérebro, robô, alvo literal, rede ou ponte literal |
+| Substantiva o bastante para institucional? | Sim — a lente adiciona peso que a versão minimalista não tinha |
+| Tem segunda leitura? | Sim — "mira/olho": *antes de melhorar sua empresa, enxergue-a melhor* |
+| Humana? | Sim — passagem acolhe; nada de máquina |
+| Relação conceitual real com "Ponte"? | Sim — passagem + convergência + clareza + evolução |
+| Gera linguagem visual? | Sim — pontos / lente / jóia / fluxo (já aplicada na landing: eco do hero + divisor) |
 | Continua boa em 5–10 anos? | Sim — geometria simples, sem modismos |
-| Funciona em azul-noite, claro, PB, documentos, sistema? | Sim — surfaces light/dark/mono |
-| Animável com elegância? | Sim — fragmentos→arcos→ponto (não implementado por escopo) |
+| Funciona em azul-noite, claro, PB, documento, sistema? | Sim — surfaces light/dark/mono |
+| Animável com elegância? | Sim — pontos → lente → jóia (não implementado por escopo) |

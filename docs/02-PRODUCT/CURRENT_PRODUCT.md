@@ -1,15 +1,15 @@
 # CURRENT_PRODUCT.md — Estado Atual do Produto (V4 Founder)
 
-> **MARCO: IDENTIDADE VISUAL — "O ENCONTRO" — SÍMBOLO INSTITUCIONAL DEFINITIVO — 14 de agosto de 2026**
+> **MARCO: IDENTIDADE VISUAL — "A PASSAGEM" — SÍMBOLO INSTITUCIONAL DEFINITIVO — 15 de agosto de 2026**
 >
-> **A Ponte ganha marca definitiva: um único gesto geométrico — margens de sinais → arcos que convergem → um ponto central que se completa (clareza nascida da geometria, sem estrela/ornamento).** Rodada exclusiva de identidade visual, sem tocar em arquitetura, schema, APIs, rotas, autenticação, Copiloto, descoberta ou multi-tenant.
-> - **Conceito "O Encontro":** 4 pontos (fragmentos) nas margens + 2 arcos (conexão) convergindo para **1 ponto central** (convergência→clareza). Simbólico de "conectar coisas que estavam separadas", humano e equilibrado; não é ponte literal, não é rede/IA genérica, não é estrela.
-> - **Variações:** símbolo full/micro, fundo claro/azul-noite, mono preto/branco, lockup horizontal, favicon canônico (micro sobre azul-noite), `preview.html` para verificação. **Componente reutilizável** `PonteSymbol`/`PonteLogo` (`sistema/src/components/brand/ponte-logo.tsx`, `surface` light/dark/mono + `variant` full/micro — zero SVG duplicado).
-> - **Integrado:** `marketing-nav`, `marketing-footer` (substituem o glyph "✦"), `(auth)/layout` e `sidebar` (substituem ícone `Building2`), favicon canônico via `src/app/icon.svg` (file convention do Next) + `manifest.ts` com `/favicon.svg` (corrige referência morta a `/favicon.ico`). `AvatarPonte` **inalterado** (elemento narrativo, não mascote).
-> - **Tudo vem dos tokens existentes** (institutional-900/primary/evergreen ← l-azure/l-green): nenhuma cor nova. Wordmark em Inter; Fraunces segue nos momentos narrativos.
-> - **Status:** typecheck limpo, **build limpo** (68 rotas), testes verdes (plataforma 5/5 + handoff 4/4). Validação visual manual pendente via `public/brand/preview.html` (ver seção 11 do relatório).
+> **A marca ganha personalidade institucional: fragmentos → passagem (lente/portal) → jóia (clareza) + fluxo contínuo (evolução).** Evolução da rodada P-101 ("O Encontro", minimalista demais), mesma filosofia — nada é ponte literal, estrela, cérebro, robô, circuito ou alvo literal. Rodada exclusiva de identidade visual, sem tocar em arquitetura, schema, APIs, rotas, autenticação, Copiloto, descoberta ou multi-tenant.
+> - **Conceito "A Passagem":** 6 fragmentos em colunas (informação dispersa) → **lente/portal vertical** formada por 2 arcos (a ponte que não é desenhada — a travessia) → **jóia** central (clareza = núcleo) → **2 fluxos diagonais** que continuam além do quadro (nada é estático). **Segunda leitura: "mira/olho"** — reforça o posicionamento *"antes de melhorar sua empresa, enxergue-a melhor"*.
+> - **Componente único** `PonteSymbol`/`PonteLogo` (`ponte-logo.tsx`, surfaces light/dark/mono, variants full/micro) — nav/footer/auth/sidebar herdam a nova marca automaticamente; `AvatarPonte` agora converge na própria marca (substituiu o glifo ✦).
+> - **Linguagem P-102 na landing:** 2 lentes gigantes quase invisíveis + pontos no hero (eco da mira) e divisor "A Passagem" (pontos → símbolo → pontos) entre a Fragmentação e o Mapa Vivo.
+> - **Assets:** `public/brand/*` (8 SVGs + preview), `public/favicon.svg` e `src/app/icon.svg` (micro sobre azul-noite) atualizados. Tudo dos tokens existentes (institutional-900/primary/evergreen ← l-azure/l-green), nenhuma cor nova.
+> - **Status:** typecheck limpo, **build limpo** (69 rotas, incluindo `/icon`), testes verdes (plataforma 5/5 + handoff 4/4). Forma validada programaticamente por amostragem de pixels em 16/20/24/48/96px; decisão estética final em `public/brand/preview.html`.
 >
-> Ver `docs/05-OPERATIONS/REPORTS/IDENTIDADE-VISUAL.md` + `ponte-identidade-visual.zip`.
+> Ver `docs/05-OPERATIONS/REPORTS/IDENTIDADE-VISUAL.md`.
 
 > **MARCO: P93 — CONSOLIDAÇÃO DO SISTEMA + LANDING VIVA — 12 de agosto de 2026**
 >

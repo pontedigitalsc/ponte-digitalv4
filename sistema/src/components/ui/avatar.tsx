@@ -3,6 +3,7 @@
 import * as React from 'react'
 import * as AvatarPrimitive from '@radix-ui/react-avatar'
 import { cn, getIniciais } from '@/lib/utils'
+import { PonteSymbol } from '@/components/brand/ponte-logo'
 
 // ─── AVATAR ───────────────────────────────────────────────────────────────────
 
@@ -72,6 +73,14 @@ interface AvatarPonteProps {
   className?: string
 }
 
+// A "presença" da Ponte carrega a própria marca: a passagem + a jóia de
+// clareza. A marca é o ponto de convergência (não um mascote antropomórfico).
+const PONTE_MARK_SIZE: Record<'sm' | 'md' | 'lg', string> = {
+  sm: 'h-5 w-auto',
+  md: 'h-6 w-auto',
+  lg: 'h-8 w-auto',
+}
+
 function AvatarPonte({ state = 'breathing', size = 'md', className }: AvatarPonteProps) {
   const dimension = size === 'sm' ? 'h-8 w-8' : size === 'lg' ? 'h-14 w-14' : 'h-10 w-10'
 
@@ -84,7 +93,7 @@ function AvatarPonte({ state = 'breathing', size = 'md', className }: AvatarPont
   return (
     <AvatarRoot className={cn(dimension, animClass, className)}>
       <AvatarFallback className="bg-gradient-to-br from-primary/20 via-primary/10 to-transparent text-primary text-sm font-semibold">
-        <span className="text-lg">✦</span>
+        <PonteSymbol variant="micro" surface="mono" className={cn(PONTE_MARK_SIZE[size])} />
       </AvatarFallback>
     </AvatarRoot>
   )
