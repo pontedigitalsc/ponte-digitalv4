@@ -13,7 +13,7 @@ Executar na URL pública após o deploy. Marcar cada item como ✅ OK, ⚠️ WA
 - [ ] `https://<url>/robots.txt` — Robots servido corretamente
 - [ ] `https://<url>/sitemap.xml` — Sitemap servido corretamente
 - [ ] `https://<url>/manifest.webmanifest` — Manifest servido
-- [ ] `https://<url>/favicon.ico` — Favicon retorna 200
+- [ ] `https://<url>/icon.svg` — Favicon canônico (SVG P100B) retorna 200
 - [ ] `https://<url>/rota-inexistente` — 404 personalizada (não tela branca)
 - [ ] HTTPS ativo (sem erro de certificado)
 - [ ] Headers de segurança presentes (CSP, HSTS, X-Frame-Options)

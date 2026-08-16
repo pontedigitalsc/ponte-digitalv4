@@ -38,9 +38,9 @@ export const metadata: Metadata = {
     type: 'website',
   },
   // Ícone: file convention `app/icon.svg` — gera o <link rel="icon"> canônico
-  // (SVG, sizes=any). O Next ainda injeta um link /favicon.ico?hash default
-  // (placeholder padrão, não 404); não removível via metadata. `public/favicon.svg`
-  // segue usado pelo manifest/PWA.
+  // (SVG, sizes=any). O `favicon.ico` residual pré-P96 foi removido (P100C):
+  // ele gerava um <link rel="icon" href="/favicon.ico"> que sobrescrevia o SVG
+  // com a marca antiga. `public/favicon.svg` segue usado pelo manifest/PWA.
   manifest: '/manifest',
   robots: '/robots',
 }

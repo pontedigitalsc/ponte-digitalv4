@@ -1,5 +1,19 @@
 # Known Issues
 
+## P100C — Governança e Consolidação (16/08/2026): resumo dos achados registrados
+
+**Status:** Registro de auditoria — nenhuma decisão unilateral tomada além da remoção do resíduo de identidade (ver abaixo). Fundamento: documentação de fontes da verdade agora em `docs/05-OPERATIONS/PONTE-SOURCE-OF-TRUTH.md`, `GOVERNANCA-DE-DESENVOLVIMENTO.md` e `REPORTS/P100C-STATUS-DA-PONTE.md`.
+
+1. **Favicon `app/favicon.ico` removido (resíduo pré-P96 corrigido).** O arquivo físico `sistema/src/app/favicon.ico` (pré-P96, preto/branco, quadrado com losango) era lido pela file convention do Next (gera `<link rel="icon" href="/favicon.ico">`) e **sobrescrevia** o canônico `app/icon.svg` P100B. O comentário em `layout.tsx` dizia que era "placeholder padrão não removível" — incorreto (toolchain lê o arquivo se ele existir). Removido na P100C; `app/icon.svg` + `public/favicon.svg` são os canônicos. `SMOKE_TEST.md` atualizado para `/icon.svg`. **Observação:** o comportamento de /favicon.ico em produção após a remoção foi validado no deploy P100C (ver relatório P100C).
+2. **Conflito documental `/api/patrimonio` × `/api/cognitive-heritage` (duplicação).** `RFC-002` recomenda manter `/api/patrimonio`; `SPRINTS/C1-C3-impact-reports.md` recomenda manter `/api/cognitive-heritage`. Sem consumidor nenhum no frontend. **Decisão pendente do Fundador.**
+3. **Notas desatualizadas do KNOWN_ISSUES:** (a) soft delete — lista antiga dizia "7 models sem deletedAt"; verificação do schema atual mostra 58/62 com `deletedAt` (só 4 logs de plataforma sem, por design); (b) RLS — nota antiga diz 11 tabelas/8 policies; arquivo atual cobre 31/31 (mas ~50% do schema, tabelas novas das migrations 008–012 fora); (c) `prismaSeguro` — nota P94 dizia "majoria usa cliente direto"; hoje 9/10 services usam o wrapper (`atendimento.service` é a exceção).
+4. **`/register` residual no proxy:** `sistema/src/proxy.ts` lista `/register` como rota pública, mas a rota foi eliminada no P41 — resíduo documental/código (rota não existe).
+5. **Sitemap incompleto:** `/explorar` ativo/linkado mas ausente do `sitemap.ts` (P0-6).
+6. **APIs órfãs/legadas catalogadas (ver P100C-STATUS):** `sessao/iniciar`, `relacao` e `relacao/perguntas/[id]/responder`, `cognitive/panel`, `cognitive/decisoes` — sem consumidor; nenhuma removida nesta rodada (governar ≠ apagar).
+7. **Rate limit in-memory** sem cobertura nas rotas de plataforma e leituras cognitivas — registrar para rodada de segurança.
+8. **Migrations 001/002 duplicam tabelas** (`respostas_conversa`, `momento_wow`, `fricoes`, `sinais_valor`, `auditoria_recomendacoes`, `plataforma_snapshots`, etc.) — possível débito a conferir com histórico aplicado real.
+9. **Cópias de ambiente:** `evolucao-os` tem `.git` próprio ligado ao MESMO remote (HEAD antigo P70) — proibido desenvolver lá. Ver `PONTE-SOURCE-OF-TRUTH.md` §3.
+
 ## P94 — tenant wrapper (`prismaSeguro`) e RLS: decisão de NÃO conectar nesta fase (documentado apenas)
 
 **Status:** Aceito (decisão de escopo registrada pelo usuário — não é bug)
