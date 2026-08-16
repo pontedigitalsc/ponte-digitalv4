@@ -1,15 +1,33 @@
 # RODADA DE IDENTIDADE VISUAL — A MARCA DA PONTE DIGITAL
 
-> **P100 — "A Travessia" (reconstruída): o ARCO como protagonista (supersede "A Travessia"/P99)**
+> **P100B — "Clareza" — o símbolo aberto (supersede "A Travessia"/P100)**
 >
-> Data: 15 de agosto de 2026
+> Data: 16 de agosto de 2026
 > Tipo de trabalho: identidade visual (rodada do Founder) — **sem mudanças de arquitetura, schema, APIs, rotas, autenticação, Copiloto, Founder, descoberta ou multi-tenant**.
-> Status: implementado — `typecheck` limpo, `build` limpo (69 rotas + `/icon`), forma validada por pixel-scan (full 96, micro/noite 48), testes verdes (plataforma 5/5 + handoff 4/4). Publicado e verificado em produção.
+> Status: implementado — `typecheck` limpo, `build` limpo (69 rotas + `/icon`), forma validada por pixel-scan (full light/dark 480×200, micro 192, zoom do centro 960×400, redução 14→288px), testes verdes (plataforma 5/5 + handoff 4/4). Publicado e verificado em produção.
 > Componente: `sistema/src/components/brand/ponte-logo.tsx` — `PonteSymbol` / `PonteLogo` / `PonteLogoHorizontal` / `PonteLogoStacked`.
 
-**Esta rodada SUPERSEDE a P99. O conteúdo das seções "Conceito" deste documento descreve as rodadas anteriores. A partir da P100, vale o seguinte:**
+**Esta rodada SUPERSEDE a P100. O conteúdo das seções "Conceito" deste documento descreve as rodadas anteriores. A partir da P100B, vale o seguinte:**
 
 ---
+
+## 0. Conceito — "Clareza" (P100B, o símbolo aberto)
+
+A P100 era bonita, mas lia como **desenho** (um objeto: ponte de engenharia elegante) — não como uma forma que conta uma história. A P100B para de desenhar a ponte e passa a **expressar o processo que a Ponte executa numa empresa**: FRAGMENTOS → CONEXÃO → CONVERGÊNCIA → CONTEXTO → CLAREZA → EVOLUÇÃO. Primeira leitura (2 segundos): **sinais convergindo e um ponto de clareza no encontro**. Segunda leitura: as linhas atravessam e continuam — **a ponte é a travessia percebida PELA RELAÇÃO entre as margens, sem desenhar torres, cabos ou arco**.
+
+```
+LOGO     = o processo (fragmentos → conexão → clareza → evolução)
+MARCA    = ponte + conexão + contexto
+EXPERIÊNCIA = fragmentação → conexão → contexto → clareza → evolução
+```
+
+- **8 fragmentos (`ink`):** 4 à esquerda (x=30) e 4 à direita (x=210), y {17, 39, 61, 83} — espaçamento 22, simétrico em torno de y=50 (r 3.5). São sinais independentes entrando: pessoa, processo, venda, planilha, WhatsApp, memória.
+- **Malha de travessia (`path`), 4 Béziers quadráticas:** duas descem (cruzam em (120,36.5)), duas sobem (cruzam em (120,63.5)); as linhas **continuam além dos cruzamentos** — a conexão não para no meio, segue evoluindo.
+- **CENTRO DE CLAREZA (`signal`) em (120,50):** um **losango** (hw 6, hh 8) + **4 eixos diagonais** + **4 pontas discretas** (r 1.7). Tratado como **símbolo próprio da Ponte** — construído em SVG, **não é o caractere "✦", não é estrela decorativa, não é botão**. Representa contexto/inteligência/compreensão/decisão que nasce no encontro das conexões.
+- **Segunda leitura — foco/lente:** a convergência da malha sugere discretamente uma leitura de foco ("enxergar melhor a empresa") — sempre subliminar, nunca olho literal, nunca mira de arma.
+- **Micro (48×48 / 16–32px):** núcleo quadrado para favicon/avatar/sidebar/tiles — 4 fragmentos, o X da convergência e o losango. O que sobrevive e mantém a identidade na redução.
+- **Espaçamento e cruzamentos matematicamente consistentes** — cada elemento é um `path` separado, deterministicamente desenhável: animação futura = pontos → linhas → malha → convergência → centro acende → fluxo segue.
+- **Decisão de design (rodada do Founder):** a referência visual é um PRINCÍPIO, não uma imagem a copiar — "como transformo a filosofia da Ponte em uma forma que alguém entenda visualmente?". NÃO FAZER: ponte literal, "✦"/estrela decorativa, ícones prontos (Lucide), rede tecnológica genérica, Wi-Fi/blockchain/banco, excesso de linhas/nós, centro como botão, olho literal, gradientes, sombras, depender de animação.
 
 ## 1. Conceito — "A Travessia" (P100, reconstruída)
 
@@ -93,7 +111,7 @@ Não há tabuleiro, pilares ou vão explícito. A **lente é a passagem** — a 
 
 | Arquivo | Uso |
 |---|---|
-| `public/brand/simbolo.svg` | símbolo completo "A Travessia", fundo claro |
+| `public/brand/simbolo.svg` | símbolo completo "Clareza" (P100B, 240×100), fundo claro |
 | `public/brand/simbolo-azul-noite.svg` | símbolo completo, fundo azul-noite |
 | `public/brand/simbolo-mono.svg` | monocromático preto (PB / impressão) |
 | `public/brand/simbolo-mono-branco.svg` | monocromático branco |
@@ -105,7 +123,7 @@ Não há tabuleiro, pilares ou vão explícito. A **lente é a passagem** — a 
 | `src/app/icon.svg` | **ícone canônico do site** (file convention do Next) — `<link rel="icon">` SVG |
 | `public/brand/preview.html` | página de verificação das superfícies (abrir num navegador) |
 
-> **P99:** os mesmos 8 SVGs de `public/brand` + favicon + icon foram regravados para a geometria da ponte. A tabela acima continua válida — só a forma interna mudou.
+> **P100B:** os mesmos 8 SVGs de `public/brand` + favicon + icon foram regravados para a geometria "Clareza" (full 240×100 / micro 48×48). A tabela acima continua válida — só a forma interna mudou.
 
 ### Componente reutilizável
 

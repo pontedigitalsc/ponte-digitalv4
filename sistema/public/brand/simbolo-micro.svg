@@ -1,12 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Ponte Digital" focusable="false">
-  <!-- Ponte Digital — "A Travessia" (P100) versão micro (16–24px: favicon, avatares, tiles) — fundo claro -->
+  <!-- Ponte Digital — "Clareza" (P100B) versão micro (16–24px: favicon, avatares, tiles) — fundo claro.
+       4 fragmentos + X da convergência + losango: a identidade na redução. -->
   <g fill="none">
-    <path d="M 5 40 L 20 40" stroke="hsl(226, 64%, 14%)" stroke-width="3.8" stroke-linecap="round"/>
-    <path d="M 28 40 L 43 40" stroke="hsl(226, 64%, 14%)" stroke-width="3.8" stroke-linecap="round"/>
-    <path d="M 13 15 L 13 40" stroke="hsl(226, 64%, 14%)" stroke-width="3.8" stroke-linecap="round"/>
-    <path d="M 35 15 L 35 40" stroke="hsl(226, 64%, 14%)" stroke-width="3.8" stroke-linecap="round"/>
-    <path d="M 13 15 C 16 6, 21 4.6, 23.3 4.6" stroke="hsl(221, 72%, 45%)" stroke-width="4.4" stroke-linecap="round"/>
-    <path d="M 35 15 C 32 6, 27 4.6, 24.7 4.6" stroke="hsl(221, 72%, 45%)" stroke-width="4.4" stroke-linecap="round"/>
+    <path d="M 8 13.5 Q 24 24 40 34.5" stroke="hsl(221, 72%, 45%)" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M 40 13.5 Q 24 24 8 34.5" stroke="hsl(221, 72%, 45%)" stroke-width="3.4" stroke-linecap="round"/>
   </g>
-  <circle cx="24" cy="5" r="3.8" fill="hsl(165, 34%, 26%)"/>
+  <circle cx="8" cy="13.5" r="2.8" fill="hsl(226, 64%, 14%)"/>
+  <circle cx="40" cy="13.5" r="2.8" fill="hsl(226, 64%, 14%)"/>
+  <circle cx="8" cy="34.5" r="2.8" fill="hsl(226, 64%, 14%)"/>
+  <circle cx="40" cy="34.5" r="2.8" fill="hsl(226, 64%, 14%)"/>
+  <path d="M 24 19.2 L 27.2 24 L 24 28.8 L 20.8 24 Z" fill="hsl(165, 34%, 26%)"/>
 </svg>

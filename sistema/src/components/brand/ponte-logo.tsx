@@ -2,50 +2,61 @@ import type { CSSProperties } from 'react'
 import { cn } from '@/lib/utils'
 
 /**
- * Marca institucional da Ponte Digital — P100, "A Travessia" (reconstruída).
+ * Marca institucional da Ponte Digital — P100B, "Clareza" (o símbolo aberto).
  *
- * Primeira leitura (2 segundos): UMA PONTE — um arco elegante entre duas
- * margens, com os dois lados quase se tocando no alto, fechados por um único
- * nó (a conexão central). Não é ponte de engenharia, nem ponte suspensa com
- * cabos: é a estrutura mínima e sofisticada de uma travessia.
+ * Princípio da rodada (Founder): UM ÚNICO SÍMBOLO CONTA UMA HISTÓRIA POR VÁRIAS
+ * LEITURAS SIMULTÂNEAS. Ela não diz "nós somos uma ponte" — ela faz a pessoa
+ * sentir que "isso conecta coisas e as torna claras".
  *
- * Segunda leitura (a linguagem da Ponte — pontos, sinais, convergência):
- *   · as duas margens (pilares + apoios no chão) = as partes separadas de
- *     uma empresa que precisam conversar;
- *   · o arco em DOIS TRECHOS que se aproximam pelo alto = informação
- *     convergindo de cada lado — a mesma conversa que a landing desenha
- *     (sinais → linhas → convergência);
- *   · o NÓ no ápice = a clareza onde as partes se encontram — não é um
- *     enfeite, é a consequência da conexão (o keystone que fecha o arco);
- *   · o espaço entre as duas margens, aberto, = A PASSAGEM (o vão que se
- *     atravessa; aquilo que ainda não foi conectado).
+ * O símbolo representa o processo que a Ponte Digital executa numa empresa:
  *
- * Regra da rodada: LOGO = ponte · MARCA = ponte + conexão + inteligência ·
- * EXPERIÊNCIA = fragmentação → conexão → contexto → clareza → evolução.
- * O símbolo não tenta carregar toda a filosofia — ele é a origem dela: a
- * mesma gramática (arco + margens + nó) é o que a landing repete em
- * hero-visual, live-map e passagem.
+ *   FRAGMENTOS → CONEXÃO → CONVERGÊNCIA → CONTEXTO → CLAREZA → EVOLUÇÃO
  *
- * Variação:
- *   · variant="full"  — versão completa (padrão): arco em dois trechos +
- *     nó central + duas margens (pilares com apoio no chão). Usar ≥ 24px.
- *   · variant="micro" — redução responsiva (16–24px, favicon, avatares, tiles):
- *     mesma silhueta, traços mais pesados, nó maior para sobreviver.
+ * Leituras simultâneas:
+ *   · sinais chegando  — 4+4 fragmentos nas margens (unidades de informação
+ *     independentes: pessoa, processo, venda, planilha, WhatsApp, memória);
+ *   · conexão          — as linhas atravessam o centro (informação conversa);
+ *   · convergência     — as linhas dos dois lados se aproximam e cruzam no meio;
+ *   · contexto/clareza — o centro (losango + eixos + pontas) organiza o disperso:
+ *     é um PONTO DE CLAREZA surgindo no encontro, tratado como símbolo próprio
+ *     da Ponte (construído em SVG, não é o caractere "✦" nem estrela decorativa);
+ *   · evolução         — as linhas continuam depois do encontro (os caminhos não
+ *     param no centro, seguem para o outro lado);
+ *   · ponte            — a travessia aparece PELA RELAÇÃO entre os elementos
+ *     (duas margens ligadas por linhas), sem desenhar torres, cabos ou arco;
+ *   · visão            — a convergência sugere discretamente um foco/lente
+ *     ("enxergar melhor a empresa"), sempre subliminar, nunca olho literal.
  *
- * Cores (hierarquia da identidade, só tokens existentes):
- *   · ink    — estrutura (margens/pilares e apoios no chão);
- *   · path   — a travessia (o arco);
- *   · signal — a clareza (o nó onde as partes se encontram).
+ * NÃO FAZER (regras da rodada): ponte literal, "✦", ícones prontos (Lucide),
+ * rede tecnológica genérica, Wi-Fi/blockchain/banco, excesso de linhas/nós,
+ * centro como botão, olho literal, gradientes, sombras, depender de animação.
  *
- * Superfícies:
- *   · surface="light"     — fundo claro (produto/documentos).
- *   · surface="dark"      — fundo azul-noite (landing).
- *   · surface="deepnight" — fundo muito escuro/colorido (estrutura em branco).
- *   · surface="mono"      — tudo herda currentColor (PB, tiles, impressão).
+ * Geometria (viewBox 240×100, full):
+ *   · 8 fragmentos (pontos, `ink`) — 4 à esquerda (x 30) e 4 à direita (x 210),
+ *     y {17, 39, 61, 83} — espaçamento perfeitamente consistente (22) e
+ *     simétrico (±33, ±11 em torno de y 50): sinais independentes entrando;
+ *   · 4 linhas de travessia (`path`) em Bézier quadrática — duas que descem
+ *     (cruzam em (120, 36.5)) e duas que sobem (cruzam em (120, 63.5)),
+ *     criando a malha da convergência; as linhas continuam além dos cruzamentos;
+ *   · o CENTRO (`signal`) em (120, 50) — um losango com 4 eixos diagonais e 4
+ *     pontas discretas: o ponto de clareza que nasce no encontro das conexões.
  *
- * Animação futura (cada elemento é um path separado, desenhável via
- * stroke-dashoffset): margens aparecem → o arco nasce das duas bordas e
- * converge → o nó fecha a conexão → a passagem completa a leitura.
+ * O espaçamento e os cruzamentos são matematicamente consistentes; cada
+ * elemento é um path separado e deterministicamente desenhável (animação
+ * futura: pontos → linhas → malha → convergência → centro acende → fluxo segue).
+ *
+ * Variações:
+ *   · variant="full"  — versão completa (padrão, 240×100): 8 fragmentos + malha
+ *     + centro de clareza. Usar ≥ 32px (nav, footer, passagem ampla, lockups).
+ *   · variant="micro" — núcleo quadrado (48×48) para 16–32px (favicon, avatar,
+ *     sidebar, tiles): 4 fragmentos, o X da convergência e o losango — o que
+ *     sobrevive e mantém a identidade na redução.
+ *
+ * Superfícies (hierarquia de tokens, sem cor nova):
+ *   · ink    — estrutura/fragmentos (azul-noite no claro, azul-suave no escuro);
+ *   · path   — a travessia/as linhas (primary no claro, azure no escuro);
+ *   · signal — a clareza/o centro (evergreen no claro, l-green no escuro).
+ *   · surface="mono" — tudo herda currentColor (PB, tiles, impressão).
  */
 export type PonteSurface = 'light' | 'dark' | 'deepnight' | 'mono'
 export type PonteSymbolVariant = 'full' | 'micro'
@@ -55,6 +66,8 @@ interface PonteSymbolProps {
   className?: string
   surface?: PonteSurface
   variant?: PonteSymbolVariant
+  /** Tamanho em px (opcional). Quando informado, define width/height numéricos. */
+  size?: number
 }
 
 const SURFACE_VARS: Record<Exclude<PonteSurface, 'mono'>, CSSProperties> = {
@@ -75,74 +88,131 @@ const SURFACE_VARS: Record<Exclude<PonteSurface, 'mono'>, CSSProperties> = {
   } as CSSProperties,
 }
 
+/** Fragmentos do símbolo completo (pontos laterais). */
+type Fragments = { lx: number; rx: number; ys: number[]; r: number }
+/** A malha de travessia (linhas convergentes em Bézier quadrática). */
+type Weave = { d: string; w: number }
+/** O centro de clareza — losango + eixos + pontas. */
+type Clarity = {
+  cx: number
+  cy: number
+  hw: number
+  hh: number
+  /** eixos diagonais partindo do centro (M cx cy L x y). */
+  rays: [number, number][]
+  /** pontas discretas (círculos) no fim de cada eixo. */
+  dots: [number, number, number][]
+}
+
 interface BridgeShape {
-  arcL: string
-  arcR: string
-  pillarL: string
-  pillarR: string
-  groundL: string
-  groundR: string
-  node: { cx: number; cy: number; r: number }
-  stroke: { arc: number; pillar: number; ground: number }
+  viewBox: string
+  fragments: Fragments
+  weave: Weave[]
+  clarity: Clarity
 }
 
-// "A Travessia" (P100) — ponte-e-nó, viewBox 48×48:
-// duas margens (pilares 13/35, y 15→40, apoiadas nos dois blocos do solo
-// 5–20 e 28–43) sustentam um arco em DOIS TRECHOS que convergem pelo alto
-// (Béziers a partir dos topos 13,15 e 35,15, ápice ~24,4.6) — cada lado da
-// empresa se aproxima do outro; o NÓ no ápice (24,5) fecha a conexão no ponto
-// exato do encontro, como a pedra de fecho do arco. O espaço aberto entre as
-// margens = A PASSAGEM (o vão que se atravessa). Estrutura/margens em ink,
-// travessia (o arco) em path, clareza (o nó) em signal.
+// "Clareza" (P100B) — full, 240×100: o símbolo aberto. 8 fragmentos nas duas
+// margens, malha Bézier que converge e continua, centro de clareza no encontro.
+// y dos fragmentos {17, 39, 61, 83}: espaçamento 22, simétrico em torno de 50.
 const BRIDGE: BridgeShape = {
-  arcL: 'M 13 15 C 16 6, 21 4.6, 23.3 4.6',
-  arcR: 'M 35 15 C 32 6, 27 4.6, 24.7 4.6',
-  pillarL: 'M 13 15 L 13 40',
-  pillarR: 'M 35 15 L 35 40',
-  groundL: 'M 5 40 L 20 40',
-  groundR: 'M 28 40 L 43 40',
-  node: { cx: 24, cy: 5, r: 3.2 },
-  stroke: { arc: 3.6, pillar: 3.0, ground: 3.0 },
+  viewBox: '0 0 240 100',
+  fragments: { lx: 30, rx: 210, ys: [17, 39, 61, 83], r: 3.5 },
+  weave: [
+    // desce da margem esquerda de cima → cruza com a direita em (120, 36.5)
+    { d: 'M 30 17 Q 120 34 210 61', w: 2.8 },
+    // sobe da margem esquerda de baixo → cruza com a direita em (120, 63.5)
+    { d: 'M 30 83 Q 120 66 210 39', w: 2.8 },
+    // desce da margem direita de cima → cruza com a esquerda em (120, 36.5)
+    { d: 'M 210 17 Q 120 34 30 61', w: 2.8 },
+    // sobe da margem direita de baixo → cruza com a esquerda em (120, 63.5)
+    { d: 'M 210 83 Q 120 66 30 39', w: 2.8 },
+  ],
+  clarity: {
+    cx: 120,
+    cy: 50,
+    hw: 6,
+    hh: 8,
+    rays: [
+      [126.4, 43.6],
+      [113.6, 43.6],
+      [126.4, 56.4],
+      [113.6, 56.4],
+    ],
+    dots: [
+      [126.4, 43.6, 1.7],
+      [113.6, 43.6, 1.7],
+      [126.4, 56.4, 1.7],
+      [113.6, 56.4, 1.7],
+    ],
+  },
 }
 
+// "Clareza" micro — 48×48: núcleo quadrado para 16–32px. 4 fragmentos, o X da
+// convergência e o losango da clareza — a identidade na redução sem perder leitura.
 const BRIDGE_MICRO: BridgeShape = {
-  arcL: BRIDGE.arcL,
-  arcR: BRIDGE.arcR,
-  pillarL: BRIDGE.pillarL,
-  pillarR: BRIDGE.pillarR,
-  groundL: BRIDGE.groundL,
-  groundR: BRIDGE.groundR,
-  node: { cx: 24, cy: 5, r: 3.8 },
-  stroke: { arc: 4.4, pillar: 3.8, ground: 3.8 },
+  viewBox: '0 0 48 48',
+  fragments: { lx: 8, rx: 40, ys: [13.5, 34.5], r: 2.8 },
+  weave: [
+    { d: 'M 8 13.5 Q 24 24 40 34.5', w: 3.4 },
+    { d: 'M 40 13.5 Q 24 24 8 34.5', w: 3.4 },
+  ],
+  clarity: {
+    cx: 24,
+    cy: 24,
+    hw: 3.2,
+    hh: 4.8,
+    rays: [],
+    dots: [],
+  },
 }
 
-export function PonteSymbol({ className, surface = 'light', variant = 'full' }: PonteSymbolProps) {
+function lozengePath({ cx, cy, hw, hh }: Clarity): string {
+  return `M ${cx} ${cy - hh} L ${cx + hw} ${cy} L ${cx} ${cy + hh} L ${cx - hw} ${cy} Z`
+}
+
+export function PonteSymbol({ className, surface = 'light', variant = 'full', size }: PonteSymbolProps) {
   const mono = surface === 'mono'
   const style = mono ? undefined : SURFACE_VARS[surface]
   const c = (varName: 'ink' | 'path' | 'signal') => (mono ? 'currentColor' : `var(--brand-${varName})`)
   const s = variant === 'micro' ? BRIDGE_MICRO : BRIDGE
+  const { lx, rx, ys, r } = s.fragments
+  const sizeStyle = size ? { width: size, height: size * (100 / 240) } : undefined
 
   return (
     <svg
-      viewBox="0 0 48 48"
+      viewBox={s.viewBox}
       role="img"
       aria-label="Ponte Digital"
       focusable="false"
-      className={cn('shrink-0 select-none', className)}
-      style={style as CSSProperties}
+      className={cn('shrink-0 select-none', variant === 'micro' && 'aspect-square', className)}
+      style={{ ...sizeStyle, ...style } as CSSProperties}
       fill="none"
     >
-      {/* Apoios no chão — as duas margens que sustentam a travessia */}
-      <path d={s.groundL} stroke={c('ink')} strokeWidth={s.stroke.ground} strokeLinecap="round" />
-      <path d={s.groundR} stroke={c('ink')} strokeWidth={s.stroke.ground} strokeLinecap="round" />
-      {/* Pilares — a estrutura levantada por cada lado */}
-      <path d={s.pillarL} stroke={c('ink')} strokeWidth={s.stroke.pillar} strokeLinecap="round" />
-      <path d={s.pillarR} stroke={c('ink')} strokeWidth={s.stroke.pillar} strokeLinecap="round" />
-      {/* O arco — dois trechos que convergem pelo alto (a travessia) */}
-      <path d={s.arcL} stroke={c('path')} strokeWidth={s.stroke.arc} strokeLinecap="round" />
-      <path d={s.arcR} stroke={c('path')} strokeWidth={s.stroke.arc} strokeLinecap="round" />
-      {/* O nó no ápice — a clareza onde as duas partes se encontram */}
-      <circle cx={s.node.cx} cy={s.node.cy} r={s.node.r} fill={c('signal')} />
+      {/* A malha — linhas Bézier que atravessam o centro e continuam além dele */}
+      <g>
+        {s.weave.map((thread, i) => (
+          <path key={i} d={thread.d} stroke={c('path')} strokeWidth={thread.w} strokeLinecap="round" />
+        ))}
+      </g>
+      {/* Os fragmentos — unidades de informação de cada margem */}
+      <g>
+        {ys.map((y) => (
+          <g key={y}>
+            <circle cx={lx} cy={y} r={r} fill={c('ink')} />
+            <circle cx={rx} cy={y} r={r} fill={c('ink')} />
+          </g>
+        ))}
+      </g>
+      {/* O centro de clareza — eixos → losango → pontas (por cima da malha) */}
+      <g>
+        {s.clarity.rays.map(([x, y], i) => (
+          <line key={`r${i}`} x1={s.clarity.cx} y1={s.clarity.cy} x2={x} y2={y} stroke={c('signal')} strokeWidth={2} strokeLinecap="round" />
+        ))}
+        <path d={lozengePath(s.clarity)} fill={c('signal')} />
+        {s.clarity.dots.map(([x, y, dr], i) => (
+          <circle key={`d${i}`} cx={x} cy={y} r={dr} fill={c('signal')} />
+        ))}
+      </g>
     </svg>
   )
 }
@@ -183,16 +253,17 @@ export function PonteLogo({
   variant = 'full',
   withWordmark = false,
   symbolClassName = 'h-7 w-auto',
+  size,
 }: PonteLogoProps) {
   return (
     <span className={cn('inline-flex items-center gap-2.5', className)}>
-      <PonteSymbol surface={surface} variant={variant} className={symbolClassName} />
+      <PonteSymbol surface={surface} variant={variant} className={symbolClassName} size={size} />
       {withWordmark && <Wordmark surface={surface} />}
     </span>
   )
 }
 
-interface PonteLogoHorizontalProps extends PonteSymbolProps {
+interface PonteLogoHorizontalProps extends Omit<PonteSymbolProps, 'size'> {
   size?: PonteSize
   symbolClassName?: string
 }

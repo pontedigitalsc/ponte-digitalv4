@@ -1,12 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Ponte Digital" focusable="false">
-  <!-- Ponte Digital — "A Travessia" (P100, monocromático branco) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 100" role="img" aria-label="Ponte Digital" focusable="false">
+  <!-- Ponte Digital — "Clareza" (P100B, monocromático branco) — tinta branca -->
   <g fill="none">
-    <path d="M 5 40 L 20 40" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
-    <path d="M 28 40 L 43 40" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
-    <path d="M 13 15 L 13 40" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
-    <path d="M 35 15 L 35 40" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
-    <path d="M 13 15 C 16 6, 21 4.6, 23.3 4.6" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round"/>
-    <path d="M 35 15 C 32 6, 27 4.6, 24.7 4.6" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round"/>
+    <path d="M 30 17 Q 120 34 210 61" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M 30 83 Q 120 66 210 39" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M 210 17 Q 120 34 30 61" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M 210 83 Q 120 66 30 39" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
   </g>
-  <circle cx="24" cy="5" r="3.2" fill="#ffffff"/>
+  <circle cx="30" cy="17" r="3.5" fill="#ffffff"/>
+  <circle cx="30" cy="39" r="3.5" fill="#ffffff"/>
+  <circle cx="30" cy="61" r="3.5" fill="#ffffff"/>
+  <circle cx="30" cy="83" r="3.5" fill="#ffffff"/>
+  <circle cx="210" cy="17" r="3.5" fill="#ffffff"/>
+  <circle cx="210" cy="39" r="3.5" fill="#ffffff"/>
+  <circle cx="210" cy="61" r="3.5" fill="#ffffff"/>
+  <circle cx="210" cy="83" r="3.5" fill="#ffffff"/>
+  <line x1="120" y1="50" x2="126.4" y2="43.6" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  <line x1="120" y1="50" x2="113.6" y2="43.6" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  <line x1="120" y1="50" x2="126.4" y2="56.4" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  <line x1="120" y1="50" x2="113.6" y2="56.4" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 120 42 L 126 50 L 120 58 L 114 50 Z" fill="#ffffff"/>
+  <circle cx="126.4" cy="43.6" r="1.7" fill="#ffffff"/>
+  <circle cx="113.6" cy="43.6" r="1.7" fill="#ffffff"/>
+  <circle cx="126.4" cy="56.4" r="1.7" fill="#ffffff"/>
+  <circle cx="113.6" cy="56.4" r="1.7" fill="#ffffff"/>
 </svg>
